@@ -149,8 +149,8 @@ img,svg{display:block;max-width:100%}
 .env .h2{margin-bottom:clamp(36px,5vw,70px)}
 .path{position:relative;list-style:none;padding:0 0 0 52px}
 .path:before{content:"";position:absolute;left:11px;top:14px;bottom:14px;width:2px;background:rgba(255,245,234,.22)}
-.path .fill{position:absolute;left:11px;top:14px;width:2px;height:0;background:var(--bord)}
-.path li{position:relative;padding:0 0 clamp(30px,4vw,52px)}
+.path:after{content:"";position:absolute;left:11px;top:14px;width:2px;height:var(--fill,0px);background:var(--bord)}
+.path li{position:relative;z-index:1;padding:0 0 clamp(30px,4vw,52px)}
 .path li:last-child{padding-bottom:0}
 .path li:before{content:"";position:absolute;left:-52px;top:2px;width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,245,234,.4);background:var(--ink);transition:border-color .4s,background .4s,box-shadow .4s}
 .path li.on:before{border-color:var(--bord);background:var(--bord);box-shadow:0 0 0 6px var(--ink),0 0 0 8px var(--bord)}
@@ -166,8 +166,9 @@ img,svg{display:block;max-width:100%}
 .how .h2{margin-bottom:clamp(50px,7vw,100px)}
 .steps{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,64px);position:relative}
 .steps:before{content:"";position:absolute;left:0;right:0;top:15px;height:2px;background:var(--bord);opacity:.25}
-.steps .bar{position:absolute;left:0;top:15px;height:2px;width:0;background:var(--bord);transition:width 1.4s var(--ease)}
-.step{position:relative;padding-top:56px}
+.steps:after{content:"";position:absolute;left:0;top:15px;height:2px;width:0;background:var(--bord);transition:width 1.4s var(--ease)}
+.steps.on:after{width:100%}
+.step{position:relative;z-index:1;padding-top:56px}
 .step:before{content:"";position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;border:2px solid var(--bord);background:var(--cream);transition:background .4s}
 .step:after{content:"";position:absolute;left:11px;top:11px;width:10px;height:10px;border-radius:50%;background:var(--bord);transform:scale(0);transition:transform .5s var(--ease)}
 .step.on:after{transform:scale(1)}
@@ -269,7 +270,7 @@ img,svg{display:block;max-width:100%}
   .grid{grid-template-columns:1fr}
   .card{min-height:230px}
   .steps{grid-template-columns:1fr;gap:34px}
-  .steps:before,.steps .bar{display:none}
+  .steps:before,.steps:after{display:none}
   .step{padding:0 0 0 56px}
   .step:before{top:6px}.step:after{top:17px}
   .step .n{font-size:64px}
@@ -375,7 +376,6 @@ img,svg{display:block;max-width:100%}
       <span class="kicker rv">02 / не школа в привычном смысле</span>
       <h2 class="h2 rv d1">приходи<br>не только за<br><em>занятиями.</em></h2>
       <ol class="path" id="path">
-        <span class="fill" id="pathFill"></span>
         <li><h3>Начинай с нуля</h3><p>Не умеешь играть? Отлично. Здесь не требуют подготовку, прежде чем разрешить тебе заниматься.</p></li>
         <li><h3>Будь частью среды</h3><p>Занятия — только начало. Здесь есть люди, практика, выступления и совместные музыкальные истории.</p></li>
         <li><h3>Делай по-своему</h3><p>Можно просто научиться играть любимую песню. А можно однажды выйти на сцену. Маршрут выбираешь ты.</p></li>
@@ -390,7 +390,6 @@ img,svg{display:block;max-width:100%}
     <span class="kicker rv">03 / как это работает</span>
     <h2 class="h2 rv d1">всё проще,<br><em>чем кажется.</em></h2>
     <ol class="steps" id="steps">
-      <span class="bar" id="stepsBar"></span>
       <li class="step"><span class="n">01</span><h3>Оставляешь заявку</h3><p>Рассказываешь, чем хочешь заниматься. Можно вообще ничего пока не знать о музыке.</p></li>
       <li class="step"><span class="n">02</span><h3>Знакомимся</h3><p>Подбираем направление и формат, который подходит именно тебе.</p></li>
       <li class="step"><span class="n">03</span><h3>Начинаешь</h3><p>Первый шаг сделан. Дальше — уже музыка.</p></li>
@@ -661,11 +660,11 @@ const io = 'IntersectionObserver' in window ? new IntersectionObserver(es=>es.fo
 $$('.rv').forEach(el=> io ? io.observe(el) : el.classList.add('in'));
 
 /* линия «пути» в разделе про среду */
-const pathLis=$$('#path li'), pathFill=$('#pathFill'), pathEl=$('#path');
+const pathLis=$$('#path li'), pathEl=$('#path');
 function pathUpdate(){
   const r=pathEl.getBoundingClientRect(), mid=innerHeight*.62;
   const prog=Math.max(0,Math.min(1,(mid-r.top)/r.height));
-  pathFill.style.height=(prog*(r.height-28))+'px';
+  pathEl.style.setProperty('--fill',(prog*(r.height-28))+'px');
   pathLis.forEach(li=>{ const lr=li.getBoundingClientRect(); li.classList.toggle('on', lr.top<mid); });
 }
 addEventListener('scroll',pathUpdate,{passive:true}); addEventListener('resize',pathUpdate); pathUpdate();
@@ -674,11 +673,11 @@ addEventListener('scroll',pathUpdate,{passive:true}); addEventListener('resize',
 const stepsEl=$('#steps');
 if(io){
   new IntersectionObserver((es,ob)=>es.forEach(e=>{ if(e.isIntersecting){
-    $('#stepsBar').style.width='100%';
+    stepsEl.classList.add('on');
     $$('.step',stepsEl).forEach((s,i)=>setTimeout(()=>s.classList.add('on'),i*450));
     ob.disconnect();
   }}),{threshold:.35}).observe(stepsEl);
-} else { $$('.step').forEach(s=>s.classList.add('on')); $('#stepsBar').style.width='100%'; }
+} else { $$('.step').forEach(s=>s.classList.add('on')); stepsEl.classList.add('on'); }
 </script>
 </body>
 </html>
