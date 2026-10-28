@@ -157,7 +157,7 @@ img,svg{display:block;max-width:100%}
 .path li.on:before{border-color:var(--bord);background:var(--bord);box-shadow:0 0 0 6px var(--ink),0 0 0 8px var(--bord)}
 .path h3{font-size:clamp(26px,3vw,42px);line-height:1.05;letter-spacing:-.02em;margin-bottom:10px}
 .path p{opacity:.72;max-width:28em;font-size:17px}
-.poster{position:sticky;top:110px;aspect-ratio:4/5;width:100%;max-width:520px;justify-self:end;background:var(--cream);overflow:hidden;touch-action:pan-y}
+.poster{position:sticky;top:110px;aspect-ratio:4/5;width:100%;max-width:520px;justify-self:end;background:var(--cream);overflow:hidden}
 .poster canvas{position:absolute;inset:0;width:100%;height:100%}
 .poster .tag{position:absolute;z-index:1;left:20px;bottom:20px;right:20px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:var(--cream);color:var(--ink);padding:14px 18px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
 .poster .tag b{color:var(--bord)}
@@ -186,11 +186,12 @@ img,svg{display:block;max-width:100%}
 .addr{margin-top:44px;display:flex;flex-wrap:wrap;gap:6px 36px;font-size:15px;letter-spacing:.1em;text-transform:uppercase}
 .addr b{opacity:.65;display:block;font-size:12px;margin-bottom:6px;letter-spacing:.16em}
 .arch{position:relative;justify-self:center;width:min(100%,400px);aspect-ratio:3/4}
-.arch .win{position:absolute;inset:0;border-radius:999px 999px 0 0;background:var(--cream) url("img/pattern-3.svg") 30% center/auto 100%;overflow:hidden}
-.arch .orb{position:absolute;right:-14%;bottom:-8%;width:46%;aspect-ratio:1;border-radius:50%;background:var(--ink)}
-.arch .orb:after{content:"";position:absolute;inset:34%;border-radius:50%;background:var(--bord);animation:pulse 2.4s ease-in-out infinite}
-@keyframes pulse{50%{transform:scale(1.35)}}
-.arch .line{position:absolute;left:-10%;right:-10%;bottom:14%;height:2px;background:var(--cream)}
+.arch svg{width:100%;height:100%;overflow:visible}
+.arch .a-win{fill:var(--cream)}
+.arch .a-arc{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.8s var(--ease) calc(.35s + var(--i) * .14s)}
+.arch.in .a-arc{stroke-dashoffset:0}
+.arch .a-base{stroke:var(--bord);stroke-width:3}
+.arch .a-rope{stroke:var(--bord);stroke-width:2}
 
 /* ───────── подвал ───────── */
 .foot{padding:36px var(--gutter);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 40px;font-size:14px;letter-spacing:.06em;border-top:2px solid var(--bord)}
@@ -408,7 +409,28 @@ img,svg{display:block;max-width:100%}
         <div><b>адрес</b><span data-b="full">г. Троицк, ул. 3-я Нововатутинская, д. 2</span></div>
       </div>
     </div>
-    <div class="arch rv d2" aria-hidden="true"><div class="win"></div><div class="line"></div><div class="orb"></div></div>
+    <div class="arch rv d2" id="arch" aria-hidden="true">
+      <svg viewBox="0 0 300 400">
+        <defs><clipPath id="archClip"><path d="M0 400V150A150 150 0 0 1 300 150V400Z"/></clipPath></defs>
+        <path class="a-win" d="M0 400V150A150 150 0 0 1 300 150V400Z"/>
+        <g clip-path="url(#archClip)">
+          <path class="a-arc" pathLength="1" style="--i:0" d="M104 352V150A46 46 0 0 1 196 150V352"/>
+          <path class="a-arc" pathLength="1" style="--i:1" d="M84 352V150A66 66 0 0 1 216 150V352"/>
+          <path class="a-arc" pathLength="1" style="--i:2" d="M64 352V150A86 86 0 0 1 236 150V352"/>
+          <path class="a-arc" pathLength="1" style="--i:3" d="M44 352V150A106 106 0 0 1 256 150V352"/>
+          <path class="a-arc" pathLength="1" style="--i:4" d="M24 352V150A126 126 0 0 1 276 150V352"/>
+          <line class="a-base" x1="0" y1="353.5" x2="300" y2="353.5"/>
+          <g id="archPend">
+            <line class="a-rope" x1="150" y1="150" x2="150" y2="236"/>
+            <path d="M150 236a14 14 0 0 0 0 28z" fill="#1A1A1A"/><path d="M150 236a14 14 0 0 1 0 28z" fill="#9B3E47"/>
+          </g>
+          <circle id="archPivot" cx="150" cy="150" r="4.5" fill="#1A1A1A"/>
+          <g id="archOrb" transform="translate(150 318)">
+            <circle r="34" fill="#1A1A1A"/><circle r="12" fill="#9B3E47"/><circle cy="-23" r="3.5" fill="#FFF5EA"/>
+          </g>
+        </g>
+      </svg>
+    </div>
   </section>
 </main>
 
@@ -791,6 +813,21 @@ function liveLoop(el, step){
     poster.addEventListener('pointerleave',()=>ptr=null);
   }
   liveLoop(poster,step);
+})();
+
+/* арка: дуги прорисовываются (CSS), маятник качается, бублик катится по линии */
+(()=>{
+  const arch=$('#arch'); if(!arch || reduce) return;
+  const pend=$('#archPend'), pivot=$('#archPivot'), orb=$('#archOrb'), TAU=Math.PI*2;
+  let t=0;
+  liveLoop(arch,dt=>{
+    t+=dt;
+    const ph=t*TAU/4.6;
+    pend.setAttribute('transform',`rotate(${(Math.sin(ph)*9).toFixed(3)} 150 150)`);
+    pivot.setAttribute('r',(4.5+Math.abs(Math.cos(ph))*1.5).toFixed(2));
+    const x=150+104*Math.sin(t*TAU/16), rot=(x-150)/34*180/Math.PI;   // поворот = путь / радиус — катится без проскальзывания
+    orb.setAttribute('transform',`translate(${x.toFixed(2)} 318) rotate(${rot.toFixed(2)})`);
+  });
 })();
 </script>
 </body>
