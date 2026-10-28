@@ -157,8 +157,9 @@ img,svg{display:block;max-width:100%}
 .path li.on:before{border-color:var(--bord);background:var(--bord);box-shadow:0 0 0 6px var(--ink),0 0 0 8px var(--bord)}
 .path h3{font-size:clamp(26px,3vw,42px);line-height:1.05;letter-spacing:-.02em;margin-bottom:10px}
 .path p{opacity:.72;max-width:28em;font-size:17px}
-.poster{position:sticky;top:110px;aspect-ratio:4/5;width:100%;max-width:520px;justify-self:end;background:var(--cream) url("img/pattern-2.svg") center/cover;overflow:hidden}
-.poster .tag{position:absolute;left:20px;bottom:20px;right:20px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:var(--cream);color:var(--ink);padding:14px 18px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.poster{position:sticky;top:110px;aspect-ratio:4/5;width:100%;max-width:520px;justify-self:end;background:var(--cream);overflow:hidden;touch-action:pan-y}
+.poster canvas{position:absolute;inset:0;width:100%;height:100%}
+.poster .tag{position:absolute;z-index:1;left:20px;bottom:20px;right:20px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:var(--cream);color:var(--ink);padding:14px 18px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
 .poster .tag b{color:var(--bord)}
 
 /* ───────── как это работает ───────── */
@@ -270,6 +271,7 @@ img,svg{display:block;max-width:100%}
   .branch-btn{padding:9px 14px 9px 16px;font-size:13px}
   .grid{grid-template-columns:1fr}
   .card{min-height:230px}
+  .poster{aspect-ratio:1/1}
   .steps{grid-template-columns:1fr;gap:34px}
   .steps:before,.steps:after{display:none}
   .step{padding:0 0 0 56px}
@@ -379,7 +381,8 @@ img,svg{display:block;max-width:100%}
         <li><h3>Делай по-своему</h3><p>Можно просто научиться играть любимую песню. А можно однажды выйти на сцену. Маршрут выбираешь ты.</p></li>
       </ol>
     </div>
-    <div class="poster rv d2" role="img" aria-label="Фирменный паттерн «Точки звука»">
+    <div class="poster rv d2" id="poster" role="img" aria-label="Фирменные круги «Точки звука» катаются и отталкиваются друг от друга">
+      <canvas aria-hidden="true"></canvas>
       <div class="tag"><span>точка звука</span><b data-b="name">Троицк</b></div>
     </div>
   </section>
@@ -675,6 +678,120 @@ if(io){
     ob.disconnect();
   }}),{threshold:.35}).observe(stepsEl);
 } else { $$('.step').forEach(s=>s.classList.add('on')); stepsEl.classList.add('on'); }
+
+/* ═════════ ЖИВЫЕ ИЛЛЮСТРАЦИИ ═════════ */
+/* крутит step(dt) только пока элемент на экране и вкладка видна */
+function liveLoop(el, step){
+  let on=false, vis=false, last=0, id=0;
+  const tick=t=>{ const dt=Math.min(.05,Math.max(0,(t-last)/1000)); last=t; step(dt); id=requestAnimationFrame(tick); };
+  const sync=()=>{ const want=vis && !document.hidden;
+    if(want && !on){ on=true; last=performance.now(); id=requestAnimationFrame(tick); }
+    else if(!want && on){ on=false; cancelAnimationFrame(id); } };
+  if('IntersectionObserver' in window) new IntersectionObserver(es=>{ vis=es[es.length-1].isIntersecting; sync(); },{rootMargin:'60px'}).observe(el);
+  else vis=true;
+  document.addEventListener('visibilitychange',sync); sync();
+}
+
+/* постер: фирменные круги катаются и отталкиваются */
+(()=>{
+  const poster=$('#poster'); if(!poster) return;
+  const cv=$('canvas',poster), ctx=cv.getContext('2d'), tag=$('.tag',poster);
+  const INK='#1A1A1A', BORD='#9B3E47', CREAM='#FFF5EA';
+  // k — радиус в долях меньшей стороны поля; fx/fy — ровная стартовая (она же статичная) раскладка
+  const defs=[
+    {k:.21, fx:.30, fy:.30, a:BORD},
+    {k:.145,fx:.76, fy:.24, a:INK, b:BORD, rot:0},
+    {k:.115,fx:.74, fy:.72, a:INK},
+    {k:.095,fx:.25, fy:.76, ring:true},
+    {k:.08, fx:.52, fy:.56, a:BORD, b:INK, rot:Math.PI/2},
+    {k:.045,fx:.90, fy:.50, a:INK},
+    {k:.038,fx:.10, fy:.54, a:BORD},
+  ];
+  let W=0,H=0,box=null,S=1,balls=[],ptr=null,dpr=1;
+
+  function layout(){
+    const r=poster.getBoundingClientRect(); if(!r.width||!r.height) return;
+    const pad=Math.max(14,r.width*.045);
+    const nb={x:pad,y:pad,w:r.width-pad*2,h:tag.offsetTop-pad*1.6};
+    const old=box;
+    W=r.width; H=r.height; box=nb; S=Math.min(box.w,box.h);
+    dpr=Math.min(2,devicePixelRatio||1);
+    cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+    if(!old){
+      balls=defs.map((d,i)=>{ const ang=i*2.4+.6; return {...d, x:box.x+d.fx*box.w, y:box.y+d.fy*box.h, vx:Math.cos(ang), vy:Math.sin(ang), rot:d.rot||0}; });
+    } else {
+      balls.forEach(b=>{ b.x=box.x+(b.x-old.x)/old.w*box.w; b.y=box.y+(b.y-old.y)/old.h*box.h; });
+    }
+    balls.forEach(b=>{ b.r=b.k*S; b.m=b.r*b.r; });
+    if(!old||reduce) for(let i=0;i<80;i++){ collide(false); walls(false); }  // разводим пересечения
+    draw();
+  }
+  function walls(bounce){
+    for(const b of balls){
+      const l=box.x+b.r, rr=box.x+box.w-b.r, t=box.y+b.r, bt=box.y+box.h-b.r;
+      if(b.x<l){ b.x=l; if(bounce) b.vx=Math.abs(b.vx); } else if(b.x>rr){ b.x=rr; if(bounce) b.vx=-Math.abs(b.vx); }
+      if(b.y<t){ b.y=t; if(bounce) b.vy=Math.abs(b.vy); } else if(b.y>bt){ b.y=bt; if(bounce) b.vy=-Math.abs(b.vy); }
+    }
+  }
+  function collide(bounce){
+    const gap=bounce?0:S*.025;
+    for(let i=0;i<balls.length;i++) for(let j=i+1;j<balls.length;j++){
+      const a=balls[i], b=balls[j], dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy)||1e-3, min=a.r+b.r+gap;
+      if(d>=min) continue;
+      const nx=dx/d, ny=dy/d, over=min-d, sm=a.m+b.m;
+      a.x-=nx*over*b.m/sm; a.y-=ny*over*b.m/sm; b.x+=nx*over*a.m/sm; b.y+=ny*over*a.m/sm;
+      if(!bounce) continue;
+      const rv=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny; if(rv>0) continue;
+      const imp=2*rv/sm;   // упругий удар с учётом массы (масса ~ площади)
+      a.vx+=imp*b.m*nx; a.vy+=imp*b.m*ny; b.vx-=imp*a.m*nx; b.vy-=imp*a.m*ny;
+    }
+  }
+  function step(dt){
+    const v0=S*.16, h=dt/2;   // два подшага на кадр — без «проваливаний» на 30 fps
+    for(let k=0;k<2;k++){
+      for(const b of balls){
+        if(ptr){ const dx=b.x-ptr.x, dy=b.y-ptr.y, d=Math.hypot(dx,dy), R=b.r+S*.22;
+          if(d<R&&d>.1){ const f=(1-d/R)*S*5*h; b.vx+=dx/d*f; b.vy+=dy/d*f; } }
+        // скорость мягко тянется к крейсерской: движение не затухает и не разгоняется; крупные — медленнее
+        const sp=Math.hypot(b.vx,b.vy)||1e-3, tgt=v0*(1.25-b.k*2.2);
+        const g=1+(tgt/sp-1)*Math.min(1,h*.9); b.vx*=g; b.vy*=g;
+        b.x+=b.vx*h; b.y+=b.vy*h;
+        b.rot+=b.vx/b.r*h;   // «катится»: поворот от горизонтальной скорости
+      }
+      collide(true); walls(true);
+    }
+    draw();
+  }
+  function disc(x,y,r,c){ ctx.fillStyle=c; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); }
+  function draw(){
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    // тонкая сетка 4×3 внутри поля, подпись не пересекает
+    ctx.strokeStyle='rgba(26,26,26,.09)'; ctx.lineWidth=1; ctx.beginPath();
+    for(let i=1;i<4;i++){ const x=Math.round(box.x+box.w*i/4)+.5; ctx.moveTo(x,box.y); ctx.lineTo(x,box.y+box.h); }
+    for(let i=1;i<3;i++){ const y=Math.round(box.y+box.h*i/3)+.5; ctx.moveTo(box.x,y); ctx.lineTo(box.x+box.w,y); }
+    ctx.stroke();
+    for(const b of balls){
+      const mx=Math.cos(b.rot), my=Math.sin(b.rot);
+      if(b.ring){
+        const lw=Math.max(2,b.r*.22); ctx.lineWidth=lw; ctx.strokeStyle=INK;
+        ctx.beginPath(); ctx.arc(b.x,b.y,b.r-lw/2,0,Math.PI*2); ctx.stroke();
+        disc(b.x+mx*b.r*.36,b.y+my*b.r*.36,b.r*.16,BORD); continue;
+      }
+      disc(b.x,b.y,b.r,b.a);
+      if(b.b){ ctx.fillStyle=b.b; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,b.rot,b.rot+Math.PI); ctx.closePath(); ctx.fill(); }
+      else if(b.k>.1) disc(b.x+mx*b.r*.58,b.y+my*b.r*.58,b.r*.1,b.a===BORD?CREAM:BORD);
+    }
+  }
+  layout();
+  if('ResizeObserver' in window) new ResizeObserver(layout).observe(poster); else addEventListener('resize',layout);
+  if(document.fonts) document.fonts.ready.then(layout);
+  if(reduce) return;
+  if(matchMedia('(hover:hover) and (pointer:fine)').matches){
+    poster.addEventListener('pointermove',e=>{ const r=poster.getBoundingClientRect(); ptr={x:e.clientX-r.left,y:e.clientY-r.top}; },{passive:true});
+    poster.addEventListener('pointerleave',()=>ptr=null);
+  }
+  liveLoop(poster,step);
+})();
 </script>
 </body>
 </html>
