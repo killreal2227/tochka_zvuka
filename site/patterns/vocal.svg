@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="5333.333pt" height="3000pt" viewBox="0 0 5333.333 3000">
+<defs>
+<clipPath id="clip_1">
+<path transform="matrix(2.7777777,0,0,-2.7777777,0,3000)" d="M0 1080H1920V0H0Z"/>
+</clipPath>
+<clipPath id="clip_2">
+<path transform="matrix(2.7777777,0,0,-2.7777777,0,3000)" d="M0 29.51H1920V1037.49H0Z"/>
+</clipPath>
+</defs>
+<g>
+<g id="layer_1" data-name="Слой 1">
+<path transform="matrix(2.7777777,0,0,-2.7777777,0,3000)" d="M0 0H1920V1080H0Z" fill="#f7c842"/>
+<g clip-path="url(#clip_1)">
+<g opacity=".199997">
+<g clip-path="url(#clip_2)">
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,131.97225)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,384.08338)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,636.1667)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,888.27786)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,1140.3888)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,1392.4722)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,1643.6387)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,1895.722)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,2147.8333)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,2399.9444)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,2652.0277)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+<path transform="matrix(2.7777777,0,0,-2.7777777,5333.333,2904.1387)" stroke-width="10" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ffffff" d="M0 0H-1920"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>
