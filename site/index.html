@@ -236,7 +236,7 @@ img,svg{display:block;max-width:100%}
 .done .rings b{position:absolute;inset:32px;border-radius:50%;background:var(--bord)}
 [hidden]{display:none!important}
 
-.toast{position:fixed;left:50%;bottom:24px;z-index:70;transform:translate(-50%,30px);max-width:min(520px,calc(100vw - 32px));background:var(--ink);color:var(--cream);padding:14px 22px;border-radius:100px;font-size:14px;opacity:0;visibility:hidden;transition:opacity .3s,transform .4s var(--ease),visibility .3s}
+.toast{position:fixed;left:50%;bottom:24px;z-index:70;transform:translate(-50%,30px);max-width:min(520px,calc(100vw - 32px));background:var(--ink);color:var(--cream);padding:14px 22px;border-radius:24px;font-size:14px;text-align:center;opacity:0;visibility:hidden;transition:opacity .3s,transform .4s var(--ease),visibility .3s}
 .toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
 
 /* курсор-точка (только мышь) */
@@ -505,7 +505,7 @@ function setBranch(id, announce){
   $$('[data-b="short"]').forEach(e=>e.textContent=branch.short);
   $$('.branch-opt').forEach(o=>o.setAttribute('aria-selected', o.dataset.branch===branch.id));
   try{ history.replaceState(null,'', branch.id===CONFIG.defaultBranch ? location.pathname+location.search : '#'+branch.id) }catch(e){}
-  if(announce) toast(branch.id==='kaluga' ? 'Калуга · Ленина, 79. Тексты и расписание филиала подключим следующим этапом.' : 'Троицк · 3-я Нововатутинская, 2');
+  if(announce) toast(branch.short);
 }
 function toggleBranch(open){
   const o = open ?? !bList.classList.contains('open');
