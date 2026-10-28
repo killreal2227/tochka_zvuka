@@ -105,7 +105,7 @@ img,svg{display:block;max-width:100%}
 .hint{position:absolute;right:2%;bottom:-2%;display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--bord);pointer-events:none}
 .hint:before{content:"";width:44px;height:2px;background:var(--bord)}
 #heroDot{cursor:pointer}
-.wave{fill:none;stroke:var(--cream);stroke-width:1.2;opacity:0;transform-box:fill-box;transform-origin:center;vector-effect:non-scaling-stroke}
+.wave{fill:none;stroke:var(--bord);stroke-width:1.2;opacity:0;transform-box:fill-box;transform-origin:center;vector-effect:non-scaling-stroke}
 .wave.idle{animation:wave 4.2s linear infinite}
 .wave.idle:nth-child(2){animation-delay:1.4s}
 .wave.idle:nth-child(3){animation-delay:2.8s}
@@ -332,8 +332,6 @@ img,svg{display:block;max-width:100%}
         <defs><clipPath id="discClip"><circle cx="475.8" cy="430" r="35.6"/></clipPath></defs>
         <g class="floaty">
           <g clip-path="url(#discClip)">
-            <rect x="436" y="390" width="80" height="80" fill="#FFF5EA"/>
-            <image id="heroPat" href="img/pattern-1.svg" x="404" y="394" width="137" height="71" preserveAspectRatio="xMidYMid slice"/>
             <g id="waves">
               <circle class="wave idle" cx="475.8" cy="430" r="14"/>
               <circle class="wave idle" cx="475.8" cy="430" r="14"/>
@@ -344,7 +342,6 @@ img,svg{display:block;max-width:100%}
           <path d="M 523.878906 432 L 499.878906 432 L 499.878906 428 L 523.878906 428 Z M 523.878906 432 " fill="#1A1A1A"/>
           <g id="heroDot" tabindex="0" role="button" aria-label="Точка. Нажми, чтобы сыграть ноту">
             <circle cx="475.8" cy="430" r="17" fill="transparent"/>
-            <circle cx="475.8" cy="430" r="14.2" fill="none" stroke="#FFF5EA" stroke-width="2.4"/>
             <path d="M 487.804688 430 C 487.804688 436.628906 482.429688 442 475.804688 442 C 469.175781 442 463.804688 436.628906 463.804688 430 C 463.804688 423.371094 469.175781 418 475.804688 418 C 482.429688 418 487.804688 423.371094 487.804688 430 " fill="#9B3E47"/>
           </g>
         </g>
@@ -628,7 +625,7 @@ dot.addEventListener('click',hit);
 dot.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); hit(); } });
 
 /* точка следит за курсором */
-const stage=$('#stage'), pat=$('#heroPat');
+const stage=$('#stage');
 let tx=0,ty=0,cx=0,cy=0,raf;
 if(!reduce && matchMedia('(hover:hover)').matches){
   addEventListener('pointermove',e=>{
@@ -641,7 +638,6 @@ if(!reduce && matchMedia('(hover:hover)').matches){
 function loop(){
   cx+=(tx-cx)*.12; cy+=(ty-cy)*.12;
   dot.style.transform=`translate(${(cx*4.5).toFixed(2)}px,${(cy*4.5).toFixed(2)}px)`;
-  pat.style.transform=`translate(${(-cx*2.5).toFixed(2)}px,${(-cy*2).toFixed(2)}px)`;
   raf = (Math.abs(tx-cx)>.002||Math.abs(ty-cy)>.002) ? requestAnimationFrame(loop) : null;
 }
 
