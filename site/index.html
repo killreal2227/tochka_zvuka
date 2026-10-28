@@ -158,7 +158,7 @@ img,svg{display:block;max-width:100%}
 .path h3{font-size:clamp(26px,3vw,42px);line-height:1.05;letter-spacing:-.02em;margin-bottom:10px}
 .path p{opacity:.72;max-width:28em;font-size:17px}
 .poster{position:sticky;top:110px;aspect-ratio:4/5;width:100%;max-width:520px;justify-self:end;background:var(--cream);overflow:hidden}
-.poster canvas{position:absolute;inset:0;width:100%;height:100%}
+.poster svg{position:absolute;inset:0;width:100%;height:100%}
 .poster .tag{position:absolute;z-index:1;left:20px;bottom:20px;right:20px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;background:var(--cream);color:var(--ink);padding:14px 18px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
 .poster .tag b{color:var(--bord)}
 
@@ -186,12 +186,9 @@ img,svg{display:block;max-width:100%}
 .addr{margin-top:44px;display:flex;flex-wrap:wrap;gap:6px 36px;font-size:15px;letter-spacing:.1em;text-transform:uppercase}
 .addr b{opacity:.65;display:block;font-size:12px;margin-bottom:6px;letter-spacing:.16em}
 .arch{position:relative;justify-self:center;width:min(100%,400px);aspect-ratio:3/4}
-.arch svg{width:100%;height:100%;overflow:visible}
-.arch .a-win{fill:var(--cream)}
-.arch .a-arc{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.8s var(--ease) calc(.35s + var(--i) * .14s)}
+.arch svg{width:100%;height:100%}
+.arch .a-arc{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.8s var(--ease) calc(.35s + var(--i) * .14s)}
 .arch.in .a-arc{stroke-dashoffset:0}
-.arch .a-base{stroke:var(--bord);stroke-width:3}
-.arch .a-rope{stroke:var(--bord);stroke-width:2}
 
 /* ───────── подвал ───────── */
 .foot{padding:36px var(--gutter);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 40px;font-size:14px;letter-spacing:.06em;border-top:2px solid var(--bord)}
@@ -261,7 +258,7 @@ img,svg{display:block;max-width:100%}
   .stage{width:min(100%,460px);margin-top:12px}
   .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .env,.final{grid-template-columns:1fr}
-  .poster{position:relative;top:0;justify-self:start;aspect-ratio:16/10;max-width:none}
+  .poster{position:relative;top:0;justify-self:start}
   .arch{width:min(100%,320px);justify-self:start}
 }
 @media (max-width:680px){
@@ -272,7 +269,6 @@ img,svg{display:block;max-width:100%}
   .branch-btn{padding:9px 14px 9px 16px;font-size:13px}
   .grid{grid-template-columns:1fr}
   .card{min-height:230px}
-  .poster{aspect-ratio:1/1}
   .steps{grid-template-columns:1fr;gap:34px}
   .steps:before,.steps:after{display:none}
   .step{padding:0 0 0 56px}
@@ -382,8 +378,38 @@ img,svg{display:block;max-width:100%}
         <li><h3>Делай по-своему</h3><p>Можно просто научиться играть любимую песню. А можно однажды выйти на сцену. Маршрут выбираешь ты.</p></li>
       </ol>
     </div>
-    <div class="poster rv d2" id="poster" role="img" aria-label="Фирменные круги «Точки звука» катаются и отталкиваются друг от друга">
-      <canvas aria-hidden="true"></canvas>
+    <div class="poster rv d2" id="poster" role="img" aria-label="Фирменный паттерн «Точки звука»: круги-маятники на линиях">
+      <!-- фигуры из «3. Паттерны/паттерн-2.svg» без изменений; группы только переставлены в кадр 4:5 и качаются (transform) -->
+      <svg viewBox="0 0 380 475" aria-hidden="true">
+        <path fill="#9b3e47" transform="translate(-326.05 0)" d="M706.05,0v69.75c-19.36,12.92-42.62,20.46-67.65,20.46-56.38,0-103.83-38.24-117.81-90.21h185.46Z"/>
+        <g id="pA" transform="translate(-80 0)">
+          <line fill="none" stroke="#9b3e47" stroke-width="2" x1="186.52" y1="72.72" x2="113.8" y2="0"/>
+          <g id="pA1">
+            <line fill="none" stroke="#9b3e47" stroke-width="2" x1="199.55" y1="101.32" x2="199.55" y2="276.21"/>
+            <circle fill="#9b3e47" cx="199.55" cy="284.61" r="8.4"/>
+          </g>
+          <g id="pA2">
+            <line fill="none" stroke="#1a1a1a" stroke-width="2" x1="227.9" y1="94.7" x2="342.45" y2="188.77"/>
+            <circle fill="#1a1a1a" cx="349.88" cy="194.61" r="9.46"/>
+          </g>
+          <path fill="#1a1a1a" d="M185.27,80.3c0-13.12,10.63-23.75,23.75-23.75,13.12,0,23.75,10.63,23.75,23.75h-47.5Z"/>
+          <path fill="#9b3e47" opacity=".5" d="M209.02,104.05c-13.12,0-23.75-10.63-23.75-23.75,0-13.12,10.63-23.75,23.75-23.75v47.5Z"/>
+          <path fill="#9b3e47" d="M232.77,80.3c0,13.12-10.63,23.75-23.75,23.75s-23.75-10.63-23.75-23.75h47.5Z"/>
+        </g>
+        <g transform="translate(-120.73 0)">
+          <g id="pB">
+            <line fill="none" stroke="#9b3e47" stroke-width="2" x1="432.95" y1="114.32" x2="435.73" y2="253.38"/>
+            <circle fill="#9b3e47" cx="435.73" cy="301.55" r="48.17"/>
+            <line fill="none" stroke="#1a1a1a" stroke-width="2" x1="435.73" y1="326.79" x2="435.73" y2="366.67"/>
+          </g>
+          <path fill="#1a1a1a" opacity=".8" d="M432.95,102.77c3.74,0,6.78,3.03,6.78,6.78s-3.03,6.78-6.78,6.78v-13.56Z"/>
+          <path fill="#1a1a1a" d="M432.95,102.77c3.74,0,6.78,3.03,6.78,6.78,0,3.74-3.03,6.78-6.78,6.78v-13.56Z"/>
+          <path fill="#9b3e47" opacity=".8" d="M432.95,102.77c3.74,0,6.78,3.03,6.78,6.78s-3.03,6.78-6.78,6.78v-13.56Z"/>
+          <path fill="#1a1a1a" d="M432.95,116.32c-3.74,0-6.78-3.03-6.78-6.78s3.03-6.78,6.78-6.78v13.56Z"/>
+        </g>
+        <g id="pC" transform="translate(107.27 109.04)"><circle fill="#1a1a1a" cx="97.73" cy="235.96" r="18.38"/></g>
+        <g id="pD" transform="translate(-534.4 67.2)"><circle fill="#9b3e47" cx="594.4" cy="262.8" r="13.42"/></g>
+      </svg>
       <div class="tag"><span>точка звука</span><b data-b="name">Троицк</b></div>
     </div>
   </section>
@@ -410,24 +436,23 @@ img,svg{display:block;max-width:100%}
       </div>
     </div>
     <div class="arch rv d2" id="arch" aria-hidden="true">
-      <svg viewBox="0 0 300 400">
-        <defs><clipPath id="archClip"><path d="M0 400V150A150 150 0 0 1 300 150V400Z"/></clipPath></defs>
-        <path class="a-win" d="M0 400V150A150 150 0 0 1 300 150V400Z"/>
+      <!-- фигуры из «3. Паттерны/паттерн-3.svg» без изменений; кадр — окно-арка по оси концентрических арок -->
+      <svg viewBox="119.74 20 260 346.67">
+        <defs><clipPath id="archClip"><path d="M119.74 366.67V150A130 130 0 0 1 379.74 150V366.67Z"/></clipPath></defs>
+        <path fill="#fff5ea" d="M119.74 366.67V150A130 130 0 0 1 379.74 150V366.67Z"/>
         <g clip-path="url(#archClip)">
-          <path class="a-arc" pathLength="1" style="--i:0" d="M104 352V150A46 46 0 0 1 196 150V352"/>
-          <path class="a-arc" pathLength="1" style="--i:1" d="M84 352V150A66 66 0 0 1 216 150V352"/>
-          <path class="a-arc" pathLength="1" style="--i:2" d="M64 352V150A86 86 0 0 1 236 150V352"/>
-          <path class="a-arc" pathLength="1" style="--i:3" d="M44 352V150A106 106 0 0 1 256 150V352"/>
-          <path class="a-arc" pathLength="1" style="--i:4" d="M24 352V150A126 126 0 0 1 276 150V352"/>
-          <line class="a-base" x1="0" y1="353.5" x2="300" y2="353.5"/>
-          <g id="archPend">
-            <line class="a-rope" x1="150" y1="150" x2="150" y2="236"/>
-            <path d="M150 236a14 14 0 0 0 0 28z" fill="#1A1A1A"/><path d="M150 236a14 14 0 0 1 0 28z" fill="#9B3E47"/>
+          <path class="a-arc" pathLength="1" style="--i:4" fill="none" stroke="#1a1a1a" stroke-width="2" d="M172.9,366.67V123.1c0-47.92,34.4-86.76,76.84-86.76,21.22,0,40.43,9.71,54.34,25.42,13.91,15.69,22.51,37.39,22.51,61.34v243.57"/>
+          <path class="a-arc" pathLength="1" style="--i:3" fill="none" stroke="#1a1a1a" stroke-width="2" d="M186.19,366.67V120.76c0-39.63,28.45-71.76,63.55-71.76,17.55,0,33.44,8.03,44.94,21.01s18.62,30.93,18.62,50.74v245.91"/>
+          <path class="a-arc" pathLength="1" style="--i:2" fill="none" stroke="#1a1a1a" stroke-width="2" d="M198.88,366.67V118.87c0-31.72,22.77-57.43,50.86-57.43,14.04,0,26.76,6.42,35.96,16.82,9.21,10.39,14.9,24.74,14.9,40.6v247.8"/>
+          <path class="a-arc" pathLength="1" style="--i:1" fill="none" stroke="#1a1a1a" stroke-width="2" d="M211.88,366.67V118.87c0-23.61,16.95-42.76,37.86-42.76,10.46,0,19.93,4.79,26.78,12.52,6.85,7.75,11.09,18.44,11.09,30.24v247.8"/>
+          <path class="a-arc" pathLength="1" style="--i:0" fill="none" stroke="#1a1a1a" stroke-width="2" d="M224.94,366.67V117.45c0-15.47,11.11-28,24.8-28,6.85,0,13.05,3.13,17.54,8.2s7.27,12.07,7.27,19.8v249.22"/>
+          <line id="archRope" fill="none" stroke="#9b3e47" stroke-width="4" x1="249.74" y1="137.72" x2="249.74" y2="257.85"/>
+          <g id="archNode">
+            <path fill="#1a1a1a" d="M249.74,101.25c8.03,0,14.54,6.51,14.54,14.54s-6.51,14.54-14.54,14.54v-29.09Z"/>
+            <path fill="#9b3e47" opacity=".7" d="M249.74,101.25c8.03,0,14.54,6.51,14.54,14.54s-6.51,14.54-14.54,14.54v-29.09Z"/>
+            <path fill="#9b3e47" d="M249.74,130.34c-8.03,0-14.54-6.51-14.54-14.54s6.51-14.54,14.54-14.54v29.09Z"/>
           </g>
-          <circle id="archPivot" cx="150" cy="150" r="4.5" fill="#1A1A1A"/>
-          <g id="archOrb" transform="translate(150 318)">
-            <circle r="34" fill="#1A1A1A"/><circle r="12" fill="#9B3E47"/><circle cy="-23" r="3.5" fill="#FFF5EA"/>
-          </g>
+          <g id="archBall" transform="translate(-355.2 293.67)"><circle fill="#1a1a1a" cx="604.94" cy="39" r="34"/></g>
         </g>
       </svg>
     </div>
@@ -714,119 +739,40 @@ function liveLoop(el, step){
   document.addEventListener('visibilitychange',sync); sync();
 }
 
-/* постер: фирменные круги катаются и отталкиваются */
+/* постер (паттерн-2): круги качаются на своих линиях, как маятники */
 (()=>{
-  const poster=$('#poster'); if(!poster) return;
-  const cv=$('canvas',poster), ctx=cv.getContext('2d'), tag=$('.tag',poster);
-  const INK='#1A1A1A', BORD='#9B3E47', CREAM='#FFF5EA';
-  // k — радиус в долях меньшей стороны поля; fx/fy — ровная стартовая (она же статичная) раскладка
-  const defs=[
-    {k:.21, fx:.30, fy:.30, a:BORD},
-    {k:.145,fx:.76, fy:.24, a:INK, b:BORD, rot:0},
-    {k:.115,fx:.74, fy:.72, a:INK},
-    {k:.095,fx:.25, fy:.76, ring:true},
-    {k:.08, fx:.52, fy:.56, a:BORD, b:INK, rot:Math.PI/2},
-    {k:.045,fx:.90, fy:.50, a:INK},
-    {k:.038,fx:.10, fy:.54, a:BORD},
-  ];
-  let W=0,H=0,box=null,S=1,balls=[],ptr=null,dpr=1;
-
-  function layout(){
-    const r=poster.getBoundingClientRect(); if(!r.width||!r.height) return;
-    const pad=Math.max(14,r.width*.045);
-    const nb={x:pad,y:pad,w:r.width-pad*2,h:tag.offsetTop-pad*1.6};
-    const old=box;
-    W=r.width; H=r.height; box=nb; S=Math.min(box.w,box.h);
-    dpr=Math.min(2,devicePixelRatio||1);
-    cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
-    if(!old){
-      balls=defs.map((d,i)=>{ const ang=i*2.4+.6; return {...d, x:box.x+d.fx*box.w, y:box.y+d.fy*box.h, vx:Math.cos(ang), vy:Math.sin(ang), rot:d.rot||0}; });
-    } else {
-      balls.forEach(b=>{ b.x=box.x+(b.x-old.x)/old.w*box.w; b.y=box.y+(b.y-old.y)/old.h*box.h; });
-    }
-    balls.forEach(b=>{ b.r=b.k*S; b.m=b.r*b.r; });
-    if(!old||reduce) for(let i=0;i<80;i++){ collide(false); walls(false); }  // разводим пересечения
-    draw();
-  }
-  function walls(bounce){
-    for(const b of balls){
-      const l=box.x+b.r, rr=box.x+box.w-b.r, t=box.y+b.r, bt=box.y+box.h-b.r;
-      if(b.x<l){ b.x=l; if(bounce) b.vx=Math.abs(b.vx); } else if(b.x>rr){ b.x=rr; if(bounce) b.vx=-Math.abs(b.vx); }
-      if(b.y<t){ b.y=t; if(bounce) b.vy=Math.abs(b.vy); } else if(b.y>bt){ b.y=bt; if(bounce) b.vy=-Math.abs(b.vy); }
-    }
-  }
-  function collide(bounce){
-    const gap=bounce?0:S*.025;
-    for(let i=0;i<balls.length;i++) for(let j=i+1;j<balls.length;j++){
-      const a=balls[i], b=balls[j], dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy)||1e-3, min=a.r+b.r+gap;
-      if(d>=min) continue;
-      const nx=dx/d, ny=dy/d, over=min-d, sm=a.m+b.m;
-      a.x-=nx*over*b.m/sm; a.y-=ny*over*b.m/sm; b.x+=nx*over*a.m/sm; b.y+=ny*over*a.m/sm;
-      if(!bounce) continue;
-      const rv=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny; if(rv>0) continue;
-      const imp=2*rv/sm;   // упругий удар с учётом массы (масса ~ площади)
-      a.vx+=imp*b.m*nx; a.vy+=imp*b.m*ny; b.vx-=imp*a.m*nx; b.vy-=imp*a.m*ny;
-    }
-  }
-  function step(dt){
-    const v0=S*.16, h=dt/2;   // два подшага на кадр — без «проваливаний» на 30 fps
-    for(let k=0;k<2;k++){
-      for(const b of balls){
-        if(ptr){ const dx=b.x-ptr.x, dy=b.y-ptr.y, d=Math.hypot(dx,dy), R=b.r+S*.22;
-          if(d<R&&d>.1){ const f=(1-d/R)*S*5*h; b.vx+=dx/d*f; b.vy+=dy/d*f; } }
-        // скорость мягко тянется к крейсерской: движение не затухает и не разгоняется; крупные — медленнее
-        const sp=Math.hypot(b.vx,b.vy)||1e-3, tgt=v0*(1.25-b.k*2.2);
-        const g=1+(tgt/sp-1)*Math.min(1,h*.9); b.vx*=g; b.vy*=g;
-        b.x+=b.vx*h; b.y+=b.vy*h;
-        b.rot+=b.vx/b.r*h;   // «катится»: поворот от горизонтальной скорости
-      }
-      collide(true); walls(true);
-    }
-    draw();
-  }
-  function disc(x,y,r,c){ ctx.fillStyle=c; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); }
-  function draw(){
-    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
-    // тонкая сетка 4×3 внутри поля, подпись не пересекает
-    ctx.strokeStyle='rgba(26,26,26,.09)'; ctx.lineWidth=1; ctx.beginPath();
-    for(let i=1;i<4;i++){ const x=Math.round(box.x+box.w*i/4)+.5; ctx.moveTo(x,box.y); ctx.lineTo(x,box.y+box.h); }
-    for(let i=1;i<3;i++){ const y=Math.round(box.y+box.h*i/3)+.5; ctx.moveTo(box.x,y); ctx.lineTo(box.x+box.w,y); }
-    ctx.stroke();
-    for(const b of balls){
-      const mx=Math.cos(b.rot), my=Math.sin(b.rot);
-      if(b.ring){
-        const lw=Math.max(2,b.r*.22); ctx.lineWidth=lw; ctx.strokeStyle=INK;
-        ctx.beginPath(); ctx.arc(b.x,b.y,b.r-lw/2,0,Math.PI*2); ctx.stroke();
-        disc(b.x+mx*b.r*.36,b.y+my*b.r*.36,b.r*.16,BORD); continue;
-      }
-      disc(b.x,b.y,b.r,b.a);
-      if(b.b){ ctx.fillStyle=b.b; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,b.rot,b.rot+Math.PI); ctx.closePath(); ctx.fill(); }
-      else if(b.k>.1) disc(b.x+mx*b.r*.58,b.y+my*b.r*.58,b.r*.1,b.a===BORD?CREAM:BORD);
-    }
-  }
-  layout();
-  if('ResizeObserver' in window) new ResizeObserver(layout).observe(poster); else addEventListener('resize',layout);
-  if(document.fonts) document.fonts.ready.then(layout);
-  if(reduce) return;
-  if(matchMedia('(hover:hover) and (pointer:fine)').matches){
-    poster.addEventListener('pointermove',e=>{ const r=poster.getBoundingClientRect(); ptr={x:e.clientX-r.left,y:e.clientY-r.top}; },{passive:true});
-    poster.addEventListener('pointerleave',()=>ptr=null);
-  }
-  liveLoop(poster,step);
+  const poster=$('#poster'); if(!poster || reduce) return;
+  const g=id=>$('#'+id,poster), A=g('pA'), A1=g('pA1'), A2=g('pA2'), B=g('pB'), C=g('pC'), D=g('pD');
+  const TAU=Math.PI*2, sw=(t,T,ph)=>Math.sin(t*TAU/T+ph);
+  const rot=(el,a,x,y,pre='')=>el.setAttribute('transform',`${pre}rotate(${a.toFixed(3)} ${x} ${y})`);
+  let t=0;
+  liveLoop(poster,dt=>{
+    t+=dt;
+    // вся связка A висит на линии из верхнего края и чуть покачивается вокруг точки крепления
+    rot(A,sw(t,9,0)*1.4,113.8,0,'translate(-80 0) ');
+    rot(A1,sw(t,5.2,.8)*7,209.02,80.3);        // красный отвес — вокруг узла
+    rot(A2,sw(t,6.4,2.1)*6,209.02,80.3);       // чёрная нить с точкой
+    rot(B,sw(t,7.3,1.3)*3,432.95,109.55);      // большой круг на нити под куполом
+    // свободные круги мягко перекатываются
+    const cx=sw(t,11,0)*14, dy=sw(t,6.5,1)*5;
+    C.setAttribute('transform',`translate(${(107.27+cx).toFixed(2)} 109.04)`);
+    D.setAttribute('transform',`translate(-534.4 ${(67.2+dy).toFixed(2)})`);
+  });
 })();
 
-/* арка: дуги прорисовываются (CSS), маятник качается, бублик катится по линии */
+/* арка (паттерн-3): дуги прорисовываются (CSS), отвес качается под точкой, точка дышит, чёрный круг катится по низу */
 (()=>{
   const arch=$('#arch'); if(!arch || reduce) return;
-  const pend=$('#archPend'), pivot=$('#archPivot'), orb=$('#archOrb'), TAU=Math.PI*2;
+  const rope=$('#archRope'), node=$('#archNode'), ball=$('#archBall'), TAU=Math.PI*2;
   let t=0;
   liveLoop(arch,dt=>{
     t+=dt;
     const ph=t*TAU/4.6;
-    pend.setAttribute('transform',`rotate(${(Math.sin(ph)*9).toFixed(3)} 150 150)`);
-    pivot.setAttribute('r',(4.5+Math.abs(Math.cos(ph))*1.5).toFixed(2));
-    const x=150+104*Math.sin(t*TAU/16), rot=(x-150)/34*180/Math.PI;   // поворот = путь / радиус — катится без проскальзывания
-    orb.setAttribute('transform',`translate(${x.toFixed(2)} 318) rotate(${rot.toFixed(2)})`);
+    rope.setAttribute('transform',`rotate(${(Math.sin(ph)*7).toFixed(3)} 249.74 115.79)`);
+    const k=1+Math.abs(Math.cos(ph))*.07;
+    node.setAttribute('transform',`translate(249.74 115.79) scale(${k.toFixed(4)}) translate(-249.74 -115.79)`);
+    const x=Math.sin(t*TAU/16)*80;
+    ball.setAttribute('transform',`translate(${(-355.2+x).toFixed(2)} 293.67)`);
   });
 })();
 </script>
