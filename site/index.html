@@ -122,13 +122,13 @@ img,svg{display:block;max-width:100%}
 .sec-head p{max-width:24em}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .card{--c:var(--bord);--fg:var(--ink);--pat:none;position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:clamp(280px,29vw,400px);padding:24px;border:0;border-radius:0;text-align:left;background-color:var(--c);color:var(--fg);overflow:hidden;isolation:isolate;transition:transform .45s var(--ease)}
-/* фоны направлений — оригинальные SVG из брендбука (2560×1440, цвет уже внутри); высота не меньше 420px, чтобы линии не мельчили на телефоне */
+/* фоны направлений — оригинальные SVG из брендбука, вариант «Темный» (чёрные линии, 20% прозрачности; 2560×1440, цвет уже внутри); высота не меньше 420px, чтобы линии не мельчили на телефоне */
 .card:before,.card.actor:after{content:"";position:absolute;inset:-24px;z-index:-1;background:var(--c) var(--pat) center/auto max(100%,420px) no-repeat;transition:transform 1.2s var(--ease)}
 .card:hover:before,.card:focus-visible:before,.card.actor:hover:after,.card.actor:focus-visible:after{transform:translate(-18px,12px)}
 .card:hover{transform:translateY(-6px)}
 .card .ico{width:clamp(96px,10vw,140px);height:clamp(96px,10vw,140px);object-fit:contain;object-position:left top;transition:transform .5s var(--ease)}
 .card:hover .ico{transform:rotate(-8deg) scale(1.06)}
-.card .num{position:absolute;right:24px;top:24px;font-size:14px;letter-spacing:.12em}
+.card .num{position:absolute;right:24px;top:20px;font-family:var(--font);font-size:clamp(28px,2.6vw,40px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .card .name{font-size:clamp(28px,3vw,44px);line-height:1;letter-spacing:-.02em;max-width:8em}
 .card .desc{font-size:15px;line-height:1.35;max-width:17em;margin-top:12px;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s var(--ease),opacity .4s,margin .4s}
 .card:hover .desc,.card:focus-visible .desc{max-height:5em;opacity:1}
@@ -136,8 +136,8 @@ img,svg{display:block;max-width:100%}
 .card .go svg{width:18px;height:18px}
 .card:hover .go,.card:focus-visible .go{transform:none}
 .card.vocal{--c:var(--vocal);--pat:url("patterns/vocal.svg")}
-.card.guitar{--c:var(--guitar);--fg:var(--cream);--pat:url("patterns/guitar.svg")}
-.card.drums{--c:var(--drums);--fg:var(--cream);--pat:url("patterns/drums.svg")}
+.card.guitar{--c:var(--guitar);--pat:url("patterns/guitar.svg")}
+.card.drums{--c:var(--drums);--pat:url("patterns/drums.svg")}
 .card.piano{--c:var(--piano);--pat:url("patterns/piano.svg")}
 .card.actor{--c:var(--orange);--pat:url("patterns/actor-orange.svg")}
 .card.actor:after{--c:var(--blue);--pat:url("patterns/actor-blue.svg");clip-path:polygon(74% 0,100% 0,100% 100%,56% 100%)}
