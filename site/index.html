@@ -234,8 +234,12 @@ img,svg{display:block;max-width:100%}
 .modal.open .sheet{transform:none}
 .sheet-art{position:relative;background:var(--cream);min-height:200px;overflow:hidden}
 .sheet-art svg{position:absolute;inset:0;width:100%;height:100%}
-.sheet-art .nd{transform-box:fill-box;transform-origin:center;transition:transform .8s var(--ease)}
-#artBig{transition:fill .6s var(--ease)}
+.sheet-art .nd{transform-box:fill-box;transform-origin:center}
+.sheet-art .cr,.sheet-art .ck{transition:fill .9s ease-in-out}
+.sheet-art .cr{fill:var(--art-r,#9b3e47)}
+.sheet-art .ck{fill:var(--art-k,#1a1a1a)}
+.sheet-art .sr{stroke:var(--art-r,#9b3e47);transition:stroke .9s ease-in-out}
+.sheet-art [data-d]{transform-box:fill-box}
 .sheet-art:after{content:"";position:absolute;inset:0;border-right:2px solid var(--bord)}
 .sheet-body{padding:clamp(24px,3vw,36px) clamp(24px,4vw,48px)}
 .sheet h2{font-size:clamp(32px,4vw,48px);line-height:1;letter-spacing:-.02em;margin:10px 0 10px}
@@ -515,28 +519,30 @@ img,svg{display:block;max-width:100%}
       <!-- фигуры из «3. Паттерны/паттерн-4.svg» без изменений; двигаются только transform -->
       <svg viewBox="34 0 183 366.67" preserveAspectRatio="xMidYMid slice">
         <rect fill="#fff5ea" x="-40" y="-40" width="786" height="447"/>
+        <g>
         <line data-f="c" data-t="7.2" data-p="0" fill="none" stroke="#1a1a1a" stroke-width="3" x1="353.33" y1="275.33" x2="481.83" y2="275.33"/>
-        <g class="nd" data-t="5.2"><path fill="#1a1a1a" d="M584.27,116.09c0,12.7-10.3,23-23,23-12.7,0-23-10.3-23-23h46Z"/><path fill="#9b3e47" d="M561.27,116.09l-16.26,16.26c-4.16-4.16-6.74-9.91-6.74-16.26h23Z"/></g>
-        <path data-d="x" data-t="11" data-p="0" id="artBig" fill="#1a1a1a" d="M192.85,0c-3.13,23.76-23.46,42.09-48.08,42.09S99.83,23.76,96.69,0h96.16Z"/>
-        <path data-d="y" data-t="13" data-p="1.2" fill="#1a1a1a" d="M0,332.61c8.82,9.17,21.21,14.87,34.94,14.87,23.58,0,43.24-16.84,47.59-39.15.6-3.02.91-6.15.91-9.35,0-26.79-21.72-48.5-48.5-48.5-13.73,0-26.12,5.7-34.94,14.86v67.27Z"/>
-        <path data-d="x" data-t="12" data-p="2.4" fill="#9b3e47" d="M672.27,336.59c0,10.76-2.41,20.96-6.72,30.08h-127.56c-4.31-9.12-6.72-19.32-6.72-30.08,0-9.38,1.83-18.34,5.17-26.53,10.47-25.79,35.78-43.97,65.33-43.97,38.94,0,70.5,31.56,70.5,70.5Z"/>
-        <path data-d="y" data-t="10" data-p="3.3" fill="#9b3e47" d="M64.27,85.59c0,36.84-28.25,67.07-64.27,70.22V15.37c36.02,3.15,64.27,33.38,64.27,70.22Z"/>
-        <g class="nd" data-t="4.4"><path fill="#9b3e47" d="M406.27,176.09c-23.2,0-42-18.8-42-42s18.8-42,42-42v84Z"/><path fill="#1a1a1a" d="M406.27,92.09c23.2,0,42,18.8,42,42s-18.8,42-42,42v-84Z"/></g>
-        <g class="nd" data-t="5.8"><path fill="#1a1a1a" d="M189.77,247.09c-14.91,0-27-12.09-27-27,0-14.91,12.09-27,27-27v54Z"/><path fill="#9b3e47" d="M216.77,220.09c0,14.91-12.09,27-27,27-14.91,0-27-12.09-27-27h54Z"/><path fill="#9b3e47" d="M189.77,193.09c14.91,0,27,12.09,27,27s-12.09,27-27,27v-54Z"/></g>
-        <g class="nd" data-t="4.0"><path fill="#9b3e47" d="M271.77,86.09c-5.8,0-10.5-4.7-10.5-10.5s4.7-10.5,10.5-10.5v21Z"/><path fill="#1a1a1a" d="M271.77,65.09c5.8,0,10.5,4.7,10.5,10.5s-4.7,10.5-10.5,10.5v-21Z"/></g>
-        <g class="nd" data-t="4.8"><path fill="#1a1a1a" d="M283.77,323.09c-5.8,0-10.5-4.7-10.5-10.5s4.7-10.5,10.5-10.5v21Z"/><path fill="#9b3e47" opacity=".8" d="M283.77,323.09c-5.8,0-10.5-4.7-10.5-10.5s4.7-10.5,10.5-10.5v21Z"/><path fill="#1a1a1a" d="M283.77,302.09c5.8,0,10.5,4.7,10.5,10.5s-4.7,10.5-10.5,10.5v-21Z"/></g>
-        <path data-d="x" data-t="14" data-p="4.1" fill="#9b3e47" d="M680.23,0c-2.31,11.52-8.4,21.68-16.92,29.12-9.23,8.08-21.31,12.97-34.54,12.97s-25.3-4.89-34.53-12.97c-8.53-7.44-14.62-17.6-16.93-29.12h102.92Z"/>
+        <g class="nd" data-t="5.2"><path fill="#1a1a1a" d="M584.27,116.09c0,12.7-10.3,23-23,23-12.7,0-23-10.3-23-23h46Z"/><path class="cr" fill="#9b3e47" d="M561.27,116.09l-16.26,16.26c-4.16-4.16-6.74-9.91-6.74-16.26h23Z"/></g>
+        <path data-d="x" style="transform-origin:center top" data-t="11" data-p="0" class="ck" fill="#1a1a1a" d="M192.85,0c-3.13,23.76-23.46,42.09-48.08,42.09S99.83,23.76,96.69,0h96.16Z"/>
+        <path data-d="y" style="transform-origin:left center" data-t="13" data-p="1.2" class="ck" fill="#1a1a1a" d="M0,332.61c8.82,9.17,21.21,14.87,34.94,14.87,23.58,0,43.24-16.84,47.59-39.15.6-3.02.91-6.15.91-9.35,0-26.79-21.72-48.5-48.5-48.5-13.73,0-26.12,5.7-34.94,14.86v67.27Z"/>
+        <path data-d="x" style="transform-origin:center bottom" data-t="12" data-p="2.4" class="cr" fill="#9b3e47" d="M672.27,336.59c0,10.76-2.41,20.96-6.72,30.08h-127.56c-4.31-9.12-6.72-19.32-6.72-30.08,0-9.38,1.83-18.34,5.17-26.53,10.47-25.79,35.78-43.97,65.33-43.97,38.94,0,70.5,31.56,70.5,70.5Z"/>
+        <path data-d="y" style="transform-origin:left center" data-t="10" data-p="3.3" class="cr" fill="#9b3e47" d="M64.27,85.59c0,36.84-28.25,67.07-64.27,70.22V15.37c36.02,3.15,64.27,33.38,64.27,70.22Z"/>
+        <g class="nd" data-t="4.4"><path class="cr" fill="#9b3e47" d="M406.27,176.09c-23.2,0-42-18.8-42-42s18.8-42,42-42v84Z"/><path fill="#1a1a1a" d="M406.27,92.09c23.2,0,42,18.8,42,42s-18.8,42-42,42v-84Z"/></g>
+        <g class="nd" data-t="5.8"><path fill="#1a1a1a" d="M189.77,247.09c-14.91,0-27-12.09-27-27,0-14.91,12.09-27,27-27v54Z"/><path class="cr" fill="#9b3e47" d="M216.77,220.09c0,14.91-12.09,27-27,27-14.91,0-27-12.09-27-27h54Z"/><path class="cr" fill="#9b3e47" d="M189.77,193.09c14.91,0,27,12.09,27,27s-12.09,27-27,27v-54Z"/></g>
+        <g class="nd" data-t="4.0"><path class="cr" fill="#9b3e47" d="M271.77,86.09c-5.8,0-10.5-4.7-10.5-10.5s4.7-10.5,10.5-10.5v21Z"/><path fill="#1a1a1a" d="M271.77,65.09c5.8,0,10.5,4.7,10.5,10.5s-4.7,10.5-10.5,10.5v-21Z"/></g>
+        <g class="nd" data-t="4.8"><path fill="#1a1a1a" d="M283.77,323.09c-5.8,0-10.5-4.7-10.5-10.5s4.7-10.5,10.5-10.5v21Z"/><path class="cr" fill="#9b3e47" opacity=".8" d="M283.77,323.09c-5.8,0-10.5-4.7-10.5-10.5s4.7-10.5,10.5-10.5v21Z"/><path fill="#1a1a1a" d="M283.77,302.09c5.8,0,10.5,4.7,10.5,10.5s-4.7,10.5-10.5,10.5v-21Z"/></g>
+        <path data-d="x" style="transform-origin:center top" data-t="14" data-p="4.1" class="cr" fill="#9b3e47" d="M680.23,0c-2.31,11.52-8.4,21.68-16.92,29.12-9.23,8.08-21.31,12.97-34.54,12.97s-25.3-4.89-34.53-12.97c-8.53-7.44-14.62-17.6-16.93-29.12h102.92Z"/>
         <line data-f="c" data-t="8.1" data-p="1.1" fill="none" stroke="#1a1a1a" x1="144.77" y1="134.09" x2="269.72" y2="134.09"/>
         <line data-f="r" data-t="6.4" data-p="2.3" fill="none" stroke="#1a1a1a" stroke-width="5" x1="486.72" y1="213.83" x2="706.05" y2="213.83"/>
-        <line data-f="c" data-t="6.9" data-p="3.0" fill="none" stroke="#9b3e47" stroke-width="2" x1="58.22" y1="308.33" x2="125.44" y2="308.33"/>
+        <line data-f="c" data-t="6.9" data-p="3.0" fill="none" class="sr" stroke="#9b3e47" stroke-width="2" x1="58.22" y1="308.33" x2="125.44" y2="308.33"/>
         <line data-f="l" data-t="8.6" data-p="0.6" fill="none" stroke="#1a1a1a" stroke-width="2" x1="0" y1="220.09" x2="34.94" y2="220.09"/>
-        <line data-f="l" data-t="7.6" data-p="2.0" fill="none" stroke="#9b3e47" stroke-width="4" x1="0" y1="193.09" x2="58.22" y2="193.09"/>
-        <line data-f="c" data-t="6.2" data-p="4.1" fill="none" stroke="#9b3e47" stroke-width="2" x1="98.66" y1="126.33" x2="230.22" y2="126.33"/>
-        <line data-f="c" data-t="8.9" data-p="5.0" fill="none" stroke="#9b3e47" x1="97.55" y1="148.11" x2="230.22" y2="148.11"/>
-        <line data-f="c" data-t="7.2" data-p="0" fill="none" stroke="#9b3e47" stroke-width="3" x1="353.33" y1="275.33" x2="481.83" y2="275.33"/>
+        <line data-f="l" data-t="7.6" data-p="2.0" fill="none" class="sr" stroke="#9b3e47" stroke-width="4" x1="0" y1="193.09" x2="58.22" y2="193.09"/>
+        <line data-f="c" data-t="6.2" data-p="4.1" fill="none" class="sr" stroke="#9b3e47" stroke-width="2" x1="98.66" y1="126.33" x2="230.22" y2="126.33"/>
+        <line data-f="c" data-t="8.9" data-p="5.0" fill="none" class="sr" stroke="#9b3e47" x1="97.55" y1="148.11" x2="230.22" y2="148.11"/>
+        <line data-f="c" data-t="7.2" data-p="0" fill="none" class="sr" stroke="#9b3e47" stroke-width="3" x1="353.33" y1="275.33" x2="481.83" y2="275.33"/>
         <line data-f="c" data-t="7.0" data-p="1.7" fill="none" stroke="#1a1a1a" stroke-width="2" x1="403.77" y1="310.06" x2="584.27" y2="310.06"/>
         <line data-f="c" data-t="6.6" data-p="2.8" fill="none" stroke="#1a1a1a" x1="166.44" y1="336.59" x2="283.77" y2="336.59"/>
         <line data-f="c" data-t="8.3" data-p="3.6" fill="none" stroke="#1a1a1a" stroke-width="3" x1="672.27" y1="29.12" x2="334.77" y2="29.12"/>
+        </g>
       </svg>
     </div>
     <div class="sheet-body">
@@ -641,35 +647,39 @@ function toast(msg){ toastEl.textContent=msg; toastEl.classList.add('show'); cle
 
 /* ═════════ ФОРМА ═════════ */
 const modal=$('#modal'), form=$('#leadForm'), done=$('#done');
-/* паттерн-4 в форме: линии ходят, как фейдеры пульта; узлы поворачиваются; большие формы дрейфуют.
+/* паттерн-4 в форме: линии плавно ходят, как фейдеры пульта; узлы-ручки медленно вращаются; большие формы дрейфуют.
+   Всё на синусах с периодами 8–14 с. Выбор направления плавно перекрашивает красные части и одиночные круги.
    Работает только пока форма открыта. */
 const formArt=(()=>{
-  const svg=$('.sheet-art svg'), mob=matchMedia('(max-width:680px)');
+  const box=$('.sheet-art'), svg=$('svg',box), mob=matchMedia('(max-width:680px)');
   const setVB=()=>svg.setAttribute('viewBox', mob.matches ? '0 0 706.05 366.67' : '34 0 183 366.67');
   setVB(); if(mob.addEventListener) mob.addEventListener('change',setVB);
-  const F=$$('[data-f]',svg), D=$$('[data-d]',svg), N=$$('.nd',svg), big=$('#artBig');
-  const col={vocal:'var(--vocal)',guitar:'var(--guitar)',drums:'var(--drums)',piano:'var(--piano)',actor:'var(--orange)',speech:'var(--pink)',unsure:'var(--bord)'};
-  const tint=()=>{ const v=form.elements.direction.value; big.style.fill = col[v] || ''; };
+  const F=$$('[data-f]',svg), D=$$('[data-d]',svg), N=$$('.nd',svg);
+  const col={vocal:'--vocal',guitar:'--guitar',drums:'--drums',piano:'--piano',actor:'--orange',speech:'--pink'};
+  function tint(){
+    const c=col[form.elements.direction.value];
+    box.style.setProperty('--art-r', c ? `var(${c})` : 'var(--bord)');
+    if(c) box.style.setProperty('--art-k', `var(${c})`); else box.style.removeProperty('--art-k');
+  }
   form.addEventListener('change',e=>{ if(e.target.name==='direction') tint(); });
-  let id=0, t0=0, timers=[];
-  const wave=(el,s)=>Math.sin(s*2*Math.PI/+el.dataset.t + +el.dataset.p);
+  const per=el=>8+((+el.dataset.t*1.37)%6);            // период 8–14 с, у каждого свой
+  const wave=(el,s)=>Math.sin(s*2*Math.PI/per(el) + +el.dataset.p);
+  let id=0, t0=0, run=0;
   function frame(t){
-    const m=svg.getScreenCTM(), k=(m&&m.a)||1, s=(t-t0)/1000;   // k — пикселей в единице SVG
-    F.forEach(l=>{ const a=12/k, w=wave(l,s), mode=l.dataset.f;
-      const x = mode==='l' ? -a*(1-w)/2 : mode==='r' ? a*(1-w)/2 : a*w;   // у края линия не отрывается от него
+    const m=svg.getScreenCTM(), k=(m&&m.a)||1, s=(t-t0)/1000;    // k — пикселей в единице SVG
+    F.forEach(l=>{ const a=32/k, w=wave(l,s), mode=l.dataset.f;
+      const x = mode==='l' ? -a*(1-w)/2 : mode==='r' ? a*(1-w)/2 : a*w;   // у края линия от него не отрывается
       l.style.transform=`translateX(${x.toFixed(2)}px)`; });
-    D.forEach(d=>{ const v=(6/k*wave(d,s)).toFixed(2);
-      d.style.transform = d.dataset.d==='x' ? `translateX(${v}px)` : `translateY(${v}px)`; });
+    D.forEach(d=>{ const v=(16/k*wave(d,s)).toFixed(2), sc=(1+.05*Math.sin(s*2*Math.PI/(per(d)*1.3) + +d.dataset.p*2)).toFixed(4);
+      d.style.transform=(d.dataset.d==='x' ? `translateX(${v}px)` : `translateY(${v}px)`)+` scale(${sc})`; });
+    N.forEach((n,i)=>{ const dir=i%2?-1:1, speed=360/(20+i*3);   // оборот за 20–32 с
+      n.style.transform=`rotate(${(dir*speed*s).toFixed(2)}deg)`; });
     id=requestAnimationFrame(frame);
   }
   return {
     tint,
-    start(){
-      if(reduce||id) return;
-      t0=performance.now(); id=requestAnimationFrame(frame);
-      N.forEach(n=>timers.push(setInterval(()=>{ const r=(+n.dataset.r||0)+90; n.dataset.r=r; n.style.transform=`rotate(${r}deg)`; }, +n.dataset.t*1000)));
-    },
-    stop(){ cancelAnimationFrame(id); id=0; timers.forEach(clearInterval); timers=[]; }
+    start(){ if(reduce||id) return; t0=performance.now()-run; id=requestAnimationFrame(frame); },   // продолжаем с того же места
+    stop(){ if(!id) return; cancelAnimationFrame(id); id=0; run=performance.now()-t0; }
   };
 })();
 
