@@ -240,6 +240,9 @@ img,svg{display:block;max-width:100%}
 .toast{position:fixed;left:50%;bottom:24px;z-index:70;transform:translate(-50%,30px);max-width:min(520px,calc(100vw - 32px));background:var(--ink);color:var(--cream);padding:14px 22px;border-radius:24px;font-size:14px;text-align:center;opacity:0;visibility:hidden;transition:opacity .3s,transform .4s var(--ease),visibility .3s}
 .toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
 
+/* липкая кнопка записи (только телефон) */
+.stick{display:none}
+
 /* курсор-точка (только мышь) */
 .cur{position:fixed;left:0;top:0;z-index:90;width:34px;height:34px;margin:-17px 0 0 -17px;border:2px solid var(--bord);border-radius:50%;pointer-events:none;opacity:0;transition:opacity .3s,width .3s,height .3s,margin .3s,background .3s;mix-blend-mode:multiply}
 .cur.on{opacity:1}
@@ -277,7 +280,13 @@ img,svg{display:block;max-width:100%}
   .sheet{grid-template-columns:1fr}
   .sheet-art{display:none}
   .btn{padding-left:22px;font-size:15px}
-  .hint{display:none}
+  .hero{padding-bottom:28px}
+  .stage{margin-bottom:34px}
+  .hint{right:auto;left:50%;bottom:-30px;transform:translateX(-50%);white-space:nowrap}
+  .dirs{padding-top:48px}
+  .stick{display:flex;justify-content:space-between;position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;box-shadow:0 10px 30px rgba(26,26,26,.25);transform:translateY(calc(100% + 32px));visibility:hidden;transition:transform .45s var(--ease),visibility .45s,background .3s}
+  .stick.show{transform:none;visibility:visible}
+  .modal.open~.stick{transform:translateY(calc(100% + 32px));visibility:hidden}
 }
 @media (prefers-reduced-motion:reduce){
   *,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -503,6 +512,8 @@ img,svg{display:block;max-width:100%}
   </div>
 </div>
 
+<button class="btn stick openForm" type="button" id="stick">Записаться<i><svg><use href="#i-arrow"/></svg></i></button>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="cur" id="cur"></div>
 
@@ -727,6 +738,15 @@ if(io){
     ob.disconnect();
   }}),{threshold:.35}).observe(stepsEl);
 } else { $$('.step').forEach(s=>s.classList.add('on')); stepsEl.classList.add('on'); }
+
+/* липкая «Записаться» на телефоне: после первого экрана и пока финальный CTA ещё не виден */
+(()=>{
+  const st=$('#stick'), cta=$('.final .openForm'), mq=matchMedia('(max-width:680px)');
+  let q=0;
+  const upd=()=>{ q=0; st.classList.toggle('show', mq.matches && scrollY>innerHeight*.85 && cta.getBoundingClientRect().top>innerHeight); };
+  const req=()=>{ if(!q) q=requestAnimationFrame(upd); };
+  addEventListener('scroll',req,{passive:true}); addEventListener('resize',req); upd();
+})();
 
 /* ═════════ ЖИВЫЕ ИЛЛЮСТРАЦИИ ═════════ */
 /* крутит step(dt) только пока элемент на экране и вкладка видна */
