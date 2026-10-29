@@ -6,7 +6,7 @@
 site/
   index.html     — вся страница: разметка, стили, скрипты
   favicon.svg
-  fonts/         — Architexture.ttf
+  fonts/         — Architexture-v2.ttf
   icons/         — иконки направлений
   img/           — фирменные паттерны
 ```
