@@ -123,14 +123,14 @@ img,svg{display:block;max-width:100%}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .card{--c:var(--bord);--fg:var(--ink);--pat:none;position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:clamp(280px,29vw,400px);padding:24px;border:0;border-radius:0;text-align:left;background-color:var(--c);color:var(--fg);overflow:hidden;isolation:isolate;transition:transform .45s var(--ease)}
 /* фоны направлений — оригинальные SVG из брендбука, вариант «Темный» (чёрные линии, 20% прозрачности; 2560×1440, цвет уже внутри); высота не меньше 420px, чтобы линии не мельчили на телефоне */
-.card:before,.card.actor:after{content:"";position:absolute;inset:-24px;z-index:-1;background:var(--c) var(--pat) center/auto max(100%,420px) no-repeat;transition:transform 1.2s var(--ease)}
+.card:before,.card.actor:after{content:"";position:absolute;inset:-24px;z-index:-1;background:linear-gradient(to top,color-mix(in srgb,var(--c) 60%,transparent) 0,color-mix(in srgb,var(--c) 60%,transparent) 30%,transparent 46%),var(--pat) center/auto max(100%,420px) no-repeat var(--c);transition:transform 1.2s var(--ease)}
 .card:hover:before,.card:focus-visible:before,.card.actor:hover:after,.card.actor:focus-visible:after{transform:translate(-18px,12px)}
 .card:hover{transform:translateY(-6px)}
 .card .ico{width:clamp(96px,10vw,140px);height:clamp(96px,10vw,140px);object-fit:contain;object-position:left top;transition:transform .5s var(--ease)}
 .card:hover .ico{transform:rotate(-8deg) scale(1.06)}
 .card .num{position:absolute;right:24px;top:20px;font-family:var(--font);font-size:clamp(28px,2.6vw,40px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .card .name{font-size:clamp(28px,3vw,44px);line-height:1;letter-spacing:-.02em;max-width:8em}
-.card .desc{font-size:15px;line-height:1.35;max-width:17em;margin-top:12px;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s var(--ease),opacity .4s,margin .4s}
+.card .desc{font-size:17px;font-weight:500;line-height:1.35;max-width:17em;margin-top:12px;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s var(--ease),opacity .4s,margin .4s}
 .card:hover .desc,.card:focus-visible .desc{max-height:5em;opacity:1}
 .card .go{position:absolute;right:20px;bottom:20px;width:46px;height:46px;border-radius:50%;background:var(--fg);color:var(--c);display:grid;place-items:center;transform:scale(0);transition:transform .4s var(--ease)}
 .card .go svg{width:18px;height:18px}
@@ -201,24 +201,24 @@ img,svg{display:block;max-width:100%}
 .modal.open{opacity:1;visibility:visible}
 .sheet{position:relative;width:min(900px,100%);max-height:calc(100svh - 32px);overflow:auto;display:grid;grid-template-columns:.8fr 1.2fr;background:var(--cream);transform:translateY(24px);transition:transform .5s var(--ease)}
 .modal.open .sheet{transform:none}
-.sheet-art{position:relative;background:var(--cream) url("img/pattern-4.svg") 38% center/auto 100%;min-height:200px}
+.sheet-art{position:relative;background:var(--cream) url("img/pattern-4.svg") 8% center/auto 100%;min-height:200px}
 .sheet-art:after{content:"";position:absolute;inset:0;border-right:2px solid var(--bord)}
-.sheet-body{padding:clamp(24px,4vw,48px)}
-.sheet h2{font-size:clamp(32px,4.4vw,52px);line-height:1;letter-spacing:-.02em;margin:14px 0 12px}
+.sheet-body{padding:clamp(24px,3vw,36px) clamp(24px,4vw,48px)}
+.sheet h2{font-size:clamp(32px,4vw,48px);line-height:1;letter-spacing:-.02em;margin:10px 0 10px}
 .sheet h2 em{font-style:normal;color:var(--bord)}
-.sheet .sub{font-size:16px;opacity:.75;margin-bottom:26px}
+.sheet .sub{font-size:16px;opacity:.75;margin-bottom:18px}
 .x{position:absolute;right:14px;top:14px;z-index:2;width:44px;height:44px;border-radius:50%;border:2px solid var(--ink);background:var(--cream);display:grid;place-items:center;transition:background .2s,color .2s}
 .x:hover{background:var(--ink);color:var(--cream)}
 .x svg{width:16px;height:16px}
-.f{display:block;margin-bottom:20px}
+.f{display:block;margin-bottom:16px}
 .f>span{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--bord);margin-bottom:6px}
-.f input{width:100%;border:0;border-bottom:2px solid var(--ink);background:transparent;padding:10px 0;font-size:20px;border-radius:0;outline:none;transition:border-color .2s}
+.f input{width:100%;border:0;border-bottom:2px solid var(--ink);background:transparent;padding:8px 0;font-size:20px;border-radius:0;outline:none;transition:border-color .2s}
 .f input:focus{border-color:var(--bord)}
 .f input::placeholder{color:rgba(26,26,26,.38)}
 .f.bad input{border-color:#c0392b}
 .err{display:none;font-size:13px;color:#b03a2e;margin-top:6px}
 .f.bad .err{display:block}
-.chips{display:flex;flex-wrap:wrap;gap:8px;border:0;padding:0;margin:0 0 22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;border:0;padding:0;margin:0 0 16px}
 .chips legend{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--bord);margin-bottom:10px;padding:0}
 .chip{position:relative}
 .chip input{position:absolute;opacity:0;inset:0;cursor:pointer}
@@ -226,9 +226,9 @@ img,svg{display:block;max-width:100%}
 .chip label:before{content:"";width:12px;height:12px;border-radius:50%;background:var(--c);border:1.5px solid var(--ink)}
 .chip input:checked+label{background:var(--ink);color:var(--cream)}
 .chip input:focus-visible+label{outline:2px solid var(--bord);outline-offset:3px}
-.where{display:flex;gap:10px;align-items:center;font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 20px}
+.where{display:flex;gap:10px;align-items:center;font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 16px}
 .where:before{content:"";width:10px;height:10px;border-radius:50%;background:var(--bord)}
-.fine{font-size:12px;opacity:.6;margin-top:14px;line-height:1.4}
+.fine{font-size:12px;opacity:.6;margin-top:10px;line-height:1.4}
 .done{text-align:left}
 .done .rings{position:relative;width:90px;height:90px;margin-bottom:26px}
 .done .rings i{position:absolute;inset:0;border-radius:50%;border:2px solid var(--bord);animation:wave 2.4s linear infinite;opacity:0}
