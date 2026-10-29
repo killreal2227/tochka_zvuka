@@ -140,28 +140,31 @@ img,svg{display:block;max-width:100%}
 .card:hover{transform:translateY(-6px)}
 .card .ico{--u:calc(clamp(96px,10vw,140px) / 138);height:calc(var(--ih) * var(--u));width:auto;max-width:none;align-self:flex-start;object-fit:contain;object-position:left top;transition:transform .5s var(--ease)}
 .card:hover .ico{transform:rotate(-8deg) scale(1.06)}
-/* анимации иконок: на наведение (десктоп) или один раз при появлении (телефон); в конце — исходное состояние */
-.ico .v-l{transform-box:fill-box;transform-origin:left center}
-.card.play .v-l{animation:ic-grow .45s var(--ease) calc(var(--d) * .2s) backwards}
-@keyframes ic-grow{from{transform:scaleX(0)}}
-.ico .g-s{stroke-dasharray:1}
-.card.play .g-s{animation:ic-draw .5s var(--ease) calc(var(--d) * .14s) backwards}
-@keyframes ic-draw{from{stroke-dashoffset:1}}
-.ico .d-body{transform-box:view-box;transform-origin:342.7px 500px}
-.ico .d-l{transform-box:view-box;transform-origin:304.2px 538.4px}
-.ico .d-r{transform-box:view-box;transform-origin:380.6px 538.4px}
-.card.play .d-body{animation:ic-drum 1.2s ease-out}
-.card.play .d-l{animation:ic-stick-l 1.2s ease-in-out}
-.card.play .d-r{animation:ic-stick-r 1.2s ease-in-out}
-@keyframes ic-drum{10%{transform:scale(1.035)}20%{transform:scale(.99)}28%,50%{transform:none}55%{transform:scale(.985)}62%,82%{transform:none}87%{transform:scale(.985)}94%{transform:none}}
-@keyframes ic-stick-l{20%{transform:none}36%{transform:rotate(-12deg)}48%{transform:rotate(2deg)}56%,100%{transform:none}}
-@keyframes ic-stick-r{52%{transform:none}68%{transform:rotate(12deg)}80%{transform:rotate(-2deg)}88%,100%{transform:none}}
-.card.play .p-k{animation:ic-press .36s ease-in-out calc(var(--d) * .15s)}
-@keyframes ic-press{50%{transform:translateY(2.5px)}}
-.card.play .a-w{animation:ic-wave .5s ease-out calc(var(--d) * .12s) backwards}
-@keyframes ic-wave{from{opacity:.15;transform:translateY(-3px)}}
-.card.play .s-w{animation:ic-wave-x .5s ease-out calc(var(--d) * .2s) backwards}
-@keyframes ic-wave-x{from{opacity:0;transform:translateX(-4px)}}
+/* живые фоны: SVG-паттерн встроен, :before/:after остаются только подложкой-градиентом */
+.card .bg{position:absolute;left:50%;top:50%;height:max(calc(100% + 48px),420px);width:auto;max-width:none;aspect-ratio:16/9;transform:translate(-50%,-50%);transition:transform 1.2s var(--ease);pointer-events:none}
+.card .bg-clip{position:absolute;inset:-24px;clip-path:polygon(74% 0,100% 0,100% 100%,56% 100%);pointer-events:none}
+.card .bg-clip .bg{height:max(100%,420px)}
+.card.live{--pat:none}
+.card.live:before,.card.actor.live:after{background-color:transparent}
+.card.live .bg{z-index:-4}.card.live:before{z-index:-3}.card.live .bg-clip{z-index:-2}.card.actor.live:after{z-index:-1}
+.card:hover .bg,.card:focus-visible .bg{transform:translate(-50%,-50%) translate(-18px,12px)}
+/* анимации фонов: наведение (десктоп) или один раз при появлении (телефон); в конце — исходное состояние */
+.bg .bg-draw,.bg .bg-draw-l{stroke-dasharray:1}
+.card.play .bg-draw{animation:bg-draw .6s var(--ease) calc(var(--d) * 1s) backwards}
+.card.play .bg-draw-l{animation:bg-draw-l .6s var(--ease) calc(var(--d) * 1s) backwards}
+@keyframes bg-draw{from{stroke-dashoffset:1}}
+@keyframes bg-draw-l{from{stroke-dashoffset:-1}}
+.card.play .bg-key{animation:bg-key .42s ease-in-out calc(var(--d) * 1s)}
+@keyframes bg-key{50%{transform:translateY(70px)}}
+.card.play .bg-wave{animation:bg-wave .6s ease-out calc(var(--d) * 1s) backwards}
+@keyframes bg-wave{from{opacity:0;transform:translateY(-70px)}}
+.bg .bg-ring,.bg .bg-stl,.bg .bg-str{transform-box:view-box}
+.card.play .bg-ring{animation:bg-ring .5s ease-out calc(var(--d) * 1s)}
+.card.play .bg-stl{animation:bg-hit .45s ease-in-out calc(var(--d) * 1s + .3s)}
+.card.play .bg-str{animation:bg-hit2 .45s ease-in-out calc(var(--d) * 1s + .6s)}
+@keyframes bg-ring{30%{transform:scale(1.05)}65%{transform:scale(.98)}100%{transform:none}}
+@keyframes bg-hit{45%{transform:rotate(-14deg)}75%{transform:rotate(3deg)}100%{transform:none}}
+@keyframes bg-hit2{45%{transform:rotate(-26deg)}75%{transform:rotate(4deg)}100%{transform:none}}
 .card .num{position:absolute;right:24px;top:20px;font-family:var(--font);font-size:clamp(28px,2.6vw,40px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .card .name{font-size:clamp(28px,3vw,44px);line-height:1;letter-spacing:-.02em;max-width:8em}
 .card .desc{font-size:17px;font-weight:500;line-height:1.35;max-width:17em;margin-top:12px;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s var(--ease),opacity .4s,margin .4s}
@@ -863,7 +866,46 @@ if(io){
   addEventListener('scroll',req,{passive:true}); addEventListener('resize',req); upd();
 })();
 
-/* иконки направлений: наведение на десктопе, один раз при появлении на телефоне */
+/* фоны направлений: оригинальные SVG-паттерны (patterns/*.svg) встраиваются на лету, чтобы двигать их собственные фигуры.
+   Без JS и при reduced-motion остаются обычные CSS-фоны из тех же файлов. */
+const bgReady = (!reduce && 'DOMParser' in window) ? (()=>{
+  const SVGNS='http://www.w3.org/2000/svg';
+  const mx=el=>{ const p=el.matches('path')?el:el.querySelector('path[transform]'); const m=p&&/matrix\(([^)]*)\)/.exec(p.getAttribute('transform')); return m?m[1].split(',').map(Number):[1,0,0,1,0,0]; };
+  const vis=x=>Math.max(0,Math.min(1,(x-1400)/2500));          // 0..1 по видимой средней части паттерна
+  const set=(el,cls,d,origin)=>{ el.classList.add(cls); el.style.setProperty('--d',d.toFixed(3)); if(origin) el.style.transformOrigin=origin; };
+  const wrap=el=>{ const g=document.createElementNS(SVGNS,'g'); el.before(g); g.appendChild(el); return g; };
+  const prep={
+    vocal:sv=>$$('path[stroke]',sv).forEach((p,i)=>{ p.setAttribute('pathLength',1); set(p,'bg-draw-l',i*.07); }),
+    guitar:sv=>$$('path[stroke]',sv).forEach(p=>{ p.setAttribute('pathLength',1); set(p,'bg-draw',vis(mx(p)[4]+1700)*.7); }),
+    piano:sv=>$$('path[stroke-width="50"]',sv).forEach(p=>{ const m=mx(p); set(wrap(p),'bg-key',vis(m[4])*.8+(m[5]/3000)*.12); }),
+    wave:sv=>$$('g[opacity]',sv).forEach(g=>{ const m=mx(g); set(g,'bg-wave',vis(m[4])*.6+Math.max(0,m[5])/3000*.25); }),
+    drums:sv=>{ const G=$$('g[opacity]',sv);
+      for(let i=0;i+3<G.length;i+=4){
+        const m=mx(G[i]), cx=m[4]-106.974*m[0], cy=m[5], d=vis(cx)*.4+Math.max(0,cy)/3000*.15;
+        [G[i],G[i+1]].forEach(g=>set(g,'bg-ring',d,`${cx}px ${cy}px`));
+        const l=mx(G[i+2]), r=mx(G[i+3]);
+        set(G[i+2],'bg-stl',d,`${l[4]}px ${l[5]+173.668*m[0]}px`);
+        set(G[i+3],'bg-str',d,`${r[4]}px ${r[5]+173.668*m[0]}px`);
+      } }
+  };
+  const kinds={vocal:['vocal'],guitar:['guitar'],drums:['drums'],piano:['piano'],actor:['actor-orange','actor-blue'],speech:['speech']};
+  const load=(file,k)=>fetch('patterns/'+file+'.svg').then(r=>r.ok?r.text():Promise.reject(r.status)).then(t=>{
+    t=t.replace(/clip_(\d+)/g,`${file}_c$1`).replace(/ id="layer_\d+"/g,'');   // id уникальны в пределах страницы
+    const sv=document.importNode(new DOMParser().parseFromString(t,'image/svg+xml').documentElement,true);
+    sv.removeAttribute('width'); sv.removeAttribute('height');
+    sv.setAttribute('preserveAspectRatio','xMidYMid slice'); sv.setAttribute('aria-hidden','true'); sv.setAttribute('class','bg');
+    (prep[k]||prep.wave)(sv); return sv; });
+  return Promise.all($$('.card').map(card=>{
+    const k=card.dataset.dir, files=kinds[k]; if(!files) return null;
+    return Promise.all(files.map(f=>load(f,k))).then(([main,second])=>{
+      card.prepend(main);
+      if(second){ const clip=document.createElement('span'); clip.className='bg-clip'; clip.appendChild(second); main.after(clip); }
+      card.classList.add('live');
+    }).catch(()=>{});     // не загрузилось — остаётся CSS-фон
+  }));
+})() : Promise.resolve();
+
+/* анимация фонов карточек: наведение на десктопе, один раз при появлении на телефоне */
 if(!reduce){
   const play=c=>{ c.classList.remove('play'); void c.offsetWidth; c.classList.add('play'); clearTimeout(c._pt); c._pt=setTimeout(()=>c.classList.remove('play'),1700); };
   if(matchMedia('(hover:hover) and (pointer:fine)').matches) $$('.card').forEach(c=>c.addEventListener('mouseenter',()=>play(c)));
