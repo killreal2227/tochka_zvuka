@@ -7,13 +7,14 @@
 <meta name="description" content="Музыка, сцена и люди, с которыми хочется пробовать новое. Вокал, гитара, барабаны, фортепиано, актёрское мастерство и ораторское искусство. Оставь заявку на первое занятие.">
 <meta name="theme-color" content="#FFF5EA">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/Architexture-v2.ttf" as="font" type="font/ttf" crossorigin>
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Точка звука">
 <meta property="og:title" content="Точка звука — школа музыки">
 <meta property="og:description" content="Вокал, гитара, барабаны, фортепиано, актёрское мастерство и ораторское искусство. Оставь заявку на первое занятие.">
 <style>
-@font-face{font-family:"Architexture";src:url("fonts/Architexture-v2.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;ascent-override:85%;descent-override:15%;line-gap-override:0%}
+@font-face{font-family:"Architexture";src:url("fonts/Architexture-v2.ttf") format("truetype");font-weight:400;font-style:normal;font-display:block;ascent-override:85%;descent-override:15%;line-gap-override:0%}
 :root{
   /* бренд: основная палитра */
   --cream:#FFF5EA; --bord:#9B3E47; --ink:#1A1A1A; --grey:#808080;
@@ -113,8 +114,12 @@ img,svg{display:block;max-width:100%}
 .mark-arc{transform-box:view-box;transform-origin:475.8px 430px}
 .mark-arc.twang{animation:twang .5s ease-out}
 @keyframes twang{30%{transform:scale(1.012)}65%{transform:scale(.996)}100%{transform:none}}
-.mark-ring{opacity:.35;animation:fade-ring .9s 1.3s ease-out backwards}
+.mark-pat{transform-box:view-box;transform-origin:475.8px 430px;animation:fade-ring .9s 1.1s ease-out backwards,pat-sway 14s 2s ease-in-out infinite}
 @keyframes fade-ring{from{opacity:0}}
+@keyframes pat-sway{25%{transform:rotate(4deg)}75%{transform:rotate(-4deg)}}
+.pat-hit{transform-box:view-box;transform-origin:475.8px 430px}
+.pat-hit.hit{animation:pat-hit .7s ease-out}
+@keyframes pat-hit{30%{transform:scale(1.05)}65%{transform:scale(.99)}100%{transform:none}}
 .dot-pop{transform-box:fill-box;transform-origin:center;animation:pop .6s 1s cubic-bezier(.34,1.56,.64,1) backwards}
 @keyframes pop{from{transform:scale(0)}}
 .dot{transform-box:fill-box;transform-origin:center;transition:transform .3s var(--ease)}
@@ -380,8 +385,18 @@ img,svg{display:block;max-width:100%}
             <line class="mark-draw bar" pathLength="1" x1="497" y1="430" x2="526" y2="430" stroke-width="7"/>
           </mask>
         </defs>
-        <g clip-path="url(#discClip)"><g id="waves"></g></g>
-        <circle class="mark-ring" cx="475.8" cy="430" r="24" fill="none" stroke="#9B3E47" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
+        <!-- внутри знака — фрагмент «3. Паттерны/паттерн-3.svg»: концентрические арки вокруг узла; узел совпадает с точкой, обрезка только по кругу -->
+        <g clip-path="url(#discClip)">
+          <g class="mark-pat" id="markPat"><g class="pat-hit" id="patHit"><g transform="translate(475.8 430) scale(.3684) translate(-249.74 -115.79)">
+            <path fill="none" stroke="#1a1a1a" stroke-width="1.6" d="M224.94,366.67V117.45c0-15.47,11.11-28,24.8-28,6.85,0,13.05,3.13,17.54,8.2s7.27,12.07,7.27,19.8v249.22"/>
+            <path fill="none" stroke="#1a1a1a" stroke-width="1.6" d="M211.88,366.67V118.87c0-23.61,16.95-42.76,37.86-42.76,10.46,0,19.93,4.79,26.78,12.52,6.85,7.75,11.09,18.44,11.09,30.24v247.8"/>
+            <path fill="none" stroke="#1a1a1a" stroke-width="1.6" d="M198.88,366.67V118.87c0-31.72,22.77-57.43,50.86-57.43,14.04,0,26.76,6.42,35.96,16.82,9.21,10.39,14.9,24.74,14.9,40.6v247.8"/>
+            <path fill="none" stroke="#1a1a1a" stroke-width="1.6" d="M186.19,366.67V120.76c0-39.63,28.45-71.76,63.55-71.76,17.55,0,33.44,8.03,44.94,21.01s18.62,30.93,18.62,50.74v245.91"/>
+            <path fill="none" stroke="#1a1a1a" stroke-width="1.6" d="M172.9,366.67V123.1c0-47.92,34.4-86.76,76.84-86.76,21.22,0,40.43,9.71,54.34,25.42,13.91,15.69,22.51,37.39,22.51,61.34v243.57"/>
+            <line fill="none" stroke="#9b3e47" stroke-width="3.2" x1="249.74" y1="137.72" x2="249.74" y2="257.85"/>
+          </g></g></g>
+          <g id="waves"></g>
+        </g>
         <g class="mark-arc" id="markArc" mask="url(#arcMask)">
           <path d="M 475.804688 466 C 455.925781 466 439.804688 449.878906 439.804688 430 C 439.804688 410.121094 455.925781 394 475.804688 394 C 491.5 394 504.851562 404.046875 509.773438 418.0625 L 513.988281 418.0625 C 508.917969 401.808594 493.730469 390 475.804688 390 C 453.707031 390 435.804688 407.910156 435.804688 430 C 435.804688 452.097656 453.707031 470 475.804688 470 C 493.691406 470 508.835938 458.265625 513.949219 442.0625 L 509.730469 442.0625 C 504.773438 456.015625 491.453125 466 475.804688 466 " fill="#1A1A1A"/>
           <path d="M 523.878906 432 L 499.878906 432 L 499.878906 428 L 523.878906 428 Z M 523.878906 432 " fill="#1A1A1A"/>
@@ -777,7 +792,7 @@ function ping(freq){
   }catch(e){}
 }
 const scale=[261.63,293.66,329.63,392,440,523.25,587.33,659.25]; let si=0;
-const dot=$('#heroDot'), waves=$('#waves'), markArc=$('#markArc');
+const dot=$('#heroDot'), waves=$('#waves'), markArc=$('#markArc'), patHit=$('#patHit');
 function hit(){
   ping(scale[si++%scale.length]);
   hideHint();
@@ -786,6 +801,7 @@ function hit(){
   c.setAttribute('class','wave'); c.setAttribute('cx',475.8); c.setAttribute('cy',430); c.setAttribute('r',12);
   waves.appendChild(c); setTimeout(()=>c.remove(),800);
   markArc.classList.remove('twang'); void markArc.getBBox(); markArc.classList.add('twang');
+  patHit.classList.remove('hit'); void patHit.getBBox(); patHit.classList.add('hit');
 }
 /* подпись «нажми на точку»: после первого клика плавно уходит навсегда */
 const hint=$('.hint'); let hintGone=false;
