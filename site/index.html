@@ -400,7 +400,7 @@ img,svg{display:block;max-width:100%}
           <g id="pB">
             <line fill="none" stroke="#9b3e47" stroke-width="2" x1="432.95" y1="114.32" x2="435.73" y2="253.38"/>
             <circle fill="#9b3e47" cx="435.73" cy="301.55" r="48.17"/>
-            <line fill="none" stroke="#1a1a1a" stroke-width="2" x1="435.73" y1="326.79" x2="435.73" y2="366.67"/>
+            <line fill="none" stroke="#1a1a1a" stroke-width="2" x1="435.73" y1="326.79" x2="435.73" y2="392"/>
           </g>
           <path fill="#1a1a1a" opacity=".8" d="M432.95,102.77c3.74,0,6.78,3.03,6.78,6.78s-3.03,6.78-6.78,6.78v-13.56Z"/>
           <path fill="#1a1a1a" d="M432.95,102.77c3.74,0,6.78,3.03,6.78,6.78,0,3.74-3.03,6.78-6.78,6.78v-13.56Z"/>
@@ -436,11 +436,12 @@ img,svg{display:block;max-width:100%}
       </div>
     </div>
     <div class="arch rv d2" id="arch" aria-hidden="true">
-      <!-- фигуры из «3. Паттерны/паттерн-3.svg» без изменений; кадр — окно-арка по оси концентрических арок -->
-      <svg viewBox="119.74 20 260 346.67">
-        <defs><clipPath id="archClip"><path d="M119.74 366.67V150A130 130 0 0 1 379.74 150V366.67Z"/></clipPath></defs>
-        <path fill="#fff5ea" d="M119.74 366.67V150A130 130 0 0 1 379.74 150V366.67Z"/>
+      <!-- фигуры из «3. Паттерны/паттерн-3.svg» без изменений; кадр — окно-арка по оси концентрических арок, под ними «пол» для круга -->
+      <svg viewBox="99 20 301.5 402">
+        <defs><clipPath id="archClip"><path d="M99 422V170.75A150.75 150.75 0 0 1 400.5 170.75V422Z"/></clipPath></defs>
+        <path fill="#fff5ea" d="M99 422V170.75A150.75 150.75 0 0 1 400.5 170.75V422Z"/>
         <g clip-path="url(#archClip)">
+          <path fill="none" stroke="#1a1a1a" stroke-width="2" d="M459.66,330.55c-26.6-51.02-77.76-87.21-137.79-92.88h-.01c-5.46-.53-10.98-.79-16.58-.79-15.79,0-31.09,2.1-45.63,6.05-59.89,16.23-106.96,63.64-122.7,123.74"/>
           <path class="a-arc" pathLength="1" style="--i:4" fill="none" stroke="#1a1a1a" stroke-width="2" d="M172.9,366.67V123.1c0-47.92,34.4-86.76,76.84-86.76,21.22,0,40.43,9.71,54.34,25.42,13.91,15.69,22.51,37.39,22.51,61.34v243.57"/>
           <path class="a-arc" pathLength="1" style="--i:3" fill="none" stroke="#1a1a1a" stroke-width="2" d="M186.19,366.67V120.76c0-39.63,28.45-71.76,63.55-71.76,17.55,0,33.44,8.03,44.94,21.01s18.62,30.93,18.62,50.74v245.91"/>
           <path class="a-arc" pathLength="1" style="--i:2" fill="none" stroke="#1a1a1a" stroke-width="2" d="M198.88,366.67V118.87c0-31.72,22.77-57.43,50.86-57.43,14.04,0,26.76,6.42,35.96,16.82,9.21,10.39,14.9,24.74,14.9,40.6v247.8"/>
@@ -452,7 +453,8 @@ img,svg{display:block;max-width:100%}
             <path fill="#9b3e47" opacity=".7" d="M249.74,101.25c8.03,0,14.54,6.51,14.54,14.54s-6.51,14.54-14.54,14.54v-29.09Z"/>
             <path fill="#9b3e47" d="M249.74,130.34c-8.03,0-14.54-6.51-14.54-14.54s6.51-14.54,14.54-14.54v29.09Z"/>
           </g>
-          <g id="archBall" transform="translate(-355.2 293.67)"><circle fill="#1a1a1a" cx="604.94" cy="39" r="34"/></g>
+          <line fill="none" stroke="#1a1a1a" stroke-width="2" x1="99" y1="366.67" x2="400.5" y2="366.67"/>
+          <g id="archBall" transform="translate(249.75 396.5) scale(.75) translate(-604.94 -39)"><circle fill="#1a1a1a" cx="604.94" cy="39" r="34"/></g>
         </g>
       </svg>
     </div>
@@ -760,7 +762,7 @@ function liveLoop(el, step){
   });
 })();
 
-/* арка (паттерн-3): дуги прорисовываются (CSS), отвес качается под точкой, точка дышит, чёрный круг катится по низу */
+/* арка (паттерн-3): дуги прорисовываются (CSS), отвес качается под точкой, точка дышит, чёрный круг катится по «полу» под арками */
 (()=>{
   const arch=$('#arch'); if(!arch || reduce) return;
   const rope=$('#archRope'), node=$('#archNode'), ball=$('#archBall'), TAU=Math.PI*2;
@@ -771,8 +773,8 @@ function liveLoop(el, step){
     rope.setAttribute('transform',`rotate(${(Math.sin(ph)*7).toFixed(3)} 249.74 115.79)`);
     const k=1+Math.abs(Math.cos(ph))*.07;
     node.setAttribute('transform',`translate(249.74 115.79) scale(${k.toFixed(4)}) translate(-249.74 -115.79)`);
-    const x=Math.sin(t*TAU/16)*80;
-    ball.setAttribute('transform',`translate(${(-355.2+x).toFixed(2)} 293.67)`);
+    const x=249.75+Math.sin(t*TAU/16)*115;
+    ball.setAttribute('transform',`translate(${x.toFixed(2)} 396.5) scale(.75) translate(-604.94 -39)`);
   });
 })();
 </script>
