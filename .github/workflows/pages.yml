@@ -5,7 +5,7 @@ name: Deploy site to GitHub Pages
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'templates/**', 'scripts/**', 'backend/**', '.github/workflows/pages.yml']
+    paths: ['site/**', 'templates/**', 'scripts/**', 'backend/**', 'site-config.json', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -30,7 +30,7 @@ jobs:
       - name: Check pages and links
         run: python3 scripts/check_site.py
       - name: Check Telegram lead handler
-        run: node --test backend/leads.test.mjs
+        run: node --test scripts/home-regression.test.mjs backend/leads.test.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

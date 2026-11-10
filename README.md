@@ -1,6 +1,6 @@
 ﻿# Точка звука — сайт
 
-Статический сайт без внешних зависимостей. Основной домен: tzvuka.ru.
+Статический сайт без внешних зависимостей. Проверенный публичный HTTPS-адрес: https://killreal2227.github.io/tochka_zvuka/. Домен tzvuka.ru пока требует исправления DNS/HTTPS.
 
 - / — выбор города;
 - /troitsk/ и /kaluga/ — самостоятельные страницы филиалов;
@@ -8,6 +8,10 @@
 - прежние privacy.html, consent.html и ссылки /#kaluga, /#troitsk ведут к новым страницам.
 
 ## Правки и локальный просмотр
+
+Точечные правила главной: `site/home.css` (подключён только на главной после общих стилей). Анимация её паттерна: `site/home-motion.js`. Порог узкой версии — viewport до 1000 px включительно. Публичный базовый URL для canonical, Open Graph, sitemap и robots задаётся в `site-config.json`; после исправления домена сменить его и пересобрать сайт.
+
+Проверка регрессий без браузера: `node --test --test-isolation=none scripts/home-regression.test.mjs backend/leads.test.mjs`. Это тесты каскада объявлений CSS, модели анимации и серверного обработчика с имитацией Telegram, а не проверка геометрии настоящего браузера. Аудит и оставшиеся вопросы: [docs/home-audit-20261110.md](docs/home-audit-20261110.md).
 
 Страницы: templates/home.html и templates/city.html. Общие подвал и форма: templates/footer.html и templates/lead-dialog.html. Главная, компактный подвал и лёгкое движение знака: site/experience.css. Прежнее оформление формы с паттерном, круглыми иконками и сменой акцентного цвета: site/form.css; поведение и отправка — site/lead-form.js. Паттерн внутри знака: site/patterns/brand.svg. Данные филиалов: scripts/build_site.py. HTML в site/ пересоздаются при сборке. Документы редактируются непосредственно в site/privacy/index.html и site/consent/index.html, оформление — site/legal.css.
 

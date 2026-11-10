@@ -1,0 +1,106 @@
+/* Final, home-only layout rules. The shared city design remains unchanged. */
+.home-page > main { min-height: 0; }
+.home-page .home-gateway { padding-top: clamp(48px, 8vh, 96px); padding-bottom: 36px; }
+.home-page .page-pattern { opacity: .32; }
+.home-page .city-lines { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.home-page .city-line,
+.home-page .city-line + .city-line,
+.home-page .city-line + .city-line:hover,
+.home-page .city-line + .city-line:focus-visible,
+.home-page .city-line:hover,
+.home-page .city-line:focus-visible {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  width: 100%; min-width: 0; min-height: 176px;
+  padding: 26px 30px; gap: 24px;
+  border: 1px solid var(--bord);
+  transform: none;
+  transition: background-color .2s, border-color .2s, box-shadow .2s;
+}
+.home-page .city-line:hover { border-color: #68232d; }
+.home-page .city-line:focus-visible {
+  border-color: #68232d;
+  outline: 3px solid var(--bord); outline-offset: 4px;
+}
+.home-page .city-line h3,
+.home-page .city-line:hover h3,
+.home-page .city-line:focus-visible h3 {
+  font-size: 48px; font-weight: 400; line-height: 1.15;
+  margin: 0 0 12px; letter-spacing: -.03em;
+}
+.home-page .city-info { min-width: 0; }
+.home-page .city-overline, .home-page .city-line p { overflow-wrap: anywhere; }
+.home-page .header-cities a { white-space: nowrap; }
+
+/* Viewport breakpoint includes exactly 1000px; no pointer-position logic. */
+@media (max-width: 1000px) {
+  .home-page { --header-height: 112px; --page-gutter: 24px; }
+  .home-page .home-header {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 38px 28px; align-content: center; align-items: center;
+    padding: 16px 24px; height: 112px; min-height: 112px;
+    column-gap: 12px; row-gap: 8px;
+  }
+  .home-page .home-brand {
+    grid-column: 1; grid-row: 1;
+    width: min(230px, 100%); min-width: 0; margin: 0;
+  }
+  .home-page .header-cta {
+    grid-column: 2; grid-row: 1; justify-self: end;
+    font-size: 16px !important; line-height: 1.2;
+    padding: 10px 16px; gap: 12px; white-space: nowrap;
+  }
+  .home-page .header-cities {
+    grid-column: 1 / -1; grid-row: 2;
+    width: 100%; justify-self: stretch; justify-content: space-between;
+    gap: 16px; font-size: 20px; line-height: 26px;
+  }
+  .home-page .header-cities > span { display: none; }
+  .home-page .header-cities a { padding: 0; }
+  .home-page .home-gateway {
+    width: 100%; max-width: 100%; min-width: 0;
+    padding: clamp(48px, 9vh, 80px) 24px 28px; gap: 18px;
+  }
+  .home-page .intro-copy h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.18; }
+  .home-page .city-lines { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .home-page .city-line,
+  .home-page .city-line + .city-line,
+  .home-page .city-line + .city-line:hover,
+  .home-page .city-line + .city-line:focus-visible,
+  .home-page .city-line:hover,
+  .home-page .city-line:focus-visible {
+    min-height: 152px; padding: 22px; gap: 16px;
+  }
+  .home-page .city-line h3,
+  .home-page .city-line:hover h3,
+  .home-page .city-line:focus-visible h3 { font-size: 38px; }
+  .home-page .city-arrow { width: 44px; height: 44px; }
+  .home-page .page-pattern { opacity: .28; }
+  .home-page > .site-footer { padding-left: 24px; padding-right: 24px; row-gap: 8px; }
+  .home-page .footer-bottom > span,
+  .home-page .footer-details,
+  .home-page .footer-bottom nav { font-size: 14px; line-height: 24px; }
+  .home-page .footer-details, .home-page .footer-bottom nav { gap: 8px; }
+  .home-page .footer-details span,
+  .home-page .footer-bottom nav a { font-size: inherit; line-height: inherit; }
+  .home-page .footer-main { grid-template-columns: minmax(0, 1fr) auto; }
+}
+@media (max-width: 680px) {
+  .home-page .home-brand { width: min(190px, 100%); }
+  .home-page .header-cta { font-size: 12px !important; padding: 10px 12px; gap: 10px; }
+  .home-page .header-cta svg { width: 16px; height: 16px; }
+  .home-page .intro-copy h1 { font-size: clamp(30px, 8.2vw, 42px); }
+}
+@media (max-width: 360px) {
+  .home-page { --page-gutter: 20px; }
+  .home-page .home-header { padding-left: 20px; padding-right: 20px; }
+  .home-page .header-cta { font-size: 11px !important; padding: 10px; gap: 8px; }
+  .home-page .home-gateway { padding-left: 20px; padding-right: 20px; }
+  .home-page > .site-footer { padding-left: 20px; padding-right: 20px; }
+  .home-page .footer-main { grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
+  .home-page .footer-contact { justify-self: start; text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-page .page-pattern * { transition: none !important; animation: none !important; }
+}

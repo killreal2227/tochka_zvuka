@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://tzvuka.ru/sitemap.xml
+Sitemap: https://killreal2227.github.io/tochka_zvuka/sitemap.xml

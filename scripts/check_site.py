@@ -4,9 +4,12 @@ from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
 import re
 import subprocess
+import json
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
+PUBLIC_BASE_URL = json.loads((ROOT/'site-config.json').read_text(encoding='utf-8'))['public_base_url'].rstrip('/')
 PAGES = ['index.html', 'troitsk/index.html', 'kaluga/index.html', 'privacy/index.html', 'consent/index.html', 'privacy.html', 'consent.html']
 
 class Page(HTMLParser):
@@ -30,6 +33,9 @@ def check():
         text = path.read_text(encoding='utf-8')
         assert not re.search(r'\[EMAIL\]|\[ТЕЛЕФОН\]|\[ДОМЕН\]|\[ДАТА\]|\{\{\w+\}\}', text), name
         page = Page(text)
+        expected_path = name.removesuffix('index.html') if name.endswith('index.html') else name.removesuffix('.html') + '/'
+        expected_canonical = PUBLIC_BASE_URL + '/' + expected_path
+        assert f'rel="canonical" href="{expected_canonical}"' in text, (name, 'canonical')
         refs = page.links + re.findall(r'url\([\"\']?([^\)\"\']+)', text)
         for href in refs:
             link = urlsplit(href)
@@ -48,14 +54,24 @@ def check():
         if name.startswith(('troitsk/', 'kaluga/')):
             slug = name.split('/')[0]
             assert f'data-city="{slug}"' in text
-            assert f'https://tzvuka.ru/{slug}/' in text
+            assert f'{PUBLIC_BASE_URL}/{slug}/' in text
             assert 'tel:+79957907670' in text and 'mailto:tzvuka@yandex.ru' in text
             assert 'id="leadForm"' in text and 'localStorage' not in text
             assert re.search(r'<input(?=[^>]*name="consent")(?=[^>]*\brequired\b)',text)
             assert 'site-footer' in text
         print('OK', name)
     assert (SITE/'CNAME').read_text().strip() == 'tzvuka.ru'
-    for asset in ('lead-form.js',):
+    assert PUBLIC_BASE_URL + '/sitemap.xml' in (SITE/'robots.txt').read_text()
+    sitemap = ET.parse(SITE/'sitemap.xml')
+    assert all(node.text.startswith(PUBLIC_BASE_URL + '/') for node in sitemap.findall('.//{*}loc'))
+    home = (SITE/'index.html').read_text(encoding='utf-8')
+    assert home.index('experience.css') < home.index('form.css') < home.index('home.css')
+    assert 'id="leadForm"' in home and 'id="leadModal"' in home
+    assert re.search(r'<input(?=[^>]*name="consent")(?=[^>]*\brequired\b)', home)
+    assert 'href="./privacy/"' in home and 'href="./consent/"' in home
+    for slug in ('troitsk', 'kaluga'):
+        assert 'home.css' not in (SITE/slug/'index.html').read_text(encoding='utf-8')
+    for asset in ('lead-form.js', 'home-motion.js'):
         subprocess.run(['node','--check',str(SITE/asset)],check=True,capture_output=True)
     print('All static checks passed.')
 
