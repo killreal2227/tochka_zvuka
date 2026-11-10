@@ -16,27 +16,29 @@ function playerScene(ready = Promise.resolve()) {
   const finish=()=>{const batch=[...timers.values()];timers.clear();batch.forEach(fn=>fn());};
   return {cards,eligible,player,timers,finish,setReduced(v){reduced=v;}};
 }
-test('direction player runs one animation and keeps only latest eligible hover',async()=>{
+test('direction playback switches immediately and never queues old cards',async()=>{
   const s=playerScene();await settle();const [a,b,c]=s.cards;
-  s.eligible.add(a);s.player.request(a);
-  s.eligible.add(b);s.player.request(b);s.eligible.delete(b);s.player.leave(b);
-  s.eligible.add(c);s.player.request(c);
-  assert.equal(s.cards.filter(c=>c.classList.playing).length,1);
-  s.finish();assert.equal(a.classList.playing,false);assert.equal(c.classList.playing,true);
-  assert.equal(b.classList.playing,false);assert.equal(s.timers.size,1);
+  s.eligible.add(a);s.player.request(a);assert.equal(a.classList.playing,true);
+  s.eligible.add(b);s.player.request(b);assert.equal(a.classList.playing,false);assert.equal(b.classList.playing,true);
+  s.eligible.add(c);s.player.request(c);assert.equal(b.classList.playing,false);assert.equal(c.classList.playing,true);
+  assert.equal(s.cards.filter(c=>c.classList.playing).length,1);assert.equal(s.timers.size,1);
+  s.finish();assert.equal(s.cards.some(c=>c.classList.playing),false);assert.equal(s.timers.size,0);
 });
-test('repeat active hover does not restart; leaving last candidate prevents playback',async()=>{
-  const s=playerScene();await settle();const [a,b]=s.cards;
-  s.eligible.add(a);s.player.request(a);const timer=[...s.timers.keys()][0];
-  s.player.request(a);assert.equal([...s.timers.keys()][0],timer);
-  s.eligible.add(b);s.player.request(b);s.eligible.delete(b);s.player.leave(b);
-  s.finish();assert.equal(s.cards.some(c=>c.classList.playing),false);
+test('pointer leave stops synchronously and re-entry starts from the beginning',async()=>{
+  const s=playerScene();await settle();const [a]=s.cards;
+  s.eligible.add(a);s.player.request(a);const first=[...s.timers.keys()][0];
+  s.player.request(a);assert.equal([...s.timers.keys()][0],first);
+  s.player.leave(a);assert.equal(a.classList.playing,false);assert.equal(s.timers.size,0);
+  s.player.request(a);assert.equal(a.classList.playing,true);assert.notEqual([...s.timers.keys()][0],first);
 });
-test('requests while assets load collapse to last choice; reduced-motion stops all',async()=>{
-  let load;const s=playerScene(new Promise(r=>{load=r;}));const [a,b]=s.cards;
-  s.eligible.add(a);s.player.request(a);s.eligible.add(b);s.player.request(b);
-  assert.equal(s.timers.size,0);load();await settle();assert.equal(b.classList.playing,true);
-  s.setReduced(true);s.player.stop();assert.equal(s.cards.some(c=>c.classList.playing),false);
+test('assets loading never starts a card already left; no autoplay without a pointer request',async()=>{
+  let load;const s=playerScene(new Promise(r=>{load=r;}));const [a]=s.cards;
+  s.eligible.add(a);s.player.request(a);s.player.leave(a);load();await settle();assert.equal(s.timers.size,0);
+  const untouched=playerScene();await settle();untouched.eligible.add(untouched.cards[0]);assert.equal(untouched.timers.size,0);
+});
+test('reduced motion stops/reset all playback and blocks new requests',async()=>{
+  const s=playerScene();await settle();const [a]=s.cards;s.eligible.add(a);s.player.request(a);
+  s.setReduced(true);s.player.stop();assert.equal(a.classList.playing,false);assert.equal(s.timers.size,0);
   s.player.request(a);assert.equal(s.timers.size,0);
 });
 function events(object={}) {

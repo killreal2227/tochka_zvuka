@@ -782,7 +782,7 @@ addEventListener('resize',scheduleSteps);stepsUpdate();
 
 /* фоны направлений: оригинальные SVG-паттерны (patterns/*.svg) встраиваются на лету, чтобы двигать их собственные фигуры.
    Без JS и при reduced-motion остаются обычные CSS-фоны из тех же файлов. */
-const bgReady = (!reduce && 'DOMParser' in window) ? (()=>{
+const bgReady = (!reduce && matchMedia('(hover:hover) and (pointer:fine)').matches && 'DOMParser' in window) ? (()=>{
   const kinds={vocal:['vocal'],guitar:['guitar'],drums:['drums'],piano:['piano'],actor:['actor-orange','actor-blue'],speech:['speech']};
   const load=file=>fetch('../patterns/'+file+'.svg').then(r=>r.ok?r.text():Promise.reject(r.status)).then(t=>{
     t=t.replace(/clip_(\d+)/g,`${file}_c$1`).replace(/ id="layer_\d+"/g,'');   // id уникальны в пределах страницы
@@ -849,40 +849,30 @@ function prepCard(card){
   return card._prep;
 }
 
-/* запуск: наведение на десктопе; на телефоне — один раз при появлении, а описание показывается у карточки в центре экрана */
+/* Pointer-only playback; touch and keyboard focus do not start direction motion. */
 const directionMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(hover:hover) and (pointer:fine)');
-let hoveredCard=null, focusedCard=null, visibleCard=null;
+let hoveredCard=null;
 const directionPlayer=window.createDirectionPlayer({
   ready:bgReady, prepare:prepCard,
-  eligible:c=>c===hoveredCard||c===focusedCard||(!finePointer.matches&&c===visibleCard),
+  eligible:c=>finePointer.matches&&c===hoveredCard,
   reduced:()=>directionMotion.matches,
   blocked:()=>document.hidden||!document.getElementById('leadModal').hidden
 });
 $$('.card[data-dir]').forEach(card=>{
-  card.addEventListener('pointerenter',()=>{if(!finePointer.matches)return;hoveredCard=card;directionPlayer.request(card);});
-  card.addEventListener('pointerleave',()=>{if(hoveredCard===card)hoveredCard=null;if(focusedCard!==card)directionPlayer.leave(card);});
-  card.addEventListener('focus',()=>{focusedCard=card;directionPlayer.request(card);});
-  card.addEventListener('blur',()=>{if(focusedCard===card)focusedCard=null;if(hoveredCard!==card)directionPlayer.leave(card);});
+  card.addEventListener('pointerenter',e=>{
+    if(!finePointer.matches||e.pointerType==='touch')return;
+    hoveredCard=card;directionPlayer.request(card);
+  });
+  const leave=()=>{if(hoveredCard===card)hoveredCard=null;directionPlayer.leave(card);};
+  card.addEventListener('pointerleave',leave);
+  card.addEventListener('pointercancel',leave);
 });
-directionMotion.addEventListener('change',()=>{directionPlayer.stop();});
-document.addEventListener('visibilitychange',()=>{if(document.hidden)directionPlayer.stop();});
-document.addEventListener('tz:lead-open',()=>directionPlayer.stop());
-if(!finePointer.matches&&'IntersectionObserver' in window){
-  const visibility=new Map();
-  const observer=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting)visibility.set(e.target,e.intersectionRatio);else visibility.delete(e.target);});
-    const previous=visibleCard;
-    visibleCard=[...visibility].sort((a,b)=>b[1]-a[1])[0]?.[0]||null;
-    if(previous&&previous!==visibleCard)directionPlayer.leave(previous);
-    if(visibleCard&&previous!==visibleCard)directionPlayer.request(visibleCard);
-  },{threshold:[0,.6,.85]});
-  $$('.card[data-dir]').forEach(c=>observer.observe(c));
-}
-if(!matchMedia('(hover:hover) and (pointer:fine)').matches && 'IntersectionObserver' in window){
-  const mid=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('seen',e.isIntersecting)),{rootMargin:'-44% 0px -44% 0px'});
-  $$('.card').forEach(c=>mid.observe(c));
-}
+const stopDirections=()=>{hoveredCard=null;directionPlayer.stop();};
+directionMotion.addEventListener('change',stopDirections);
+finePointer.addEventListener('change',stopDirections);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopDirections();});
+document.addEventListener('tz:lead-open',stopDirections);
 
 /* ═════════ ЖИВЫЕ ИЛЛЮСТРАЦИИ ═════════ */
 /* крутит step(dt) только пока элемент на экране и вкладка видна */

@@ -39,3 +39,30 @@ body[data-city] main .card:focus-visible { outline: 3px solid var(--ink); outlin
   .lesson-nudge h2 { font-size: 24px; }
 }
 @media(prefers-reduced-motion:reduce) { .lesson-nudge * { animation: none !important; transition: none !important; } }
+
+/* Text is a bottom-anchored layout layer; only the absolute artwork animates. */
+body[data-city] main .card {
+  display: grid; grid-template-rows: auto minmax(0, 1fr); align-items: start;
+}
+body[data-city] main .card > .ico { grid-row: 1; align-self: start; transition: none; }
+body[data-city] main .card > span:not(.bg-clip):not(.go) {
+  grid-row: 2; align-self: end; min-width: 0; width: 100%;
+  display: block; transform: none; transition: none;
+}
+body[data-city] main .card .name {
+  display: flex; align-items: flex-end;
+  font-size: clamp(28px, 3vw, 46px); line-height: 1.08;
+  height: 2.16em; min-height: 2.16em; max-width: 100%;
+  transform: none; transition: none;
+}
+body[data-city] main .card .bg,
+body[data-city] main .card:hover .bg,
+body[data-city] main .card:focus-visible .bg {
+  transform: translate(-50%, -50%); transition: none;
+}
+body[data-city] main .card::before,
+body[data-city] main .card::after { transform: none !important; transition: none; }
+body[data-city] main .card:not(.play) .bg * { animation: none !important; }
+@media(hover:none), (pointer:coarse) {
+  body[data-city] main .card .desc { opacity: 1; }
+}
