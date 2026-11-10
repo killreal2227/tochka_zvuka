@@ -403,3 +403,30 @@ html:has(body[data-city]){scroll-padding-top:calc(var(--header-height) + 8px)}
   :is(.home-page,[data-city]) .footer-bottom nav{display:flex;flex-direction:column;align-items:flex-start;font-size:13px;line-height:1.5;gap:2px}
 }
 @media(max-width:360px){:is(.home-page .home-header,body[data-city] .top){padding-left:20px;padding-right:20px}.home-page .header-cta{font-size:11px!important;padding:10px;gap:8px}.home-page .city-line,.home-page .city-line+.city-line{padding:18px;gap:12px}.home-page .city-overline,.home-page .city-line p{font-size:13px}.home-page .city-line h3{font-size:36px}}
+
+/* Switch before header labels and city addresses become cramped. */
+.home-page .city-lines{grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr))}
+.home-page .header-cta{white-space:nowrap;flex-shrink:0}
+@media(min-width:681px) and (max-width:1000px){
+  :root{--header-height:112px}
+  :is(.home-page .home-header,body[data-city] .top){display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:38px 28px;align-content:center;align-items:center;column-gap:16px;row-gap:8px;height:112px;min-height:112px;padding-top:16px;padding-bottom:16px}
+  .home-page .home-brand,body[data-city] .top .brand{grid-column:1;grid-row:1;width:min(230px,100%);margin:0}
+  .home-page .header-cta{grid-column:2;grid-row:1;justify-self:end;font-size:16px!important;padding:10px 18px;gap:16px;line-height:1.2}
+  .home-page .header-cta svg{width:18px;height:18px}
+  .home-page .header-cities{grid-column:1/-1;grid-row:2;justify-self:center;width:auto;gap:28px;font-size:18px;line-height:26px}
+  .home-page .header-cities a{padding:0}
+  body[data-city] .top-right{display:contents}
+  body[data-city] .top .branch{grid-column:1/-1;grid-row:2;justify-self:center}
+  body[data-city] .top .branch-btn{padding:3px 14px;font-size:13px;line-height:20px;border-width:1px}
+  body[data-city] .top .top-right>.btn{grid-column:2;grid-row:1;justify-self:end}
+  .home-page .city-line,.home-page .city-line+.city-line{min-height:160px}
+}
+/* Every narrow-footer line has the same line height and the same gap. */
+@media(max-width:1000px){
+  :is(.home-page,[data-city])>.site-footer{grid-template-columns:minmax(0,1fr);row-gap:6px}
+  :is(.home-page,[data-city]) .footer-bottom>span{grid-column:1;grid-row:2;font-size:13px;line-height:22px}
+  :is(.home-page,[data-city]) .footer-details{grid-column:1;grid-row:3;display:flex;flex-direction:column;align-items:flex-start;font-size:13px;line-height:22px;gap:6px;margin:0!important}
+  :is(.home-page,[data-city]) .footer-details span{display:block;font-size:inherit;line-height:inherit}
+  :is(.home-page,[data-city]) .footer-bottom nav{grid-column:1;grid-row:4;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;font-size:13px;line-height:22px;gap:6px}
+  :is(.home-page,[data-city]) .footer-bottom nav a{font-size:inherit;line-height:inherit}
+}
