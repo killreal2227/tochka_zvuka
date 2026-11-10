@@ -8,8 +8,8 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="preload" href="fonts/Architexture-v2.ttf" as="font" type="font/ttf" crossorigin>
 <meta property="og:title" content="Точка звука — найди свой звук"><meta property="og:type" content="website"><meta property="og:url" content="https://killreal2227.github.io/tochka_zvuka/">
 <meta property="og:description" content="Музыка, сцена и твой город. Троицк · Калуга.">
-<link rel="stylesheet" href="experience.css?v=a0521dc172"><script src="lead-form.js?v=8d2b7dc4e8" defer></script>
-<link rel="stylesheet" href="form.css?v=5a9caef86a">
+<link rel="stylesheet" href="experience.css?v=a0521dc172"><script src="lead-form.js?v=667026a0a4" defer></script>
+<link rel="stylesheet" href="form.css?v=e5fd93e88a">
 <link rel="stylesheet" href="home.css?v=a921866412"><script src="home-motion.js?v=5499f9a943" defer></script>
 <script src="button-labels.js?v=62b93b8d03" defer></script>
 </head>
@@ -122,25 +122,26 @@
         </div>
         <label class="lead-branch-label">Твоя точка<select name="branch" required><option value="">Выбери город</option><option value="troitsk">Троицк · 3-ая Нововатутинская, 2</option><option value="kaluga">Калуга · Ленина, 79</option></select></label>
         <fieldset class="pick" id="chips" aria-describedby="pickCap">
-          <legend class="sr">Что интересно (можно не выбирать)</legend>
+          <legend class="direction-legend">Выбери направление</legend>
           <div class="pick-row">
-            <span class="pk" style="--c:var(--vocal)"><input type="radio" name="direction" id="d-vocal" value="vocal"><label for="d-vocal" data-ico="vocal"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_vocal.svg?v=b7b0f090c0" alt="" aria-hidden="true"></span><span class="sr">Вокал</span></label></span>
-            <span class="pk" style="--c:var(--guitar)"><input type="radio" name="direction" id="d-guitar" value="guitar"><label for="d-guitar" data-ico="guitar"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_guitar.svg?v=ebb7457b05" alt="" aria-hidden="true"></span><span class="sr">Гитара</span></label></span>
-            <span class="pk" style="--c:var(--drums)"><input type="radio" name="direction" id="d-drums" value="drums"><label for="d-drums" data-ico="drums"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_drums.svg?v=7686b18737" alt="" aria-hidden="true"></span><span class="sr">Барабаны</span></label></span>
-            <span class="pk" style="--c:var(--piano)"><input type="radio" name="direction" id="d-piano" value="piano"><label for="d-piano" data-ico="piano"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_piano.svg?v=f98a3a4c62" alt="" aria-hidden="true"></span><span class="sr">Фортепиано</span></label></span>
-            <span class="pk actor-dual" style="--c:var(--orange);--c2:var(--blue)"><input type="radio" name="direction" id="d-actor" value="actor"><label for="d-actor" data-ico="actor"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_actor.svg?v=aa4d0e42ad" alt="" aria-hidden="true"></span><span class="sr">Актёрское мастерство</span></label></span>
-            <span class="pk" style="--c:var(--pink)"><input type="radio" name="direction" id="d-speech" value="speech"><label for="d-speech" data-ico="speech"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_speech.svg?v=415caefdf0" alt="" aria-hidden="true"></span><span class="sr">Ораторское искусство</span></label></span>
-            <span class="pk" style="--c:var(--grey)"><input type="radio" name="direction" id="d-unsure" value="unsure"><label for="d-unsure" data-ico="unsure"><span class="choice-icon" aria-hidden="true">?</span><span class="sr">Пока не знаю</span></label></span>
+            <span class="pk" style="--c:var(--vocal)"><input type="radio" name="direction" id="d-vocal" value="vocal"><label for="d-vocal" data-ico="vocal"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_vocal.svg?v=b7b0f090c0" alt="" aria-hidden="true"></span><span class="choice-name">Вокал</span></label></span>
+            <span class="pk" style="--c:var(--guitar)"><input type="radio" name="direction" id="d-guitar" value="guitar"><label for="d-guitar" data-ico="guitar"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_guitar.svg?v=ebb7457b05" alt="" aria-hidden="true"></span><span class="choice-name">Гитара</span></label></span>
+            <span class="pk" style="--c:var(--drums)"><input type="radio" name="direction" id="d-drums" value="drums"><label for="d-drums" data-ico="drums"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_drums.svg?v=7686b18737" alt="" aria-hidden="true"></span><span class="choice-name">Барабаны</span></label></span>
+            <span class="pk" style="--c:var(--piano)"><input type="radio" name="direction" id="d-piano" value="piano"><label for="d-piano" data-ico="piano"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_piano.svg?v=f98a3a4c62" alt="" aria-hidden="true"></span><span class="choice-name">Фортепиано</span></label></span>
+            <span class="pk actor-dual" style="--c:var(--orange);--c2:var(--blue)"><input type="radio" name="direction" id="d-actor" value="actor"><label for="d-actor" data-ico="actor"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_actor.svg?v=aa4d0e42ad" alt="" aria-hidden="true"></span><span class="choice-name">Актёрское мастерство</span></label></span>
+            <span class="pk" style="--c:var(--pink)"><input type="radio" name="direction" id="d-speech" value="speech"><label for="d-speech" data-ico="speech"><span class="choice-icon" aria-hidden="true"><img src="./icons/ic_speech.svg?v=415caefdf0" alt="" aria-hidden="true"></span><span class="choice-name">Ораторское искусство</span></label></span>
+            <span class="pk choice-unsure" style="--c:var(--grey)"><input type="radio" name="direction" id="d-unsure" value="unsure"><label for="d-unsure" data-ico="unsure"><span class="choice-icon" aria-hidden="true">?</span><span class="choice-name">Пока не знаю</span></label></span>
           </div>
-          <p class="pick-cap" id="pickCap">Что интересно? Можно не выбирать&nbsp;— подберём вместе</p>
+          <p class="pick-cap" id="pickCap" hidden>Что интересно? Можно не выбирать&nbsp;— подберём вместе</p>
         </fieldset>
         <label class="lead-honeypot" aria-hidden="true" inert>Ваш сайт<input name="website" tabindex="-1" autocomplete="off"></label>
         <p class="form-status" id="leadStatus" role="status" aria-live="polite"></p>
         <div class="send">
           <button class="btn lead-submit" type="submit" id="submitBtn">Отправить заявку<i><svg><use href="#i-arrow"/></svg></i></button>
-          <p class="where"><span id="leadBranchCaption">Выбери город</span></p>
         </div>
-        <p class="lead-consent">Нажимая кнопку, вы даёте <a href="./consent/" target="_blank" rel="noopener">согласие на обработку персональных данных</a> и принимаете условия <a href="./privacy/" target="_blank" rel="noopener">политики обработки данных</a>.</p>
+        <p class="lead-reassurance"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg><span>Ваши данные в безопасности</span></p>
+        <p class="lead-consent">Нажимая кнопку, вы даёте <a href="./consent/" target="_blank" rel="noopener">согласие на обработку данных</a>. <a href="./privacy/" target="_blank" rel="noopener">Политика обработки данных</a>.</p>
+        <p class="where lead-address"><span id="leadBranchCaption">Выбери город</span></p>
         <p class="fine lead-alternative"><a href="tel:+79957907670">Позвонить <span>+7 995 790-76-70</span></a></p>
       </form>
       <div class="done lead-success" id="done" hidden>

@@ -12,7 +12,7 @@ window.TZ_LEADS = Object.assign({endpoint:null,consentVersion:'2026-11-10-v3'},w
   const directionLabels={vocal:'Вокал',guitar:'Гитара',drums:'Барабаны',piano:'Фортепиано',actor:'Актёрское мастерство',speech:'Ораторское искусство',unsure:'Пока не знаю'};
 
 const formArt=(()=>{
-  const box=$('.sheet-art'), svg=box?$('svg',box):null, mob=matchMedia('(max-width:680px)');
+  const box=$('.sheet-art'), svg=box?$('svg',box):null, mob=matchMedia('(max-width:900px)');
   const col={vocal:'--vocal',guitar:'--guitar',drums:'--drums',piano:'--piano',actor:'--orange',speech:'--pink',unsure:'--grey'};
   const sheet=box?box.closest('.sheet'):modal.querySelector('.lead-sheet');
   let actorNextBlue=false;
