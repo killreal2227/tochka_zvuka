@@ -260,3 +260,12 @@
 .home-page .footer-details{grid-column:1;grid-row:3;margin:0!important;font-size:12px;line-height:1.5;gap:4px 16px;color:#574a40}
 @media(max-width:900px){.home-page>.site-footer{grid-template-columns:1fr;row-gap:10px}.home-page .footer-bottom nav{grid-column:1;grid-row:4;justify-content:flex-start}.home-page .footer-details{grid-column:1;grid-row:3}}
 @media(max-width:680px){.home-page .intro-copy{box-shadow:0 0 0 8px var(--frame-warm)}.home-page>.site-footer{padding-top:18px;padding-bottom:16px}.home-page .footer-main{gap:16px;padding-bottom:14px}.home-page .footer-brand{width:min(160px,100%)}.home-page .footer-phone{font-size:clamp(16px,4.5vw,23px)}.home-page .footer-email{font-size:13px}.home-page .footer-bottom nav{gap:8px 18px}}
+
+/* Stronger first-lesson label and the same diagonal-to-right arrow gesture. */
+.home-page .header-cta{font-size:19px!important;line-height:1.25;letter-spacing:.01em;padding:14px 22px 14px 26px;gap:24px}
+.home-page .header-cta svg{width:22px;height:22px;flex-shrink:0;transform:rotate(0deg);transform-origin:center;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.home-page .header-cta svg path{stroke-width:2}
+.home-page .header-cta:hover svg,.home-page .header-cta:focus-visible svg{transform:rotate(45deg)}
+@media(max-width:1000px){.home-page .header-cta{font-size:17px!important;padding:13px 18px;gap:18px}}
+@media(max-width:680px){.home-page .header-cta{font-size:14px!important;padding:11px 14px;gap:12px}.home-page .header-cta svg{width:18px;height:18px}}
+@media(max-width:380px){.home-page .header-cta{font-size:13px!important;padding:10px 12px;gap:8px}}
