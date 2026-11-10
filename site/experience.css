@@ -39,7 +39,7 @@
 
 /* The existing animated artwork becomes a muted, non-interactive page background. */
 .home-page{position:relative;isolation:isolate}
-.home-backdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;opacity:.3}
+.home-backdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;opacity:.15}
 .home-backdrop>svg{display:block;width:100%;height:100%}
 .home-backdrop .nd{transform-box:fill-box;transform-origin:center;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
 .home-backdrop [data-d]{transform-box:fill-box}
@@ -63,3 +63,13 @@
 .home-page .footer-main,.home-page .footer-bottom,.home-page .footer-details{max-width:none}
 @media(min-width:1600px){.home-page{--page-gutter:clamp(80px,5vw,160px)}.home-gateway .intro-panel{min-height:clamp(320px,36vh,520px)}.intro-copy h1{font-size:clamp(68px,4.2vw,96px)}.city-line,.city-line+.city-line{min-height:210px;padding:32px 38px}.city-line h3{font-size:68px}.home-gateway{padding-bottom:48px}}
 @media(max-width:680px){.home-gateway .intro-panel{min-height:0;padding:32px 0 30px}}
+
+/* Keep the home footer focused on identity, contact details and documents. */
+.home-page .footer-places,.home-page .footer-contact h2,.home-page .footer-enrol{display:none}
+.home-page .footer-main{grid-template-columns:1fr auto;align-items:center;gap:24px;padding-bottom:20px}
+.home-page .footer-contact{text-align:right}
+.home-page .footer-phone{margin-bottom:6px}
+.home-page .intro-copy h1{margin-bottom:0}
+.home-page>main{min-height:0}
+.home-page>.site-footer{margin-top:auto}
+@media(max-width:680px){.home-page .footer-main{gap:16px}.home-page .footer-contact{min-width:0}.home-page .footer-brand{width:min(150px,100%)}}
