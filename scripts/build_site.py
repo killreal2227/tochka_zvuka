@@ -1,6 +1,7 @@
 """Build the static website from shared templates. No dependencies."""
 from pathlib import Path
 import re
+import hashlib
 from html import escape
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -11,6 +12,12 @@ CITIES = {
 }
 
 def write(path, content):
+    if path.suffix == '.html':
+        def versioned(match):
+            asset = SITE / Path(match[2]).name
+            revision = hashlib.sha256(asset.read_bytes()).hexdigest()[:10]
+            return f'{match[1]}{match[2]}?v={revision}"'
+        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|form\.css|lead-form\.js))"', versioned, content)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding='utf-8')
 
