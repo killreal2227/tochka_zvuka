@@ -319,3 +319,9 @@
 /* City pages share the same footer layout and centered width as the home page. */
 body[data-city]{--home-content:1440px;--frame-warm:#f2e6d8}
 @media(min-width:1600px){body[data-city]{--home-content:min(1440px,56.4vw)}}
+
+/* A shared intermediate header width; home framing matches the city headers. */
+:root{--header-content:1460px}
+:is(.home-page .home-header,body[data-city] .top){padding-left:max(clamp(24px,5vw,72px),calc((100% - var(--header-content))/2));padding-right:max(clamp(24px,5vw,72px),calc((100% - var(--header-content))/2))}
+.home-page .home-header{background:rgba(255,245,234,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:2px solid var(--bord)}
+@media(min-width:1600px){:root{--header-content:calc((min(1440px,56.4vw) + 1480px)/2)}}
