@@ -132,7 +132,7 @@
 .lead-modal .f input, .lead-modal .lead-branch-label select {
   font-family: inherit; font-size: 16px; font-weight: 400; line-height: 1.5;
 }
-.lead-modal .btn { font-size: 16px; font-weight: 600; line-height: 1.25; letter-spacing: 0; text-transform: none; }
+.lead-modal .btn { font-size: 16px; font-weight: 400; line-height: 1.25; letter-spacing: 0; text-transform: none; }
 .lead-modal .lead-consent, .lead-modal .lead-alternative { font-size: 14px; line-height: 1.6; }
 .lead-modal a { color: var(--bord); text-decoration: underline; text-underline-offset: 3px; }
 .lead-modal a:hover { color: #68232d; }
@@ -195,12 +195,14 @@
 .lead-modal .sheet-art { min-width: 0; min-height: 0; overflow: hidden; }
 .lead-modal .sheet-body {
   box-sizing: border-box; min-width: 0; min-height: 0; max-height: calc(100svh - 32px);
-  padding: 56px 48px 32px; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
+  display: flex; flex-direction: column; padding: 44px 48px;
+  overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
 }
-.lead-modal .sheet #leadTitle { font-size: 58px; line-height: 1.15; text-align: center; margin-right: 0; }
-.lead-modal .sheet #formIntro { text-align: center; max-width: none; }
+.lead-modal #leadForm, .lead-modal .lead-success { flex: 0 0 auto; width: 100%; min-width: 0; margin-block: auto; }
+.lead-modal .sheet #leadTitle { font-size: 58px; line-height: 1.15; text-align: left; margin-right: 0; }
+.lead-modal .sheet #formIntro { text-align: left; max-width: none; }
 .lead-modal .fields { gap: 16px 24px; }
-.lead-modal .direction-legend { width: 100%; text-align: center; font-size: 16px; line-height: 1.5; margin: 0 0 12px; padding: 0; }
+.lead-modal .direction-legend { width: 100%; text-align: left; font-size: 16px; line-height: 1.5; margin: 0 0 12px; padding: 0; }
 .lead-modal #formIntro, .lead-modal .direction-legend { text-transform: uppercase; letter-spacing: .025em; font-size: 14px; font-weight: 400; }
 .lead-modal .pick-row {
   box-sizing: border-box; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -228,14 +230,14 @@
 .lead-modal .send { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
 .lead-modal .action-pane { min-width: 0; display: grid; grid-template-rows: 56px minmax(42px, auto); gap: 12px; }
 .lead-modal .action-pane > .lead-consent,
-.lead-modal .action-pane > .lead-address { margin: 0; min-height: 42px; display: flex; align-items: center; justify-content: center; text-align: center; }
+.lead-modal .action-pane > .lead-address { margin: 0; min-height: 42px; display: flex; align-items: center; justify-content: flex-start; text-align: left; }
 .lead-modal .lead-submit, .lead-modal .lead-call { box-sizing: border-box; min-width: 0; width: 100%; height: 56px; min-height: 56px; white-space: nowrap; justify-content: space-between; padding: 8px 8px 8px 20px; font-size: 16px; }
 .lead-modal .lead-submit i, .lead-modal .lead-call i { width: 40px; height: 40px; }
 .lead-modal .lead-call { background: transparent; color: var(--ink); border: 2px solid var(--ink); padding: 6px 6px 6px 18px; text-decoration: none; }
 .lead-modal .lead-call i { background: var(--ink); color: var(--cream); }
 .lead-modal .lead-call:hover { background: var(--ink); color: var(--cream); }
 .lead-modal .lead-call:hover i { background: var(--cream); color: var(--ink); }
-.lead-modal .btn { font-weight: 600; text-transform: uppercase; }
+.lead-modal .btn { font-weight: 400; text-transform: uppercase; }
 .lead-modal .f input { font-family: var(--brand-font); font-size: 20px; line-height: 1.4; }
 .lead-modal .f input:focus,
 .lead-modal .f input:focus-visible {
@@ -281,7 +283,7 @@
   .lead-modal .sheet { grid-template-columns: minmax(0, 1fr); grid-template-rows: 140px minmax(0, 1fr); }
   .lead-modal .sheet-art { height: 140px; min-height: 140px; }
   .lead-modal .sheet-art:after { border-right: 0; border-bottom: 2px solid var(--accent); }
-  .lead-modal .sheet-body { max-height: calc(100svh - 172px); padding: 36px 28px 24px; }
+  .lead-modal .sheet-body { max-height: calc(100svh - 172px); padding: 28px; }
 }
 @media(max-width:680px) {
   .lead-modal .sheet-body { padding-left: 20px; padding-right: 20px; }
