@@ -44,10 +44,6 @@ body[data-city] main .card > .ico {
   grid-row: 1; align-self: start; transform-origin: center; transform-box: fill-box;
   transition: transform .2s ease;
 }
-/* Header arrow: 2.2 SVG units at 15/20 scale = 1.65 CSS px. */
-body[data-city] main .card > .ico [stroke] {
-  stroke-width: 1.65px; vector-effect: non-scaling-stroke;
-}
 body[data-city] main .card > span:not(.bg-clip):not(.go) {
   min-width: 0; min-height: 0; width: auto;
   font-size: clamp(28px, 3vw, 46px);
