@@ -205,3 +205,10 @@
 .home-page .city-line:hover .city-arrow{background:var(--cream);border-color:var(--cream);color:#68232d}
 @media(max-width:1000px){.home-page .home-gateway .intro-panel{display:flex;min-height:220px}.home-page .side-pattern{width:66%;max-width:660px;height:auto;right:-12px;bottom:-70px;opacity:.36}}
 @media(max-width:680px){.home-page .home-gateway .intro-panel{display:block;min-height:0}.home-page .side-pattern{display:none}.home-page .home-gateway{gap:24px}}
+
+/* Anchor the entire group to the footer; spare viewport height stays above it. */
+.home-page>main{flex:1 0 auto;justify-content:flex-end}
+.home-page .home-gateway{flex:0 0 auto;margin:0 auto;padding-top:40px;padding-bottom:8px;justify-content:flex-end}
+.home-page>.site-footer{margin-top:0}
+@media(max-width:1000px){.home-page .home-gateway{padding-top:32px;padding-bottom:8px}}
+@media(max-width:680px){.home-page .home-gateway{padding-top:28px;padding-bottom:8px}}
