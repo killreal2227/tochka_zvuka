@@ -121,3 +121,20 @@
 @media(max-width:1000px){.home-page .header-cities{font-size:19px;gap:18px}.home-page .home-header{gap:24px}.home-page .home-brand{width:230px}}
 @media(max-width:680px){.home-page .home-header{gap:14px 12px}.home-page .home-brand{width:190px}.home-page .header-cities{font-size:20px;gap:28px}.home-page .home-gateway .intro-panel{padding-top:52px;padding-bottom:34px}.home-page .footer-brand{width:min(160px,100%)}.home-page .footer-phone{font-size:clamp(16px,4.5vw,23px)}}
 @media(max-width:380px){.home-page .home-brand{width:162px}}
+
+/* A single balanced composition: introduction and city choice share one row. */
+.home-page{--home-content:1440px}
+.home-page .home-gateway{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-content:center;align-items:center;gap:clamp(36px,5vw,88px);padding-top:56px;padding-bottom:56px}
+.home-page .home-gateway .intro-panel{display:block;min-height:0;padding:0;overflow:visible}
+.home-page .intro-copy h1{font-size:clamp(44px,4.1vw,76px);line-height:1.14;letter-spacing:-.035em}
+.gateway-description{font-size:clamp(17px,1.3vw,21px);line-height:1.6;margin-top:28px!important;color:#69594d}
+.home-page .city-lines{grid-template-columns:1fr;gap:16px}
+.home-page .choice-heading{margin-bottom:18px}
+.home-page .choice-heading h2{font-size:20px;color:var(--bord)}
+.home-page .city-line,.home-page .city-line+.city-line{min-height:180px;padding:26px 30px}
+.home-page .city-line h3{font-size:clamp(42px,3.7vw,60px);margin-bottom:12px}
+.home-page .city-overline{font-size:14px}
+.home-page .city-line p{font-size:14px}
+.home-page .footer-main{padding-bottom:18px;gap:32px}
+@media(max-width:1000px){.home-page .home-gateway{gap:32px}.home-page .intro-copy h1{font-size:44px}.home-page .city-line,.home-page .city-line+.city-line{padding:24px;min-height:168px}.home-page .city-line h3{font-size:44px}}
+@media(max-width:760px){.home-page .home-gateway{grid-template-columns:1fr;align-content:center;gap:32px;padding-top:40px;padding-bottom:40px}.home-page .intro-copy h1{font-size:clamp(36px,6.5vw,50px)}.gateway-description{font-size:16px;line-height:1.5;margin-top:18px!important}.home-page .city-line,.home-page .city-line+.city-line{min-height:144px;padding:22px 24px}.home-page .city-line h3{font-size:42px}.home-page .choice-heading{margin-bottom:14px}.home-page .city-overline,.home-page .city-line p{font-size:13px}}
