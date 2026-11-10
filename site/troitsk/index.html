@@ -433,8 +433,8 @@ img,svg{display:block;max-width:100%}
 .foot-legal a{font-size:15px}
 </style>
 <link rel="stylesheet" href="../experience.css?v=a0521dc172">
-<script src="../lead-form.js?v=caeae31c98" defer></script>
-<link rel="stylesheet" href="../form.css?v=ff8844ab4c">
+<script src="../lead-form.js?v=f9c2f9f0e6" defer></script>
+<link rel="stylesheet" href="../form.css?v=c70616253b">
 <link rel="stylesheet" href="../city-ui.css?v=a9d1705919"><script src="../city-ui.js?v=f4871e6031" defer></script>
 <script src="../button-labels.js?v=62b93b8d03" defer></script>
 </head>
@@ -699,7 +699,7 @@ img,svg{display:block;max-width:100%}
     </div>
     <div class="sheet-body">
       <form id="leadForm">
-        <h2 id="leadTitle" tabindex="-1">давай <em>знакомиться.</em></h2>
+        <h2 id="leadTitle" tabindex="-1">давай<br><em>знакомиться.</em></h2>
         <p class="sub" id="formIntro">Оставь номер – поможем выбрать направление.</p>
         <div class="fields" id="contactFields">
           <label class="f" id="fName"><span class="sr">Как тебя зовут</span><input name="name" autocomplete="given-name" placeholder="Как тебя зовут" minlength="2" maxlength="80" required aria-describedby="nameError"><em class="err" id="nameError">Напиши имя: от 2 до 80 символов</em></label>
@@ -728,7 +728,7 @@ img,svg{display:block;max-width:100%}
           </div>
           <div class="action-pane">
             <a class="btn lead-call" href="tel:+79957907670" aria-label="Позвонить по номеру +7 995 790-76-70">Позвонить<i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3 4 5c-2 3 2 9 6 13s8 4 10 1l1-3-5-3-2 2c-2-1-4-3-5-5l2-2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></i></a>
-            <p class="where lead-address"><span id="leadBranchCaption">Выбери город</span></p>
+            <p class="where lead-address"><a id="leadBranchCaption" target="_blank" rel="noopener" title="Открыть адрес на карте">Выбери город</a></p>
           </div>
         </div>
       </form>

@@ -74,7 +74,12 @@ const formArt=(()=>{
   document.querySelectorAll('.card[data-dir]').forEach(el=>el.addEventListener('click',()=>open(el.dataset.dir)));
   modal.querySelector('.lead-close').addEventListener('click',close);
   modal.querySelector('[data-lead-dismiss]').addEventListener('click',close);
-  function syncBranch(){const option=form.elements.branch.selectedOptions[0];modal.querySelector('#leadBranchCaption').textContent=option?.value?option.textContent:'Выбери город';}
+  function syncBranch(){
+    const option=form.elements.branch.selectedOptions[0],caption=modal.querySelector('#leadBranchCaption');
+    caption.textContent=option?.value?option.textContent:'Выбери город';
+    caption.hidden=!option?.value;
+    caption.href=option?.value?'https://yandex.ru/maps/?text='+encodeURIComponent(option.textContent.replace('·',',')):'#';
+  }
   form.elements.branch.addEventListener('change',syncBranch);
   modal.addEventListener('click',event=>{if(event.target===modal)close();});
   document.addEventListener('keydown',event=>{

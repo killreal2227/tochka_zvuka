@@ -180,8 +180,17 @@ function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',co
     fetch:async(_,options)=>{calls++;payload=JSON.parse(options.body);return{ok:reply==='success',status:reply==='success'?200:502,
       json:async()=>reply==='success'?{ok:true,requestId:payload.requestId,leadId:'1'}:{ok:false}};}});
   const fill=()=>{name.value='Иван';phone.value='+79950000000';branch.value='kaluga';};
-  return {trigger,form,success,modal,phone,status,caption,fill,get calls(){return calls;},get uuids(){return uuids;},get payload(){return payload;}};
+  return {trigger,form,success,modal,phone,status,caption,branchCaption,fill,get calls(){return calls;},get uuids(){return uuids;},get payload(){return payload;}};
 }
+test('address link searches the selected branch and hides when no branch is selected',async()=>{
+  for(const city of ['kaluga','troitsk']){
+    const s=formScene(null,'success',false,city);await s.trigger.emit('click');
+    assert.equal(s.branchCaption.href,'https://yandex.ru/maps/?text='+city);
+    assert.equal(s.branchCaption.hidden,false);
+    s.form.elements.branch.value='';await s.form.elements.branch.emit('change');
+    assert.equal(s.branchCaption.hidden,true);
+  }
+});
 test('selected direction caption is lowercase and clears without permanent helper text',async()=>{
   const s=formScene();s.form.elements.direction.value='vocal';
   await s.form.emit('change',{target:{name:'direction'}});
