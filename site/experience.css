@@ -269,3 +269,18 @@
 @media(max-width:1000px){.home-page .header-cta{font-size:17px!important;padding:13px 18px;gap:18px}}
 @media(max-width:680px){.home-page .header-cta{font-size:14px!important;padding:11px 14px;gap:12px}.home-page .header-cta svg{width:18px;height:18px}}
 @media(max-width:380px){.home-page .header-cta{font-size:13px!important;padding:10px 12px;gap:8px}}
+
+/* Keep one continuous cream surface; artwork fades before the reading area. */
+.home-page .intro-copy{background:transparent;box-shadow:none;padding:0;margin-left:0}
+.home-page .choice-heading h2{background:transparent;padding:0;margin-left:0}
+.home-page .page-pattern{mask-image:linear-gradient(to bottom,#000 0%,#000 24%,transparent 65%)}
+/* Compact the footer through spacing while retaining readable type. */
+.home-page>.site-footer{padding-top:12px;padding-bottom:10px;row-gap:4px}
+.home-page .footer-main{padding-bottom:10px;margin-bottom:4px;gap:20px}
+.home-page .footer-phone{font-size:23px;line-height:1.15;margin-bottom:2px}
+.home-page .footer-email{font-size:14px;line-height:1.25}
+.home-page .footer-bottom>span{font-size:13px;line-height:1.35}
+.home-page .footer-bottom nav{font-size:13px;line-height:1.4}
+.home-page .footer-details{font-size:12px;line-height:1.4}
+@media(max-width:900px){.home-page>.site-footer{row-gap:7px}}
+@media(max-width:680px){.home-page .intro-copy{box-shadow:none}.home-page>.site-footer{padding-top:12px;padding-bottom:12px}.home-page .footer-main{padding-bottom:10px}.home-page .footer-phone{font-size:clamp(16px,4.5vw,21px)}.home-page .footer-email{font-size:13px}.home-page .page-pattern{mask-image:linear-gradient(to bottom,#000 0%,#000 12%,transparent 48%)}}
