@@ -292,3 +292,6 @@
 
 /* Reduce the existing artwork uniformly by ten percent. */
 .home-page .page-pattern>svg{width:90%;height:90%;position:absolute;left:5%;top:0}
+
+/* Transparent, uncropped artwork: no canvas-colored strips at the SVG edges. */
+.home-page .page-pattern>svg{overflow:visible}
