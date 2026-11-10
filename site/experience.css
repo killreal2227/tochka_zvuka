@@ -85,3 +85,10 @@
 .home-page .footer-bottom{align-items:baseline}
 .home-page .footer-bottom nav{justify-content:flex-end}
 @media(max-width:680px){.home-page .home-header{flex-wrap:wrap;gap:18px 12px}.home-page .header-cities{order:3;width:100%;justify-content:center;font-size:14px;gap:20px}.home-page .footer-main{grid-template-columns:1fr auto;gap:20px 16px}.home-page .footer-places{order:3;grid-column:1/-1;justify-content:flex-start;gap:24px}.home-page .footer-identity{order:1}.home-page .footer-contact{order:2}.home-page .footer-bottom{display:grid;grid-template-columns:1fr;gap:10px}.home-page .footer-bottom nav{justify-content:flex-start}.home-page .footer-details{gap:6px 14px}}
+
+/* Align the first text lines, rather than the centers of unequal-height blocks. */
+.home-page .footer-main{align-items:baseline}
+.home-page .footer-identity,.home-page .footer-places,.home-page .footer-contact{align-self:baseline}
+.home-page .footer-places{align-items:baseline}
+.home-page .footer-phone,.home-page .footer-place span{line-height:1.3}
+.home-page .footer-email{line-height:1.4}
