@@ -20,12 +20,12 @@
   <button class="header-cta openForm" type="button">Первое занятие <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16 16 4M7 4h9v9"/></svg></button>
 </header>
 <main id="main">
+  <div class="page-pattern" aria-hidden="true">{{home_pattern}}</div>
   <div class="home-gateway">
     <section class="intro-panel" aria-labelledby="home-title">
       <div class="intro-copy">
       <h1 id="home-title">Музыка начинается<br>с твоей <em>точки.</em></h1>
       </div>
-      <div class="side-pattern" aria-hidden="true">{{home_pattern}}</div>
     </section>
     <section class="city-choice" id="cities" aria-labelledby="city-choice-title">
       <div class="choice-heading"><h2 id="city-choice-title">Выбери свою точку</h2></div>
@@ -41,7 +41,7 @@
 <script>
 /* Same line travel, shape drift and turning knobs as the existing form artwork. */
 (()=>{
-  const svg=document.querySelector('.side-pattern svg');
+  const svg=document.querySelector('.page-pattern svg');
   if(!svg)return;
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const F=[...svg.querySelectorAll('[data-f]')],D=[...svg.querySelectorAll('[data-d]')],N=[...svg.querySelectorAll('.nd')];
