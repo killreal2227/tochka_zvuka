@@ -124,6 +124,9 @@
 .lead-modal .sheet h2, .lead-modal .lead-success h2 {
   font-size: 32px; line-height: 1.2; font-weight: 600; letter-spacing: -.015em;
 }
+.lead-modal .sheet #leadTitle, .lead-modal .sheet #leadTitle em {
+  font-family: var(--brand-font); font-weight: 400;
+}
 .lead-modal .sheet h2 em { font-style: normal; }
 .lead-modal .sheet .sub, .lead-modal .pick-cap { font-size: 16px; line-height: 1.5; }
 .lead-modal .f input, .lead-modal .lead-branch-label select {
@@ -152,14 +155,22 @@
 .lead-modal .pk label[data-ico="unsure"] { line-height: 1; font-size: inherit; }
 .lead-modal .choice-icon {
   display: flex; align-items: center; justify-content: center;
-  flex: 0 0 34px; width: 34px; height: 34px;
+  flex: 0 0 46px; width: 46px; height: 34px;
   color: var(--cream); font-size: 25px; font-weight: 500; line-height: 1;
 }
 .lead-modal .pk label[data-ico] .choice-icon img {
-  display: block; width: 34px; height: 34px; max-width: none;
+  display: block; width: auto; height: var(--glyph-height, 28px); max-width: none;
   object-fit: contain; object-position: center; margin: 0;
 }
 @media(max-width:680px) {
   .lead-modal .sheet h2, .lead-modal .lead-success h2 { font-size: 28px; }
   .lead-modal .sheet-body { padding: 28px 20px; }
 }
+
+/* Each SVG is cropped to its ink with 2 units of safety padding. Visible height: 26px. */
+.lead-modal .pk label[data-ico="actor"] { --glyph-height: 27.37727px; }
+.lead-modal .pk label[data-ico="drums"] { --glyph-height: 27.28942px; }
+.lead-modal .pk label[data-ico="guitar"] { --glyph-height: 27.44507px; }
+.lead-modal .pk label[data-ico="piano"] { --glyph-height: 27.32941px; }
+.lead-modal .pk label[data-ico="speech"] { --glyph-height: 27.35539px; }
+.lead-modal .pk label[data-ico="vocal"] { --glyph-height: 27.39736px; }

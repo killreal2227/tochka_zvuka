@@ -12,10 +12,6 @@ body[data-city] .lesson-nudge .btn i { flex: 0 0 auto; align-self: center; font-
 body[data-city] main .btn svg, body[data-city] .stick svg { display: block; flex: none; }
 body[data-city] main .card, body[data-city] main .card:hover { transform: none; }
 body[data-city] main .card .ico, body[data-city] main .card:hover .ico { transform: none; }
-body[data-city] main .card .desc {
-  height: 4.05em; min-height: 4.05em; max-height: none;
-  margin-top: 12px; transition: opacity .25s;
-}
 body[data-city] main .card:not(.play) .ico * { animation: none !important; }
 body[data-city] main .card:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
 .lesson-nudge[hidden] { display: none !important; }
@@ -40,20 +36,38 @@ body[data-city] main .card:focus-visible { outline: 3px solid var(--ink); outlin
 }
 @media(prefers-reduced-motion:reduce) { .lesson-nudge * { animation: none !important; transition: none !important; } }
 
-/* Text is a bottom-anchored layout layer; only the absolute artwork animates. */
+/* Equal first-line cap positions; description reveals independently of artwork. */
 body[data-city] main .card {
   display: grid; grid-template-rows: auto minmax(0, 1fr); align-items: start;
 }
 body[data-city] main .card > .ico { grid-row: 1; align-self: start; transition: none; }
 body[data-city] main .card > span:not(.bg-clip):not(.go) {
   grid-row: 2; align-self: end; min-width: 0; width: 100%;
-  display: block; transform: none; transition: none;
+  display: block; position: relative; transform: none; transition: transform .22s ease;
 }
 body[data-city] main .card .name {
-  display: flex; align-items: flex-end;
+  display: block; position: relative; top: var(--cap-nudge, 0em);
   font-size: clamp(28px, 3vw, 46px); line-height: 1.08;
   height: 2.16em; min-height: 2.16em; max-width: 100%;
   transform: none; transition: none;
+}
+/* Architexture: flat caps 700/1000 em; Ф 720, О 710. Ignore descenders. */
+body[data-city] main .card.piano { --cap-nudge: .02em; }
+body[data-city] main .card.speech { --cap-nudge: .01em; }
+body[data-city] main .card .desc {
+  position: absolute; top: 100%; left: 0; width: 100%;
+  height: 4.05em; min-height: 0; max-height: none;
+  margin-top: 12px; opacity: 0; visibility: hidden; transition: opacity .2s;
+}
+body[data-city] main .card:focus-visible > span:not(.bg-clip):not(.go) {
+  transform: translateY(calc(-4.05 * 17px - 12px));
+}
+body[data-city] main .card:focus-visible .desc { opacity: 1; visibility: visible; }
+@media(hover:hover) and (pointer:fine) {
+  body[data-city] main .card:hover > span:not(.bg-clip):not(.go) {
+    transform: translateY(calc(-4.05 * 17px - 12px));
+  }
+  body[data-city] main .card:hover .desc { opacity: 1; visibility: visible; }
 }
 body[data-city] main .card .bg,
 body[data-city] main .card:hover .bg,
@@ -64,5 +78,10 @@ body[data-city] main .card::before,
 body[data-city] main .card::after { transform: none !important; transition: none; }
 body[data-city] main .card:not(.play) .bg * { animation: none !important; }
 @media(hover:none), (pointer:coarse) {
-  body[data-city] main .card .desc { opacity: 1; }
+  body[data-city] main .card .desc { position: static; opacity: 1; visibility: visible; }
+  body[data-city] main .card:focus-visible > span:not(.bg-clip):not(.go) { transform: none; }
+}
+@media(prefers-reduced-motion:reduce) {
+  body[data-city] main .card > span:not(.bg-clip):not(.go),
+  body[data-city] main .card .desc { transition: none; }
 }
