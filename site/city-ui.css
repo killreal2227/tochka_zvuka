@@ -36,51 +36,47 @@ body[data-city] main .card:focus-visible { outline: 3px solid var(--ink); outlin
 }
 @media(prefers-reduced-motion:reduce) { .lesson-nudge * { animation: none !important; transition: none !important; } }
 
-/* Bottom-anchored text grows only by the description's actual required height. */
+/* Fixed lower inset and hover lift; text never participates in card sizing. */
 body[data-city] main .card {
   display: grid; grid-template-rows: auto minmax(0, 1fr); align-items: start;
 }
 body[data-city] main .card > .ico { grid-row: 1; align-self: start; transition: none; }
 body[data-city] main .card > span:not(.bg-clip):not(.go) {
-  grid-row: 2; align-self: end; min-width: 0; min-height: 2.16em; width: 100%;
+  min-width: 0; min-height: 0; width: auto;
   font-size: clamp(28px, 3vw, 46px);
   display: block;
-  position: relative; transform: none; transition: none;
+  position: absolute; left: 24px; right: 24px; bottom: 32px;
+  transform: none; transition: transform .2s ease;
 }
 body[data-city] main .card .name {
-  display: block; position: relative; top: var(--cap-nudge, 0em);
+  display: block; position: relative; top: auto;
   font-family: var(--brand-font); font-weight: 400; text-transform: none;
   font-size: clamp(28px, 3vw, 46px); line-height: 1.08;
   height: auto; min-height: 0; max-width: 100%;
-  padding-bottom: var(--cap-nudge, 0em);
+  padding: 0;
   transform: none; transition: none;
 }
-/* Actual lowercase ink tops: в/г 500, б 770, ф 700, а/о 510 per 1000 em. */
-body[data-city] main .card.drums { --cap-nudge: .27em; }
-body[data-city] main .card.piano { --cap-nudge: .20em; }
-body[data-city] main .card.actor { --cap-nudge: .01em; }
-body[data-city] main .card.speech { --cap-nudge: .01em; }
 body[data-city] main .card .desc {
-  display: grid !important; grid-template-rows: minmax(0, 0fr);
-  position: static; width: 100%; max-width: none;
-  height: auto; min-height: 0; max-height: none;
-  margin: 0; padding: 0 52px 0 0; overflow: hidden;
+  box-sizing: border-box; display: block !important;
+  position: absolute; top: 100%; left: 0; width: 100%; max-width: none;
+  height: auto; min-height: 0; max-height: 61px;
+  margin: 8px 0 0; padding: 0 60px 0 0; overflow: auto;
   font-family: Arial, "Helvetica Neue", sans-serif;
-  font-size: 16px; font-weight: 400; line-height: 1.45; letter-spacing: normal;
-  color: var(--ink); background: var(--c);
+  font-size: 16px; font-weight: 400; line-height: 1.4; letter-spacing: normal;
+  color: #1a1a1a; background: transparent;
   opacity: 0; visibility: hidden;
-  transition: grid-template-rows .2s ease, margin-top .2s ease, opacity .2s;
+  transition: opacity .2s;
 }
 body[data-city] main .card .desc-copy { display: block; min-height: 0; overflow: hidden; }
-body[data-city] main .card.guitar .desc,
-body[data-city] main .card.drums .desc { color: var(--cream); }
 body[data-city] main .card:hover .desc,
 body[data-city] main .card:focus-visible .desc {
-  max-height: none; margin: 0;
+  max-height: 61px; margin: 8px 0 0;
 }
 @media(hover:hover) and (pointer:fine) {
+  body[data-city] main .card:hover > span:not(.bg-clip):not(.go) {
+    transform: translateY(-45px);
+  }
   body[data-city] main .card:hover .desc {
-    grid-template-rows: minmax(0, 1fr); margin-top: 8px;
     opacity: 1; visibility: visible;
   }
 }
