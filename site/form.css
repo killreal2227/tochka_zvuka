@@ -227,6 +227,14 @@
   margin: 12px 0 0; font-size: 13px; line-height: 1.5; color: #69594d;
 }
 .lead-modal .lead-reassurance svg { display: block; width: 15px; height: 15px; flex: 0 0 15px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.lead-modal .lead-documents summary { cursor: pointer; list-style: none; text-underline-offset: 3px; }
+.lead-modal .lead-documents summary::-webkit-details-marker { display: none; }
+.lead-modal .lead-documents summary:hover span,
+.lead-modal .lead-documents[open] summary span { text-decoration: underline; }
+.lead-modal .lead-documents .lead-consent {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px;
+  margin: 10px 0 0; font-size: 14px; line-height: 1.5;
+}
 .lead-modal .lead-consent { margin: 12px 0 0; font-size: 14px; line-height: 1.5; }
 .lead-modal .lead-address { margin: 20px 0 0; font-size: 13px; line-height: 1.5; color: #69594d; }
 .lead-modal .lead-alternative { margin: 8px 0 0; font-size: 14px; line-height: 1.5; }

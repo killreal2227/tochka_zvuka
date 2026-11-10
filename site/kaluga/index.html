@@ -434,7 +434,7 @@ img,svg{display:block;max-width:100%}
 </style>
 <link rel="stylesheet" href="../experience.css?v=a0521dc172">
 <script src="../lead-form.js?v=667026a0a4" defer></script>
-<link rel="stylesheet" href="../form.css?v=1e1f28ff9b">
+<link rel="stylesheet" href="../form.css?v=82464d9cdb">
 <link rel="stylesheet" href="../city-ui.css?v=eb4362db43"><script src="../city-ui.js?v=f4871e6031" defer></script>
 <script src="../button-labels.js?v=62b93b8d03" defer></script>
 </head>
@@ -724,8 +724,10 @@ img,svg{display:block;max-width:100%}
         <div class="send">
           <button class="btn lead-submit" type="submit" id="submitBtn">Отправить заявку<i><svg><use href="#i-arrow"/></svg></i></button>
         </div>
-        <p class="lead-reassurance"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg><span>Ваши данные в безопасности</span></p>
-        <p class="lead-consent">Нажимая кнопку, вы даёте <a href="../consent/" target="_blank" rel="noopener">согласие на обработку данных</a>. <a href="../privacy/" target="_blank" rel="noopener">Политика обработки данных</a>.</p>
+        <details class="lead-documents">
+          <summary class="lead-reassurance"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg><span>Ваши данные в безопасности</span></summary>
+          <div class="lead-consent"><a href="../consent/" target="_blank" rel="noopener">Согласие на обработку данных</a><a href="../privacy/" target="_blank" rel="noopener">Политика обработки данных</a></div>
+        </details>
         <p class="where lead-address"><span id="leadBranchCaption">Выбери город</span></p>
         <p class="fine lead-alternative"><a href="tel:+79957907670">Позвонить <span>+7 995 790-76-70</span></a></p>
       </form>
