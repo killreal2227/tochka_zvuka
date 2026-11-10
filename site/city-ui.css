@@ -36,42 +36,53 @@ body[data-city] main .card:focus-visible { outline: 3px solid var(--ink); outlin
 }
 @media(prefers-reduced-motion:reduce) { .lesson-nudge * { animation: none !important; transition: none !important; } }
 
-/* Fixed title row; description occupies only the gap below the icon. */
+/* Bottom-anchored text grows only by the description's actual required height. */
 body[data-city] main .card {
   display: grid; grid-template-rows: auto minmax(0, 1fr); align-items: start;
 }
 body[data-city] main .card > .ico { grid-row: 1; align-self: start; transition: none; }
 body[data-city] main .card > span:not(.bg-clip):not(.go) {
-  grid-row: 2; align-self: stretch; min-width: 0; min-height: 0; width: 100%;
-  display: grid; grid-template-rows: minmax(0, 1fr) auto;
+  grid-row: 2; align-self: end; min-width: 0; min-height: 2.16em; width: 100%;
+  font-size: clamp(28px, 3vw, 46px);
+  display: block;
   position: relative; transform: none; transition: none;
 }
 body[data-city] main .card .name {
-  grid-row: 2; display: block; position: relative; top: var(--cap-nudge, 0em);
+  display: block; position: relative; top: var(--cap-nudge, 0em);
+  font-family: var(--brand-font); font-weight: 400; text-transform: none;
   font-size: clamp(28px, 3vw, 46px); line-height: 1.08;
-  height: 2.16em; min-height: 2.16em; max-width: 100%;
+  height: auto; min-height: 0; max-width: 100%;
+  padding-bottom: var(--cap-nudge, 0em);
   transform: none; transition: none;
 }
-/* Architexture: flat caps 700/1000 em; Ф 720, О 710. Ignore descenders. */
-body[data-city] main .card.piano { --cap-nudge: .02em; }
+/* Actual lowercase ink tops: в/г 500, б 770, ф 700, а/о 510 per 1000 em. */
+body[data-city] main .card.drums { --cap-nudge: .27em; }
+body[data-city] main .card.piano { --cap-nudge: .20em; }
+body[data-city] main .card.actor { --cap-nudge: .01em; }
 body[data-city] main .card.speech { --cap-nudge: .01em; }
 body[data-city] main .card .desc {
-  grid-row: 1; align-self: end; position: static; width: 100%; max-width: none;
-  height: auto; min-height: 0; max-height: calc(100% - 8px);
-  margin: 0 0 8px; padding: 0; overflow: auto;
+  display: grid !important; grid-template-rows: minmax(0, 0fr);
+  position: static; width: 100%; max-width: none;
+  height: auto; min-height: 0; max-height: none;
+  margin: 0; padding: 0 52px 0 0; overflow: hidden;
   font-family: Arial, "Helvetica Neue", sans-serif;
   font-size: 16px; font-weight: 400; line-height: 1.45; letter-spacing: normal;
   color: var(--ink); background: var(--c);
-  opacity: 0; visibility: hidden; transition: opacity .2s;
+  opacity: 0; visibility: hidden;
+  transition: grid-template-rows .2s ease, margin-top .2s ease, opacity .2s;
 }
+body[data-city] main .card .desc-copy { display: block; min-height: 0; overflow: hidden; }
 body[data-city] main .card.guitar .desc,
 body[data-city] main .card.drums .desc { color: var(--cream); }
 body[data-city] main .card:hover .desc,
 body[data-city] main .card:focus-visible .desc {
-  max-height: calc(100% - 8px); margin: 0 0 8px;
+  max-height: none; margin: 0;
 }
 @media(hover:hover) and (pointer:fine) {
-  body[data-city] main .card:hover .desc { opacity: 1; visibility: visible; }
+  body[data-city] main .card:hover .desc {
+    grid-template-rows: minmax(0, 1fr); margin-top: 8px;
+    opacity: 1; visibility: visible;
+  }
 }
 body[data-city] main .card .bg,
 body[data-city] main .card:hover .bg,
