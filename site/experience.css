@@ -170,3 +170,14 @@
 .site-footer .footer-details{font-size:13px;line-height:1.6;color:#574a40}
 @media(max-width:1000px){.home-page .home-gateway{padding-top:64px;padding-bottom:40px}.home-page .city-line,.home-page .city-line+.city-line{padding:24px;min-height:170px}}
 @media(max-width:680px){.home-page .home-gateway{gap:22px;padding-top:48px;padding-bottom:36px}.home-page .choice-heading{margin-bottom:14px}.home-page .choice-heading h2{font-size:22px}.home-page .city-line,.home-page .city-line+.city-line{min-height:152px;padding:22px}.home-page .city-line h3{font-size:38px}.home-page .city-overline,.home-page .city-line p{font-size:14px}.home-page .city-arrow{width:44px;height:44px}.site-footer .footer-bottom{font-size:13px}.site-footer .footer-details{font-size:12px}}
+
+/* Lower the complete group; keep the original artwork beside the headline only. */
+.home-page .home-gateway{justify-content:flex-end;padding-top:56px;padding-bottom:32px}
+.home-page .home-gateway .intro-panel{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:32px;align-items:center;overflow:visible}
+.side-pattern{width:100%;max-width:400px;height:208px;justify-self:end;opacity:.18;pointer-events:none}
+.side-pattern>svg{display:block;width:100%;height:100%}
+.side-pattern .nd{transform-box:fill-box;transform-origin:center;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.side-pattern [data-d]{transform-box:fill-box}
+@media(max-width:1000px){.side-pattern{height:170px;max-width:320px}.home-page .home-gateway{padding-top:48px;padding-bottom:30px}.home-page .home-gateway .intro-panel{gap:20px;grid-template-columns:minmax(0,1.4fr) minmax(0,.6fr)}}
+@media(max-width:680px){.home-page .home-gateway{padding-top:40px;padding-bottom:28px}.home-page .home-gateway .intro-panel{display:block}.side-pattern{display:none}}
+@media(prefers-reduced-motion:reduce){.side-pattern .nd{transition:none}}
