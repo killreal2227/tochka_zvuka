@@ -325,3 +325,14 @@ body[data-city]{--home-content:1440px;--frame-warm:#f2e6d8}
 :is(.home-page .home-header,body[data-city] .top){padding-left:max(clamp(24px,5vw,72px),calc((100% - var(--header-content))/2));padding-right:max(clamp(24px,5vw,72px),calc((100% - var(--header-content))/2))}
 .home-page .home-header{background:rgba(255,245,234,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:2px solid var(--bord)}
 @media(min-width:1600px){:root{--header-content:calc((min(1440px,56.4vw) + 1480px)/2)}}
+
+/* One explicit header height and logo scale across all three pages. */
+:root{--header-height:96px;--header-logo:264px}
+:is(.home-page .home-header,body[data-city] .top){box-sizing:border-box;height:var(--header-height);min-height:var(--header-height);padding-top:0;padding-bottom:0;align-items:center}
+.home-page .home-brand,body[data-city] .top .brand{width:var(--header-logo);flex:none}
+body[data-city] .hero:before{top:var(--header-height)}
+body[data-city] .hero{padding-top:max(clamp(110px,14vh,150px),calc(var(--header-height) + 28px))}
+html:has(body[data-city]){scroll-padding-top:calc(var(--header-height) + 8px)}
+@media(max-width:1000px){:root{--header-logo:230px}}
+@media(max-width:680px){:root{--header-height:112px;--header-logo:clamp(130px,34vw,190px)}.home-page .home-header{padding-top:14px;padding-bottom:14px;gap:8px 12px;align-content:center}.home-page .header-cities{line-height:24px}.home-page .header-cities a{padding-top:2px;padding-bottom:2px}body[data-city] .top{align-items:center}}
+@media(max-width:380px){.home-page .header-cta{font-size:12px!important;padding:10px;gap:8px}.home-page .header-cta svg{width:16px;height:16px}}
