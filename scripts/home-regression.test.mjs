@@ -150,3 +150,13 @@ test('footer legal row and document row stack without changing content on narrow
     assert.equal(resolve(width, 'legal')['font-size'], '14px');
   }
 });
+
+test('document links stay a compact left-aligned wrapping group at every width', () => {
+  for (const width of [320, 375, 760, 1000, 1001, 1440, 2560]) {
+    const links = resolve(width, 'documents');
+    assert.equal(links['justify-content'], 'flex-start', `${width}px alignment`);
+    assert.equal(links.gap, '8px 20px', `${width}px gap`);
+    assert.equal(links['flex-wrap'], 'wrap', `${width}px wrap`);
+    assert.equal(links['flex-direction'], 'row', `${width}px direction`);
+  }
+});
