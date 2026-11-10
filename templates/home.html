@@ -13,7 +13,6 @@
 </head>
 <body class="home-page">
 {{logo}}
-<div class="home-backdrop" aria-hidden="true">{{home_pattern}}</div>
 <a class="skip-link" href="#main">К содержанию</a>
 <header class="home-header">
   <a class="home-brand" href="./" aria-label="Точка звука — на главную"><svg viewBox="0 0 567 91" aria-hidden="true"><use href="#logo-full" width="567" height="91"/></svg></a>
@@ -38,43 +37,6 @@
 </main>
 {{footer}}
 {{dialog}}
-<script>
-/* Same line travel, shape drift and turning knobs as the existing form artwork. */
-(()=>{
-  const svg=document.querySelector('.home-backdrop svg');
-  if(!svg)return;
-  const reduce=matchMedia('(prefers-reduced-motion: reduce)');
-  const F=[...svg.querySelectorAll('[data-f]')],D=[...svg.querySelectorAll('[data-d]')],N=[...svg.querySelectorAll('.nd')];
-  const per=el=>8+((+el.dataset.t*1.37)%6);
-  const wave=(el,s)=>Math.sin(s*2*Math.PI/per(el)+ +el.dataset.p);
-  let id=0,t0=0,run=0,visible=true,timers=[];
-  function knob(n){
-    const r=(+n.dataset.r||0)+(Math.random()<.5?90:180)*(Math.random()<.35?-1:1);
-    n.dataset.r=r;n.style.transform=`rotate(${r}deg)`;
-    timers.push(setTimeout(()=>knob(n),2000+Math.random()*1000));
-  }
-  function frame(t){
-    const k=svg.getScreenCTM()?.a||1,s=(t-t0)/1000;
-    F.forEach(l=>{const a=32/k,w=wave(l,s),mode=l.dataset.f;
-      const x=mode==='l'?-a*(1-w)/2:mode==='r'?a*(1-w)/2:a*w;
-      l.style.transform=`translateX(${x.toFixed(2)}px)`;});
-    D.forEach(d=>{const v=(16/k*wave(d,s)).toFixed(2),sc=(1+.05*Math.sin(s*2*Math.PI/(per(d)*1.3)+ +d.dataset.p*2)).toFixed(4);
-      d.style.transform=(d.dataset.d==='x'?`translateX(${v}px)`:`translateY(${v}px)`)+` scale(${sc})`;});
-    id=requestAnimationFrame(frame);
-  }
-  function sync(){
-    if(!reduce.matches&&!document.hidden&&visible){
-      if(id)return;t0=performance.now()-run;id=requestAnimationFrame(frame);
-      N.forEach((n,i)=>timers.push(setTimeout(()=>knob(n),700+i*450)));
-    }else{
-      if(id){cancelAnimationFrame(id);id=0;run=performance.now()-t0;}
-      timers.forEach(clearTimeout);timers=[];
-      if(reduce.matches)[...F,...D,...N].forEach(el=>el.style.transform='');
-    }
-  }
-  if('IntersectionObserver' in window)new IntersectionObserver(es=>{visible=es[0].isIntersecting;sync();}).observe(svg);
-  document.addEventListener('visibilitychange',sync);reduce.addEventListener('change',sync);sync();
-})();
-</script>
+
 <script>if(location.hash==='#kaluga'||location.hash==='#troitsk')location.replace(location.hash.slice(1)+'/'+location.search);</script>
 </body></html>
