@@ -1,0 +1,21 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {handleLeads} from './leads.mjs';
+import worker from './worker.mjs';
+const env={BOT_TOKEN:'123456789:abcdefghijklmnopqrstuvwxyz123456',LEADS_CHAT_ID:'524756735',LEADS_RATE_LIMITER:{limit:async()=>({success:true})}};
+const payload=()=>({schemaVersion:1,requestId:crypto.randomUUID(),createdAt:new Date().toISOString(),name:'Тест',phone:'+79950000000',branch:'kaluga',direction:'vocal',website:'',pagePath:'/kaluga/',consent:{accepted:true,acceptedAt:new Date().toISOString(),version:'2026-11-10-v2',documentUrl:'https://tzvuka.ru/consent/',privacyUrl:'https://tzvuka.ru/privacy/'}});
+const request=(body=payload(),origin='https://tzvuka.ru')=>new Request('https://test.workers.dev/leads',{method:'POST',headers:{origin,'content-type':'application/json','cf-connecting-ip':'192.0.2.1'},body:JSON.stringify(body)});
+test('success only after Telegram acknowledgement; recipient is server configured',async()=>{
+  let called=false;const result=await handleLeads(request(),env,async(url,options)=>{called=true;const message=JSON.parse(options.body);assert.equal(message.chat_id,env.LEADS_CHAT_ID);assert.match(message.text,/Филиал: Калуга/);assert.equal(message.parse_mode,undefined);return Response.json({ok:true,result:{message_id:42}});});
+  assert(called);assert.equal(result.status,200);assert.equal((await result.json()).leadId,'42');assert.equal(result.headers.get('access-control-allow-origin'),'https://tzvuka.ru');
+});
+test('untrusted origin is refused before sending',async()=>{const response=await handleLeads(request(payload(),'https://evil.example'),env,()=>assert.fail());assert.equal(response.status,403);assert.equal(response.headers.get('access-control-allow-origin'),null);});
+test('unconfigured or missing rate-limit binding fails closed',async()=>{assert.equal((await handleLeads(request(),{...env,LEADS_RATE_LIMITER:null},()=>assert.fail())).status,503);});
+test('server validates consent and phone and branch',async()=>{for(const change of [{consent:{accepted:false}},{phone:'123'},{branch:'other'},{website:'spam.example'},{name:'A\nB'}])assert.equal((await handleLeads(request({...payload(),...change}),env,()=>assert.fail())).status,400);});
+test('rate limit rejects before Telegram',async()=>{assert.equal((await handleLeads(request(),{...env,LEADS_RATE_LIMITER:{limit:async()=>({success:false})}},()=>assert.fail())).status,429);});
+test('Telegram errors and malformed acknowledgements do not become success',async()=>{for(const body of [{ok:false},{ok:true,result:{}}])assert.equal((await handleLeads(request(),env,async()=>Response.json(body))).status,502);});
+test('network failure does not produce a success',async()=>{assert.equal((await handleLeads(request(),env,async()=>{throw new Error('network');})).status,502);});
+test('oversized input is rejected',async()=>{assert.equal((await handleLeads(request({...payload(),name:'x'.repeat(7000)}),env,()=>assert.fail())).status,413);});
+test('preflight admits only the expected origin',async()=>{const response=await handleLeads(new Request('https://test.workers.dev/leads',{method:'OPTIONS',headers:{origin:'https://tzvuka.ru'}}),env);assert.equal(response.status,204);assert.equal(response.headers.get('access-control-allow-methods'),'POST, OPTIONS');});
+test('wrapper preserves the existing relay health route',async()=>{const response=await worker.fetch(new Request('https://test.workers.dev/health'),{});assert.equal(response.status,200);assert.equal((await response.json()).relay,'OK');});
+test('wrapper preserves authentication on the existing outbound route',async()=>{const response=await worker.fetch(new Request('https://test.workers.dev/api/sendMessage',{method:'POST',headers:{'content-type':'application/json'},body:'{}'}),{});assert.equal(response.status,403);});

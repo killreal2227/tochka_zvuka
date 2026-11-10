@@ -1,0 +1,10 @@
+name = "tochka-telegram-relay"
+main = "worker.mjs"
+compatibility_date = "2026-11-10"
+workers_dev = true
+keep_vars = true
+
+[[ratelimits]]
+name = "LEADS_RATE_LIMITER"
+namespace_id = "10112026"
+simple = { limit = 3, period = 60 }

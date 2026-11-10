@@ -1,0 +1,23 @@
+<div class="lead-modal" id="leadModal" hidden>
+  <section class="lead-sheet" role="dialog" aria-modal="true" aria-labelledby="leadTitle" tabindex="-1">
+    <button class="lead-close" type="button" aria-label="Закрыть форму">×</button>
+    <div class="lead-art" aria-hidden="true"><svg viewBox="0 0 104 94"><use href="#logo-mark" width="104" height="94"/></svg><span>начнём<br>с тебя.</span></div>
+    <div class="lead-content">
+      <p class="eyebrow">первое занятие</p><h2 id="leadTitle">давай<br><em>знакомиться.</em></h2>
+      <p class="lead-intro">Оставь контакты — поможем выбрать направление и время занятия.</p>
+      <form id="leadForm">
+        <div class="lead-fields"><label>Как тебя зовут<input name="name" autocomplete="given-name" minlength="2" maxlength="80" required placeholder="Имя"></label><label>Твой телефон<input name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="22" placeholder="+7 (___) ___-__-__"></label></div>
+        <label class="lead-branch-label">Твоя точка<select name="branch" required><option value="">Выбери город</option value="troitsk">Троицк · 3-я Нововатутинская, 2</option><option value="kaluga">Калуга · Ленина, 79</option></select></label>
+        <fieldset class="lead-directions"><legend>Что интересно?</legend><div class="lead-options">
+          <label style="--chip:#F7C842"><input name="direction" type="radio" value="vocal"><span>Вокал</span></label><label style="--chip:#AC4053;--chip-ink:#fff5ea"><input name="direction" type="radio" value="guitar"><span>Гитара</span></label><label style="--chip:#4758A4;--chip-ink:#fff5ea"><input name="direction" type="radio" value="drums"><span>Барабаны</span></label><label style="--chip:#C6DEB8"><input name="direction" type="radio" value="piano"><span>Фортепиано</span></label><label style="--chip:#F98C3D"><input name="direction" type="radio" value="actor"><span>Актёрское мастерство</span></label><label style="--chip:#E7A1A1"><input name="direction" type="radio" value="speech"><span>Ораторское искусство</span></label><label style="--chip:#e9ded2"><input name="direction" type="radio" value="unsure" checked><span>Пока не знаю</span></label>
+        </div></fieldset>
+        <label class="lead-consent"><input type="checkbox" name="consent" required><span>Даю <a href="{{root}}consent/" target="_blank" rel="noopener">согласие на обработку персональных данных</a>. Ознакомлен(а) с <a href="{{root}}privacy/" target="_blank" rel="noopener">политикой обработки данных</a>.</span></label>
+        <label class="lead-honeypot" aria-hidden="true" inert>Ваш сайт<input name="website" tabindex="-1" autocomplete="off"></label>
+        <p class="lead-status" id="leadStatus" role="status" aria-live="polite"></p>
+        <button class="lead-submit" type="submit">Отправить заявку <span aria-hidden="true">↗</span></button>
+      </form>
+      <div class="lead-success" hidden><h3>ты сделал первый шаг.</h3><p>Заявка передана. Свяжемся, чтобы обсудить занятие.</p></div>
+      <p class="lead-alternative">Или позвони: <a href="tel:+79957907670">+7 995 790-76-70</a></p>
+    </div>
+  </section>
+</div>
