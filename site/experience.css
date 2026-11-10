@@ -212,3 +212,15 @@
 .home-page>.site-footer{margin-top:0}
 @media(max-width:1000px){.home-page .home-gateway{padding-top:32px;padding-bottom:8px}}
 @media(max-width:680px){.home-page .home-gateway{padding-top:28px;padding-bottom:8px}}
+
+/* Explicit, non-overlapping areas with breathing room above the footer. */
+.home-page .home-gateway{flex:0 0 auto;margin:0 auto;gap:32px;padding-top:48px;padding-bottom:36px}
+.home-page .home-gateway .intro-panel{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);align-items:center;gap:40px;min-height:0;padding:0}
+.home-page .intro-copy{min-width:0}
+.home-page .side-pattern{position:relative;inset:auto;bottom:auto;right:auto;width:100%;max-width:480px;height:auto;aspect-ratio:706.05/366.67;opacity:.32;mask-image:none;justify-self:end}
+.home-page .city-choice{position:relative;clear:both}
+.home-page .choice-heading{margin-bottom:18px}
+.home-page .city-lines{gap:24px}
+.home-page .city-line,.home-page .city-line+.city-line{min-height:174px;padding:26px 30px}
+@media(max-width:1000px){.home-page .home-gateway{gap:28px;padding-top:40px;padding-bottom:32px}.home-page .home-gateway .intro-panel{grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:24px;min-height:0}.home-page .side-pattern{max-width:380px;height:auto;opacity:.28}}
+@media(max-width:680px){.home-page .home-gateway{gap:26px;padding-top:36px;padding-bottom:28px}.home-page .home-gateway .intro-panel{display:block;min-height:0}.home-page .side-pattern{display:none}.home-page .city-lines{gap:14px}.home-page .city-line,.home-page .city-line+.city-line{min-height:152px;padding:22px}}
