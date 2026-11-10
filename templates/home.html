@@ -9,6 +9,7 @@
 <meta property="og:title" content="Точка звука — найди свой звук"><meta property="og:type" content="website"><meta property="og:url" content="https://tzvuka.ru/">
 <meta property="og:description" content="Музыка, сцена и твой город. Троицк · Калуга.">
 <link rel="stylesheet" href="experience.css"><script src="lead-form.js" defer></script>
+<link rel="stylesheet" href="form.css">
 </head>
 <body class="home-page">
 {{logo}}
@@ -16,7 +17,7 @@
 <header class="home-header">
   <a class="home-brand" href="./" aria-label="Точка звука — на главную"><svg viewBox="0 0 567 91" aria-hidden="true"><use href="#logo-full" width="567" height="91"/></svg></a>
   <nav class="header-cities" aria-label="Филиалы"><a href="troitsk/">Троицк</a><span aria-hidden="true">/</span><a href="kaluga/">Калуга</a></nav>
-  <button class="header-cta openForm" type="button">Первое занятие <span aria-hidden="true">↗</span></button>
+  <button class="header-cta openForm" type="button">Первое занятие <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16 16 4M7 4h9v9"/></svg></button>
 </header>
 <main id="main">
   <section class="home-hero" aria-labelledby="home-title">
@@ -24,20 +25,20 @@
       <p class="eyebrow"><span class="tiny-dot" aria-hidden="true"></span> музыкальное пространство</p>
       <h1 id="home-title">найди<br>свой <em>звук.</em></h1>
       <p class="home-description">Музыка, сцена и люди,<br>с которыми хочется пробовать новое.</p>
-      <a class="choose-link" href="#cities">Начни со своего города <span aria-hidden="true">↓</span></a>
+      <a class="choose-link" href="#cities">Начни со своего города <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M4 11l6 6 6-6"/></svg></a>
     </div>
     <div class="home-art" aria-hidden="true">
       <span class="orbit orbit-one"></span><span class="orbit orbit-two"></span>
-      <div class="floating-mark"><svg viewBox="0 0 104 94"><use href="#logo-mark" width="104" height="94"/></svg></div>
+      <div class="floating-mark">{{home_mark}}</div>
       <span class="art-caption">у каждого — свой звук</span>
-      <span class="art-cross">+</span>
+      <svg class="art-cross" viewBox="0 0 20 20"><path d="M10 2v16M2 10h16"/></svg>
     </div>
   </section>
   <section class="city-choice" id="cities" aria-labelledby="city-choice-title">
     <div class="choice-heading"><h2 id="city-choice-title">где будем звучать?</h2><p>Выбери свою точку</p></div>
     <nav class="city-lines" aria-label="Выбор города">
-      <a class="city-line" href="troitsk/"><div><span class="city-overline">Москва · Новые Ватутинки</span><h3>Троицк</h3><p>ул. 3-я Нововатутинская, 2</p></div><span class="city-arrow" aria-hidden="true">↗</span></a>
-      <a class="city-line" href="kaluga/"><div><span class="city-overline">Калужская область</span><h3>Калуга</h3><p>ул. Ленина, 79</p></div><span class="city-arrow" aria-hidden="true">↗</span></a>
+      <a class="city-line" href="troitsk/"><div><span class="city-overline">Москва · Новые Ватутинки</span><h3>Троицк</h3><p>ул. 3-ая Нововатутинская, 2</p></div><span class="city-arrow" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 16 16 4M7 4h9v9"/></svg></span></a>
+      <a class="city-line" href="kaluga/"><div><span class="city-overline">Калужская область</span><h3>Калуга</h3><p>ул. Ленина, 79</p></div><span class="city-arrow" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 16 16 4M7 4h9v9"/></svg></span></a>
     </nav>
   </section>
   <div class="direction-ribbon" aria-label="Направления"><span>вокал</span><i aria-hidden="true"></i><span>гитара</span><i aria-hidden="true"></i><span>барабаны</span><i aria-hidden="true"></i><span>фортепиано</span><i aria-hidden="true"></i><span>сцена</span></div>

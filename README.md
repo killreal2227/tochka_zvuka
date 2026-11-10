@@ -9,7 +9,7 @@
 
 ## Правки и локальный просмотр
 
-Страницы: templates/home.html и templates/city.html. Общие подвал и форма: templates/footer.html и templates/lead-dialog.html. Новое оформление и лёгкое движение знака: site/experience.css. Данные филиалов: scripts/build_site.py. HTML в site/ пересоздаются при сборке. Документы редактируются непосредственно в site/privacy/index.html и site/consent/index.html, оформление — site/legal.css.
+Страницы: templates/home.html и templates/city.html. Общие подвал и форма: templates/footer.html и templates/lead-dialog.html. Главная, компактный подвал и лёгкое движение знака: site/experience.css. Прежнее оформление формы с паттерном, круглыми иконками и сменой акцентного цвета: site/form.css; поведение и отправка — site/lead-form.js. Паттерн внутри знака: site/patterns/brand.svg. Данные филиалов: scripts/build_site.py. HTML в site/ пересоздаются при сборке. Документы редактируются непосредственно в site/privacy/index.html и site/consent/index.html, оформление — site/legal.css.
 
 ```powershell
 python scripts/build_site.py

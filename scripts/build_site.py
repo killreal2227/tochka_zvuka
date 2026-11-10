@@ -1,4 +1,4 @@
-﻿"""Build the static website from shared templates. No dependencies."""
+"""Build the static website from shared templates. No dependencies."""
 from pathlib import Path
 import re
 from html import escape
@@ -6,7 +6,7 @@ from html import escape
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 CITIES = {
-    'troitsk': dict(name='Троицк', loc='Троицке', address='3-я Нововатутинская, 2', full='г. Троицк, ул. 3-я Нововатутинская, д. 2'),
+    'troitsk': dict(name='Троицк', loc='Троицке', address='3-ая Нововатутинская, 2', full='г. Троицк, ул. 3-ая Нововатутинская, д. 2'),
     'kaluga': dict(name='Калуга', loc='Калуге', address='Ленина, 79', full='г. Калуга, ул. Ленина, д. 79'),
 }
 
@@ -30,7 +30,14 @@ def build():
             page = page.replace('{{' + key + '}}', escape(value))
         write(SITE / slug / 'index.html', page)
     logo = re.search(r'<body[^>]*>\s*(<svg.*?</svg>)', template, re.S)[1]
-    home = compose(read('home.html').replace('{{logo}}', logo), './')
+    mark_paths = re.search(r'<symbol id="logo-mark"[^>]*>(.*?)</symbol>', logo, re.S)[1]
+    mark = '<svg class="home-mark" viewBox="428 383 104 94" aria-hidden="true"><defs><clipPath id="homePatternDisc"><circle cx="475.8" cy="430" r="35.6"/></clipPath></defs><g clip-path="url(#homePatternDisc)"><image href="patterns/brand.svg" x="439" y="393" width="74" height="74" preserveAspectRatio="xMidYMid slice" opacity=".72"/></g>' + mark_paths + '</svg>'
+    home_template = read('home.html').replace('{{logo}}', logo).replace('{{home_mark}}', mark)
+    # The original form uses the same arrow/close symbols on all pages.
+    symbols = re.findall(r'<svg width="0".*?</svg>', template, re.S)
+    if len(symbols)>1:
+        home_template = home_template.replace(logo, logo + '\n' + symbols[1], 1)
+    home = compose(home_template, './')
     write(SITE / 'index.html', home)
     for name in ('privacy', 'consent'):
         write(SITE / f'{name}.html', f'<!doctype html>\n<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Точка звука — переход к документу</title><link rel="canonical" href="https://tzvuka.ru/{name}/"><meta http-equiv="refresh" content="0;url={name}/"></head><body><a href="{name}/">Перейти к актуальной редакции документа</a></body></html>\n')

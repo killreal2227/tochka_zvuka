@@ -6,19 +6,67 @@ window.TZ_LEADS = Object.assign({endpoint:null,consentVersion:'2026-11-10-v2'},w
   if(!modal)return;
   const sheet=modal.querySelector('.lead-sheet'),form=document.getElementById('leadForm'),status=document.getElementById('leadStatus');
   const success=modal.querySelector('.lead-success'),button=form.querySelector('.lead-submit'),phone=form.elements.phone;
+  const $=(selector,root=modal)=>root.querySelector(selector),$$=(selector,root=modal)=>[...root.querySelectorAll(selector)];
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const directionLabels={vocal:'Вокал',guitar:'Гитара',drums:'Барабаны',piano:'Фортепиано',actor:'Актёрское мастерство',speech:'Ораторское искусство',unsure:'Пока не знаю'};
+
+const formArt=(()=>{
+  const box=$('.sheet-art'), svg=$('svg',box), mob=matchMedia('(max-width:680px)');
+  const setVB=()=>svg.setAttribute('viewBox', mob.matches ? '0 0 706.05 366.67' : '34 0 183 366.67');
+  setVB(); if(mob.addEventListener) mob.addEventListener('change',setVB);
+  const F=$$('[data-f]',svg), D=$$('[data-d]',svg), N=$$('.nd',svg);
+  const col={vocal:'--vocal',guitar:'--guitar',drums:'--drums',piano:'--piano',actor:'--orange',speech:'--pink',unsure:'--grey'};
+  const sheet=box.closest('.sheet');
+  let actorNextBlue=false;
+  function tint(advanceActor=false){   // актёрский акцент меняется при новом выборе, без мигания во время ввода
+    const v=form.elements.direction.value;
+    if(col[v]) sheet.dataset.dir=v; else delete sheet.dataset.dir;
+    if(v==='actor' && advanceActor){sheet.dataset.actorColor=actorNextBlue?'blue':'orange';actorNextBlue=!actorNextBlue;}
+    $('#chips').classList.toggle('has',!!col[v]);
+    $('#pickCap').textContent = col[v] ? directionLabels[v] : 'Что интересно? Можно не выбирать\u00a0— подберём вместе';
+  }
+  form.addEventListener('change',e=>{ if(e.target.name==='direction') tint(true); });
+  const per=el=>8+((+el.dataset.t*1.37)%6);            // период 8–14 с, у каждого свой
+  const wave=(el,s)=>Math.sin(s*2*Math.PI/per(el) + +el.dataset.p);
+  let id=0, t0=0, run=0, timers=[];
+  function knob(n){   // ручка: рывок на 90–180° за 0.5 с, затем пауза 2–3 с
+    const r=(+n.dataset.r||0)+(Math.random()<.5?90:180)*(Math.random()<.35?-1:1);
+    n.dataset.r=r; n.style.transform=`rotate(${r}deg)`;
+    timers.push(setTimeout(()=>knob(n),2000+Math.random()*1000));
+  }
+  function frame(t){
+    const m=svg.getScreenCTM(), k=(m&&m.a)||1, s=(t-t0)/1000;    // k — пикселей в единице SVG
+    F.forEach(l=>{ const a=32/k, w=wave(l,s), mode=l.dataset.f;
+      const x = mode==='l' ? -a*(1-w)/2 : mode==='r' ? a*(1-w)/2 : a*w;   // у края линия от него не отрывается
+      l.style.transform=`translateX(${x.toFixed(2)}px)`; });
+    D.forEach(d=>{ const v=(16/k*wave(d,s)).toFixed(2), sc=(1+.05*Math.sin(s*2*Math.PI/(per(d)*1.3) + +d.dataset.p*2)).toFixed(4);
+      d.style.transform=(d.dataset.d==='x' ? `translateX(${v}px)` : `translateY(${v}px)`)+` scale(${sc})`; });
+    id=requestAnimationFrame(frame);
+  }
+  return {
+    tint,
+    start(){ if(reduce||id) return; t0=performance.now()-run; id=requestAnimationFrame(frame);   // продолжаем с того же места
+      N.forEach((n,i)=>timers.push(setTimeout(()=>knob(n),700+i*450))); },
+    stop(){ if(!id) return; cancelAnimationFrame(id); id=0; run=performance.now()-t0; timers.forEach(clearTimeout); timers=[]; }
+  };
+})();
+  $$('.pk input').forEach(r=>{let was=false;r.closest('.pk').addEventListener('pointerdown',()=>{was=r.checked;});r.addEventListener('click',()=>{if(was){r.checked=false;was=false;formArt.tint();r.dispatchEvent(new Event('input',{bubbles:true}));}});});
   const pageCity=document.body.dataset.city||'';
   let lastFocus=null,pending=null,sending=false;
   function open(direction){
     lastFocus=document.activeElement;
-    if(pageCity)form.elements.branch.value=pageCity;
+    if(pageCity){form.elements.branch.value=pageCity;form.querySelector('.lead-branch-label').hidden=true;}
     if(direction){const radio=form.querySelector('input[name="direction"][value="'+direction+'"]');if(radio)radio.checked=true;}
     if(!window.TZ_LEADS.endpoint)status.textContent='Подключаем онлайн-запись. Пока можно записаться по телефону: +7 995 790-76-70.';
-    modal.hidden=false;document.body.style.overflow='hidden';sheet.focus({preventScroll:true});
+    modal.hidden=false;modal.classList.add('open');modal.setAttribute('aria-hidden','false');formArt.tint(true);formArt.start();document.body.style.overflow='hidden';sheet.focus({preventScroll:true});syncBranch();
   }
-  function close(){if(sending)return;modal.hidden=true;document.body.style.overflow='';lastFocus?.focus({preventScroll:true});}
+  function close(){if(sending)return;formArt.stop();modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.hidden=true;document.body.style.overflow='';lastFocus?.focus({preventScroll:true});}
   document.querySelectorAll('.openForm').forEach(el=>el.addEventListener('click',()=>open()));
   document.querySelectorAll('.card[data-dir]').forEach(el=>el.addEventListener('click',()=>open(el.dataset.dir)));
   modal.querySelector('.lead-close').addEventListener('click',close);
+  modal.querySelector('[data-lead-dismiss]').addEventListener('click',close);
+  function syncBranch(){const option=form.elements.branch.selectedOptions[0];modal.querySelector('#leadBranchCaption').textContent=option?.value?option.textContent:'Выбери город';}
+  form.elements.branch.addEventListener('change',syncBranch);
   modal.addEventListener('click',event=>{if(event.target===modal)close();});
   document.addEventListener('keydown',event=>{
     if(modal.hidden)return;
@@ -30,6 +78,24 @@ window.TZ_LEADS = Object.assign({endpoint:null,consentVersion:'2026-11-10-v2'},w
       else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
     }
   });
+function fmtPhone(v){
+  let d=v.replace(/\D/g,'');
+  if(d[0]==='8') d='7'+d.slice(1);
+  if(d && d[0]!=='7') d='7'+d;
+  d=d.slice(0,11);
+  let o = d ? '+7' : '';
+  if(d.length>1) o+=' ('+d.slice(1,4);
+  if(d.length>=4) o+=')';
+  if(d.length>4) o+=' '+d.slice(4,7);
+  if(d.length>7) o+='-'+d.slice(7,9);
+  if(d.length>9) o+='-'+d.slice(9,11);
+  return o;
+}
+function maskPhone(el){
+  el.addEventListener('input',e=>{ if(e.inputType==='deleteContentBackward' && !/\d$/.test(el.value)) { el.value=el.value.replace(/[^\d]*$/,''); } el.value=fmtPhone(el.value); });
+  el.addEventListener('blur',()=>{ if(el.value.replace(/\D/g,'').length<2) el.value=''; });
+}
+maskPhone(phone);
   const normalisePhone=value=>{let digits=value.replace(/\D/g,'');if(digits[0]==='8')digits='7'+digits.slice(1);if(digits.length===10)digits='7'+digits;return /^7\d{10}$/.test(digits)?'+'+digits:null;};
   phone.addEventListener('input',()=>phone.setCustomValidity(''));
   form.addEventListener('input',()=>{pending=null;status.textContent='';});
@@ -44,7 +110,7 @@ window.TZ_LEADS = Object.assign({endpoint:null,consentVersion:'2026-11-10-v2'},w
     const url=new URL(endpoint,location.href);
     if(url.protocol!=='https:'&&!(url.protocol==='http:'&&url.hostname==='127.0.0.1')){status.textContent='Не удалось открыть запись. Позвони: +7 995 790-76-70.';return;}
     const stamp=new Date().toISOString();
-    const raw={name:form.elements.name.value.trim(),phone:normalized,branch:form.elements.branch.value,direction:form.elements.direction.value,website:'',pagePath:location.pathname};
+    const raw={name:form.elements.name.value.trim(),phone:normalized,branch:form.elements.branch.value,direction:form.elements.direction.value||'unsure',website:'',pagePath:location.pathname};
     if(raw.name.length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}
     if(!pending)pending={schemaVersion:1,requestId:crypto.randomUUID(),createdAt:stamp,...raw,consent:{accepted:true,acceptedAt:stamp,version:window.TZ_LEADS.consentVersion,documentUrl:new URL(document.querySelector('.lead-consent a').getAttribute('href'),location.href).href,privacyUrl:new URL(document.querySelectorAll('.lead-consent a')[1].getAttribute('href'),location.href).href}};
     sending=true;button.disabled=true;status.textContent='Отправляем заявку…';

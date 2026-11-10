@@ -51,7 +51,7 @@ def check():
             assert f'https://tzvuka.ru/{slug}/' in text
             assert 'tel:+79957907670' in text and 'mailto:tzvuka@yandex.ru' in text
             assert 'id="leadForm"' in text and 'localStorage' not in text
-            assert 'name="consent" required' in text
+            assert re.search(r'<input(?=[^>]*name="consent")(?=[^>]*\brequired\b)',text)
             assert 'site-footer' in text
         print('OK', name)
     assert (SITE/'CNAME').read_text().strip() == 'tzvuka.ru'
