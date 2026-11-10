@@ -186,7 +186,7 @@
   .lead-modal .pk:hover .choice-icon { transform: none; transition: none; }
 }
 
-/* Wider dialog: preserve a generous graphic column and give the form more room. */
+/* Keep the 300px brand panel intact; additional desktop width belongs to the form. */
 .lead-modal .sheet {
   width: min(1120px, 100%); grid-template-columns: 300px minmax(0, 1fr);
   border-radius: 22px; overflow: hidden; min-width: 0;
