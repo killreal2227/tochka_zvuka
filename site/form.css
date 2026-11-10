@@ -155,11 +155,12 @@
 .lead-modal .pk label[data-ico="unsure"] { line-height: 1; font-size: inherit; }
 .lead-modal .choice-icon {
   display: flex; align-items: center; justify-content: center;
-  flex: 0 0 46px; width: 46px; height: 34px;
+  flex: 0 0 52px; width: 52px; height: 52px;
   color: var(--cream); font-size: 25px; font-weight: 500; line-height: 1;
+  transform: none; transform-origin: center; transition: transform .2s ease;
 }
 .lead-modal .pk label[data-ico] .choice-icon img {
-  display: block; width: auto; height: var(--glyph-height, 28px); max-width: none;
+  display: block; width: auto; height: 52px; max-width: none;
   object-fit: contain; object-position: center; margin: 0;
 }
 @media(max-width:680px) {
@@ -167,10 +168,11 @@
   .lead-modal .sheet-body { padding: 28px 20px; }
 }
 
-/* Each SVG is cropped to its ink with 2 units of safety padding. Visible height: 26px. */
-.lead-modal .pk label[data-ico="actor"] { --glyph-height: 27.37727px; }
-.lead-modal .pk label[data-ico="drums"] { --glyph-height: 27.28942px; }
-.lead-modal .pk label[data-ico="guitar"] { --glyph-height: 27.44507px; }
-.lead-modal .pk label[data-ico="piano"] { --glyph-height: 27.32941px; }
-.lead-modal .pk label[data-ico="speech"] { --glyph-height: 27.35539px; }
-.lead-modal .pk label[data-ico="vocal"] { --glyph-height: 27.39736px; }
+/* SVG canvases center their reconstructed circular element; each circle is 26px across. */
+@media(hover:hover) and (pointer:fine) {
+  .lead-modal .pk:hover .choice-icon { transform: scale(1.08); }
+}
+@media(prefers-reduced-motion:reduce) {
+  .lead-modal .pk .choice-icon,
+  .lead-modal .pk:hover .choice-icon { transform: none; transition: none; }
+}

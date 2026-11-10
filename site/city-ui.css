@@ -40,7 +40,10 @@ body[data-city] main .card:focus-visible { outline: 3px solid var(--ink); outlin
 body[data-city] main .card {
   display: grid; grid-template-rows: auto minmax(0, 1fr); align-items: start;
 }
-body[data-city] main .card > .ico { grid-row: 1; align-self: start; transition: none; }
+body[data-city] main .card > .ico {
+  grid-row: 1; align-self: start; transform-origin: center; transform-box: fill-box;
+  transition: transform .2s ease;
+}
 body[data-city] main .card > span:not(.bg-clip):not(.go) {
   min-width: 0; min-height: 0; width: auto;
   font-size: clamp(28px, 3vw, 46px);
@@ -73,6 +76,7 @@ body[data-city] main .card:focus-visible .desc {
   max-height: 61px; margin: 8px 0 0;
 }
 @media(hover:hover) and (pointer:fine) {
+  body[data-city] main .card:hover > .ico { transform: scale(1.08); }
   body[data-city] main .card:hover > span:not(.bg-clip):not(.go) {
     transform: translateY(-45px);
   }
@@ -89,6 +93,8 @@ body[data-city] main .card::before,
 body[data-city] main .card::after { transform: none !important; transition: none; }
 body[data-city] main .card:not(.play) .bg * { animation: none !important; }
 @media(prefers-reduced-motion:reduce) {
+  body[data-city] main .card > .ico,
+  body[data-city] main .card:hover > .ico { transform: none; transition: none; }
   body[data-city] main .card > span:not(.bg-clip):not(.go),
   body[data-city] main .card .desc { transition: none; }
 }
