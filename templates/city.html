@@ -815,6 +815,8 @@ function prepCard(card){
       .filter(({r})=>r.width>r.height*4&&r.right>=cr.left&&r.left<=cr.right&&r.bottom>=cr.top&&r.top<=cr.bottom)
       .sort((a,b)=>a.r.top-b.r.top||a.r.left-b.r.left);
     bands.forEach(({p},i)=>{
+      p.setAttribute('pathLength',1); p.classList.add('ap','rev');
+      p.style.setProperty('--a',(i/Math.max(1,bands.length-1)*SPREAD).toFixed(3));
       const g=p.closest('g[opacity]');
       let unit=g&&g.querySelectorAll('path[stroke-width]').length===1?g:null;
       if(!unit){
@@ -822,9 +824,9 @@ function prepCard(card){
         p.before(unit); unit.appendChild(p);
       }
       unit.classList.add('voice-pulse');
-      unit.style.setProperty('--voice-delay',(i/Math.max(1,bands.length-1)*.9).toFixed(3)+'s');
+      unit.style.setProperty('--voice-delay',(AFTER+i/Math.max(1,bands.length-1)*.75).toFixed(3)+'s');
     });
-    return card._prep=1.8;
+    return card._prep=2.6;
   }
 
   const items=[];

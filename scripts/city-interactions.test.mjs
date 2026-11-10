@@ -54,22 +54,28 @@ test('vocal pulse touches only visible horizontal background bands and leaves ot
     const path = {group, transform: 'matrix(2.7777777,0,0,-2.7777777,5333.333,131.97225)',
       getBoundingClientRect: () => rect, closest: () => group,
       before(wrapper){this.group=wrapper;}};
+    path.attrs={}; path.classes=[]; path.delays={};
+    path.setAttribute=(k,v)=>{path.attrs[k]=v;};
+    path.classList={add:(...names)=>path.classes.push(...names)};
+    path.style={setProperty:(k,v)=>{path.delays[k]=v;}};
     return path;
   };
   const lines = [band({left:10,right:200,top:20,bottom:22}),
     band({left:10,right:12,top:20,bottom:200}),
     band({left:400,right:600,top:20,bottom:22})];
   const card = {dataset: {dir:'vocal'}, getBoundingClientRect: () => ({left:0,right:300,top:0,bottom:400})};
-  const context = {card, $$: () => lines, document: {createElementNS(){
+  const context = {card, SPREAD:.7, AFTER:.95, $$: () => lines, document: {createElementNS(){
     const wrapper={classes:[],delays:{},appendChild(path){this.path=path;}};
     wrapper.classList={add:name=>wrapper.classes.push(name)};
     wrapper.style={setProperty:(k,v)=>{wrapper.delays[k]=v;}};
     return wrapper;
   }}};
-  assert.equal(vm.runInNewContext(fn+'; prepCard(card)', context), 1.8);
+  assert.equal(vm.runInNewContext(fn+'; prepCard(card)', context), 2.6);
   assert.deepEqual(lines[0].group.classes, ['voice-pulse']);
   assert.deepEqual(lines[1].group.classes, []); assert.deepEqual(lines[2].group.classes, []);
-  assert.equal(lines[0].group.delays['--voice-delay'], '0.000s');
+  assert.equal(lines[0].group.delays['--voice-delay'], '0.950s');
+  assert.deepEqual(lines[0].classes,['ap','rev']);
+  assert.equal(lines[0].attrs.pathLength,1);
   assert.equal(lines[0].group.path, lines[0]);
   assert.equal(lines[0].transform, 'matrix(2.7777777,0,0,-2.7777777,5333.333,131.97225)');
   vm.runInNewContext(fn+'; prepCard(card)', context);

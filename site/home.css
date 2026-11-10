@@ -201,3 +201,15 @@
 }
 .home-page .page-pattern { opacity: .33; }
 @media(max-width:1000px) { .home-page .page-pattern { opacity: .31; } }
+/* Fixed original desktop scale, independent of viewport width. */
+@media(min-width:1001px) {
+  .home-page .home-brand {
+    width: 260px; min-width: 260px; max-width: 260px; flex: 0 0 260px;
+  }
+  .home-page .header-cta,
+  .home-page .header-cta:hover,
+  .home-page .header-cta:focus-visible {
+    width: 230px; min-width: 230px; height: 54px; min-height: 54px;
+    flex: 0 0 230px; font-size: 16px !important;
+  }
+}

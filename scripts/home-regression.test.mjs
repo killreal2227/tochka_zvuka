@@ -176,11 +176,12 @@ test('hidden-navigation header keeps both items fixed-size and aligned at narrow
   }
 });
 
-test('main logo and first-lesson dimensions stay constant across viewport changes', () => {
+test('main header has fixed desktop and narrow sizes without viewport scaling', () => {
   for (const width of [320,375,680,768,999,1000,1001,1440,2560]) {
-    assert.equal(resolve(width,'brand').width,'160px');
-    assert.equal(resolve(width,'cta').width,'132px');
-    assert.equal(resolve(width,'cta')['font-size'],'12px');
+    assert.equal(resolve(width,'brand').width,width>1000?'260px':'160px');
+    assert.equal(resolve(width,'cta').width,width>1000?'230px':'132px');
+    assert.equal(resolve(width,'cta')['font-size'],width>1000?'16px':'12px');
+    if(width>1000) assert.equal(resolve(width,'cta').height,'54px');
     assert.equal(resolve(width,'header').height,'88px');
     assert.equal(resolve(width,'brand').transform,'none');
   }
