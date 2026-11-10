@@ -139,7 +139,35 @@
   .home-page { --header-height: 72px; }
   .home-page .header-cities { display: none; }
   .home-page .home-header {
-    grid-template-rows: 38px; height: 72px; min-height: 72px;
-    row-gap: 0; padding-top: 16px; padding-bottom: 16px;
+    display: flex; flex-wrap: nowrap; justify-content: space-between;
+    align-items: center; height: 72px; min-height: 72px;
+    gap: 16px; padding-top: 16px; padding-bottom: 16px;
   }
+  .home-page .home-brand { width: 230px; max-width: none; flex: 0 0 auto; margin: 0; }
+  .home-page .header-cta { flex: 0 0 auto; margin: 0; }
+}
+/* Slightly stronger artwork; the fading reading area stays in place. */
+.home-page .page-pattern {
+  opacity: .325;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 36%, #0006 64%, transparent 90%);
+}
+@media (max-width: 1000px) { .home-page .page-pattern { opacity: .30; } }
+@media (max-width: 680px) {
+  .home-page .home-brand { width: 176px; }
+  .home-page .header-cta {
+    box-sizing: border-box; width: 144px; justify-content: space-between;
+    font-size: 12px !important; letter-spacing: 0; padding: 10px; gap: 8px;
+  }
+  .home-page .header-cta svg { width: 16px; height: 16px; flex: 0 0 16px; }
+}
+@media (max-width: 390px) { .home-page .home-brand { width: 144px; } }
+@media (max-width: 360px) {
+  .home-page .home-header { gap: 12px; }
+  .home-page .home-brand { width: 128px; }
+  .home-page .header-cta { width: 132px; font-size: 11px !important; }
+}
+@media (max-width: 300px) {
+  .home-page .home-header { padding-left: 12px; padding-right: 12px; gap: 8px; }
+  .home-page .home-brand { width: 112px; }
+  .home-page .header-cta { width: 132px; }
 }

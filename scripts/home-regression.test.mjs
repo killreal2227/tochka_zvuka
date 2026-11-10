@@ -99,6 +99,8 @@ function resolve(viewport, target, state = '') {
       : target === 'cities' ? /(?:^|\s)\.header-cities$/
       : target === 'legal' ? /(?:^|\s)\.footer-details$/
       : target === 'documents' ? /\.footer-bottom\s+nav$/
+      : target === 'brand' ? /(?:^|\s)\.home-brand$/
+      : target === 'cta' ? /(?:^|\s)\.header-cta$/
       : target === 'grid' ? /(?:^|\s)\.city-lines$/ : /(?:^|\s)\.home-header$/;
     if (!wanted.test(plain)) continue;
     const score = (selector.match(/\.[\w-]+|:(?:hover|focus-visible|visited)/g) || []).length * 100;
@@ -130,7 +132,7 @@ test('card/title geometry declarations are identical through hover and focus', (
 });
 test('1000px is narrow; 1001px remains desktop; header cities hide strictly below 1000px', () => {
   for (const width of widths.filter(w => w <= 1000)) {
-    assert.equal(resolve(width, 'header').display, 'grid');
+    assert.equal(resolve(width, 'header').display, width < 1000 ? 'flex' : 'grid');
     assert.equal(resolve(width, 'grid')['grid-template-columns'], 'minmax(0, 1fr)');
     assert.equal(resolve(width, 'cities')['justify-content'], 'space-between');
     assert.equal(resolve(width, 'cities').display, width < 1000 ? 'none' : 'flex');
@@ -158,5 +160,18 @@ test('document links stay a compact left-aligned wrapping group at every width',
     assert.equal(links.gap, '8px 20px', `${width}px gap`);
     assert.equal(links['flex-wrap'], 'wrap', `${width}px wrap`);
     assert.equal(links['flex-direction'], 'row', `${width}px direction`);
+  }
+});
+test('hidden-navigation header keeps both items fixed-size and aligned at narrow widths', () => {
+  for (const width of [280, 300, 320, 360, 375, 390, 393, 680]) {
+    const header = resolve(width, 'header'), brand = resolve(width, 'brand'), cta = resolve(width, 'cta');
+    assert.equal(header['flex-wrap'], 'nowrap');
+    assert.equal(header['justify-content'], 'space-between');
+    assert.equal(header['align-items'], 'center');
+    assert.equal(brand.flex, '0 0 auto'); assert.equal(cta.flex, '0 0 auto');
+    const number = v => Number.parseFloat(v);
+    const reserved = number(header['padding-left']) + number(brand.width) + number(header.gap)
+      + number(cta.width) + number(header['padding-right']);
+    assert.ok(reserved <= width, `${width}px: reserved header widths ${reserved}`);
   }
 });
