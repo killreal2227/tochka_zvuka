@@ -41,11 +41,9 @@ def build():
     mark = '<svg class="home-mark" viewBox="428 383 104 94" aria-hidden="true"><defs><clipPath id="homePatternDisc"><circle cx="475.8" cy="430" r="35.6"/></clipPath></defs><g clip-path="url(#homePatternDisc)"><image href="patterns/brand.svg" x="439" y="393" width="74" height="74" preserveAspectRatio="xMidYMid slice" opacity=".72"/></g>' + mark_paths + '</svg>'
     pattern = (SITE / 'patterns' / 'brand.svg').read_text(encoding='utf-8')
     pattern = re.sub(r'<\?xml.*?\?>', '', pattern).strip()
-    # Home artwork has a transparent canvas and room for its moving edge shapes.
-    # Keep the source asset unchanged: the form uses its original crop.
+    # Home artwork covers the full main area on a transparent canvas.
+    # Keep the source asset unchanged for the form.
     pattern = re.sub(r'[ \t]*<rect\b[^>]*/>[ \t]*\n?', '', pattern, count=1)
-    pattern = pattern.replace('viewBox="0 0 706.05 366.67"', 'viewBox="-40 -40 786.05 446.67"')
-    pattern = pattern.replace('preserveAspectRatio="xMidYMid slice"', 'preserveAspectRatio="xMidYMid meet"')
     home_template = read('home.html').replace('{{logo}}', logo).replace('{{home_pattern}}', pattern)
     # The original form uses the same arrow/close symbols on all pages.
     symbols = re.findall(r'<svg width="0".*?</svg>', template, re.S)
