@@ -816,7 +816,11 @@ function prepCard(card){
       .sort((a,b)=>a.r.top-b.r.top||a.r.left-b.r.left);
     bands.forEach(({p},i)=>{
       const g=p.closest('g[opacity]');
-      const unit=g&&g.querySelectorAll('path[stroke-width]').length===1?g:p;
+      let unit=g&&g.querySelectorAll('path[stroke-width]').length===1?g:null;
+      if(!unit){
+        unit=document.createElementNS('http://www.w3.org/2000/svg','g');
+        p.before(unit); unit.appendChild(p);
+      }
       unit.classList.add('voice-pulse');
       unit.style.setProperty('--voice-delay',(i/Math.max(1,bands.length-1)*.9).toFixed(3)+'s');
     });

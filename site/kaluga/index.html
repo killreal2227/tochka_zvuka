@@ -435,7 +435,7 @@ img,svg{display:block;max-width:100%}
 <link rel="stylesheet" href="../experience.css?v=a0521dc172">
 <script src="../lead-form.js?v=d65c591a14" defer></script>
 <link rel="stylesheet" href="../form.css?v=5a9caef86a">
-<link rel="stylesheet" href="../city-ui.css?v=2db2fc582e"><script src="../city-ui.js?v=f4871e6031" defer></script>
+<link rel="stylesheet" href="../city-ui.css?v=eb4362db43"><script src="../city-ui.js?v=f4871e6031" defer></script>
 <script src="../button-labels.js?v=62b93b8d03" defer></script>
 </head>
 <body data-city="kaluga">
@@ -903,7 +903,11 @@ function prepCard(card){
       .sort((a,b)=>a.r.top-b.r.top||a.r.left-b.r.left);
     bands.forEach(({p},i)=>{
       const g=p.closest('g[opacity]');
-      const unit=g&&g.querySelectorAll('path[stroke-width]').length===1?g:p;
+      let unit=g&&g.querySelectorAll('path[stroke-width]').length===1?g:null;
+      if(!unit){
+        unit=document.createElementNS('http://www.w3.org/2000/svg','g');
+        p.before(unit); unit.appendChild(p);
+      }
       unit.classList.add('voice-pulse');
       unit.style.setProperty('--voice-delay',(i/Math.max(1,bands.length-1)*.9).toFixed(3)+'s');
     });
