@@ -104,3 +104,42 @@
 @media (prefers-reduced-motion: reduce) {
   .home-page .page-pattern * { transition: none !important; animation: none !important; }
 }
+
+/* Legal footer: credit and proprietor on one row, documents on the next. */
+.home-page > .site-footer { grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); row-gap: 12px; }
+.home-page .footer-main { display: none; }
+.home-page .footer-bottom > span { grid-column: 1; grid-row: 1; align-self: start; }
+.home-page .footer-details {
+  grid-column: 2; grid-row: 1; min-width: 0;
+  display: flex; flex-direction: row; flex-wrap: wrap;
+  align-items: baseline; justify-content: flex-end;
+  gap: 8px 20px; text-align: right; overflow-wrap: anywhere;
+}
+.home-page .footer-bottom nav {
+  grid-column: 1 / -1; grid-row: 2;
+  display: flex; flex-direction: row; flex-wrap: wrap;
+  justify-content: space-evenly; align-items: baseline;
+  gap: 12px 32px; min-width: 0;
+}
+.home-page .footer-bottom nav a { max-width: 100%; overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .home-page > .site-footer { grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
+  .home-page .footer-details {
+    grid-column: 1; grid-row: 2; flex-direction: column;
+    align-items: flex-start; justify-content: flex-start;
+    text-align: left; gap: 8px;
+  }
+  .home-page .footer-bottom nav {
+    grid-column: 1; grid-row: 3;
+    justify-content: flex-start; gap: 12px 32px;
+  }
+}
+/* Strictly below 1000px; the city cards keep their existing responsive rules. */
+@media (width < 1000px) {
+  .home-page { --header-height: 72px; }
+  .home-page .header-cities { display: none; }
+  .home-page .home-header {
+    grid-template-rows: 38px; height: 72px; min-height: 72px;
+    row-gap: 0; padding-top: 16px; padding-bottom: 16px;
+  }
+}

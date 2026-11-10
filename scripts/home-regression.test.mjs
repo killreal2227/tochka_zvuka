@@ -78,6 +78,7 @@ function rules(css, viewport, active = true) {
     if (head.startsWith('@media')) {
       let yes = active;
       for (const [, op, n] of head.matchAll(/(max|min)-width\s*:\s*(\d+)px/g)) yes &&= op === 'max' ? viewport <= +n : viewport >= +n;
+      for (const [, op, n] of head.matchAll(/\(width\s*(<|>)\s*(\d+)px\)/g)) yes &&= op === '<' ? viewport < +n : viewport > +n;
       if (head.includes('prefers-reduced-motion')) yes = false;
       if (yes) out.push(...rules(body, viewport));
     } else if (active && !head.startsWith('@')) out.push({ selectors: splitSelectors(head), body });
@@ -96,6 +97,8 @@ function resolve(viewport, target, state = '') {
     const wanted = target === 'card' ? /\.city-line(?:\s*\+\s*\.city-line)?$/
       : target === 'title' ? /\.city-line\s+h3$/
       : target === 'cities' ? /(?:^|\s)\.header-cities$/
+      : target === 'legal' ? /(?:^|\s)\.footer-details$/
+      : target === 'documents' ? /\.footer-bottom\s+nav$/
       : target === 'grid' ? /(?:^|\s)\.city-lines$/ : /(?:^|\s)\.home-header$/;
     if (!wanted.test(plain)) continue;
     const score = (selector.match(/\.[\w-]+|:(?:hover|focus-visible|visited)/g) || []).length * 100;
@@ -117,7 +120,7 @@ function resolve(viewport, target, state = '') {
   }
   return Object.fromEntries([...properties].map(([k, v]) => [k, v.value]));
 }
-const widths = [320, 375, 768, 1000, 1001, 1440, 2560];
+const widths = [320, 375, 768, 999.5, 1000, 1001, 1440, 2560];
 test('card/title geometry declarations are identical through hover and focus', () => {
   const geometry = /^(?:font|line-height|letter-spacing|margin|padding|width|min-width|max-width|height|min-height|max-height|gap|display|grid-template|transform|border-width)/;
   for (const width of widths) for (const target of ['card', 'title']) {
@@ -125,12 +128,25 @@ test('card/title geometry declarations are identical through hover and focus', (
     for (const state of ['hover', 'focus-visible']) assert.deepEqual(select(resolve(width, target, state)), select(resolve(width, target)), `${width}px ${target} ${state}`);
   }
 });
-test('1000px is narrow; 1001px remains desktop; cities use opposite edges', () => {
+test('1000px is narrow; 1001px remains desktop; header cities hide strictly below 1000px', () => {
   for (const width of widths.filter(w => w <= 1000)) {
     assert.equal(resolve(width, 'header').display, 'grid');
     assert.equal(resolve(width, 'grid')['grid-template-columns'], 'minmax(0, 1fr)');
     assert.equal(resolve(width, 'cities')['justify-content'], 'space-between');
+    assert.equal(resolve(width, 'cities').display, width < 1000 ? 'none' : 'flex');
+    assert.equal(resolve(width, 'header').height, width < 1000 ? '72px' : '112px');
   }
   assert.equal(resolve(1001, 'header').display, 'flex');
   assert.equal(resolve(1001, 'grid')['grid-template-columns'], 'repeat(2, minmax(0, 1fr))');
+});
+test('footer legal row and document row stack without changing content on narrow screens', () => {
+  assert.equal(resolve(1440, 'legal')['grid-row'], '1');
+  assert.equal(resolve(1440, 'documents')['grid-row'], '2');
+  assert.equal(resolve(1440, 'legal')['justify-content'], 'flex-end');
+  for (const width of [320, 375, 760]) {
+    assert.equal(resolve(width, 'legal')['grid-row'], '2');
+    assert.equal(resolve(width, 'documents')['grid-row'], '3');
+    assert.equal(resolve(width, 'documents')['flex-wrap'], 'wrap');
+    assert.equal(resolve(width, 'legal')['font-size'], '14px');
+  }
 });
