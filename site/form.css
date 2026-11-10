@@ -200,14 +200,16 @@
 .lead-modal .sheet #leadTitle { font-size: 58px; line-height: 1.15; }
 .lead-modal .fields { gap: 16px 24px; }
 .lead-modal .direction-legend { font-size: 16px; line-height: 1.5; margin: 0 0 12px; padding: 0; }
+.lead-modal #formIntro, .lead-modal .direction-legend { text-transform: uppercase; letter-spacing: .025em; }
 .lead-modal .pick-row {
   box-sizing: border-box; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: start;
   gap: 12px 6px; width: 100%; max-width: 100%; padding: 8px 0; overflow: visible;
 }
-.lead-modal .pk { width: auto; height: auto; min-width: 0; }
+.lead-modal .pk { width: auto; height: auto; min-width: 0; align-self: start; }
 .lead-modal .pk label {
   position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-  box-sizing: border-box; gap: 10px; width: 100%; height: 100%; min-width: 0; min-height: 52px;
+  box-sizing: border-box; gap: 10px; width: 100%; height: auto; min-width: 0; min-height: 52px;
   padding: 0 2px; border: 0; border-radius: 0; background: transparent;
 }
 .lead-modal .pk.actor-dual label { background: transparent; }
