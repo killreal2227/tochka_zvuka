@@ -284,3 +284,8 @@
 .home-page .footer-details{font-size:12px;line-height:1.4}
 @media(max-width:900px){.home-page>.site-footer{row-gap:7px}}
 @media(max-width:680px){.home-page .intro-copy{box-shadow:none}.home-page>.site-footer{padding-top:12px;padding-bottom:12px}.home-page .footer-main{padding-bottom:10px}.home-page .footer-phone{font-size:clamp(16px,4.5vw,21px)}.home-page .footer-email{font-size:13px}.home-page .page-pattern{mask-image:linear-gradient(to bottom,#000 0%,#000 12%,transparent 48%)}}
+
+/* Slightly reduce the home footer identity and phone while preserving alignment. */
+.home-page .footer-brand{width:205px}
+.home-page .footer-phone{font-size:21px}
+@media(max-width:680px){.home-page .footer-brand{width:min(145px,100%)}.home-page .footer-phone{font-size:clamp(15px,4.1vw,19px)}}
