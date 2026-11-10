@@ -36,17 +36,18 @@ body[data-city] main .card:focus-visible { outline: 3px solid var(--ink); outlin
 }
 @media(prefers-reduced-motion:reduce) { .lesson-nudge * { animation: none !important; transition: none !important; } }
 
-/* Equal first-line cap positions; description reveals independently of artwork. */
+/* Fixed title row; description occupies only the gap below the icon. */
 body[data-city] main .card {
   display: grid; grid-template-rows: auto minmax(0, 1fr); align-items: start;
 }
 body[data-city] main .card > .ico { grid-row: 1; align-self: start; transition: none; }
 body[data-city] main .card > span:not(.bg-clip):not(.go) {
-  grid-row: 2; align-self: end; min-width: 0; width: 100%;
-  display: block; position: relative; transform: none; transition: transform .22s ease;
+  grid-row: 2; align-self: stretch; min-width: 0; min-height: 0; width: 100%;
+  display: grid; grid-template-rows: minmax(0, 1fr) auto;
+  position: relative; transform: none; transition: none;
 }
 body[data-city] main .card .name {
-  display: block; position: relative; top: var(--cap-nudge, 0em);
+  grid-row: 2; display: block; position: relative; top: var(--cap-nudge, 0em);
   font-size: clamp(28px, 3vw, 46px); line-height: 1.08;
   height: 2.16em; min-height: 2.16em; max-width: 100%;
   transform: none; transition: none;
@@ -55,18 +56,21 @@ body[data-city] main .card .name {
 body[data-city] main .card.piano { --cap-nudge: .02em; }
 body[data-city] main .card.speech { --cap-nudge: .01em; }
 body[data-city] main .card .desc {
-  position: absolute; top: 100%; left: 0; width: 100%;
-  height: 4.05em; min-height: 0; max-height: none;
-  margin-top: 12px; opacity: 0; visibility: hidden; transition: opacity .2s;
+  grid-row: 1; align-self: end; position: static; width: 100%; max-width: none;
+  height: auto; min-height: 0; max-height: calc(100% - 8px);
+  margin: 0 0 8px; padding: 0; overflow: auto;
+  font-family: Arial, "Helvetica Neue", sans-serif;
+  font-size: 16px; font-weight: 400; line-height: 1.45; letter-spacing: normal;
+  color: var(--ink); background: var(--c);
+  opacity: 0; visibility: hidden; transition: opacity .2s;
 }
-body[data-city] main .card:focus-visible > span:not(.bg-clip):not(.go) {
-  transform: translateY(calc(-4.05 * 17px - 12px));
+body[data-city] main .card.guitar .desc,
+body[data-city] main .card.drums .desc { color: var(--cream); }
+body[data-city] main .card:hover .desc,
+body[data-city] main .card:focus-visible .desc {
+  max-height: calc(100% - 8px); margin: 0 0 8px;
 }
-body[data-city] main .card:focus-visible .desc { opacity: 1; visibility: visible; }
 @media(hover:hover) and (pointer:fine) {
-  body[data-city] main .card:hover > span:not(.bg-clip):not(.go) {
-    transform: translateY(calc(-4.05 * 17px - 12px));
-  }
   body[data-city] main .card:hover .desc { opacity: 1; visibility: visible; }
 }
 body[data-city] main .card .bg,
@@ -77,10 +81,6 @@ body[data-city] main .card:focus-visible .bg {
 body[data-city] main .card::before,
 body[data-city] main .card::after { transform: none !important; transition: none; }
 body[data-city] main .card:not(.play) .bg * { animation: none !important; }
-@media(hover:none), (pointer:coarse) {
-  body[data-city] main .card .desc { position: static; opacity: 1; visibility: visible; }
-  body[data-city] main .card:focus-visible > span:not(.bg-clip):not(.go) { transform: none; }
-}
 @media(prefers-reduced-motion:reduce) {
   body[data-city] main .card > span:not(.bg-clip):not(.go),
   body[data-city] main .card .desc { transition: none; }
