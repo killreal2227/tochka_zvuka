@@ -150,7 +150,7 @@ test('invitation stays disabled if session storage is unavailable',()=>{
   const s=nudgeScene(new Map(),true);s.window.scrollY=500;s.delay();assert.equal(s.box.hidden,true);assert.equal(s.timers.length,0);
 });
 
-function formScene(endpoint=null,reply='success') {
+function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='') {
   const element=()=>events({hidden:false,disabled:false,offsetParent:{},tabIndex:0,style:{},dataset:{},classList:{add(){},remove(){},toggle(){}},setAttribute(){},focus(){document.activeElement=this;}});
   const input=()=>Object.assign(element(),{value:'',setCustomValidity(v){this.validity=v;},reportValidity(){return !this.validity;}});
   const name=input(),phone=input(),website=input(),direction=input(),branch=input();
@@ -163,10 +163,10 @@ function formScene(endpoint=null,reply='success') {
     reset(){for(const e of Object.values(this.elements))e.value='';},querySelector:s=>s==='.lead-submit'?submit:s==='.lead-branch-label'?branchLabel:null});
   const svg={setAttribute(){},querySelectorAll:()=>[],getScreenCTM:()=>({a:1})};
   const art={querySelector:()=>svg,closest:()=>sheet};
-  const map={'.lead-sheet':sheet,'.lead-success':success,'.lead-close':close,'[data-lead-dismiss]':dismiss,'.sheet-art':art,'#chips':chips,'#pickCap':caption,'#leadBranchCaption':branchCaption};
+  const map={'.lead-sheet':sheet,'.lead-success':success,'.lead-close':close,'[data-lead-dismiss]':dismiss,'.sheet-art':withoutArt?null:art,'#chips':chips,'#pickCap':caption,'#leadBranchCaption':branchCaption};
   const modal=Object.assign(element(),{hidden:true,querySelector:s=>map[s],querySelectorAll:s=>s==='a,button,input,select'?[close,name,phone,submit]:[]});
   const link=href=>({getAttribute:()=>href});
-  const document=events({body:{dataset:{},style:{}},activeElement:trigger,
+  const document=events({body:{dataset:{city:pageCity},style:{}},activeElement:trigger,
     getElementById:id=>({leadModal:modal,leadForm:form,leadStatus:status})[id],
     querySelector:s=>s==='.lead-consent a'?link('./consent/'):null,
     querySelectorAll:s=>s==='.openForm'?[trigger]:s==='.lead-consent a'?[link('./consent/'),link('./privacy/')]:[]});
@@ -186,6 +186,15 @@ test('unconfigured form gives requested feedback without request, storage or lea
   const s=formScene();await s.trigger.emit('click');s.fill();await s.form.emit('submit',{preventDefault(){}});
   assert.equal(s.calls,0);assert.equal(s.uuids,0);assert.equal(s.success.hidden,false);assert.equal(s.form.hidden,true);
   assert.equal(s.phone.value,'');await s.trigger.emit('click');assert.equal(s.form.hidden,false);assert.equal(s.success.hidden,true);
+});
+test('single-column branch form opens and confirms locally without decorative SVG',async()=>{
+  for(const city of ['kaluga','troitsk']){
+    const s=formScene(null,'success',true,city);await s.trigger.emit('click');
+    assert.equal(s.modal.hidden,false);assert.equal(s.form.elements.branch.value,city);
+    s.fill();s.form.elements.branch.value=city;
+    await s.form.emit('submit',{preventDefault(){}});
+    assert.equal(s.success.hidden,false);assert.equal(s.calls,0);assert.equal(s.uuids,0);
+  }
 });
 test('configured form uses transport acknowledgement and includes button-consent metadata',async()=>{
   const s=formScene('https://example.invalid/leads');await s.trigger.emit('click');s.fill();await s.form.emit('submit',{preventDefault(){}});

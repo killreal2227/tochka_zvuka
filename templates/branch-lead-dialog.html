@@ -1,0 +1,43 @@
+<div class="modal lead-modal" id="leadModal" hidden aria-hidden="true">
+  <div class="sheet lead-sheet" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="leadTitle">
+    <button class="x lead-close" type="button" id="close" aria-label="Закрыть"><svg><use href="#i-x"/></svg></button>
+    <div class="sheet-body">
+      <form id="leadForm">
+        <p class="form-eyebrow">ОСТАВЬТЕ ЗАЯВКУ</p>
+        <h2 id="leadTitle" tabindex="-1">Давай знакомиться!</h2>
+        <p class="sub" id="formIntro">Оставь номер — поможем выбрать направление</p>
+        <div class="fields" id="contactFields">
+          <label class="f" id="fPhone"><span class="sr">Телефон</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required aria-describedby="phoneError"><em class="err" id="phoneError">Проверь номер&nbsp;— нужно 11 цифр, начиная с 7 или 8</em></label>
+          <label class="f" id="fName"><span class="field-label">Как тебя зовут?</span><input name="name" autocomplete="given-name" placeholder="Имя" minlength="2" maxlength="80" required aria-describedby="nameError"><em class="err" id="nameError">Напиши имя: от 2 до 80 символов</em></label>
+        </div>
+        <label class="lead-branch-label">Твоя точка<select name="branch" required><option value="">Выбери город</option><option value="troitsk">Троицк · 3-ая Нововатутинская, 2</option><option value="kaluga">Калуга · Ленина, 79</option></select></label>
+        <fieldset class="pick" id="chips" aria-describedby="pickCap">
+          <legend class="direction-legend">Выбери направление</legend>
+          <div class="pick-row">
+            <span class="pk" style="--c:var(--vocal)"><input type="radio" name="direction" id="d-vocal" value="vocal"><label for="d-vocal" data-ico="vocal"><span class="choice-icon" aria-hidden="true"><img src="{{root}}icons/ic_vocal.svg" alt="" aria-hidden="true"></span><span class="choice-name">вокал</span></label></span>
+            <span class="pk" style="--c:var(--guitar)"><input type="radio" name="direction" id="d-guitar" value="guitar"><label for="d-guitar" data-ico="guitar"><span class="choice-icon" aria-hidden="true"><img src="{{root}}icons/ic_guitar.svg" alt="" aria-hidden="true"></span><span class="choice-name">гитара</span></label></span>
+            <span class="pk" style="--c:var(--drums)"><input type="radio" name="direction" id="d-drums" value="drums"><label for="d-drums" data-ico="drums"><span class="choice-icon" aria-hidden="true"><img src="{{root}}icons/ic_drums.svg" alt="" aria-hidden="true"></span><span class="choice-name">барабаны</span></label></span>
+            <span class="pk" style="--c:var(--piano)"><input type="radio" name="direction" id="d-piano" value="piano"><label for="d-piano" data-ico="piano"><span class="choice-icon" aria-hidden="true"><img src="{{root}}icons/ic_piano.svg" alt="" aria-hidden="true"></span><span class="choice-name">фортепиано</span></label></span>
+            <span class="pk actor-dual" style="--c:var(--orange);--c2:var(--blue)"><input type="radio" name="direction" id="d-actor" value="actor"><label for="d-actor" data-ico="actor"><span class="choice-icon" aria-hidden="true"><img src="{{root}}icons/ic_actor.svg" alt="" aria-hidden="true"></span><span class="choice-name">актёрское мастерство</span></label></span>
+            <span class="pk" style="--c:var(--pink)"><input type="radio" name="direction" id="d-speech" value="speech"><label for="d-speech" data-ico="speech"><span class="choice-icon" aria-hidden="true"><img src="{{root}}icons/ic_speech.svg" alt="" aria-hidden="true"></span><span class="choice-name">ораторское искусство</span></label></span>
+            <span class="pk choice-unsure" style="--c:var(--grey)"><input type="radio" name="direction" id="d-unsure" value="unsure"><label for="d-unsure" data-ico="unsure"><span class="choice-icon" aria-hidden="true">?</span><span class="choice-name">Пока не знаю</span></label></span>
+          </div>
+          <p class="pick-cap" id="pickCap" hidden>Что интересно? Можно не выбирать&nbsp;— подберём вместе</p>
+        </fieldset>
+        <label class="lead-honeypot" aria-hidden="true" inert>Ваш сайт<input name="website" tabindex="-1" autocomplete="off"></label>
+        <p class="form-status" id="leadStatus" role="status" aria-live="polite"></p>
+        <div class="send">
+          <button class="btn lead-submit" type="submit" id="submitBtn">Отправить заявку<i><svg><use href="#i-arrow"/></svg></i></button>
+          <p class="where" hidden><span id="leadBranchCaption">Выбери город</span></p>
+        </div>
+        <p class="lead-consent">Нажимая кнопку, вы даёте <a href="{{root}}consent/" target="_blank" rel="noopener">согласие на обработку персональных данных</a> и принимаете условия <a href="{{root}}privacy/" target="_blank" rel="noopener">политики обработки данных</a>.</p>
+        <p class="fine lead-alternative"><a href="tel:+79957907670">Позвонить <span>+7 995 790-76-70</span></a></p>
+      </form>
+      <div class="done lead-success" id="done" hidden>
+        <div class="rings"><i></i><b></b></div>
+        <h2 id="doneText" role="status" aria-live="polite">Спасибо, заявка отправлена</h2>
+        <button class="btn" type="button" id="doneClose" data-lead-dismiss>Закрыть<i><svg><use href="#i-x"/></svg></i></button>
+      </div>
+    </div>
+  </div>
+</div>

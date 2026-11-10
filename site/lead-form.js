@@ -12,12 +12,9 @@ window.TZ_LEADS = Object.assign({endpoint:null,consentVersion:'2026-11-10-v3'},w
   const directionLabels={vocal:'Вокал',guitar:'Гитара',drums:'Барабаны',piano:'Фортепиано',actor:'Актёрское мастерство',speech:'Ораторское искусство',unsure:'Пока не знаю'};
 
 const formArt=(()=>{
-  const box=$('.sheet-art'), svg=$('svg',box), mob=matchMedia('(max-width:680px)');
-  const setVB=()=>svg.setAttribute('viewBox', mob.matches ? '0 0 706.05 366.67' : '34 0 183 366.67');
-  setVB(); if(mob.addEventListener) mob.addEventListener('change',setVB);
-  const F=$$('[data-f]',svg), D=$$('[data-d]',svg), N=$$('.nd',svg);
+  const box=$('.sheet-art'), svg=box?$('svg',box):null, mob=matchMedia('(max-width:680px)');
   const col={vocal:'--vocal',guitar:'--guitar',drums:'--drums',piano:'--piano',actor:'--orange',speech:'--pink',unsure:'--grey'};
-  const sheet=box.closest('.sheet');
+  const sheet=box?box.closest('.sheet'):modal.querySelector('.lead-sheet');
   let actorNextBlue=false;
   function tint(advanceActor=false){   // актёрский акцент меняется при новом выборе, без мигания во время ввода
     const v=form.elements.direction.value;
@@ -27,6 +24,10 @@ const formArt=(()=>{
     $('#pickCap').textContent = col[v] ? directionLabels[v] : 'Что интересно? Можно не выбирать\u00a0— подберём вместе';
   }
   form.addEventListener('change',e=>{ if(e.target.name==='direction') tint(true); });
+  if(!svg)return {tint,resize(){},start(){},stop(){}};
+  const setVB=()=>svg.setAttribute('viewBox', mob.matches ? '0 0 706.05 366.67' : '34 0 183 366.67');
+  setVB(); if(mob.addEventListener) mob.addEventListener('change',setVB);
+  const F=$$('[data-f]',svg), D=$$('[data-d]',svg), N=$$('.nd',svg);
   const per=el=>8+((+el.dataset.t*1.37)%6);            // период 8–14 с, у каждого свой
   const wave=(el,s)=>Math.sin(s*2*Math.PI/per(el) + +el.dataset.p);
   let id=0, t0=0, run=0, scale=1, lastPaint=null;

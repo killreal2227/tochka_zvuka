@@ -23,22 +23,22 @@ def write(path, content):
             asset = (path.parent / match[2]).resolve()
             revision = hashlib.sha256(asset.read_bytes()).hexdigest()[:10]
             return f'{match[1]}{match[2]}?v={revision}"'
-        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|form\.css|home\.css|home-motion\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|button-labels\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
+        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|form\.css|branch-form\.css|home\.css|home-motion\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|button-labels\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding='utf-8')
 
 def read(name):
     return (ROOT / 'templates' / name).read_text(encoding='utf-8')
 
-def compose(page, root):
-    for part, filename in [('footer', 'footer.html'), ('dialog', 'lead-dialog.html'), ('nudge', 'lesson-nudge.html')]:
+def compose(page, root, dialog='lead-dialog.html'):
+    for part, filename in [('footer', 'footer.html'), ('dialog', dialog), ('nudge', 'lesson-nudge.html')]:
         page = page.replace('{{' + part + '}}', read(filename).replace('{{root}}', root))
     return page
 
 def build():
     template = read('city.html')
     for slug, city in CITIES.items():
-        page = compose(template, '../')
+        page = compose(template, '../', 'branch-lead-dialog.html')
         for key, value in dict(city, slug=slug).items():
             page = page.replace('{{' + key + '}}', escape(value))
         write(SITE / slug / 'index.html', page)
