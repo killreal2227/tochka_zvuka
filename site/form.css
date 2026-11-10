@@ -195,23 +195,41 @@
 .lead-modal .sheet-art { min-width: 0; min-height: 0; overflow: hidden; }
 .lead-modal .sheet-body {
   box-sizing: border-box; min-width: 0; min-height: 0; max-height: calc(100svh - 32px);
-  display: flex; flex-direction: column; padding: 100px 40px 40px; background: #fff5ea;
+  display: flex; flex-direction: column; padding: 128px 40px 40px; background: #fff5ea;
   overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
 }
 .lead-modal #leadForm, .lead-modal .lead-success { flex: 0 0 auto; width: 100%; min-width: 0; }
 .lead-modal #leadForm { margin-block: 0; }
 .lead-modal .lead-success { margin-block: auto; }
-.lead-modal .sheet #leadTitle { font-size: 58px; line-height: 1.15; text-align: left; margin: 0 0 12px; }
+.lead-modal .sheet #leadTitle { font-size: 68px; line-height: 1.15; text-align: left; margin: 0 0 12px; }
 .lead-modal .sheet #formIntro { text-align: left; max-width: none; margin: 0 0 28px; }
 .lead-modal .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 0 0 28px; }
 .lead-modal .fields .f { min-width: 0; margin: 0; }
 .lead-modal .fields input { min-width: 0; background: #fff5ea; }
+.lead-modal .fields input:autofill,
+.lead-modal .fields input:autofill:focus {
+  background: #fff5ea; color: #1a1a1a; caret-color: #1a1a1a;
+  border-bottom-color: var(--bord); box-shadow: inset 0 0 0 1000px #fff5ea;
+}
+.lead-modal .fields input:-webkit-autofill,
+.lead-modal .fields input:-webkit-autofill:hover,
+.lead-modal .fields input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #1a1a1a; caret-color: #1a1a1a;
+  background: #fff5ea; border-bottom-color: var(--bord);
+  -webkit-box-shadow: inset 0 0 0 1000px #fff5ea;
+  box-shadow: inset 0 0 0 1000px #fff5ea;
+}
 .lead-modal .direction-legend { width: 100%; text-align: left; font-size: 16px; line-height: 1.5; margin: 0 0 12px; padding: 0; }
 .lead-modal #formIntro, .lead-modal .direction-legend { text-transform: uppercase; letter-spacing: .025em; font-size: 14px; font-weight: 400; }
 .lead-modal .pick-row {
   box-sizing: border-box; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
   align-items: start;
-  gap: 12px 6px; width: 100%; max-width: 100%; padding: 8px 0; overflow: visible;
+  gap: 12px 6px; width: 100%; max-width: 100%; padding: 8px 0 0; overflow: visible;
+}
+.lead-modal .pick { margin-bottom: 8px; }
+.lead-modal #pickCap {
+  min-height: 24px; margin: 6px 0 0; font-family: var(--brand-font);
+  font-size: 18px; font-weight: 400; line-height: 1.3; text-transform: lowercase;
 }
 .lead-modal .pk { width: auto; height: auto; min-width: 0; align-self: start; }
 .lead-modal .pk label {
@@ -234,13 +252,14 @@
 .lead-modal .send { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
 .lead-modal .action-pane { min-width: 0; display: grid; grid-template-rows: 56px minmax(42px, auto); gap: 12px; }
 .lead-modal .action-pane > .lead-consent,
-.lead-modal .action-pane > .lead-address { margin: 0; min-height: 42px; display: flex; align-items: center; justify-content: flex-start; text-align: left; }
+.lead-modal .action-pane > .lead-address { margin: 0; min-height: 42px; display: flex; align-items: center; justify-content: flex-start; text-align: left; font-size: 14px; }
+.lead-modal .action-pane > .lead-address { justify-content: flex-end; text-align: right; }
 .lead-modal .lead-submit, .lead-modal .lead-call { box-sizing: border-box; min-width: 0; width: 100%; height: 56px; min-height: 56px; white-space: nowrap; justify-content: space-between; padding: 8px 8px 8px 20px; font-size: 16px; }
 .lead-modal .lead-submit i, .lead-modal .lead-call i { width: 40px; height: 40px; }
 .lead-modal .lead-call { background: transparent; color: var(--ink); border: 2px solid var(--ink); padding: 6px 6px 6px 18px; text-decoration: none; }
-.lead-modal .lead-call i { background: var(--ink); color: var(--cream); }
-.lead-modal .lead-call:hover { background: var(--ink); color: var(--cream); }
-.lead-modal .lead-call:hover i { background: var(--cream); color: var(--ink); }
+.lead-modal .lead-call i { background: transparent; color: var(--ink); border-radius: 0; }
+.lead-modal .lead-call:hover { background: #fff5ea; color: var(--ink); }
+.lead-modal .lead-call:hover i { background: transparent; color: var(--ink); }
 .lead-modal .btn { font-weight: 400; text-transform: uppercase; }
 .lead-modal .f input { font-family: var(--brand-font); font-size: 20px; line-height: 1.4; }
 .lead-modal .f input:focus,
@@ -261,23 +280,22 @@
   margin: 10px 0 0; font-size: 14px; line-height: 1.5;
 }
 .lead-modal .lead-consent { margin: 12px 0 0; font-size: 14px; line-height: 1.5; }
-.lead-modal .lead-consent .lead-reassurance { margin: 0; color: #69594d; }
+.lead-modal .lead-consent .lead-reassurance { margin: 0; color: #69594d; font-size: 14px; }
 .lead-modal .lead-address { margin: 20px 0 0; font-size: 16px; line-height: 1.5; color: #69594d; }
 .lead-modal .lead-alternative { margin: 8px 0 0; font-size: 14px; line-height: 1.5; }
 .lead-modal .lead-alternative a { color: #69594d; font-weight: 400; }
 .lead-modal .lead-alternative span { font-size: 14px; }
 /* On pointer devices only the relevant name is displayed, without seven caption blocks. */
 @media(min-width:681px) {
-  .lead-modal .pick-row { padding-bottom: 46px; }
+  .lead-modal .pick-row { padding-bottom: 0; }
   .lead-modal .choice-name {
-    position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
     width: max-content; max-width: 200px; padding: 2px 4px;
     background: var(--cream); z-index: 3; pointer-events: none;
     font-size: 14px; line-height: 1.3; opacity: 0; visibility: hidden;
   }
   .lead-modal .pk:hover .choice-name,
-  .lead-modal .pk input:focus-visible+label .choice-name,
-  .lead-modal .pk input:checked+label .choice-name { opacity: 1; visibility: visible; }
+  .lead-modal .pk input:focus-visible+label .choice-name { opacity: 1; visibility: visible; }
   .lead-modal .pick-row:has(.pk:hover) .pk:not(:hover) .choice-name { opacity: 0; visibility: hidden; }
 }
 @media(max-width:1050px) and (min-width:901px) {
@@ -291,7 +309,7 @@
 }
 @media(max-width:680px) {
   .lead-modal .sheet-body { padding-left: 20px; padding-right: 20px; }
-  .lead-modal .sheet #leadTitle { font-size: 40px; }
+  .lead-modal .sheet #leadTitle { font-size: 46px; }
   .lead-modal .fields { grid-template-columns: minmax(0, 1fr); }
   .lead-modal .pick-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 10px; }
   .lead-modal .choice-unsure { grid-column: 1 / -1; }
@@ -300,3 +318,4 @@
   .lead-modal .choice-name { font-size: 13px; line-height: 1.3; min-height: 2.6em; }
   .lead-modal .choice-unsure .choice-name { min-height: 0; }
 }
+@media(max-width:360px) { .lead-modal .sheet #leadTitle { font-size: 40px; } }

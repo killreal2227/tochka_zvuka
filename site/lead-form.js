@@ -21,7 +21,7 @@ const formArt=(()=>{
     if(col[v]) sheet.dataset.dir=v; else delete sheet.dataset.dir;
     if(v==='actor' && advanceActor){sheet.dataset.actorColor=actorNextBlue?'blue':'orange';actorNextBlue=!actorNextBlue;}
     $('#chips').classList.toggle('has',!!col[v]);
-    $('#pickCap').textContent = col[v] ? directionLabels[v] : 'Что интересно? Можно не выбирать\u00a0— подберём вместе';
+    $('#pickCap').textContent = col[v] ? directionLabels[v].toLocaleLowerCase('ru') : '';
   }
   form.addEventListener('change',e=>{ if(e.target.name==='direction') tint(true); });
   if(!svg)return {tint,resize(){},start(){},stop(){}};

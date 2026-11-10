@@ -180,8 +180,15 @@ function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',co
     fetch:async(_,options)=>{calls++;payload=JSON.parse(options.body);return{ok:reply==='success',status:reply==='success'?200:502,
       json:async()=>reply==='success'?{ok:true,requestId:payload.requestId,leadId:'1'}:{ok:false}};}});
   const fill=()=>{name.value='Иван';phone.value='+79950000000';branch.value='kaluga';};
-  return {trigger,form,success,modal,phone,status,fill,get calls(){return calls;},get uuids(){return uuids;},get payload(){return payload;}};
+  return {trigger,form,success,modal,phone,status,caption,fill,get calls(){return calls;},get uuids(){return uuids;},get payload(){return payload;}};
 }
+test('selected direction caption is lowercase and clears without permanent helper text',async()=>{
+  const s=formScene();s.form.elements.direction.value='vocal';
+  await s.form.emit('change',{target:{name:'direction'}});
+  assert.equal(s.caption.textContent,'вокал');
+  s.form.elements.direction.value='';await s.form.emit('change',{target:{name:'direction'}});
+  assert.equal(s.caption.textContent,'');
+});
 test('unconfigured form gives requested feedback without request, storage or lead ID',async()=>{
   const s=formScene();await s.trigger.emit('click');s.fill();await s.form.emit('submit',{preventDefault(){}});
   assert.equal(s.calls,0);assert.equal(s.uuids,0);assert.equal(s.success.hidden,false);assert.equal(s.form.hidden,true);
