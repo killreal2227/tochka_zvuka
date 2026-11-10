@@ -8,7 +8,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="preload" href="fonts/Architexture-v2.ttf" as="font" type="font/ttf" crossorigin>
 <meta property="og:title" content="Точка звука — найди свой звук"><meta property="og:type" content="website"><meta property="og:url" content="https://tzvuka.ru/">
 <meta property="og:description" content="Музыка, сцена и твой город. Троицк · Калуга.">
-<link rel="stylesheet" href="experience.css?v=84f1dc29de"><script src="lead-form.js?v=c4a887d2ba" defer></script>
+<link rel="stylesheet" href="experience.css?v=b5bfeaed76"><script src="lead-form.js?v=c4a887d2ba" defer></script>
 <link rel="stylesheet" href="form.css?v=3f6fded27d">
 </head>
 <body class="home-page">
@@ -19,19 +19,7 @@
   <symbol id="i-down2" viewBox="0 0 14 14"><path d="M7 1v12M2 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></symbol>
   <symbol id="i-x" viewBox="0 0 16 16"><path d="m2 2 12 12M14 2 2 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></symbol>
 </svg>
-<a class="skip-link" href="#main">К содержанию</a>
-<header class="home-header">
-  <a class="home-brand" href="./" aria-label="Точка звука — на главную"><svg viewBox="0 0 567 91" aria-hidden="true"><use href="#logo-full" width="567" height="91"/></svg></a>
-  <nav class="header-cities" aria-label="Филиалы"><a href="troitsk/">Троицк</a><span aria-hidden="true">/</span><a href="kaluga/">Калуга</a></nav>
-  <button class="header-cta openForm" type="button">Первое занятие <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16 16 4M7 4h9v9"/></svg></button>
-</header>
-<main id="main">
-  <div class="home-gateway">
-    <section class="intro-panel" aria-labelledby="home-title">
-      <div class="intro-copy"><p class="eyebrow">школа музыки</p>
-      <h1 id="home-title">Музыка начинается<br>с твоей <em>точки.</em></h1>
-      <p class="intro-description">Учись. Играй. Выходи на сцену.</p></div>
-      <div class="intro-pattern" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 706.05 366.67" preserveAspectRatio="xMidYMid slice">
+<div class="home-backdrop" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 706.05 366.67" preserveAspectRatio="xMidYMid slice">
         <rect fill="#fff5ea" x="-40" y="-40" width="786" height="447"/>
         <g>
         <line data-f="c" data-t="7.2" data-p="0" fill="none" stroke="#1a1a1a" stroke-width="3" x1="353.33" y1="275.33" x2="481.83" y2="275.33"/>
@@ -58,6 +46,18 @@
         <line data-f="c" data-t="8.3" data-p="3.6" fill="none" stroke="#1a1a1a" stroke-width="3" x1="672.27" y1="29.12" x2="334.77" y2="29.12"/>
         </g>
       </svg></div>
+<a class="skip-link" href="#main">К содержанию</a>
+<header class="home-header">
+  <a class="home-brand" href="./" aria-label="Точка звука — на главную"><svg viewBox="0 0 567 91" aria-hidden="true"><use href="#logo-full" width="567" height="91"/></svg></a>
+  <nav class="header-cities" aria-label="Филиалы"><a href="troitsk/">Троицк</a><span aria-hidden="true">/</span><a href="kaluga/">Калуга</a></nav>
+  <button class="header-cta openForm" type="button">Первое занятие <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16 16 4M7 4h9v9"/></svg></button>
+</header>
+<main id="main">
+  <div class="home-gateway">
+    <section class="intro-panel" aria-labelledby="home-title">
+      <div class="intro-copy"><p class="eyebrow">школа музыки</p>
+      <h1 id="home-title">Музыка начинается<br>с твоей <em>точки.</em></h1>
+      <p class="intro-description">Учись. Играй. Выходи на сцену.</p></div>
     </section>
     <section class="city-choice" id="cities" aria-labelledby="city-choice-title">
       <div class="choice-heading"><h2 id="city-choice-title">Выбери свою точку</h2><p>два города · одна школа</p></div>
@@ -155,7 +155,7 @@
 <script>
 /* Same line travel, shape drift and turning knobs as the existing form artwork. */
 (()=>{
-  const svg=document.querySelector('.intro-pattern svg');
+  const svg=document.querySelector('.home-backdrop svg');
   if(!svg)return;
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const F=[...svg.querySelectorAll('[data-f]')],D=[...svg.querySelectorAll('[data-d]')],N=[...svg.querySelectorAll('.nd')];

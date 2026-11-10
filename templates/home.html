@@ -13,6 +13,7 @@
 </head>
 <body class="home-page">
 {{logo}}
+<div class="home-backdrop" aria-hidden="true">{{home_pattern}}</div>
 <a class="skip-link" href="#main">К содержанию</a>
 <header class="home-header">
   <a class="home-brand" href="./" aria-label="Точка звука — на главную"><svg viewBox="0 0 567 91" aria-hidden="true"><use href="#logo-full" width="567" height="91"/></svg></a>
@@ -25,7 +26,6 @@
       <div class="intro-copy"><p class="eyebrow">школа музыки</p>
       <h1 id="home-title">Музыка начинается<br>с твоей <em>точки.</em></h1>
       <p class="intro-description">Учись. Играй. Выходи на сцену.</p></div>
-      <div class="intro-pattern" aria-hidden="true">{{home_pattern}}</div>
     </section>
     <section class="city-choice" id="cities" aria-labelledby="city-choice-title">
       <div class="choice-heading"><h2 id="city-choice-title">Выбери свою точку</h2><p>два города · одна школа</p></div>
@@ -41,7 +41,7 @@
 <script>
 /* Same line travel, shape drift and turning knobs as the existing form artwork. */
 (()=>{
-  const svg=document.querySelector('.intro-pattern svg');
+  const svg=document.querySelector('.home-backdrop svg');
   if(!svg)return;
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const F=[...svg.querySelectorAll('[data-f]')],D=[...svg.querySelectorAll('[data-d]')],N=[...svg.querySelectorAll('.nd')];
