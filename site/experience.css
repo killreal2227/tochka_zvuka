@@ -103,7 +103,7 @@
 .home-page .city-line:focus-visible{background:#68232d}
 
 /* Warm, opaque framing and one centered content width across the home page. */
-.home-page{--home-content:1680px;--frame-warm:#f5e2c8}
+.home-page{--home-content:1680px;--frame-warm:#f2e6d8}
 .home-page .home-header{background:var(--frame-warm);padding-left:max(var(--page-gutter),calc((100% - var(--home-content))/2));padding-right:max(var(--page-gutter),calc((100% - var(--home-content))/2))}
 .home-page .header-cities{font-size:22px;gap:24px;color:var(--bord)}
 .home-page .header-cities a{padding:8px 0;border-bottom:1px solid #9b3e4755;transition:border-color .2s,color .2s}
