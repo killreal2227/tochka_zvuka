@@ -202,6 +202,11 @@
 .home-page .page-pattern { opacity: .33; }
 @media(max-width:1000px) { .home-page .page-pattern { opacity: .31; } }
 /* Fixed original desktop scale, independent of viewport width. */
+.home-page .header-cta { white-space: nowrap; text-transform: none; }
+.home-page .header-cta > svg:not(.capsule-caption) {
+  position: absolute; right: 8px; top: 0; bottom: 0;
+  margin-top: auto; margin-bottom: auto;
+}
 @media(min-width:1001px) {
   .home-page .home-brand {
     width: 260px; min-width: 260px; max-width: 260px; flex: 0 0 260px;
