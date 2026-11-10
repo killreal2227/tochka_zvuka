@@ -195,13 +195,17 @@
 .lead-modal .sheet-art { min-width: 0; min-height: 0; overflow: hidden; }
 .lead-modal .sheet-body {
   box-sizing: border-box; min-width: 0; min-height: 0; max-height: calc(100svh - 32px);
-  display: flex; flex-direction: column; padding: 44px 48px;
+  display: flex; flex-direction: column; padding: 100px 40px 40px; background: #fff5ea;
   overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
 }
-.lead-modal #leadForm, .lead-modal .lead-success { flex: 0 0 auto; width: 100%; min-width: 0; margin-block: auto; }
-.lead-modal .sheet #leadTitle { font-size: 58px; line-height: 1.15; text-align: left; margin-right: 0; }
-.lead-modal .sheet #formIntro { text-align: left; max-width: none; }
-.lead-modal .fields { gap: 16px 24px; }
+.lead-modal #leadForm, .lead-modal .lead-success { flex: 0 0 auto; width: 100%; min-width: 0; }
+.lead-modal #leadForm { margin-block: 0; }
+.lead-modal .lead-success { margin-block: auto; }
+.lead-modal .sheet #leadTitle { font-size: 58px; line-height: 1.15; text-align: left; margin: 0 0 12px; }
+.lead-modal .sheet #formIntro { text-align: left; max-width: none; margin: 0 0 28px; }
+.lead-modal .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 0 0 28px; }
+.lead-modal .fields .f { min-width: 0; margin: 0; }
+.lead-modal .fields input { min-width: 0; background: #fff5ea; }
 .lead-modal .direction-legend { width: 100%; text-align: left; font-size: 16px; line-height: 1.5; margin: 0 0 12px; padding: 0; }
 .lead-modal #formIntro, .lead-modal .direction-legend { text-transform: uppercase; letter-spacing: .025em; font-size: 14px; font-weight: 400; }
 .lead-modal .pick-row {
@@ -277,7 +281,7 @@
   .lead-modal .pick-row:has(.pk:hover) .pk:not(:hover) .choice-name { opacity: 0; visibility: hidden; }
 }
 @media(max-width:1050px) and (min-width:901px) {
-  .lead-modal .sheet-body { padding-left: 28px; padding-right: 28px; }
+  .lead-modal .sheet-body { padding-left: 40px; padding-right: 40px; }
 }
 @media(max-width:900px) {
   .lead-modal .sheet { grid-template-columns: minmax(0, 1fr); grid-template-rows: 140px minmax(0, 1fr); }
