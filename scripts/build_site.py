@@ -39,7 +39,7 @@ def build():
     logo = re.search(r'<body[^>]*>\s*(<svg.*?</svg>)', template, re.S)[1]
     mark_paths = re.search(r'<symbol id="logo-mark"[^>]*>(.*?)</symbol>', logo, re.S)[1]
     mark = '<svg class="home-mark" viewBox="428 383 104 94" aria-hidden="true"><defs><clipPath id="homePatternDisc"><circle cx="475.8" cy="430" r="35.6"/></clipPath></defs><g clip-path="url(#homePatternDisc)"><image href="patterns/brand.svg" x="439" y="393" width="74" height="74" preserveAspectRatio="xMidYMid slice" opacity=".72"/></g>' + mark_paths + '</svg>'
-    pattern = (SITE / 'patterns' / 'vocal.svg').read_text(encoding='utf-8')
+    pattern = (SITE / 'patterns' / 'brand.svg').read_text(encoding='utf-8')
     pattern = re.sub(r'<\?xml.*?\?>', '', pattern).strip()
     home_template = read('home.html').replace('{{logo}}', logo).replace('{{home_pattern}}', pattern)
     # The original form uses the same arrow/close symbols on all pages.
