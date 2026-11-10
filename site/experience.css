@@ -52,3 +52,14 @@
 /* Explicit foreground color wins over the general home link rule in every state. */
 .home-page .city-line,.home-page .city-line:visited,.home-page .city-line:hover,.home-page .city-line:focus-visible{color:var(--cream)}
 .home-page .city-line h3,.home-page .city-line:hover h3{color:var(--cream)}
+
+/* Let the home composition fill wide and tall displays without scaling body text. */
+.home-page{min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
+.home-page>.home-header{width:100%;max-width:none;flex-shrink:0}
+.home-page>main{display:flex;flex-direction:column;flex:1}
+.home-gateway{width:100%;max-width:none;flex:1;display:flex;flex-direction:column}
+.home-gateway .intro-panel{flex:1;min-height:306px;padding-top:40px;padding-bottom:40px}
+.home-page>.site-footer{flex-shrink:0}
+.home-page .footer-main,.home-page .footer-bottom,.home-page .footer-details{max-width:none}
+@media(min-width:1600px){.home-page{--page-gutter:clamp(80px,5vw,160px)}.home-gateway .intro-panel{min-height:clamp(320px,36vh,520px)}.intro-copy h1{font-size:clamp(68px,4.2vw,96px)}.city-line,.city-line+.city-line{min-height:210px;padding:32px 38px}.city-line h3{font-size:68px}.home-gateway{padding-bottom:48px}}
+@media(max-width:680px){.home-gateway .intro-panel{min-height:0;padding:32px 0 30px}}
