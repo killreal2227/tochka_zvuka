@@ -171,3 +171,33 @@
   .home-page .home-brand { width: 112px; }
   .home-page .header-cta { width: 132px; }
 }
+/* Fixed main-header geometry across widths; only available spacing changes. */
+.home-page .home-header {
+  display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: center;
+  height: 88px; min-height: 88px; padding-top: 12px; padding-bottom: 12px;
+  transition: none; transform: none;
+}
+.home-page .home-brand {
+  width: 160px; min-width: 160px; max-width: 160px; flex: 0 0 160px;
+  margin: 0; transform: none; transition: none; animation: none;
+}
+.home-page .header-cta,
+.home-page .header-cta:hover,
+.home-page .header-cta:focus-visible {
+  box-sizing: border-box; width: 132px; min-width: 132px; flex: 0 0 132px;
+  min-height: 40px; font-size: 12px !important; line-height: 1.2;
+  padding: 8px; gap: 8px; letter-spacing: 0;
+  transform: none; transition: background-color .2s, border-color .2s, color .2s;
+}
+.home-page .header-cta svg { width: 16px; height: 16px; flex: 0 0 16px; }
+@media(max-width:1000px) {
+  .home-page { --header-height: 88px; --page-gutter: 24px; }
+  .home-page .home-header { padding-left: 24px; padding-right: 24px; gap: 12px; }
+}
+@media(max-width:360px) {
+  .home-page { --page-gutter: 10px; }
+  .home-page .home-header { padding-left: 10px; padding-right: 10px; gap: 8px; }
+  .home-page .home-gateway, .home-page > .site-footer { padding-left: 10px; padding-right: 10px; }
+}
+.home-page .page-pattern { opacity: .33; }
+@media(max-width:1000px) { .home-page .page-pattern { opacity: .31; } }

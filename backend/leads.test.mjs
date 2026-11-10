@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {handleLeads} from './leads.mjs';
 import worker from './worker.mjs';
 const env={BOT_TOKEN:'123456789:abcdefghijklmnopqrstuvwxyz123456',LEADS_CHAT_ID:'524756735',LEADS_RATE_LIMITER:{limit:async()=>({success:true})}};
-const payload=()=>({schemaVersion:1,requestId:crypto.randomUUID(),createdAt:new Date().toISOString(),name:'Тест',phone:'+79950000000',branch:'kaluga',direction:'vocal',website:'',pagePath:'/kaluga/',consent:{accepted:true,acceptedAt:new Date().toISOString(),version:'2026-11-10-v2',documentUrl:'https://tzvuka.ru/consent/',privacyUrl:'https://tzvuka.ru/privacy/'}});
+const payload=()=>({schemaVersion:1,requestId:crypto.randomUUID(),createdAt:new Date().toISOString(),name:'Тест',phone:'+79950000000',branch:'kaluga',direction:'vocal',website:'',pagePath:'/kaluga/',consent:{accepted:true,acceptedAt:new Date().toISOString(),version:'2026-11-10-v3',documentUrl:'https://tzvuka.ru/consent/',privacyUrl:'https://tzvuka.ru/privacy/'}});
 const request=(body=payload(),origin='https://tzvuka.ru')=>new Request('https://test.workers.dev/leads',{method:'POST',headers:{origin,'content-type':'application/json','cf-connecting-ip':'192.0.2.1'},body:JSON.stringify(body)});
 test('success only after Telegram acknowledgement; recipient is server configured',async()=>{
   let called=false;const result=await handleLeads(request(),env,async(url,options)=>{called=true;const message=JSON.parse(options.body);assert.equal(message.chat_id,env.LEADS_CHAT_ID);assert.match(message.text,/Филиал: Калуга/);assert.equal(message.parse_mode,undefined);return Response.json({ok:true,result:{message_id:42}});});

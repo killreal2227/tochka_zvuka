@@ -53,19 +53,18 @@
           </div>
           <p class="pick-cap" id="pickCap">Что интересно? Можно не выбирать&nbsp;— подберём вместе</p>
         </fieldset>
-        <label class="consent lead-consent"><input name="consent" type="checkbox" required><span>Даю <a href="{{root}}consent/" target="_blank" rel="noopener">согласие на обработку персональных данных</a> и ознакомлен(а) с <a href="{{root}}privacy/" target="_blank" rel="noopener">политикой обработки данных</a>.</span></label>
         <label class="lead-honeypot" aria-hidden="true" inert>Ваш сайт<input name="website" tabindex="-1" autocomplete="off"></label>
         <p class="form-status" id="leadStatus" role="status" aria-live="polite"></p>
         <div class="send">
           <button class="btn lead-submit" type="submit" id="submitBtn">Отправить заявку<i><svg><use href="#i-arrow"/></svg></i></button>
           <p class="where"><span id="leadBranchCaption">Выбери город</span></p>
         </div>
-        <p class="fine lead-alternative">Или позвони: <a href="tel:+79957907670">+7 995 790-76-70</a></p>
+        <p class="lead-consent">Нажимая кнопку, вы даёте <a href="{{root}}consent/" target="_blank" rel="noopener">согласие на обработку персональных данных</a> и принимаете условия <a href="{{root}}privacy/" target="_blank" rel="noopener">политики обработки данных</a>.</p>
+        <p class="fine lead-alternative"><a href="tel:+79957907670">Позвонить <span>+7 995 790-76-70</span></a></p>
       </form>
       <div class="done lead-success" id="done" hidden>
         <div class="rings"><i></i><b></b></div>
-        <h2>готово. <em>поехали.</em></h2>
-        <p class="sub" id="doneText">Заявка передана. Свяжемся, чтобы обсудить первое занятие.</p>
+        <h2 id="doneText" role="status" aria-live="polite">Спасибо, заявка отправлена</h2>
         <button class="btn" type="button" id="doneClose" data-lead-dismiss>Закрыть<i><svg><use href="#i-x"/></svg></i></button>
       </div>
     </div>

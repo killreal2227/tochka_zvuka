@@ -1,0 +1,41 @@
+/* Only content buttons; branch header rules are deliberately excluded. */
+body[data-city] main .btn, body[data-city] .stick,
+body[data-city] .lesson-nudge .btn {
+  line-height: 1.2; align-items: center; justify-content: space-between;
+  transform: none; transition: background-color .2s, color .2s;
+}
+body[data-city] main .btn:hover, body[data-city] main .btn:focus-visible,
+body[data-city] .stick:hover, body[data-city] .lesson-nudge .btn:hover { transform: none; }
+body[data-city] main .btn > span, body[data-city] .stick > span { display: block; line-height: 1.2; }
+body[data-city] main .btn i, body[data-city] .stick i,
+body[data-city] .lesson-nudge .btn i { flex: 0 0 auto; align-self: center; font-style: normal; }
+body[data-city] main .btn svg, body[data-city] .stick svg { display: block; flex: none; }
+body[data-city] main .card, body[data-city] main .card:hover { transform: none; }
+body[data-city] main .card .ico, body[data-city] main .card:hover .ico { transform: none; }
+body[data-city] main .card .desc {
+  height: 4.05em; min-height: 4.05em; max-height: none;
+  margin-top: 12px; transition: opacity .25s;
+}
+body[data-city] main .card:not(.play) .ico * { animation: none !important; }
+body[data-city] main .card:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+.lesson-nudge[hidden] { display: none !important; }
+.lesson-nudge {
+  position: fixed; right: 24px; bottom: 24px; z-index: 50;
+  width: min(360px, calc(100vw - 48px)); padding: 24px;
+  background: var(--cream); color: var(--ink); border: 1px solid var(--bord);
+  box-shadow: 0 8px 30px #1a1a1a20;
+}
+.lesson-nudge h2 { font-size: 26px; line-height: 1.2; margin: 0 28px 12px 0; }
+.lesson-nudge p { font-size: 16px; line-height: 1.4; margin-bottom: 18px; }
+.lesson-nudge-close {
+  position: absolute; top: 8px; right: 8px; width: 36px; height: 36px;
+  border: 0; background: none; color: var(--ink); font: inherit; font-size: 28px;
+  display: grid; place-items: center; line-height: 1;
+}
+.lesson-nudge .btn { font-size: 15px; padding: 6px 6px 6px 20px; gap: 16px; }
+.lesson-nudge .btn i { width: 36px; height: 36px; }
+@media(max-width:680px) {
+  .lesson-nudge { right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); width: calc(100vw - 32px); max-height: calc(100svh - 32px); overflow: auto; padding: 20px; }
+  .lesson-nudge h2 { font-size: 24px; }
+}
+@media(prefers-reduced-motion:reduce) { .lesson-nudge * { animation: none !important; transition: none !important; } }

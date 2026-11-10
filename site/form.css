@@ -64,13 +64,11 @@
 .where:before{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent);flex:none}
 .fine{font-size:13px;opacity:.72;margin-top:18px;line-height:1.4}
 .availability{font-size:13px;line-height:1.45;margin:12px 0 18px}
-.availability[data-mode=demo]:before{content:"ДЕМО";display:inline-block;background:var(--ink);color:var(--cream);padding:3px 7px;margin-right:8px;font-size:11px;letter-spacing:.08em}
 .f input:disabled{opacity:.6;cursor:not-allowed}
 #submitBtn:disabled{opacity:.55;cursor:not-allowed}
 .consent{display:flex;align-items:flex-start;gap:10px;font-size:12px;line-height:1.45;margin:12px 0 18px}
 .consent input{width:18px;height:18px;flex:none;margin-top:2px;accent-color:var(--bord)}
 .form-status{font-size:14px;line-height:1.5;margin:12px 0;color:var(--bord)}
-.demo-result{font-size:13px;line-height:1.5;font-weight:700;letter-spacing:.04em;margin-bottom:14px}
 .nudge .consent{font-size:12px;margin:12px 0}
 .done{text-align:left}
 .done .rings{position:relative;width:90px;height:90px;margin-bottom:26px}
@@ -91,3 +89,28 @@
 @media(prefers-reduced-motion:reduce){.lead-modal *{animation:none!important;transition:none!important}}
 
 .lead-modal [hidden]{display:none!important}.lead-modal .done h2{margin-top:0}.lead-modal .done p{font-size:17px}
+
+/* Center artwork in its circle, including wide actor/speech glyphs. */
+.lead-modal .pk label {
+  display: flex; justify-content: center; align-items: center;
+  line-height: 1; padding: 0; transform: none;
+}
+.lead-modal .pk input:hover + label { transform: none; }
+.lead-modal .pk label img {
+  display: block; flex: none; width: 66%; height: 66%; max-width: none;
+  margin: 0; object-fit: contain; object-position: center;
+}
+.lead-modal .pk label[data-ico="actor"] img { width: 80%; height: 56%; }
+.lead-modal .pk label[data-ico="speech"] img { width: 78%; height: 60%; }
+.lead-modal .pk label[data-ico="piano"] img { width: 68%; height: 68%; }
+.lead-modal .pk label[data-ico="unsure"]::before { line-height: 1; }
+.lead-modal .btn, .lead-modal .btn:hover, .lead-modal .btn:focus-visible {
+  align-items: center; line-height: 1.2; transform: none;
+}
+.lead-modal .btn i { flex: 0 0 auto; align-self: center; }
+.lead-modal .btn svg { display: block; flex: none; }
+.lead-modal .lead-consent { display: block; font-size: 14px; line-height: 1.5; margin: 16px 0; }
+.lead-modal .lead-alternative { margin: 20px 0 0; font-size: 14px; line-height: 1.5; }
+.lead-modal .lead-alternative a { display: inline-flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.lead-modal .lead-alternative span { font-size: 17px; }
+.lead-modal .lead-success h2 { font-size: clamp(28px,5vw,42px); line-height: 1.2; }

@@ -21,7 +21,7 @@ function leadValid(data,origin){
   if(!Object.hasOwn(LEAD_BRANCHES,data.branch)||!Object.hasOwn(LEAD_DIRECTIONS,data.direction))return false;
   if(data.website!==''||typeof data.pagePath!=='string'||!['/','/troitsk/','/kaluga/','/tochka_zvuka/','/tochka_zvuka/troitsk/','/tochka_zvuka/kaluga/'].includes(data.pagePath))return false;
   const consent=data.consent;
-  if(consent?.accepted!==true||consent.version!=='2026-11-10-v2'||!Number.isFinite(Date.parse(consent.acceptedAt))||!Number.isFinite(Date.parse(data.createdAt)))return false;
+  if(consent?.accepted!==true||consent.version!=='2026-11-10-v3'||!Number.isFinite(Date.parse(consent.acceptedAt))||!Number.isFinite(Date.parse(data.createdAt)))return false;
   if(Math.abs(Date.now()-Date.parse(consent.acceptedAt))>24*60*60*1000)return false;
   try{
     const doc=new URL(consent.documentUrl),privacy=new URL(consent.privacyUrl),prefix=origin==='https://killreal2227.github.io'?'/tochka_zvuka':'';

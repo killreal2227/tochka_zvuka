@@ -1,5 +1,5 @@
 /* Public configuration contains no credentials. The server owns the bot token. */
-window.TZ_LEADS = Object.assign({endpoint:null,consentVersion:'2026-11-10-v2'},window.TZ_LEADS||{});
+window.TZ_LEADS = Object.assign({endpoint:null,consentVersion:'2026-11-10-v3'},window.TZ_LEADS||{});
 (()=>{
   'use strict';
   const modal=document.getElementById('leadModal');
@@ -7,7 +7,8 @@ window.TZ_LEADS = Object.assign({endpoint:null,consentVersion:'2026-11-10-v2'},w
   const sheet=modal.querySelector('.lead-sheet'),form=document.getElementById('leadForm'),status=document.getElementById('leadStatus');
   const success=modal.querySelector('.lead-success'),button=form.querySelector('.lead-submit'),phone=form.elements.phone;
   const $=(selector,root=modal)=>root.querySelector(selector),$$=(selector,root=modal)=>[...root.querySelectorAll(selector)];
-  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduceQuery=matchMedia('(prefers-reduced-motion: reduce)');
+  let reduce=reduceQuery.matches;
   const directionLabels={vocal:'Вокал',guitar:'Гитара',drums:'Барабаны',piano:'Фортепиано',actor:'Актёрское мастерство',speech:'Ораторское искусство',unsure:'Пока не знаю'};
 
 const formArt=(()=>{
@@ -28,14 +29,19 @@ const formArt=(()=>{
   form.addEventListener('change',e=>{ if(e.target.name==='direction') tint(true); });
   const per=el=>8+((+el.dataset.t*1.37)%6);            // период 8–14 с, у каждого свой
   const wave=(el,s)=>Math.sin(s*2*Math.PI/per(el) + +el.dataset.p);
-  let id=0, t0=0, run=0, timers=[];
+  let id=0, t0=0, run=0, scale=1, lastPaint=null;
+  const timers=new Set();
+  const later=(fn,ms)=>{const token=setTimeout(()=>{timers.delete(token);fn();},ms);timers.add(token);};
+  const measure=()=>{scale=Math.abs(svg.getScreenCTM()?.a||1);};
   function knob(n){   // ручка: рывок на 90–180° за 0.5 с, затем пауза 2–3 с
     const r=(+n.dataset.r||0)+(Math.random()<.5?90:180)*(Math.random()<.35?-1:1);
     n.dataset.r=r; n.style.transform=`rotate(${r}deg)`;
-    timers.push(setTimeout(()=>knob(n),2000+Math.random()*1000));
+    later(()=>knob(n),2000+Math.random()*1000);
   }
   function frame(t){
-    const m=svg.getScreenCTM(), k=(m&&m.a)||1, s=(t-t0)/1000;    // k — пикселей в единице SVG
+    if(lastPaint!==null&&t-lastPaint<1000/(mob.matches?12:24)){id=requestAnimationFrame(frame);return;}
+    lastPaint=t;
+    const k=scale, s=(t-t0)/1000;    // k — пикселей в единице SVG
     F.forEach(l=>{ const a=32/k, w=wave(l,s), mode=l.dataset.f;
       const x = mode==='l' ? -a*(1-w)/2 : mode==='r' ? a*(1-w)/2 : a*w;   // у края линия от него не отрывается
       l.style.transform=`translateX(${x.toFixed(2)}px)`; });
@@ -44,12 +50,14 @@ const formArt=(()=>{
     id=requestAnimationFrame(frame);
   }
   return {
-    tint,
-    start(){ if(reduce||id) return; t0=performance.now()-run; id=requestAnimationFrame(frame);   // продолжаем с того же места
-      N.forEach((n,i)=>timers.push(setTimeout(()=>knob(n),700+i*450))); },
-    stop(){ if(!id) return; cancelAnimationFrame(id); id=0; run=performance.now()-t0; timers.forEach(clearTimeout); timers=[]; }
+    tint, resize:measure,
+    start(){ if(reduce||id) return; measure();lastPaint=null;t0=performance.now()-run; id=requestAnimationFrame(frame);   // продолжаем с того же места
+      N.forEach((n,i)=>later(()=>knob(n),700+i*450)); },
+    stop(){ if(!id) return; cancelAnimationFrame(id); id=0; run=performance.now()-t0; timers.forEach(clearTimeout);timers.clear(); }
   };
 })();
+  window.addEventListener('resize',()=>formArt.resize(),{passive:true});
+  reduceQuery.addEventListener('change',()=>{reduce=reduceQuery.matches;if(reduce)formArt.stop();else if(!modal.hidden)formArt.start();});
   $$('.pk input').forEach(r=>{let was=false;r.closest('.pk').addEventListener('pointerdown',()=>{was=r.checked;});r.addEventListener('click',()=>{if(was){r.checked=false;was=false;formArt.tint();r.dispatchEvent(new Event('input',{bubbles:true}));}});});
   const pageCity=document.body.dataset.city||'';
   let lastFocus=null,pending=null,sending=false;
@@ -57,8 +65,8 @@ const formArt=(()=>{
     lastFocus=document.activeElement;
     if(pageCity){form.elements.branch.value=pageCity;form.querySelector('.lead-branch-label').hidden=true;}
     if(direction){const radio=form.querySelector('input[name="direction"][value="'+direction+'"]');if(radio)radio.checked=true;}
-    if(!window.TZ_LEADS.endpoint)status.textContent='Подключаем онлайн-запись. Пока можно записаться по телефону: +7 995 790-76-70.';
-    modal.hidden=false;modal.classList.add('open');modal.setAttribute('aria-hidden','false');formArt.tint(true);formArt.start();document.body.style.overflow='hidden';sheet.focus({preventScroll:true});syncBranch();
+    form.hidden=false;success.hidden=true;status.textContent='';
+    modal.hidden=false;modal.classList.add('open');modal.setAttribute('aria-hidden','false');formArt.tint(true);formArt.start();document.body.style.overflow='hidden';sheet.focus({preventScroll:true});syncBranch();document.dispatchEvent(new CustomEvent('tz:lead-open'));
   }
   function close(){if(sending)return;formArt.stop();modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.hidden=true;document.body.style.overflow='';lastFocus?.focus({preventScroll:true});}
   document.querySelectorAll('.openForm').forEach(el=>el.addEventListener('click',()=>open()));
@@ -99,15 +107,22 @@ maskPhone(phone);
   const normalisePhone=value=>{let digits=value.replace(/\D/g,'');if(digits[0]==='8')digits='7'+digits.slice(1);if(digits.length===10)digits='7'+digits;return /^7\d{10}$/.test(digits)?'+'+digits:null;};
   phone.addEventListener('input',()=>phone.setCustomValidity(''));
   form.addEventListener('input',()=>{pending=null;status.textContent='';});
+  function showSuccess(){
+    form.hidden=true;success.hidden=false;status.textContent='';pending=null;
+    form.reset();syncBranch();success.setAttribute('tabindex','-1');success.focus({preventScroll:true});
+  }
   form.addEventListener('submit',async event=>{
     event.preventDefault();if(sending)return;
     const normalized=normalisePhone(phone.value);
     if(!normalized){phone.setCustomValidity('Введи номер из 11 цифр, начиная с +7 или 8.');phone.reportValidity();return;}
     if(!form.reportValidity())return;
     if(form.elements.website.value)return;
+    if(form.elements.name.value.trim().length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}
     const endpoint=window.TZ_LEADS.endpoint;
-    if(!endpoint){status.textContent='Онлайн-запись ещё подключается. Позвони нам: +7 995 790-76-70 — поможем записаться.';return;}
-    const url=new URL(endpoint,location.href);
+    // Local feedback only: no request, identifier, storage or fictitious lead record.
+    // To enable real delivery, configure TZ_LEADS.endpoint after server acceptance tests.
+    if(!endpoint){showSuccess();return;}
+    let url;try{url=new URL(endpoint,location.href);}catch{status.textContent='Не удалось открыть запись. Позвони: +7 995 790-76-70.';return;}
     if(url.protocol!=='https:'&&!(url.protocol==='http:'&&url.hostname==='127.0.0.1')){status.textContent='Не удалось открыть запись. Позвони: +7 995 790-76-70.';return;}
     const stamp=new Date().toISOString();
     const raw={name:form.elements.name.value.trim(),phone:normalized,branch:form.elements.branch.value,direction:form.elements.direction.value||'unsure',website:'',pagePath:location.pathname};
@@ -121,7 +136,7 @@ maskPhone(phone);
       if(!response.ok||data.ok!==true||data.requestId!==pending.requestId||typeof data.leadId!=='string'){
         throw new Error(response.status===429?'Слишком много попыток. Подожди минуту или позвони нам.':'Сервис не подтвердил приём. Позвони нам, чтобы уточнить запись.');
       }
-      form.hidden=true;success.hidden=false;status.textContent='';pending=null;
+      showSuccess();
     }catch(error){status.textContent=error.name==='AbortError'?'Не дождались подтверждения. Заявка могла дойти — уточни запись по телефону, чтобы не дублировать обращение.':error.message||'Нет подтверждения приёма заявки. Позвони нам.';}
     finally{clearTimeout(timer);sending=false;button.disabled=false;}
   });

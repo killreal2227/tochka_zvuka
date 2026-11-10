@@ -23,7 +23,7 @@ def write(path, content):
             asset = SITE / Path(match[2]).name
             revision = hashlib.sha256(asset.read_bytes()).hexdigest()[:10]
             return f'{match[1]}{match[2]}?v={revision}"'
-        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|form\.css|home\.css|home-motion\.js|lead-form\.js))"', versioned, content)
+        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|form\.css|home\.css|home-motion\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js))"', versioned, content)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding='utf-8')
 
@@ -31,7 +31,7 @@ def read(name):
     return (ROOT / 'templates' / name).read_text(encoding='utf-8')
 
 def compose(page, root):
-    for part, filename in [('footer', 'footer.html'), ('dialog', 'lead-dialog.html')]:
+    for part, filename in [('footer', 'footer.html'), ('dialog', 'lead-dialog.html'), ('nudge', 'lesson-nudge.html')]:
         page = page.replace('{{' + part + '}}', read(filename).replace('{{root}}', root))
     return page
 
@@ -57,7 +57,8 @@ def build():
     write(SITE / 'index.html', home)
     for name in ('privacy', 'consent'):
         document = SITE / name / 'index.html'
-        write(document, document.read_text(encoding='utf-8'))
+        head = document.read_text(encoding='utf-8').split('<body>', 1)[0]
+        write(document, head + read(name + '-body.html'))
         write(SITE / f'{name}.html', f'<!doctype html>\n<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Точка звука — переход к документу</title><link rel="canonical" href="https://tzvuka.ru/{name}/"><meta http-equiv="refresh" content="0;url={name}/"></head><body><a href="{name}/">Перейти к актуальной редакции документа</a></body></html>\n')
     urls = ['', 'troitsk/', 'kaluga/', 'privacy/', 'consent/']
     write(SITE / 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join(f'<url><loc>{PUBLIC_BASE_URL}/{url}</loc></url>' for url in urls) + '</urlset>\n')

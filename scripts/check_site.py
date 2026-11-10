@@ -57,7 +57,9 @@ def check():
             assert f'{PUBLIC_BASE_URL}/{slug}/' in text
             assert 'tel:+79957907670' in text and 'mailto:tzvuka@yandex.ru' in text
             assert 'id="leadForm"' in text and 'localStorage' not in text
-            assert re.search(r'<input(?=[^>]*name="consent")(?=[^>]*\brequired\b)',text)
+            assert 'lessonNudge' in text and 'direction-player.js' in text
+            assert 'name="consent"' not in text
+            assert 'class="lead-consent"' in text
             assert 'site-footer' in text
         print('OK', name)
     assert (SITE/'CNAME').read_text().strip() == 'tzvuka.ru'
@@ -67,11 +69,12 @@ def check():
     home = (SITE/'index.html').read_text(encoding='utf-8')
     assert home.index('experience.css') < home.index('form.css') < home.index('home.css')
     assert 'id="leadForm"' in home and 'id="leadModal"' in home
-    assert re.search(r'<input(?=[^>]*name="consent")(?=[^>]*\brequired\b)', home)
+    assert 'name="consent"' not in home
+    assert 'class="lead-consent"' in home
     assert 'href="./privacy/"' in home and 'href="./consent/"' in home
     for slug in ('troitsk', 'kaluga'):
         assert 'home.css' not in (SITE/slug/'index.html').read_text(encoding='utf-8')
-    for asset in ('lead-form.js', 'home-motion.js'):
+    for asset in ('lead-form.js', 'home-motion.js', 'direction-player.js', 'city-ui.js'):
         subprocess.run(['node','--check',str(SITE/asset)],check=True,capture_output=True)
     print('All static checks passed.')
 

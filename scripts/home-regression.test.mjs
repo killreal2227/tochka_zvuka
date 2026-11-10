@@ -132,11 +132,11 @@ test('card/title geometry declarations are identical through hover and focus', (
 });
 test('1000px is narrow; 1001px remains desktop; header cities hide strictly below 1000px', () => {
   for (const width of widths.filter(w => w <= 1000)) {
-    assert.equal(resolve(width, 'header').display, width < 1000 ? 'flex' : 'grid');
+    assert.equal(resolve(width, 'header').display, 'flex');
     assert.equal(resolve(width, 'grid')['grid-template-columns'], 'minmax(0, 1fr)');
     assert.equal(resolve(width, 'cities')['justify-content'], 'space-between');
     assert.equal(resolve(width, 'cities').display, width < 1000 ? 'none' : 'flex');
-    assert.equal(resolve(width, 'header').height, width < 1000 ? '72px' : '112px');
+    assert.equal(resolve(width, 'header').height, '88px');
   }
   assert.equal(resolve(1001, 'header').display, 'flex');
   assert.equal(resolve(1001, 'grid')['grid-template-columns'], 'repeat(2, minmax(0, 1fr))');
@@ -163,15 +163,25 @@ test('document links stay a compact left-aligned wrapping group at every width',
   }
 });
 test('hidden-navigation header keeps both items fixed-size and aligned at narrow widths', () => {
-  for (const width of [280, 300, 320, 360, 375, 390, 393, 680]) {
+  for (const width of [320, 360, 375, 390, 393, 680, 768, 999.5]) {
     const header = resolve(width, 'header'), brand = resolve(width, 'brand'), cta = resolve(width, 'cta');
     assert.equal(header['flex-wrap'], 'nowrap');
     assert.equal(header['justify-content'], 'space-between');
     assert.equal(header['align-items'], 'center');
-    assert.equal(brand.flex, '0 0 auto'); assert.equal(cta.flex, '0 0 auto');
+    assert.equal(brand.flex, '0 0 160px'); assert.equal(cta.flex, '0 0 132px');
     const number = v => Number.parseFloat(v);
     const reserved = number(header['padding-left']) + number(brand.width) + number(header.gap)
       + number(cta.width) + number(header['padding-right']);
     assert.ok(reserved <= width, `${width}px: reserved header widths ${reserved}`);
+  }
+});
+
+test('main logo and first-lesson dimensions stay constant across viewport changes', () => {
+  for (const width of [320,375,680,768,999,1000,1001,1440,2560]) {
+    assert.equal(resolve(width,'brand').width,'160px');
+    assert.equal(resolve(width,'cta').width,'132px');
+    assert.equal(resolve(width,'cta')['font-size'],'12px');
+    assert.equal(resolve(width,'header').height,'88px');
+    assert.equal(resolve(width,'brand').transform,'none');
   }
 });
