@@ -169,6 +169,15 @@
 }
 
 /* SVG canvases center their reconstructed circular element; each circle is 26px across. */
+.btn, .header-cta { position: relative; }
+.capsule-source { opacity: 0; }
+.btn > svg.capsule-caption, .header-cta > svg.capsule-caption {
+  position: absolute; inset: 0; width: 100% !important; height: 100% !important; max-width: none;
+  margin: 0; padding: 0; pointer-events: none; overflow: visible;
+  transform: none !important; transition: none !important; animation: none !important;
+  fill: currentColor; stroke: none; flex: none;
+}
+.capsule-caption text { text-transform: none; }
 @media(hover:hover) and (pointer:fine) {
   .lead-modal .pk:hover .choice-icon { transform: scale(1.08); }
 }

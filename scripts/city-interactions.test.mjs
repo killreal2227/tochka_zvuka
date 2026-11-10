@@ -5,6 +5,66 @@ import vm from 'node:vm';
 
 const source = p => fs.readFileSync(new URL('../site/'+p,import.meta.url),'utf8');
 const settle = async () => { await Promise.resolve(); await Promise.resolve(); };
+function captionScene() {
+  const callbacks = [], handlers = {}, ink = {x: -2, y: -12, width: 80, height: 16};
+  const label = {textContent: 'Book', classList: {add(){}}};
+  const arrow = {offsetLeft: 140, getBoundingClientRect: () => ({left: 140})};
+  let text, visible = true;
+  const button = {clientWidth: 200, offsetWidth: 200, clientHeight: 48, clientLeft: 0,
+    getClientRects: () => visible ? [{}] : [], getBoundingClientRect: () => ({left: 0, width: 200}),
+    querySelector: selector => selector.includes('i,') ? arrow : label, append(){}};
+  arrow.offsetParent = button;
+  const document = {readyState: 'complete', body: {}, fonts: {ready: Promise.resolve()},
+    querySelectorAll: () => [button], addEventListener(){},
+    createElementNS(_, tag) {
+      const node = {style: {}, attrs: {}, classList: {add(){}}, append(){},
+        setAttribute(k,v){this.attrs[k]=v;}, getBBox: () => ink};
+      if (tag === 'text') text = node;
+      return node;
+    }};
+  const window = {addEventListener: (name, fn) => {handlers[name] = fn;}};
+  vm.runInNewContext(source('button-labels.js'), {document, window,
+    getComputedStyle: () => ({fontFamily:'Arial',fontSize:'16px',fontWeight:'400',fontStyle:'normal',letterSpacing:'0px',textTransform:'none'}),
+    MutationObserver: class {constructor(fn){callbacks.push(fn);} observe(){}},
+    requestAnimationFrame: fn => fn()});
+  return {text, button, arrow, handlers, callbacks, ink, setVisible(v){visible=v;}};
+}
+test('capsule label centers the ink inside the area before the unchanged arrow', async () => {
+  const s = captionScene(); await settle();
+  assert.equal(Number(s.text.attrs.x) + s.ink.x + s.ink.width/2, 70);
+  assert.equal(Number(s.text.attrs.y) + s.ink.y + s.ink.height/2, 24);
+  assert.equal(s.arrow.offsetLeft, 140); assert.equal(s.button.clientWidth, 200);
+  s.arrow.offsetLeft = 120; s.handlers.resize();
+  assert.equal(Number(s.text.attrs.x) + s.ink.x + s.ink.width/2, 60);
+});
+test('capsule label recomputes visible glyph bounds after font or panel changes', async () => {
+  const s = captionScene(); await settle();
+  s.setVisible(false); s.ink.height = 20; s.callbacks.at(-1)();
+  s.setVisible(true); s.callbacks.at(-1)();
+  assert.equal(Number(s.text.attrs.y) + s.ink.y + s.ink.height/2, 24);
+});
+test('vocal pulse touches only visible horizontal background bands and leaves other artwork alone', () => {
+  const template = fs.readFileSync(new URL('../templates/city.html', import.meta.url), 'utf8');
+  const fn = template.slice(template.indexOf('function prepCard(card)'), template.indexOf('/* Pointer-only playback;'));
+  const band = rect => {
+    rect.width = rect.right - rect.left; rect.height = rect.bottom - rect.top;
+    const group = {classes: [], delays: {}, querySelectorAll: () => [{}]};
+    group.classList = {add: name => group.classes.push(name)};
+    group.style = {setProperty: (k,v) => {group.delays[k] = v;}};
+    return {group, getBoundingClientRect: () => rect, closest: () => group};
+  };
+  const lines = [band({left:10,right:200,top:20,bottom:22}),
+    band({left:10,right:12,top:20,bottom:200}),
+    band({left:400,right:600,top:20,bottom:22})];
+  const card = {dataset: {dir:'vocal'}, getBoundingClientRect: () => ({left:0,right:300,top:0,bottom:400})};
+  const context = {card, $$: () => lines};
+  assert.equal(vm.runInNewContext(fn+'; prepCard(card)', context), 1.8);
+  assert.deepEqual(lines[0].group.classes, ['voice-pulse']);
+  assert.deepEqual(lines[1].group.classes, []); assert.deepEqual(lines[2].group.classes, []);
+  assert.equal(lines[0].group.delays['--voice-delay'], '0.000s');
+  vm.runInNewContext(fn+'; prepCard(card)', context);
+  assert.equal(lines[0].group.classes.length, 1);
+});
 function playerScene(ready = Promise.resolve()) {
   const window = {}, timers = new Map(), eligible = new Set();
   let sequence=0, reduced=false;

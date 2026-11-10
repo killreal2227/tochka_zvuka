@@ -74,7 +74,7 @@ def check():
     assert 'href="./privacy/"' in home and 'href="./consent/"' in home
     for slug in ('troitsk', 'kaluga'):
         assert 'home.css' not in (SITE/slug/'index.html').read_text(encoding='utf-8')
-    for asset in ('lead-form.js', 'home-motion.js', 'direction-player.js', 'city-ui.js'):
+    for asset in ('lead-form.js', 'home-motion.js', 'direction-player.js', 'city-ui.js', 'button-labels.js'):
         subprocess.run(['node','--check',str(SITE/asset)],check=True,capture_output=True)
     print('All static checks passed.')
 
