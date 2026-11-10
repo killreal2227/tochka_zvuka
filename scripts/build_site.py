@@ -60,7 +60,16 @@ def build():
         head = document.read_text(encoding='utf-8').split('<body>', 1)[0]
         write(document, head + read(name + '-body.html'))
         write(SITE / f'{name}.html', f'<!doctype html>\n<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Точка звука — переход к документу</title><link rel="canonical" href="https://tzvuka.ru/{name}/"><meta http-equiv="refresh" content="0;url={name}/"></head><body><a href="{name}/">Перейти к актуальной редакции документа</a></body></html>\n')
-    urls = ['', 'troitsk/', 'kaluga/', 'privacy/', 'consent/']
+    combined = read('documents.html').replace('{{public_base_url}}', PUBLIC_BASE_URL)
+    for name in ('privacy', 'consent'):
+        module = read(name + '-body.html').split('<h1>', 1)[1]
+        module = '<h1>' + module.split('<footer>', 1)[0]
+        module = re.sub(r'<(/?)h2>', r'<\1h3>', module)
+        module = re.sub(r'<(/?)h1>', r'<\1h2>', module)
+        module = module.replace('../privacy/', '#privacy').replace('../consent/', '#consent')
+        combined = combined.replace('{{' + name + '}}', module)
+    write(SITE / 'documents' / 'index.html', combined)
+    urls = ['', 'troitsk/', 'kaluga/', 'privacy/', 'consent/', 'documents/']
     write(SITE / 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join(f'<url><loc>{PUBLIC_BASE_URL}/{url}</loc></url>' for url in urls) + '</urlset>\n')
     write(SITE / 'robots.txt', f'User-agent: *\nAllow: /\nSitemap: {PUBLIC_BASE_URL}/sitemap.xml\n')
     print('Built home, city pages and shared footer/form.')

@@ -150,7 +150,7 @@ test('invitation stays disabled if session storage is unavailable',()=>{
   const s=nudgeScene(new Map(),true);s.window.scrollY=500;s.delay();assert.equal(s.box.hidden,true);assert.equal(s.timers.length,0);
 });
 
-function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='') {
+function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',combinedDocs=false) {
   const element=()=>events({hidden:false,disabled:false,offsetParent:{},tabIndex:0,style:{},dataset:{},classList:{add(){},remove(){},toggle(){}},setAttribute(){},focus(){document.activeElement=this;}});
   const input=()=>Object.assign(element(),{value:'',setCustomValidity(v){this.validity=v;},reportValidity(){return !this.validity;}});
   const name=input(),phone=input(),website=input(),direction=input(),branch=input();
@@ -165,7 +165,7 @@ function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='') {
   const art={querySelector:()=>svg,closest:()=>sheet};
   const map={'.lead-sheet':sheet,'.lead-success':success,'.lead-close':close,'[data-lead-dismiss]':dismiss,'.sheet-art':withoutArt?null:art,'#chips':chips,'#pickCap':caption,'#leadBranchCaption':branchCaption};
   const modal=Object.assign(element(),{hidden:true,querySelector:s=>map[s],querySelectorAll:s=>s==='a,button,input,select'?[close,name,phone,submit]:[]});
-  const link=href=>({getAttribute:()=>href});
+  const link=href=>({getAttribute:()=>href,dataset:combinedDocs?{consentUrl:'./documents/#consent',policyUrl:'./documents/#privacy'}:{}});
   const document=events({body:{dataset:{city:pageCity},style:{}},activeElement:trigger,
     getElementById:id=>({leadModal:modal,leadForm:form,leadStatus:status})[id],
     querySelector:s=>s==='.lead-consent a'?link('./consent/'):null,
@@ -201,6 +201,12 @@ test('configured form uses transport acknowledgement and includes button-consent
   assert.equal(s.calls,1);assert.equal(s.success.hidden,false);assert.equal(s.payload.consent.accepted,true);assert.equal(s.payload.consent.version,'2026-11-10-v3');
   const bad=formScene('https://example.invalid/leads','failure');bad.fill();await bad.form.emit('submit',{preventDefault(){}});
   assert.equal(bad.success.hidden,true);assert.ok(bad.status.textContent);
+});
+test('combined legal page keeps consent and policy module URLs in future submission metadata',async()=>{
+  const s=formScene('https://example.invalid/leads','success',false,'',true);
+  await s.trigger.emit('click');s.fill();await s.form.emit('submit',{preventDefault(){}});
+  assert.equal(s.payload.consent.documentUrl,'https://killreal2227.github.io/tochka_zvuka/documents/#consent');
+  assert.equal(s.payload.consent.privacyUrl,'https://killreal2227.github.io/tochka_zvuka/documents/#privacy');
 });
 test('invalid phone is rejected before any external request',async()=>{
   const s=formScene('https://example.invalid/leads');s.fill();s.phone.value='123';await s.form.emit('submit',{preventDefault(){}});

@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 PUBLIC_BASE_URL = json.loads((ROOT/'site-config.json').read_text(encoding='utf-8'))['public_base_url'].rstrip('/')
-PAGES = ['index.html', 'troitsk/index.html', 'kaluga/index.html', 'privacy/index.html', 'consent/index.html', 'privacy.html', 'consent.html']
+PAGES = ['index.html', 'troitsk/index.html', 'kaluga/index.html', 'privacy/index.html', 'consent/index.html', 'documents/index.html', 'privacy.html', 'consent.html']
 
 class Page(HTMLParser):
     def __init__(self, text):

@@ -128,7 +128,7 @@ maskPhone(phone);
     const stamp=new Date().toISOString();
     const raw={name:form.elements.name.value.trim(),phone:normalized,branch:form.elements.branch.value,direction:form.elements.direction.value||'unsure',website:'',pagePath:location.pathname};
     if(raw.name.length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}
-    if(!pending)pending={schemaVersion:1,requestId:crypto.randomUUID(),createdAt:stamp,...raw,consent:{accepted:true,acceptedAt:stamp,version:window.TZ_LEADS.consentVersion,documentUrl:new URL(document.querySelector('.lead-consent a').getAttribute('href'),location.href).href,privacyUrl:new URL(document.querySelectorAll('.lead-consent a')[1].getAttribute('href'),location.href).href}};
+    if(!pending)pending={schemaVersion:1,requestId:crypto.randomUUID(),createdAt:stamp,...raw,consent:{accepted:true,acceptedAt:stamp,version:window.TZ_LEADS.consentVersion,documentUrl:new URL(document.querySelector('.lead-consent a').dataset?.consentUrl||document.querySelector('.lead-consent a').getAttribute('href'),location.href).href,privacyUrl:new URL(document.querySelector('.lead-consent a').dataset?.policyUrl||document.querySelectorAll('.lead-consent a')[1].getAttribute('href'),location.href).href}};
     sending=true;button.disabled=true;status.textContent='Отправляем заявку…';
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
     try{
