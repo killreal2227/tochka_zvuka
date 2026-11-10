@@ -48,3 +48,7 @@
 @media(max-width:1000px) and (min-width:681px){.intro-panel{min-height:276px}}
 @media(max-width:680px){.intro-panel{min-height:0;padding:32px 0 30px}}
 @media(prefers-reduced-motion:reduce){.home-backdrop .nd{transition:none}}
+
+/* Explicit foreground color wins over the general home link rule in every state. */
+.home-page .city-line,.home-page .city-line:visited,.home-page .city-line:hover,.home-page .city-line:focus-visible{color:var(--cream)}
+.home-page .city-line h3,.home-page .city-line:hover h3{color:var(--cream)}
