@@ -59,39 +59,39 @@
 .home-page>main{display:flex;flex-direction:column;flex:1}
 .home-gateway{width:100%;max-width:none;flex:1;display:flex;flex-direction:column}
 .home-gateway .intro-panel{flex:1;min-height:306px;padding-top:40px;padding-bottom:40px}
-.home-page>.site-footer{flex-shrink:0}
-.home-page .footer-main,.home-page .footer-bottom,.home-page .footer-details{max-width:none}
+:is(.home-page,[data-city])>.site-footer{flex-shrink:0}
+:is(.home-page,[data-city]) .footer-main,:is(.home-page,[data-city]) .footer-bottom,:is(.home-page,[data-city]) .footer-details{max-width:none}
 @media(min-width:1600px){.home-page{--page-gutter:clamp(80px,5vw,160px)}.home-gateway .intro-panel{min-height:clamp(320px,36vh,520px)}.intro-copy h1{font-size:clamp(68px,4.2vw,96px)}.city-line,.city-line+.city-line{min-height:210px;padding:32px 38px}.city-line h3{font-size:68px}.home-gateway{padding-bottom:48px}}
 @media(max-width:680px){.home-gateway .intro-panel{min-height:0;padding:32px 0 30px}}
 
 /* Keep the home footer focused on identity, contact details and documents. */
-.home-page .footer-places,.home-page .footer-contact h2,.home-page .footer-enrol{display:none}
-.home-page .footer-main{grid-template-columns:1fr auto;align-items:center;gap:24px;padding-bottom:20px}
-.home-page .footer-contact{text-align:right}
-.home-page .footer-phone{margin-bottom:6px}
+:is(.home-page,[data-city]) .footer-places,:is(.home-page,[data-city]) .footer-contact h2,:is(.home-page,[data-city]) .footer-enrol{display:none}
+:is(.home-page,[data-city]) .footer-main{grid-template-columns:1fr auto;align-items:center;gap:24px;padding-bottom:20px}
+:is(.home-page,[data-city]) .footer-contact{text-align:right}
+:is(.home-page,[data-city]) .footer-phone{margin-bottom:6px}
 .home-page .intro-copy h1{margin-bottom:0}
 .home-page>main{min-height:0}
-.home-page>.site-footer{margin-top:auto}
-@media(max-width:680px){.home-page .footer-main{gap:16px}.home-page .footer-contact{min-width:0}.home-page .footer-brand{width:min(150px,100%)}}
+:is(.home-page,[data-city])>.site-footer{margin-top:auto}
+@media(max-width:680px){:is(.home-page,[data-city]) .footer-main{gap:16px}:is(.home-page,[data-city]) .footer-contact{min-width:0}:is(.home-page,[data-city]) .footer-brand{width:min(150px,100%)}}
 
 /* Restore compact branch navigation and align all footer columns on one row. */
 .home-page .header-cities{display:flex}
-.home-page .footer-main{grid-template-columns:1fr 1fr 1fr;align-items:center}
-.home-page .footer-identity{align-self:center;padding-top:0}
-.home-page .footer-places{display:flex;justify-content:center;align-items:center;gap:28px}
-.home-page .footer-places h2,.home-page .footer-place small{display:none}
-.home-page .footer-place span{font-size:18px;line-height:1.4;margin:0}
-.home-page .footer-contact{justify-self:end}
-.home-page .footer-bottom{align-items:baseline}
-.home-page .footer-bottom nav{justify-content:flex-end}
-@media(max-width:680px){.home-page .home-header{flex-wrap:wrap;gap:18px 12px}.home-page .header-cities{order:3;width:100%;justify-content:center;font-size:14px;gap:20px}.home-page .footer-main{grid-template-columns:1fr auto;gap:20px 16px}.home-page .footer-places{order:3;grid-column:1/-1;justify-content:flex-start;gap:24px}.home-page .footer-identity{order:1}.home-page .footer-contact{order:2}.home-page .footer-bottom{display:grid;grid-template-columns:1fr;gap:10px}.home-page .footer-bottom nav{justify-content:flex-start}.home-page .footer-details{gap:6px 14px}}
+:is(.home-page,[data-city]) .footer-main{grid-template-columns:1fr 1fr 1fr;align-items:center}
+:is(.home-page,[data-city]) .footer-identity{align-self:center;padding-top:0}
+:is(.home-page,[data-city]) .footer-places{display:flex;justify-content:center;align-items:center;gap:28px}
+:is(.home-page,[data-city]) .footer-places h2,:is(.home-page,[data-city]) .footer-place small{display:none}
+:is(.home-page,[data-city]) .footer-place span{font-size:18px;line-height:1.4;margin:0}
+:is(.home-page,[data-city]) .footer-contact{justify-self:end}
+:is(.home-page,[data-city]) .footer-bottom{align-items:baseline}
+:is(.home-page,[data-city]) .footer-bottom nav{justify-content:flex-end}
+@media(max-width:680px){.home-page .home-header{flex-wrap:wrap;gap:18px 12px}.home-page .header-cities{order:3;width:100%;justify-content:center;font-size:14px;gap:20px}:is(.home-page,[data-city]) .footer-main{grid-template-columns:1fr auto;gap:20px 16px}:is(.home-page,[data-city]) .footer-places{order:3;grid-column:1/-1;justify-content:flex-start;gap:24px}:is(.home-page,[data-city]) .footer-identity{order:1}:is(.home-page,[data-city]) .footer-contact{order:2}:is(.home-page,[data-city]) .footer-bottom{display:grid;grid-template-columns:1fr;gap:10px}:is(.home-page,[data-city]) .footer-bottom nav{justify-content:flex-start}:is(.home-page,[data-city]) .footer-details{gap:6px 14px}}
 
 /* Align the first text lines, rather than the centers of unequal-height blocks. */
-.home-page .footer-main{align-items:baseline}
-.home-page .footer-identity,.home-page .footer-places,.home-page .footer-contact{align-self:baseline}
-.home-page .footer-places{align-items:baseline}
-.home-page .footer-phone,.home-page .footer-place span{line-height:1.3}
-.home-page .footer-email{line-height:1.4}
+:is(.home-page,[data-city]) .footer-main{align-items:baseline}
+:is(.home-page,[data-city]) .footer-identity,:is(.home-page,[data-city]) .footer-places,:is(.home-page,[data-city]) .footer-contact{align-self:baseline}
+:is(.home-page,[data-city]) .footer-places{align-items:baseline}
+:is(.home-page,[data-city]) .footer-phone,:is(.home-page,[data-city]) .footer-place span{line-height:1.3}
+:is(.home-page,[data-city]) .footer-email{line-height:1.4}
 
 /* Slightly larger brand and header, with a smaller increase on phones. */
 .home-page .home-header{min-height:104px;padding-top:29px;padding-bottom:29px}
@@ -111,15 +111,15 @@
 .home-page .header-cities span{color:#9b3e4760}
 .home-page .home-gateway{max-width:calc(var(--home-content) + 2*var(--page-gutter))}
 .home-page .home-gateway .intro-panel{padding-top:80px;padding-bottom:32px}
-.home-page .site-footer{background:var(--frame-warm);padding-left:max(var(--page-gutter),calc((100% - var(--home-content))/2));padding-right:max(var(--page-gutter),calc((100% - var(--home-content))/2))}
-.home-page .footer-places{display:none}
-.home-page .footer-main{grid-template-columns:1fr auto;gap:24px;padding-bottom:18px}
-.home-page .footer-brand{width:230px}
-.home-page .footer-phone{font-size:26px}
-.home-page .footer-bottom{padding-top:14px}
-.home-page .footer-details{margin-top:10px!important}
+:is(.home-page,[data-city]) .site-footer{background:var(--frame-warm);padding-left:max(var(--page-gutter),calc((100% - var(--home-content))/2));padding-right:max(var(--page-gutter),calc((100% - var(--home-content))/2))}
+:is(.home-page,[data-city]) .footer-places{display:none}
+:is(.home-page,[data-city]) .footer-main{grid-template-columns:1fr auto;gap:24px;padding-bottom:18px}
+:is(.home-page,[data-city]) .footer-brand{width:230px}
+:is(.home-page,[data-city]) .footer-phone{font-size:26px}
+:is(.home-page,[data-city]) .footer-bottom{padding-top:14px}
+:is(.home-page,[data-city]) .footer-details{margin-top:10px!important}
 @media(max-width:1000px){.home-page .header-cities{font-size:19px;gap:18px}.home-page .home-header{gap:24px}.home-page .home-brand{width:230px}}
-@media(max-width:680px){.home-page .home-header{gap:14px 12px}.home-page .home-brand{width:190px}.home-page .header-cities{font-size:20px;gap:28px}.home-page .home-gateway .intro-panel{padding-top:52px;padding-bottom:34px}.home-page .footer-brand{width:min(160px,100%)}.home-page .footer-phone{font-size:clamp(16px,4.5vw,23px)}}
+@media(max-width:680px){.home-page .home-header{gap:14px 12px}.home-page .home-brand{width:190px}.home-page .header-cities{font-size:20px;gap:28px}.home-page .home-gateway .intro-panel{padding-top:52px;padding-bottom:34px}:is(.home-page,[data-city]) .footer-brand{width:min(160px,100%)}:is(.home-page,[data-city]) .footer-phone{font-size:clamp(16px,4.5vw,23px)}}
 @media(max-width:380px){.home-page .home-brand{width:162px}}
 
 /* Quiet home layout: one heading and two equal city cards on a shared grid. */
@@ -136,7 +136,7 @@
 .home-page .city-overline{font-size:14px;line-height:1.5;margin-bottom:4px}
 .home-page .city-line p{font-size:14px;line-height:1.5}
 .home-page .city-arrow{width:44px;height:44px}
-.home-page .footer-main{gap:32px;padding-bottom:18px}
+:is(.home-page,[data-city]) .footer-main{gap:32px;padding-bottom:18px}
 @media(max-width:1000px){.home-page .home-gateway{gap:32px;padding-top:48px;padding-bottom:48px}.home-page .city-lines{gap:18px}.home-page .city-line,.home-page .city-line+.city-line{padding:26px;min-height:180px}}
 @media(max-width:680px){.home-page .home-gateway{gap:28px;padding-top:40px;padding-bottom:40px}.home-page .intro-copy h1{font-size:clamp(34px,7.8vw,48px)}.home-page .city-lines{grid-template-columns:1fr;gap:14px}.home-page .city-line,.home-page .city-line+.city-line{padding:22px 24px;min-height:146px}.home-page .city-line h3{font-size:40px;margin-bottom:10px}.home-page .city-overline,.home-page .city-line p{font-size:13px}.home-page .choice-heading{margin-bottom:14px}}
 
@@ -209,7 +209,7 @@
 /* Anchor the entire group to the footer; spare viewport height stays above it. */
 .home-page>main{flex:1 0 auto;justify-content:flex-end}
 .home-page .home-gateway{flex:0 0 auto;margin:0 auto;padding-top:40px;padding-bottom:8px;justify-content:flex-end}
-.home-page>.site-footer{margin-top:0}
+:is(.home-page,[data-city])>.site-footer{margin-top:0}
 @media(max-width:1000px){.home-page .home-gateway{padding-top:32px;padding-bottom:8px}}
 @media(max-width:680px){.home-page .home-gateway{padding-top:28px;padding-bottom:8px}}
 
@@ -247,19 +247,19 @@
 
 /* Reference footer: identity/contact row, then credit and aligned legal details. */
 .home-page .intro-copy{background:var(--frame-warm);box-shadow:0 0 0 12px var(--frame-warm)}
-.home-page>.site-footer{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:28px;row-gap:8px;padding-top:20px;padding-bottom:12px}
-.home-page .footer-main{grid-column:1/-1;width:100%;display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px;border-bottom:1px solid #1a1a1a24;padding-bottom:16px;margin-bottom:6px}
-.home-page .footer-identity,.home-page .footer-contact{align-self:center}
-.home-page .footer-brand{width:230px}
-.home-page .footer-contact{justify-self:end;text-align:right}
-.home-page .footer-phone{font-size:25px;line-height:1.2;margin-bottom:4px}
-.home-page .footer-email{font-size:15px;line-height:1.3}
-.home-page .footer-bottom{display:contents}
-.home-page .footer-bottom>span{grid-column:1;grid-row:2;font-size:13px;line-height:1.5}
-.home-page .footer-bottom nav{grid-column:2;grid-row:3;align-self:end;justify-content:flex-end;gap:20px;font-size:13px;line-height:1.5}
-.home-page .footer-details{grid-column:1;grid-row:3;margin:0!important;font-size:12px;line-height:1.5;gap:4px 16px;color:#574a40}
-@media(max-width:900px){.home-page>.site-footer{grid-template-columns:1fr;row-gap:10px}.home-page .footer-bottom nav{grid-column:1;grid-row:4;justify-content:flex-start}.home-page .footer-details{grid-column:1;grid-row:3}}
-@media(max-width:680px){.home-page .intro-copy{box-shadow:0 0 0 8px var(--frame-warm)}.home-page>.site-footer{padding-top:18px;padding-bottom:16px}.home-page .footer-main{gap:16px;padding-bottom:14px}.home-page .footer-brand{width:min(160px,100%)}.home-page .footer-phone{font-size:clamp(16px,4.5vw,23px)}.home-page .footer-email{font-size:13px}.home-page .footer-bottom nav{gap:8px 18px}}
+:is(.home-page,[data-city])>.site-footer{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:28px;row-gap:8px;padding-top:20px;padding-bottom:12px}
+:is(.home-page,[data-city]) .footer-main{grid-column:1/-1;width:100%;display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px;border-bottom:1px solid #1a1a1a24;padding-bottom:16px;margin-bottom:6px}
+:is(.home-page,[data-city]) .footer-identity,:is(.home-page,[data-city]) .footer-contact{align-self:center}
+:is(.home-page,[data-city]) .footer-brand{width:230px}
+:is(.home-page,[data-city]) .footer-contact{justify-self:end;text-align:right}
+:is(.home-page,[data-city]) .footer-phone{font-size:25px;line-height:1.2;margin-bottom:4px}
+:is(.home-page,[data-city]) .footer-email{font-size:15px;line-height:1.3}
+:is(.home-page,[data-city]) .footer-bottom{display:contents}
+:is(.home-page,[data-city]) .footer-bottom>span{grid-column:1;grid-row:2;font-size:13px;line-height:1.5}
+:is(.home-page,[data-city]) .footer-bottom nav{grid-column:2;grid-row:3;align-self:end;justify-content:flex-end;gap:20px;font-size:13px;line-height:1.5}
+:is(.home-page,[data-city]) .footer-details{grid-column:1;grid-row:3;margin:0!important;font-size:12px;line-height:1.5;gap:4px 16px;color:#574a40}
+@media(max-width:900px){:is(.home-page,[data-city])>.site-footer{grid-template-columns:1fr;row-gap:10px}:is(.home-page,[data-city]) .footer-bottom nav{grid-column:1;grid-row:4;justify-content:flex-start}:is(.home-page,[data-city]) .footer-details{grid-column:1;grid-row:3}}
+@media(max-width:680px){.home-page .intro-copy{box-shadow:0 0 0 8px var(--frame-warm)}:is(.home-page,[data-city])>.site-footer{padding-top:18px;padding-bottom:16px}:is(.home-page,[data-city]) .footer-main{gap:16px;padding-bottom:14px}:is(.home-page,[data-city]) .footer-brand{width:min(160px,100%)}:is(.home-page,[data-city]) .footer-phone{font-size:clamp(16px,4.5vw,23px)}:is(.home-page,[data-city]) .footer-email{font-size:13px}:is(.home-page,[data-city]) .footer-bottom nav{gap:8px 18px}}
 
 /* Stronger first-lesson label and the same diagonal-to-right arrow gesture. */
 .home-page .header-cta{font-size:19px!important;line-height:1.25;letter-spacing:.01em;padding:14px 22px 14px 26px;gap:24px}
@@ -275,20 +275,20 @@
 .home-page .choice-heading h2{background:transparent;padding:0;margin-left:0}
 .home-page .page-pattern{mask-image:linear-gradient(to bottom,#000 0%,#000 24%,transparent 65%)}
 /* Compact the footer through spacing while retaining readable type. */
-.home-page>.site-footer{padding-top:12px;padding-bottom:10px;row-gap:4px}
-.home-page .footer-main{padding-bottom:10px;margin-bottom:4px;gap:20px}
-.home-page .footer-phone{font-size:23px;line-height:1.15;margin-bottom:2px}
-.home-page .footer-email{font-size:14px;line-height:1.25}
-.home-page .footer-bottom>span{font-size:13px;line-height:1.35}
-.home-page .footer-bottom nav{font-size:13px;line-height:1.4}
-.home-page .footer-details{font-size:12px;line-height:1.4}
-@media(max-width:900px){.home-page>.site-footer{row-gap:7px}}
-@media(max-width:680px){.home-page .intro-copy{box-shadow:none}.home-page>.site-footer{padding-top:12px;padding-bottom:12px}.home-page .footer-main{padding-bottom:10px}.home-page .footer-phone{font-size:clamp(16px,4.5vw,21px)}.home-page .footer-email{font-size:13px}.home-page .page-pattern{mask-image:linear-gradient(to bottom,#000 0%,#000 12%,transparent 48%)}}
+:is(.home-page,[data-city])>.site-footer{padding-top:12px;padding-bottom:10px;row-gap:4px}
+:is(.home-page,[data-city]) .footer-main{padding-bottom:10px;margin-bottom:4px;gap:20px}
+:is(.home-page,[data-city]) .footer-phone{font-size:23px;line-height:1.15;margin-bottom:2px}
+:is(.home-page,[data-city]) .footer-email{font-size:14px;line-height:1.25}
+:is(.home-page,[data-city]) .footer-bottom>span{font-size:13px;line-height:1.35}
+:is(.home-page,[data-city]) .footer-bottom nav{font-size:13px;line-height:1.4}
+:is(.home-page,[data-city]) .footer-details{font-size:12px;line-height:1.4}
+@media(max-width:900px){:is(.home-page,[data-city])>.site-footer{row-gap:7px}}
+@media(max-width:680px){.home-page .intro-copy{box-shadow:none}:is(.home-page,[data-city])>.site-footer{padding-top:12px;padding-bottom:12px}:is(.home-page,[data-city]) .footer-main{padding-bottom:10px}:is(.home-page,[data-city]) .footer-phone{font-size:clamp(16px,4.5vw,21px)}:is(.home-page,[data-city]) .footer-email{font-size:13px}.home-page .page-pattern{mask-image:linear-gradient(to bottom,#000 0%,#000 12%,transparent 48%)}}
 
 /* Slightly reduce the home footer identity and phone while preserving alignment. */
-.home-page .footer-brand{width:205px}
-.home-page .footer-phone{font-size:21px}
-@media(max-width:680px){.home-page .footer-brand{width:min(145px,100%)}.home-page .footer-phone{font-size:clamp(15px,4.1vw,19px)}}
+:is(.home-page,[data-city]) .footer-brand{width:205px}
+:is(.home-page,[data-city]) .footer-phone{font-size:21px}
+@media(max-width:680px){:is(.home-page,[data-city]) .footer-brand{width:min(145px,100%)}:is(.home-page,[data-city]) .footer-phone{font-size:clamp(15px,4.1vw,19px)}}
 
 /* Reduce the existing artwork uniformly by ten percent. */
 .home-page .page-pattern>svg{width:90%;height:90%;position:absolute;left:5%;top:0}
@@ -315,3 +315,7 @@
 /* Fill the entire main field as in the reference, without SVG fitting margins. */
 .home-page .page-pattern{inset:0;width:100%;height:100%}
 .home-page .page-pattern>svg{width:100%;height:100%;left:0;top:0}
+
+/* City pages share the same footer layout and centered width as the home page. */
+body[data-city]{--home-content:1440px;--frame-warm:#f2e6d8}
+@media(min-width:1600px){body[data-city]{--home-content:min(1440px,56.4vw)}}
