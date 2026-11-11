@@ -457,3 +457,10 @@
 .lead-modal .fields input,
 .lead-modal .lead-branch-control,
 .lead-modal .lead-branch-label select { padding-left:0; text-indent:0; }
+
+/* Reserve caption space even when no direction is selected or helper text exists. */
+.lead-modal .pick { margin-bottom:20px; }
+@media(width < 680px) {
+  .lead-modal .pick .pick-row,
+  .lead-modal .pick.has:not(:has(.choice-unsure input:checked)) .pick-row { padding-bottom:48px; }
+}
