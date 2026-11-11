@@ -35,6 +35,9 @@ const formArt=(()=>{
     if(v==='actor' && advanceActor){sheet.dataset.actorColor=actorNextBlue?'blue':'orange';actorNextBlue=!actorNextBlue;}
     $('#chips').classList.toggle('has',!!col[v]);
     $('#pickCap').textContent = col[v] ? directionLabels[v].toLocaleLowerCase('ru') : '';
+    const title=$('#directionTitle'),reset=$('#directionReset');
+    if(title) title.textContent=col[v]?directionLabels[v]:'Направление';
+    if(reset) reset.hidden=!col[v];
     positionDirectionNames();
   }
   form.addEventListener('change',e=>{ if(e.target.name==='direction') tint(true); });
@@ -71,6 +74,13 @@ const formArt=(()=>{
     stop(){ if(!id) return; cancelAnimationFrame(id); id=0; run=performance.now()-t0; timers.forEach(clearTimeout);timers.clear(); }
   };
 })();
+  $('#directionReset')?.addEventListener('click',()=>{
+    form.elements.direction.value='';
+    $$('input[name="direction"]').forEach(r=>{r.checked=false;});
+    formArt.tint();
+    form.dispatchEvent(new Event('input',{bubbles:true}));
+    $('.pk input')?.focus({preventScroll:true});
+  });
   window.addEventListener('resize',()=>formArt.resize(),{passive:true});
   reduceQuery.addEventListener('change',()=>{reduce=reduceQuery.matches;if(reduce)formArt.stop();else if(!modal.hidden)formArt.start();});
   $$('.pk input').forEach(r=>{

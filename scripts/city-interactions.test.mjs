@@ -157,13 +157,14 @@ function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',co
   Object.defineProperty(branch,'selectedOptions',{get:()=>[{value:branch.value,textContent:branch.value||'choose'}]});
   const submit=element(),status=element(),sheet=element(),success=element(),close=element(),dismiss=element(),trigger=element();
   success.hidden=true;
-  const chips=element(),caption=element(),branchCaption=element(),branchLabel=element();
+  const chips=element(),caption=element(),branchCaption=element(),branchLabel=element(),directionTitle=element(),directionReset=element();
   let calls=0,uuids=0,payload;
   const form=Object.assign(element(),{elements:{name,phone,website,direction,branch},reportValidity:()=>name.value.trim().length>=2&&!!branch.value,
     reset(){for(const e of Object.values(this.elements))e.value='';},querySelector:s=>s==='.lead-submit'?submit:s==='.lead-branch-label'?branchLabel:null});
+  form.dispatchEvent=e=>{form.emit(e.type,e);};
   const svg={setAttribute(){},querySelectorAll:()=>[],getScreenCTM:()=>({a:1})};
   const art={querySelector:()=>svg,closest:()=>sheet};
-  const map={'.lead-sheet':sheet,'.lead-success':success,'.lead-close':close,'[data-lead-dismiss]':dismiss,'.sheet-art':withoutArt?null:art,'#chips':chips,'#pickCap':caption,'#leadBranchCaption':branchCaption};
+  const map={'.lead-sheet':sheet,'.lead-success':success,'.lead-close':close,'[data-lead-dismiss]':dismiss,'.sheet-art':withoutArt?null:art,'#chips':chips,'#pickCap':caption,'#directionTitle':directionTitle,'#directionReset':directionReset,'#leadBranchCaption':branchCaption};
   const modal=Object.assign(element(),{hidden:true,querySelector:s=>map[s],querySelectorAll:s=>s==='a,button,input,select'?[close,name,phone,submit]:[]});
   const link=href=>({getAttribute:()=>href,dataset:combinedDocs?{consentUrl:'./documents/#consent',policyUrl:'./documents/#privacy'}:{}});
   const document=events({body:{dataset:{city:pageCity},style:{}},activeElement:trigger,
@@ -173,14 +174,14 @@ function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',co
   document.dispatchEvent=e=>{document.emit(e.type);};
   const window=events({TZ_LEADS:{endpoint}});
   vm.runInNewContext(source('lead-form.js'),{window,document,matchMedia:()=>({matches:true,addEventListener(){}}),
-    requestAnimationFrame:()=>1,cancelAnimationFrame(){},setTimeout:()=>1,clearTimeout(){},URL,AbortController,
+    requestAnimationFrame:()=>1,cancelAnimationFrame(){},setTimeout:()=>1,clearTimeout(){},URL,AbortController,Event,
     location:{href:'https://killreal2227.github.io/tochka_zvuka/',pathname:'/tochka_zvuka/'},
     crypto:{randomUUID(){uuids++;return'00000000-0000-4000-8000-000000000001';}},
     CustomEvent:class{constructor(type){this.type=type;}},
     fetch:async(_,options)=>{calls++;payload=JSON.parse(options.body);return{ok:reply==='success',status:reply==='success'?200:502,
       json:async()=>reply==='success'?{ok:true,requestId:payload.requestId,leadId:'1'}:{ok:false}};}});
   const fill=()=>{name.value='Иван';phone.value='+79950000000';branch.value='kaluga';};
-  return {trigger,form,success,modal,phone,status,caption,branchCaption,fill,get calls(){return calls;},get uuids(){return uuids;},get payload(){return payload;}};
+  return {trigger,form,success,modal,phone,status,caption,branchCaption,directionTitle,directionReset,fill,get calls(){return calls;},get uuids(){return uuids;},get payload(){return payload;}};
 }
 test('address link searches the selected branch and hides when no branch is selected',async()=>{
   for(const city of ['kaluga','troitsk']){
@@ -227,4 +228,21 @@ test('combined legal page keeps consent and policy module URLs in future submiss
 test('invalid phone is rejected before any external request',async()=>{
   const s=formScene('https://example.invalid/leads');s.fill();s.phone.value='123';await s.form.emit('submit',{preventDefault(){}});
   assert.equal(s.calls,0);assert.ok(s.phone.validity);
+});
+
+test('direction title and reset button follow selection and reset only the direction',async()=>{
+  const s=formScene();await s.trigger.emit('click');s.fill();
+  assert.equal(s.directionTitle.textContent,'Направление');
+  assert.equal(s.directionReset.hidden,true);
+  s.form.elements.direction.value='speech';
+  await s.form.emit('change',{target:{name:'direction'}});
+  assert.equal(s.directionTitle.textContent,'Ораторское искусство');
+  assert.equal(s.directionReset.hidden,false);
+  await s.directionReset.emit('click');
+  assert.equal(s.form.elements.direction.value,'');
+  assert.equal(s.directionTitle.textContent,'Направление');
+  assert.equal(s.directionReset.hidden,true);
+  assert.equal(s.caption.textContent,'');
+  assert.equal(s.form.elements.name.value,'Иван');
+  assert.equal(s.form.elements.branch.value,'kaluga');
 });

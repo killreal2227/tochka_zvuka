@@ -479,10 +479,23 @@
   .lead-modal .pick.has:not(:has(.choice-unsure input:checked)) .pick-row {
     row-gap:24px; padding-bottom:14px;
   }
-  .lead-modal #pickCap {
-    position:static; width:100%; height:auto; min-height:26px; padding:0;
-    margin:0; overflow:visible; clip-path:none; white-space:nowrap;
-    font-family:var(--brand-font); font-size:18px; line-height:26px;
-    text-align:center;
-  }
+
+}
+
+/* Direction state and reset share the existing legend row. */
+.lead-modal .direction-legend {
+  box-sizing:border-box; width:100%; display:flex; align-items:center;
+  justify-content:space-between; gap:12px; min-height:44px; padding:0;
+  margin-bottom:8px;
+}
+.lead-modal #directionTitle { min-width:0; font-size:14px; text-transform:none; letter-spacing:0; white-space:nowrap; }
+.lead-modal .direction-reset {
+  flex:0 0 auto; border:0; background:transparent; color:var(--muted);
+  font:inherit; font-size:12px; text-transform:none; letter-spacing:0;
+  min-height:44px; padding:8px 0 8px 10px; cursor:pointer;
+  text-decoration:underline; text-underline-offset:3px;
+}
+.lead-modal #pickCap {
+  position:absolute; width:1px; height:1px; min-height:0; padding:0;
+  margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap;
 }
