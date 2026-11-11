@@ -386,9 +386,10 @@
   border-radius:50%; background:#383838; color:#FFF5EA;
 }
 .lead-modal .btn.lead-submit i { flex:0 0 40px; width:40px; height:40px; border-radius:50%; }
-/* Accent lettering stays light for every direction and interaction state. */
+/* Fixed dark accent lettering for every direction and interaction state. */
 .lead-modal .sheet #leadTitle em,
-.lead-modal .sheet #submitBtn { color:#FFF5EA; }
+.lead-modal .sheet #submitBtn { color:#1a1a1a; }
+.lead-modal .sheet #submitBtn:hover { --action-bg:var(--accent); background:transparent; }
 .lead-modal .sheet #submitBtn i { background:#FFF5EA; }
 .lead-modal .pick-row { padding-top:10px; padding-bottom:42px; }
 .lead-modal .pk .choice-name {
@@ -464,3 +465,6 @@
   .lead-modal .pick .pick-row,
   .lead-modal .pick.has:not(:has(.choice-unsure input:checked)) .pick-row { padding-bottom:48px; }
 }
+
+/* Bring the circles slightly closer without changing their caption clearance. */
+.lead-modal .pick-row { width:96%; margin-left:auto; margin-right:auto; }
