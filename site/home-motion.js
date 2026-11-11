@@ -1,4 +1,4 @@
-/* Home rhythm shapes; bounded paint rate, no per-frame geometry reads or timers. */
+/* Original branch orbital artwork; bounded paint rate, no per-frame geometry reads or timers. */
 (() => {
   'use strict';
   const svg = document.querySelector('.page-pattern svg');

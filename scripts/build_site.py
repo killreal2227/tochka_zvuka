@@ -43,7 +43,7 @@ def build():
             page = page.replace('{{' + key + '}}', escape(value))
         write(SITE / slug / 'index.html', page)
     logo = re.search(r'<body[^>]*>\s*(<svg.*?</svg>)', template, re.S)[1]
-    pattern = (SITE / 'patterns' / 'home-rhythm.svg').read_text(encoding='utf-8')
+    pattern = (SITE / 'patterns' / 'home-orbits.svg').read_text(encoding='utf-8')
     pattern = re.sub(r'<\?xml.*?\?>', '', pattern).strip()
     # Distinct transparent home artwork; the form retains its original pattern.
     home_template = read('home.html').replace('{{logo}}', logo).replace('{{home_pattern}}', pattern)

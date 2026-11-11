@@ -281,5 +281,5 @@ body.home-page .home-header {
 /* Fit the complete background to viewport width instead of cropping it to page height. */
 .home-page .page-pattern > svg {
   position:absolute; left:0; top:0; width:100%; height:auto;
-  aspect-ratio:1200 / 640;
+  aspect-ratio:706.05 / 366.67;
 }
