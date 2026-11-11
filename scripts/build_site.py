@@ -23,7 +23,7 @@ def write(path, content):
             asset = (path.parent / match[2]).resolve()
             revision = hashlib.sha256(asset.read_bytes()).hexdigest()[:10]
             return f'{match[1]}{match[2]}?v={revision}"'
-        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|form\.css|home\.css|home-motion\.js|home-branches\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|button-labels\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
+        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|form\.css|home\.css|home-motion\.js|home-branches\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|direction-scroll\.js|button-labels\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding='utf-8')
 

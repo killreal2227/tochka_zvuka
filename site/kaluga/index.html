@@ -435,7 +435,7 @@ img,svg{display:block;max-width:100%}
 <link rel="stylesheet" href="../experience.css?v=a0521dc172">
 <script src="../lead-form.js?v=da53518a31" defer></script>
 <link rel="stylesheet" href="../form.css?v=1aef385385">
-<link rel="stylesheet" href="../city-ui.css?v=fe5ffb8280"><script src="../city-ui.js?v=f4871e6031" defer></script>
+<link rel="stylesheet" href="../city-ui.css?v=f175e7fdd3"><script src="../city-ui.js?v=f4871e6031" defer></script>
 <script src="../button-labels.js?v=3397abeb3f" defer></script>
 </head>
 <body data-city="kaluga">
@@ -755,7 +755,8 @@ img,svg{display:block;max-width:100%}
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="../direction-player.js?v=a2abee2741"></script>
+<script src="../direction-player.js?v=0bd0606969"></script>
+<script src="../direction-scroll.js?v=de81294e5d"></script>
 <script>
 const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
@@ -959,68 +960,9 @@ function prepCard(card){
   return card._prep;
 }
 
-/* Pointer-only playback; touch and keyboard focus do not start direction motion. */
-const directionMotion=matchMedia('(prefers-reduced-motion: reduce)');
-const finePointer=matchMedia('(hover:hover) and (pointer:fine)');
-let hoveredCard=null;
-const directionPlayer=window.createDirectionPlayer({
-  ready:bgReady, prepare:prepCard,
-  eligible:c=>finePointer.matches&&c===hoveredCard,
-  reduced:()=>directionMotion.matches,
-  blocked:()=>document.hidden||!document.getElementById('leadModal').hidden
-});
-$$('.card[data-dir]').forEach(card=>{
-  card.addEventListener('pointerenter',e=>{
-    if(!finePointer.matches||e.pointerType==='touch')return;
-    scrollTour.stop();hoveredCard=card;directionPlayer.request(card);
-  });
-  const leave=()=>{if(hoveredCard===card)hoveredCard=null;directionPlayer.leave(card);};
-  card.addEventListener('pointerleave',leave);
-  card.addEventListener('pointercancel',leave);
-});
-const stopDirections=()=>{hoveredCard=null;directionPlayer.stop();scrollTour.stop();};
-directionMotion.addEventListener('change',stopDirections);
-finePointer.addEventListener('change',stopDirections);
-document.addEventListener('visibilitychange',()=>{if(document.hidden)stopDirections();});
-document.addEventListener('tz:lead-open',stopDirections);
-/* Scroll: present the central visible row from left to right at every grid width. */
-const scrollCards=$$('.card[data-dir]');
-const scrollPlayers=new Map(scrollCards.map(card=>[card,window.createDirectionPlayer({
-  ready:bgReady,prepare:prepCard,
-  eligible:c=>c.classList.contains('is-active'),
-  reduced:()=>directionMotion.matches,
-  blocked:()=>document.hidden||!document.getElementById('leadModal').hidden
-})]));
-const scrollTour=window.createDirectionRowTour({
-  ready:bgReady,prepare:prepCard,playerFor:card=>scrollPlayers.get(card),
-  activate:active=>scrollCards.forEach(card=>card.classList.toggle('is-active',card===active)),
-  blocked:()=>directionMotion.matches||document.hidden||!document.getElementById('leadModal').hidden
-});
-let cardFrame=0;
-function updateScrollCard(){
-  cardFrame=0;
-  let next=[];
-  if(!document.hidden&&document.getElementById('leadModal').hidden){
-    const candidates=scrollCards.map(card=>({card,rect:card.getBoundingClientRect(),row:card.offsetTop}))
-      .filter(({rect})=>rect.bottom>innerHeight*.2&&rect.top<innerHeight*.8);
-    const central=candidates.reduce((best,item)=>!best||Math.abs((item.rect.top+item.rect.bottom)/2-innerHeight*.5)<Math.abs((best.rect.top+best.rect.bottom)/2-innerHeight*.5)?item:best,null);
-    if(central)next=candidates.filter(item=>Math.abs(item.row-central.row)<2).map(item=>item.card);
-  }
-  if(next.length){hoveredCard=null;directionPlayer.stop();}
-  scrollTour.request(next);
-}
-function scheduleScrollCard(){if(!cardFrame)cardFrame=requestAnimationFrame(updateScrollCard);}
-addEventListener('scroll',scheduleScrollCard,{passive:true});
-addEventListener('resize',()=>{stopDirections();scheduleScrollCard();});
-finePointer.addEventListener('change',scheduleScrollCard);
-document.addEventListener('visibilitychange',scheduleScrollCard);
-document.addEventListener('tz:lead-open',scheduleScrollCard);
-document.addEventListener('tz:lead-close',scheduleScrollCard);
-scheduleScrollCard();
+/* Pointer-only playback; handled together with sticky scroll selection by the shared controller. */
+window.createStickyDirections({ready:bgReady,prepare:prepCard});
 
-
-/* ═════════ ЖИВЫЕ ИЛЛЮСТРАЦИИ ═════════ */
-/* крутит step(dt) только пока элемент на экране и вкладка видна */
 function liveLoop(el, step){
   let on=false, vis=false, last=0, id=0;
   const tick=t=>{ const dt=Math.min(.05,Math.max(0,(t-last)/1000)); last=t; step(dt); id=requestAnimationFrame(tick); };
