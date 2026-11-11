@@ -50,13 +50,16 @@ test('hidden/offscreen animation stops and resumes without duplicate loops', () 
   assert.equal(s.frames.size, 1);
   s.observer([{ isIntersecting: false }]); assert.equal(s.frames.size, 0);
 });
-test('mobile paint rate is capped and geometry is not read every frame', () => {
-  const s = scene({ mobile: true }); const reads = s.reads, writes = s.writes;
-  for (let t = 0; t <= 2000; t += 10) s.tick(t);
-  assert.equal(s.reads, reads);
-  // Two moving elements plus one occasional knob, at no more than 12 paints/s.
-  assert.ok(s.writes - writes <= 51);
-  assert.equal(s.reads,0); assert.equal(s.events.has('resize'),false);
+test('every display frame updates motion at 60 and 120Hz on desktop and mobile without geometry reads', () => {
+  for(const mobile of [false,true]) for(const hz of [60,120]) {
+    const s=scene({mobile});s.tick(0);
+    for(let n=1;n<=hz;n++) {
+      const previous=s.writes;s.tick(n*1000/hz);
+      assert.ok(s.writes>=previous+2,`${hz}Hz frame ${n} must update both moving elements`);
+    }
+    assert.equal(s.reads,0);assert.equal(s.events.has('resize'),false);
+    assert.equal(s.frames.size,1);
+  }
 });
 
 /* Declaration-cascade regression, NOT a browser/layout engine. */
