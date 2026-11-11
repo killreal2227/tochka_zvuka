@@ -222,7 +222,8 @@
 
 /* The round mark spans 80 units in the 567-unit logo. Header = 3 diameters. */
 .home-page { --header-height:calc(260px * 240 / 567); }
-.home-page .home-header {
+body.home-page .home-header {
+  display:flex; align-items:center; justify-content:space-between;
   height:calc(260px * 240 / 567); min-height:calc(260px * 240 / 567);
   padding-top:8px; padding-bottom:8px; gap:24px;
 }
@@ -237,5 +238,5 @@
 }
 .home-page .header-cta > svg:not(.capsule-caption) { right:16px; }
 @media(max-width:600px) {
-  .home-page .home-header { flex-direction:column; justify-content:center; gap:4px; padding:4px 10px; }
+  body.home-page .home-header { flex-direction:column; justify-content:center; gap:4px; padding:4px 10px; }
 }
