@@ -243,3 +243,44 @@ body[data-city] .top .branch-btn > svg.capsule-caption {
   }
   body[data-city] .top .branch-btn > svg:not(.capsule-caption) { right:10px; width:10px; height:10px; margin-top:-5px; }
 }
+
+/* Exact home-page CTA markup and visual dimensions, without the old .btn/.sm cascade. */
+body[data-city] .top .header-cta,
+body[data-city] .top .header-cta:hover,
+body[data-city] .top .header-cta:focus-visible {
+  position:relative; box-sizing:border-box; display:flex; align-items:center;
+  width:230px; min-width:230px; height:54px; min-height:54px; flex:0 0 230px;
+  font-family:var(--brand-font); font-size:16px!important; font-weight:400; line-height:1.2;
+  letter-spacing:0; text-transform:none; white-space:nowrap;
+  padding:8px 12px; gap:8px; border:1px solid var(--ink); border-radius:27px;
+  background:transparent; color:var(--ink); transform:none;
+  transition:background-color .2s,border-color .2s,color .2s;
+}
+body[data-city] .top .header-cta:hover,
+body[data-city] .top .header-cta:focus-visible { background:var(--ink); color:var(--cream); }
+body[data-city] .top .header-cta > svg.header-cta-icon:not(.capsule-caption) {
+  position:absolute; right:6px; top:0; bottom:0; margin:auto 0;
+  width:40px; height:40px; flex:0 0 40px; transform:none; transition:none; overflow:visible;
+}
+body[data-city] .top .header-cta .header-cta-icon circle { fill:var(--cream); stroke:none; }
+body[data-city] .top .header-cta .header-cta-icon path {
+  fill:none; stroke:var(--bord); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;
+}
+@media(min-width:601px) and (max-width:760px) {
+  body[data-city] { --header-height:120px; }
+  body[data-city] .top { grid-template-rows:54px 30px; }
+}
+@media(max-width:760px) {
+  body[data-city] .top .header-cta { grid-column:2; grid-row:1; justify-self:end; }
+}
+@media(max-width:600px) {
+  body[data-city] .top .header-cta,
+  body[data-city] .top .header-cta:hover,
+  body[data-city] .top .header-cta:focus-visible {
+    width:156px; min-width:0; height:38px; min-height:38px; flex:1 1 156px;
+    font-size:12px!important; padding:6px 8px; border-radius:19px;
+  }
+  body[data-city] .top .header-cta > svg.header-cta-icon:not(.capsule-caption) {
+    width:28px; height:28px; right:4px; flex-basis:28px;
+  }
+}
