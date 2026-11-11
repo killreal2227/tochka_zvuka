@@ -278,10 +278,10 @@ body.home-page .home-header {
   .home-page .header-cta:active .header-cta-icon { animation:none; }
 }
 
-/* Keep the artwork at a fixed scale; narrow viewports crop its edges. */
+/* Cover the full main background, as with the original page artwork. */
 .home-page .page-pattern > svg {
-  position:absolute; left:50%; top:0; width:1440px; max-width:none; height:auto;
-  transform:translateX(-50%); aspect-ratio:706.05 / 366.67;
+  position:absolute; left:0; top:0; width:100%; max-width:none; height:100%;
+  transform:none; aspect-ratio:auto;
 }
 
 .home-page .page-pattern { overflow:hidden; }
