@@ -409,7 +409,7 @@
 /* Compact phone layout: centered single-line names and one shared action stack. */
 @media(width < 680px) {
   .lead-modal .pick-row {
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-columns:repeat(3,minmax(0,1fr));
     gap:42px 12px; padding:10px 0 0;
   }
   .lead-modal .pk .choice-name,
@@ -417,22 +417,26 @@
     left:50%; right:auto; transform:translateX(-50%); text-align:center;
   }
   .lead-modal .choice-unsure { grid-column:1 / -1; justify-self:center; }
-  .lead-modal .choice-unsure label { flex-direction:row; align-items:center; gap:12px; min-height:40px; padding:0 8px; }
-  .lead-modal .choice-unsure .choice-icon { flex:0 0 36px; width:36px; height:36px; font-size:24px; }
+  .lead-modal .choice-unsure label { flex-direction:row; align-items:center; justify-content:center; gap:0; min-height:40px; padding:8px 20px; border:1px solid #77716b; border-radius:20px; background:transparent; }
+  .lead-modal .choice-unsure .choice-icon { display:none; }
   .lead-modal .choice-unsure .choice-name {
     position:static; width:auto; min-height:0; transform:none;
     visibility:visible; opacity:1; font-size:16px;
   }
-  .lead-modal .send { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }
+  .lead-modal .choice-unsure input:checked+label { background:#383838; border-color:#383838; }
+  .lead-modal .choice-unsure input:checked+label .choice-name { color:#FFF5EA; }
+  .lead-modal .send { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
   .lead-modal .send > .action-pane { display:contents; }
-  .lead-modal .send .lead-submit { grid-row:1; }
-  .lead-modal .send .lead-call { grid-row:2; }
+  .lead-modal .send .lead-submit { grid-row:1; grid-column:1 / -1; }
+  .lead-modal .send .lead-call { grid-row:2; grid-column:1 / -1; }
   .lead-modal .send .action-pane > .lead-consent {
-    grid-row:3; min-height:0; justify-content:center; margin:2px 0 0;
+    grid-row:3; grid-column:1; min-height:0; justify-content:flex-start; align-items:flex-start; margin:2px 0 0; font-size:12px;
   }
   .lead-modal .send .action-pane > .lead-address {
-    grid-row:4; min-height:0; justify-content:center; text-align:center; padding-right:0;
+    grid-row:3; grid-column:2; min-height:0; justify-content:flex-end; align-items:flex-start; text-align:right; padding-right:0; margin:2px 0 0; font-size:12px;
   }
+  .lead-modal .send .lead-consent .lead-reassurance { justify-content:flex-start; align-items:flex-start; font-size:12px; }
+  .lead-modal .send .lead-reassurance svg { margin-top:2px; }
 }
 @media(width < 380px) {
   .lead-modal .pk label[data-ico="actor"] .choice-name,
