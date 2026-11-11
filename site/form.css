@@ -1,3 +1,4 @@
+:root{--tz-panel-radius:16px}
 @property --accent{syntax:'<color>';inherits:true;initial-value:#9B3E47}
 @property --accent-on{syntax:'<color>';inherits:true;initial-value:#FFF5EA}
 /* цвет направления целиком: заливка выделения в заголовке, линии полей, точка адреса, кнопка, красные части арта и разделитель.
@@ -200,7 +201,7 @@
 /* Keep the 300px brand panel intact; additional desktop width belongs to the form. */
 .lead-modal .sheet {
   width: min(1120px, 100%); grid-template-columns: 300px minmax(0, 1fr);
-  border-radius: 22px; overflow: hidden; min-width: 0;
+  border-radius: var(--tz-panel-radius); overflow: hidden; min-width: 0;
   max-height: calc(100svh - 32px);
 }
 .lead-modal .sheet-art { min-width: 0; min-height: 0; overflow: hidden; }
@@ -369,7 +370,7 @@
 .lead-modal .send { grid-template-columns:repeat(2,minmax(0,1fr)); }
 .lead-modal .action-pane { grid-template-rows:64px minmax(42px,auto); }
 .lead-modal .btn.lead-submit,.lead-modal .btn.lead-call {
-  position:relative; isolation:isolate; border:0; border-radius:14px;
+  position:relative; isolation:isolate; border:0; border-radius:var(--tz-panel-radius);
   background:transparent; padding:8px 10px 8px 18px; align-self:center;
 }
 .lead-modal .btn.lead-submit { --action-bg:var(--accent); height:64px; min-height:64px; font-size:18px; }
