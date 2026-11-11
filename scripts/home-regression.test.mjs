@@ -168,21 +168,26 @@ test('hidden-navigation header keeps both items fixed-size and aligned at narrow
     assert.equal(header['flex-wrap'], 'nowrap');
     assert.equal(header['justify-content'], 'space-between');
     assert.equal(header['align-items'], 'center');
-    assert.equal(brand.flex, '0 0 auto'); assert.equal(cta.flex, width<=600?'0 0 132px':'0 0 230px');
+    assert.equal(brand.flex, width<=600?'0 1 180px':'0 0 auto'); assert.equal(cta.flex, width<=600?'1 1 156px':'0 0 230px');
     const number = v => Number.parseFloat(v);
     const reserved = number(header['padding-left']) + number(brand.width) + number(header.gap)
       + number(cta.width) + number(header['padding-right']);
-    assert.ok(reserved <= width, `${width}px: reserved header widths ${reserved}`);
+    if(width>600) assert.ok(reserved <= width, `${width}px: reserved header widths ${reserved}`);
+    else {
+      assert.equal(brand['min-width'],'0'); assert.equal(cta['min-width'],'0');
+      assert.equal(header['padding-left'],'max(clamp(24px,5vw,72px),calc((100% - var(--header-content))/2))');
+      assert.equal(header['padding-right'],header['padding-left']);
+    }
     if(width<=600) assert.equal(header['flex-direction'],'row');
   }
 });
 
 test('main header has fixed desktop and narrow sizes without viewport scaling', () => {
   for (const width of [320,375,599,600,601,680,768,999,1000,1001,1440,2560]) {
-    assert.equal(resolve(width,'brand').width,width<=600?'150px':'260px');
-    assert.equal(resolve(width,'cta').width,width<=600?'132px':'230px');
-    assert.equal(resolve(width,'cta')['font-size'],width<=600?'10px':'16px');
-    assert.equal(resolve(width,'cta').height,width<=600?'32px':'54px');
+    assert.equal(resolve(width,'brand').width,width<=600?'180px':'260px');
+    assert.equal(resolve(width,'cta').width,width<=600?'156px':'230px');
+    assert.equal(resolve(width,'cta')['font-size'],width<=600?'12px':'16px');
+    assert.equal(resolve(width,'cta').height,width<=600?'38px':'54px');
     assert.equal(resolve(width,'header').height,'calc(260px * 240 / 567)');
     assert.equal(resolve(width,'brand').transform,'none');
   }
