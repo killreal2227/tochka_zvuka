@@ -309,8 +309,8 @@
 .lead-modal .pk input:checked+label .choice-name,
 .lead-modal .pk input:focus-visible+label .choice-name { visibility:visible; opacity:1; }
 .lead-modal .pk .choice-icon { transition:transform .2s ease,opacity .2s ease; }
-.lead-modal .pk input:checked+label .choice-icon { transform:scale(1.1); filter:none; }
-.lead-modal .pick.has .pk input:not(:checked)+label .choice-icon { filter:none; opacity:.4; }
+.lead-modal .pk input:checked+label .choice-icon { transform:scale(1.16); filter:none; }
+.lead-modal .pick.has .pk input:not(:checked)+label .choice-icon { filter:none; opacity:.3; }
 .lead-modal .pk input:focus-visible+label .choice-icon { filter:none; }
 @media(hover:hover) { .lead-modal .pk:hover .choice-name { visibility:visible; opacity:1; } }
 @media(max-width:1050px) and (min-width:901px) {
@@ -365,29 +365,39 @@
 .lead-modal .pk input:checked+label .choice-icon { opacity:1; }
 .lead-modal .pk input:focus-visible+label .choice-icon { opacity:1; }
 
-/* Shared cut corner on both actions; keep the focus outline outside the shape. */
-.lead-modal .send { grid-template-columns:minmax(0,1.65fr) minmax(0,1fr); }
+/* Equal-width rounded actions with matching circular icons. */
+.lead-modal .send { grid-template-columns:repeat(2,minmax(0,1fr)); }
 .lead-modal .action-pane { grid-template-rows:64px minmax(42px,auto); }
 .lead-modal .btn.lead-submit,.lead-modal .btn.lead-call {
-  position:relative; isolation:isolate; border:0; border-radius:0;
+  position:relative; isolation:isolate; border:0; border-radius:14px;
   background:transparent; padding:8px 10px 8px 18px; align-self:center;
 }
 .lead-modal .btn.lead-submit { --action-bg:var(--accent); height:64px; min-height:64px; font-size:18px; }
 .lead-modal .btn.lead-call { --action-bg:#e7ded4; height:56px; min-height:56px; font-size:16px; }
 .lead-modal .btn.lead-submit::before,.lead-modal .btn.lead-call::before {
   content:""; position:absolute; inset:0; z-index:-1; background:var(--action-bg);
-  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%);
+  border-radius:inherit;
 }
 .lead-modal .btn.lead-submit:hover { --action-bg:var(--ink); background:transparent; }
 .lead-modal .btn.lead-call:hover { --action-bg:#d9cec2; background:transparent; }
 .lead-modal .btn.lead-call:focus-visible { background:transparent; }
 .lead-modal .btn.lead-call i,.lead-modal .btn.lead-call:hover i {
-  display:grid; place-items:center; flex:0 0 36px; width:36px; height:36px;
+  display:grid; place-items:center; flex:0 0 40px; width:40px; height:40px;
   border-radius:50%; background:#383838; color:#FFF5EA;
 }
-.lead-modal .btn.lead-submit i { width:44px; height:44px; }
+.lead-modal .btn.lead-submit i { flex:0 0 40px; width:40px; height:40px; border-radius:50%; }
+.lead-modal .pick-row { padding-top:10px; padding-bottom:42px; }
+.lead-modal .pk .choice-name {
+  position:absolute; top:calc(100% + 12px); left:50%; transform:translateX(-50%);
+  width:max-content; max-width:none; min-height:0; white-space:nowrap; overflow-wrap:normal;
+  pointer-events:none; z-index:3;
+}
+.lead-modal .pick.has .pk:not(:has(input:checked)):hover .choice-name { visibility:hidden; opacity:0; }
 @media(max-width:680px) {
   .lead-modal .send { grid-template-columns:minmax(0,1fr); }
+  .lead-modal .pick-row { row-gap:48px; }
   .lead-modal .pk .choice-name { font-size:16px; }
-  .lead-modal .btn.lead-call { width:75%; justify-self:end; }
+  .lead-modal .choice-unsure .choice-name { min-height:0; }
+  .lead-modal .pk:nth-child(3n):not(.choice-unsure) .choice-name { left:auto; right:0; transform:none; }
+  .lead-modal .btn.lead-call { width:100%; justify-self:stretch; }
 }
