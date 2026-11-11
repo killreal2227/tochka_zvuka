@@ -277,3 +277,9 @@ body.home-page .home-header {
 @media(prefers-reduced-motion:reduce) {
   .home-page .header-cta:active .header-cta-icon { animation:none; }
 }
+
+/* Fit the complete background to viewport width instead of cropping it to page height. */
+.home-page .page-pattern > svg {
+  position:absolute; left:0; top:0; width:100%; height:auto;
+  aspect-ratio:1200 / 640;
+}

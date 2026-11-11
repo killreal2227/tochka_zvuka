@@ -1,4 +1,4 @@
-/* Original brand shapes; bounded paint rate, no per-frame geometry reads or timers. */
+/* Home rhythm shapes; bounded paint rate, no per-frame geometry reads or timers. */
 (() => {
   'use strict';
   const svg = document.querySelector('.page-pattern svg');
@@ -23,13 +23,13 @@
     if (lastPaint === null || now - lastPaint >= interval) {
       lastPaint = now;
       lines.forEach(line => {
-        const amplitude = 32 / scale, w = wave(line, seconds);
+        const amplitude = 32, w = wave(line, seconds);
         const x = line.dataset.f === 'l' ? -amplitude * (1-w)/2
           : line.dataset.f === 'r' ? amplitude * (1-w)/2 : amplitude * w;
         line.style.transform = `translateX(${x.toFixed(2)}px)`;
       });
       shapes.forEach(shape => {
-        const v = (16 / scale * wave(shape, seconds)).toFixed(2);
+        const v = (16 * wave(shape, seconds)).toFixed(2);
         const zoom = (1 + .05 * Math.sin(seconds * 2 * Math.PI / (period(shape)*1.3) + +shape.dataset.p*2)).toFixed(4);
         shape.style.transform = (shape.dataset.d === 'x' ? `translateX(${v}px)` : `translateY(${v}px)`) + ` scale(${zoom})`;
       });

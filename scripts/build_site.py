@@ -43,11 +43,9 @@ def build():
             page = page.replace('{{' + key + '}}', escape(value))
         write(SITE / slug / 'index.html', page)
     logo = re.search(r'<body[^>]*>\s*(<svg.*?</svg>)', template, re.S)[1]
-    pattern = (SITE / 'patterns' / 'brand.svg').read_text(encoding='utf-8')
+    pattern = (SITE / 'patterns' / 'home-rhythm.svg').read_text(encoding='utf-8')
     pattern = re.sub(r'<\?xml.*?\?>', '', pattern).strip()
-    # Home artwork covers the full main area on a transparent canvas.
-    # Keep the source asset unchanged for the form.
-    pattern = re.sub(r'[ \t]*<rect\b[^>]*/>[ \t]*\n?', '', pattern, count=1)
+    # Distinct transparent home artwork; the form retains its original pattern.
     home_template = read('home.html').replace('{{logo}}', logo).replace('{{home_pattern}}', pattern)
     # The original form uses the same arrow/close symbols on all pages.
     symbols = re.findall(r'<svg width="0".*?</svg>', template, re.S)
