@@ -556,69 +556,60 @@
 .lead-modal .sheet #submitBtn i,
 .lead-modal .sheet #submitBtn:hover i { background:var(--cream); color:var(--accent); }
 
-/* Confirmation shares the form's brand typography and calm spacing. */
-.lead-modal .lead-success {
-  display:flex; flex-direction:column; align-items:flex-start; justify-content:center;
-  gap:0; min-height:320px; padding:24px 0; box-sizing:border-box;
-}
-.lead-modal .lead-success .success-mark {
-  display:block; width:72px; height:72px; margin:0 0 28px;
-  fill:none; stroke:var(--accent); stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
-}
-.lead-modal .sheet .lead-success #doneText {
-  font-family:"Architexture","Century Gothic",sans-serif; font-synthesis:none;
-  font-size:clamp(40px,5vw,64px); font-weight:400; line-height:1.1;
-  letter-spacing:0; color:var(--ink); margin:0 0 12px;
-}
-.lead-modal .sheet .lead-success .success-message {
-  font-family:"Architexture","Century Gothic",sans-serif;
-  font-size:20px; font-weight:400; line-height:1.4; color:#585858; margin:0 0 36px;
-}
-.lead-modal .sheet .lead-success #doneClose {
-  position:relative; box-sizing:border-box; width:240px; max-width:100%; height:56px;
-  padding:8px 8px 8px 20px; justify-content:space-between; gap:16px;
-  border-radius:var(--tz-panel-radius); background:var(--accent); color:var(--accent-on);
-  font-family:"Architexture","Century Gothic",sans-serif;
-  font-size:20px; font-weight:400; line-height:1.4; text-transform:none;
-}
-.lead-modal .sheet .lead-success #doneClose i {
-  width:40px; height:40px; border-radius:50%; background:var(--cream); color:var(--accent);
-}
-@media(width < 900px) {
-  .lead-modal .lead-success { min-height:280px; padding:12px 0; }
-  .lead-modal .lead-success .success-mark { width:60px; height:60px; margin-bottom:24px; }
-  .lead-modal .sheet .lead-success #doneClose { width:100%; }
-}
-
-/* A compact, single-panel confirmation with one close icon in the corner. */
+/* Compact confirmation, with a single left-aligned content column. */
 .lead-modal .sheet:has(.lead-success:not([hidden])) {
-  width:min(520px,100%); grid-template-columns:minmax(0,1fr); grid-template-rows:auto;
+  width:min(560px,100%); height:auto; min-height:0;
+  grid-template-columns:minmax(0,1fr); grid-template-rows:auto;
 }
 .lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-art { display:none; }
 .lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-body {
-  padding:64px 40px 40px; max-height:calc(100svh - 32px);
+  padding:64px 64px 56px; max-height:calc(100svh - 32px);
 }
-.lead-modal .sheet .lead-success { min-height:0; margin:0; padding:0; }
-.lead-modal .sheet .lead-success #doneClose { justify-content:center; padding:8px 20px; }
-@media(max-width:600px) {
-  .lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-body { padding:56px 24px 28px; }
+.lead-modal .sheet .lead-success {
+  display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start;
+  gap:0; min-height:0; height:auto; margin:0; padding:0; box-sizing:border-box; text-align:left;
+  font-family:"Architexture","Century Gothic",sans-serif; font-synthesis:none;
 }
-
-.lead-modal .sheet .lead-success .success-message em {
-  font:inherit; font-style:normal; background:var(--accent); color:var(--accent-on);
-  padding:0 .1em .06em; -webkit-box-decoration-break:clone; box-decoration-break:clone;
+.lead-modal .sheet .lead-success #doneText {
+  font-family:inherit; font-size:clamp(40px,6vw,64px); font-weight:400;
+  line-height:1.1; letter-spacing:0; color:var(--ink); margin:0 0 24px;
 }
-
-/* Give the sent state its own line and an unbroken rectangular highlight. */
 .lead-modal .sheet .lead-success .success-message {
   display:flex; flex-direction:column; align-items:flex-start; gap:8px;
-  margin-top:8px; margin-bottom:32px;
+  max-width:100%; font-family:inherit; font-weight:400; line-height:1.4;
+  color:#786c62; margin:0 0 20px;
 }
 .lead-modal .sheet .lead-success .success-message > span {
-  font:inherit; font-size:18px; line-height:1.4;
+  font-family:inherit; font-size:18px; line-height:1.4;
 }
 .lead-modal .sheet .lead-success .success-message em {
-  display:inline-block; box-sizing:border-box; max-width:100%;
-  font-size:clamp(30px,6vw,46px); line-height:1.1; white-space:nowrap;
-  padding:8px 12px 10px; border-radius:0;
+  display:inline-block; box-sizing:border-box; width:max-content; max-width:100%;
+  font-family:inherit; font-size:44px; font-style:normal; font-weight:400; line-height:1.1;
+  white-space:nowrap; padding:8px 12px 10px; border-radius:0;
+  background:var(--bord); color:var(--cream);
+}
+.lead-modal .sheet .lead-success .success-followup {
+  max-width:100%; font-family:inherit; font-size:18px; font-weight:400;
+  line-height:1.4; color:#786c62; margin:0 0 32px; overflow-wrap:break-word;
+}
+.lead-modal .sheet .lead-success #doneClose {
+  position:relative; box-sizing:border-box; width:220px; max-width:100%;
+  height:auto; min-height:56px; padding:12px 24px; align-self:flex-start;
+  justify-content:center; border-radius:var(--tz-panel-radius);
+  background:var(--bord); color:var(--cream); border:0;
+  font-family:inherit; font-size:20px; font-weight:400; line-height:1.4;
+  text-transform:none; white-space:normal;
+}
+.lead-modal .sheet .lead-success #doneClose:hover { background:#802e38; color:var(--cream); }
+.lead-modal .sheet:has(.lead-success:not([hidden])) .lead-close {
+  top:12px; right:12px; width:44px; height:44px; border:0;
+  background:transparent; color:#786c62;
+}
+.lead-modal .sheet:has(.lead-success:not([hidden])) .lead-close:hover {
+  background:#eee3d8; color:#585858;
+}
+.lead-modal .sheet:has(.lead-success:not([hidden])) .lead-close svg { width:14px; height:14px; }
+@media(max-width:600px) {
+  .lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-body { padding:56px 24px 32px; }
+  .lead-modal .sheet .lead-success .success-message em { font-size:clamp(26px,7.5vw,44px); }
 }
