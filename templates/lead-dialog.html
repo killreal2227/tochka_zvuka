@@ -47,7 +47,7 @@
             <ul id="leadBranchList" class="lead-branch-list" role="listbox" aria-labelledby="leadBranchLabel" hidden></ul>
           </div>
         </div>
-        <fieldset class="pick" id="chips" aria-describedby="pickCap directionHint">
+        <fieldset class="pick" id="chips" aria-describedby="pickCap">
           <legend class="direction-legend">Выбери направление:</legend>
           <div class="pick-row">
             <span class="pk" style="--c:var(--vocal)"><input type="radio" name="direction" aria-label="Вокал" id="d-vocal" value="vocal"><label for="d-vocal" data-ico="vocal"><span class="choice-icon" aria-hidden="true"><img src="{{root}}icons/ic_vocal.svg" alt="" aria-hidden="true"></span><span class="choice-name">Вокал</span></label></span>
@@ -58,7 +58,6 @@
             <span class="pk" style="--c:var(--pink)"><input type="radio" name="direction" aria-label="Ораторское искусство" id="d-speech" value="speech"><label for="d-speech" data-ico="speech"><span class="choice-icon" aria-hidden="true"><img src="{{root}}icons/ic_speech.svg" alt="" aria-hidden="true"></span><span class="choice-name">Ораторское искусство</span></label></span>
           </div>
           <p class="pick-cap" id="pickCap" aria-live="polite"></p>
-          <p id="directionHint" class="direction-hint">Можно пропустить — поможем выбрать</p>
         </fieldset>
         <label class="lead-honeypot" aria-hidden="true" inert>Ваш сайт<input name="website" tabindex="-1" autocomplete="off"></label>
         <p class="form-status" id="leadStatus" role="status" aria-live="polite"></p>

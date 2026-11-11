@@ -35,8 +35,6 @@ const formArt=(()=>{
     if(v==='actor' && advanceActor){sheet.dataset.actorColor=actorNextBlue?'blue':'orange';actorNextBlue=!actorNextBlue;}
     $('#chips').classList.toggle('has',!!col[v]);
     $('#pickCap').textContent = col[v] ? directionLabels[v].toLocaleLowerCase('ru') : '';
-    const hint=$('#directionHint');
-    if(hint)hint.textContent=col[v]?'Нажми на выбранный кружок ещё раз, чтобы снять выбор':'Можно пропустить — поможем выбрать';
     positionDirectionNames();
   }
   form.addEventListener('change',e=>{ if(e.target.name==='direction') tint(true); });

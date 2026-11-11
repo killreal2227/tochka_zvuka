@@ -454,4 +454,6 @@
   font-family:"Architexture","Century Gothic",sans-serif;
   font-size:20px; font-weight:400; line-height:1.4;
 }
-.lead-modal .direction-hint { margin:0 0 16px; font-family:Arial,sans-serif; font-size:13px; line-height:1.4; color:var(--muted); }
+.lead-modal .fields input,
+.lead-modal .lead-branch-control,
+.lead-modal .lead-branch-label select { padding-left:0; text-indent:0; }
