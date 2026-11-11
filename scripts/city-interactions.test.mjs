@@ -261,7 +261,7 @@ function scrollCardScene(){
   const card=(top,bottom)=>({rect:{top,bottom},active:false,get offsetTop(){return this.rect.top;},getBoundingClientRect(){return this.rect;},classList:{toggle(_,value){this.owner.active=value;}}});
   const cards=[card(100,300),card(340,540),card(850,1050)];cards.forEach(c=>c.classList.owner=c);
   const calls=[],modal={hidden:true},document={hidden:false,getElementById:()=>modal};
-  const context={cardFrame:0,scrollCards:cards,scrollPlayers:new Map(cards.map(c=>[c,{request(card){calls.push(card);},stop(){calls.push("stop");}}])),finePointer:{matches:false},document,innerHeight:800,
+  const context={cardFrame:0,scrollCards:cards,scrollTour:{request(row){cards.forEach(c=>c.active=row.includes(c));calls.push(...row);}},hoveredCard:null,finePointer:{matches:false},document,innerHeight:800,
     directionPlayer:{stop(){calls.push('stop');},request(c){calls.push(c);}}};
   vm.createContext(context);vm.runInContext(fn,context);
   return {context,cards,calls,modal,update:()=>context.updateScrollCard()};
@@ -272,7 +272,7 @@ test('touch scroll activates only the central visible direction and stops behind
   s.cards[0].rect={top:-500,bottom:-300};s.cards[1].rect={top:-100,bottom:100};s.cards[2].rect={top:200,bottom:400};s.update();
   assert.ok(s.calls.includes(s.cards[2]));assert.deepEqual(s.cards.map(c=>c.active),[false,false,true]);
   s.modal.hidden=false;s.update();assert.ok(s.cards.every(c=>!c.active));assert.ok(s.cards.every(c=>!c.active));
-  s.modal.hidden=true;s.context.finePointer.matches=true;s.update();assert.ok(s.cards.every(c=>!c.active));
+  s.modal.hidden=true;s.context.finePointer.matches=true;s.update();assert.equal(s.cards[2].active,true);
 });
 test('touch scroll starts both columns in the visible row, with no left-column bias',()=>{
   const s=scrollCardScene();
@@ -304,4 +304,21 @@ test('branch header shows only its current address without a branch switching co
   assert.ok(header.includes('class="branch-current"'));assert.ok(header.includes('{{address}}'));
   assert.ok(!header.includes('branchBtn'));assert.ok(!header.includes('branch-opt'));
   assert.ok(!template.includes("const bBtn="));assert.ok(header.includes('header-cta openForm'));
+});
+
+test('a three-column row tours left to right and cancels its timer on exit',async()=>{
+  const window={},timers=new Map();let sequence=0,active=null;
+  vm.runInNewContext(source('direction-player.js'),{window,Promise});
+  const cards=[{id:'left'},{id:'middle'},{id:'right'}],played=[];
+  const players=new Map(cards.map(card=>[card,{stop(){},request(c){played.push(c.id);}}]));
+  const tour=window.createDirectionRowTour({ready:Promise.resolve(),prepare:()=>2.9,playerFor:c=>players.get(c),
+    activate:c=>active=c,clock:{setTimeout(fn){const id=++sequence;timers.set(id,fn);return id;},clearTimeout(id){timers.delete(id);}}});
+  const advance=()=>{const batch=[...timers.values()];timers.clear();batch.forEach(fn=>fn());};
+  tour.request(cards);await settle();assert.equal(active,cards[0]);
+  tour.request(cards);assert.equal(timers.size,1);
+  advance();assert.equal(active,cards[1]);advance();assert.equal(active,cards[2]);
+  assert.deepEqual(played,['left','middle','right']);assert.equal(timers.size,0);
+  tour.request([]);assert.equal(active,null);
+  tour.request(cards);await settle();assert.equal(timers.size,1);
+  tour.stop();assert.equal(timers.size,0);assert.equal(active,null);
 });

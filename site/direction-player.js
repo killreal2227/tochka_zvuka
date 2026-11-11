@@ -34,4 +34,30 @@
     Promise.resolve(ready).then(() => { loaded = true; start(); }).catch(() => api.stop());
     return api;
   };
+  // A single left-to-right pass; changing rows cancels every pending continuation.
+  window.createDirectionRowTour=({ready,prepare,playerFor,activate,blocked=()=>false,clock=window})=>{
+    let row=[],timer=0,generation=0;
+    function stop(){
+      generation++;if(timer)clock.clearTimeout(timer);timer=0;
+      row.forEach(card=>playerFor(card).stop());row=[];activate(null);
+    }
+    function request(cards){
+      if(cards.length===row.length&&cards.every((card,i)=>card===row[i]))return;
+      stop();if(!cards.length||blocked())return;
+      row=[...cards];const token=generation;
+      Promise.resolve(ready).then(()=>{
+        function play(index){
+          timer=0;if(token!==generation||blocked()){if(token===generation)stop();return;}
+          if(index)playerFor(row[index-1]).stop();
+          const card=row[index];activate(card);playerFor(card).request(card);
+          if(index+1<row.length){
+            const duration=Math.min(3.2,Math.max(.5,prepare(card)));
+            timer=clock.setTimeout(()=>play(index+1),duration*1000+250);
+          }
+        }
+        if(token===generation)play(0);
+      }).catch(()=>{if(token===generation)stop();});
+    }
+    return {request,stop};
+  };
 })();

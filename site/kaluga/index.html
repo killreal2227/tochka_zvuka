@@ -755,7 +755,7 @@ img,svg{display:block;max-width:100%}
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="../direction-player.js?v=8a2aef0454"></script>
+<script src="../direction-player.js?v=2486ffc222"></script>
 <script>
 const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
@@ -972,41 +972,42 @@ const directionPlayer=window.createDirectionPlayer({
 $$('.card[data-dir]').forEach(card=>{
   card.addEventListener('pointerenter',e=>{
     if(!finePointer.matches||e.pointerType==='touch')return;
-    hoveredCard=card;directionPlayer.request(card);
+    scrollTour.stop();hoveredCard=card;directionPlayer.request(card);
   });
   const leave=()=>{if(hoveredCard===card)hoveredCard=null;directionPlayer.leave(card);};
   card.addEventListener('pointerleave',leave);
   card.addEventListener('pointercancel',leave);
 });
-const stopDirections=()=>{hoveredCard=null;directionPlayer.stop();scrollPlayers.forEach(player=>player.stop());};
+const stopDirections=()=>{hoveredCard=null;directionPlayer.stop();scrollTour.stop();};
 directionMotion.addEventListener('change',stopDirections);
 finePointer.addEventListener('change',stopDirections);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopDirections();});
 document.addEventListener('tz:lead-open',stopDirections);
-/* Touch: every card in the central visible grid row can play, including right-hand columns. */
+/* Scroll: present the central visible row from left to right at every grid width. */
 const scrollCards=$$('.card[data-dir]');
 const scrollPlayers=new Map(scrollCards.map(card=>[card,window.createDirectionPlayer({
   ready:bgReady,prepare:prepCard,
-  eligible:c=>!finePointer.matches&&c.classList.contains('is-active'),
+  eligible:c=>c.classList.contains('is-active'),
   reduced:()=>directionMotion.matches,
   blocked:()=>document.hidden||!document.getElementById('leadModal').hidden
 })]));
+const scrollTour=window.createDirectionRowTour({
+  ready:bgReady,prepare:prepCard,playerFor:card=>scrollPlayers.get(card),
+  activate:active=>scrollCards.forEach(card=>card.classList.toggle('is-active',card===active)),
+  blocked:()=>directionMotion.matches||document.hidden||!document.getElementById('leadModal').hidden
+});
 let cardFrame=0;
 function updateScrollCard(){
   cardFrame=0;
   let next=[];
-  if(!finePointer.matches&&!document.hidden&&document.getElementById('leadModal').hidden){
+  if(!document.hidden&&document.getElementById('leadModal').hidden){
     const candidates=scrollCards.map(card=>({card,rect:card.getBoundingClientRect(),row:card.offsetTop}))
       .filter(({rect})=>rect.bottom>innerHeight*.2&&rect.top<innerHeight*.8);
     const central=candidates.reduce((best,item)=>!best||Math.abs((item.rect.top+item.rect.bottom)/2-innerHeight*.5)<Math.abs((best.rect.top+best.rect.bottom)/2-innerHeight*.5)?item:best,null);
     if(central)next=candidates.filter(item=>Math.abs(item.row-central.row)<2).map(item=>item.card);
   }
-  scrollCards.forEach(card=>{
-    const active=next.includes(card);
-    card.classList.toggle('is-active',active);
-    const player=scrollPlayers.get(card);
-    if(active)player.request(card);else player.stop();
-  });
+  if(next.length){hoveredCard=null;directionPlayer.stop();}
+  scrollTour.request(next);
 }
 function scheduleScrollCard(){if(!cardFrame)cardFrame=requestAnimationFrame(updateScrollCard);}
 addEventListener('scroll',scheduleScrollCard,{passive:true});
