@@ -386,6 +386,10 @@
   border-radius:50%; background:#383838; color:#FFF5EA;
 }
 .lead-modal .btn.lead-submit i { flex:0 0 40px; width:40px; height:40px; border-radius:50%; }
+/* Accent lettering stays light for every direction and interaction state. */
+.lead-modal .sheet #leadTitle em,
+.lead-modal .sheet #submitBtn { color:#FFF5EA; }
+.lead-modal .sheet #submitBtn i { background:#FFF5EA; }
 .lead-modal .pick-row { padding-top:10px; padding-bottom:42px; }
 .lead-modal .pk .choice-name {
   position:absolute; top:calc(100% + 12px); left:50%; transform:translateX(-50%);
