@@ -303,21 +303,16 @@
 .lead-modal .lead-alternative { margin: 8px 0 0; font-size: 14px; line-height: 1.5; }
 .lead-modal .lead-alternative a { color: #69594d; font-weight: 400; }
 .lead-modal .lead-alternative span { font-size: 14px; }
-/* On pointer devices only the relevant name is displayed, without seven caption blocks. */
-@media(min-width:681px) {
-  .lead-modal .pick-row { padding-bottom: 0; }
-  .lead-modal .choice-name {
-    position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
-    width: max-content; max-width: 200px; padding: 2px 4px;
-    background: var(--cream); z-index: 3; pointer-events: none;
-    font-size: 16px; line-height: 1.3; opacity: 0; visibility: hidden;
-  }
-  .lead-modal .pk:hover .choice-name,
-  .lead-modal .pk input:focus-visible+label .choice-name { opacity: 1; visibility: visible; }
-  .lead-modal .pick-row:has(.pk:hover) .pk:not(:hover) .choice-name { opacity: 0; visibility: hidden; }
-  .lead-modal .pick:has(.pk:hover) #pickCap,
-  .lead-modal .pick:has(input:focus-visible) #pickCap { visibility: hidden; }
-}
+/* Names stay directly below their own circles, with space reserved for wrapping. */
+.lead-modal #pickCap { position:absolute; width:1px; height:1px; min-height:0; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.lead-modal .pk .choice-name { position:static; transform:none; width:100%; max-width:100%; min-height:5.2em; padding:0; font-family:var(--brand-font); font-size:14px; line-height:1.3; text-align:center; visibility:hidden; opacity:0; }
+.lead-modal .pk input:checked+label .choice-name,
+.lead-modal .pk input:focus-visible+label .choice-name { visibility:visible; opacity:1; }
+.lead-modal .pk .choice-icon { transition:transform .2s ease,filter .2s ease; }
+.lead-modal .pk input:checked+label .choice-icon { transform:scale(1.1); filter:none; }
+.lead-modal .pick.has .pk input:not(:checked)+label .choice-icon { filter:blur(1px); }
+.lead-modal .pk input:focus-visible+label .choice-icon { filter:none; }
+@media(hover:hover) { .lead-modal .pk:hover .choice-name { visibility:visible; opacity:1; } }
 @media(max-width:1050px) and (min-width:901px) {
   .lead-modal .sheet-body { padding-left: 40px; padding-right: 40px; }
 }
@@ -339,3 +334,21 @@
   .lead-modal .choice-unsure .choice-name { min-height: 0; }
 }
 @media(max-width:360px) { .lead-modal .sheet #leadTitle { font-size: 40px; } }
+
+/* Neutral fields and a quieter secondary call action. */
+.lead-modal .f input { border-bottom-color:#77716b; }
+.lead-modal .f input:focus,.lead-modal .f input:focus-visible { border-bottom-color:#77716b; box-shadow:0 1px 0 #77716b; }
+.lead-modal .fields input:autofill,
+.lead-modal .fields input:-webkit-autofill,
+.lead-modal .fields input:-webkit-autofill:hover,
+.lead-modal .fields input:-webkit-autofill:focus { border-bottom-color:#77716b; }
+.lead-modal .lead-branch-control,.lead-modal .lead-branch-list,.lead-modal .lead-branch-label select { font-family:var(--brand-font); }
+.lead-modal .btn.lead-call { background:#e7ded4; color:#383838; border:0; padding:8px 16px 8px 20px; border-radius:14px; text-decoration:none; }
+.lead-modal .btn.lead-call i { flex:0 0 32px; width:32px; height:32px; background:transparent; color:inherit; }
+.lead-modal .btn.lead-call:hover { background:#d9cec2; color:#383838; }
+.lead-modal .btn.lead-call:focus-visible { background:#e7ded4; color:#383838; outline:2px solid #585858; outline-offset:4px; }
+@media(max-width:680px) {
+  .lead-modal .choice-unsure label { flex-direction:column; }
+  .lead-modal .choice-unsure .choice-name { min-height:2.6em; }
+}
+@media(prefers-reduced-motion:reduce) { .lead-modal .pk .choice-icon { transition:none; } }
