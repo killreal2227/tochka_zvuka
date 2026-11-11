@@ -10,6 +10,19 @@ window.TZ_LEADS = Object.assign({endpoint:null,consentVersion:'2026-11-10-v3'},w
   const reduceQuery=matchMedia('(prefers-reduced-motion: reduce)');
   let reduce=reduceQuery.matches;
   const directionLabels={vocal:'Вокал',guitar:'Гитара',drums:'Барабаны',piano:'Фортепиано',actor:'Актёрское мастерство',speech:'Ораторское искусство',unsure:'Пока не знаю'};
+  function positionDirectionNames(){
+    const row=$('.pick-row');
+    if(!row||modal.hidden)return;
+    const bounds=row.getBoundingClientRect();
+    $$('.pk:not(.choice-unsure) .choice-name').forEach(name=>{
+      name.style.setProperty('--caption-shift','0px');
+      const rect=name.getBoundingClientRect();
+      const shift=Math.max(bounds.left-rect.left,Math.min(0,bounds.right-rect.right));
+      name.style.setProperty('--caption-shift',shift+'px');
+    });
+  }
+  window.addEventListener('resize',positionDirectionNames,{passive:true});
+  document.fonts?.ready.then(positionDirectionNames);
 
 const formArt=(()=>{
   const box=$('.sheet-art'), svg=box?$('svg',box):null, mob=matchMedia('(max-width:900px)');
@@ -22,6 +35,7 @@ const formArt=(()=>{
     if(v==='actor' && advanceActor){sheet.dataset.actorColor=actorNextBlue?'blue':'orange';actorNextBlue=!actorNextBlue;}
     $('#chips').classList.toggle('has',!!col[v]);
     $('#pickCap').textContent = col[v] ? directionLabels[v].toLocaleLowerCase('ru') : '';
+    positionDirectionNames();
   }
   form.addEventListener('change',e=>{ if(e.target.name==='direction') tint(true); });
   if(!svg)return {tint,resize(){},start(){},stop(){}};

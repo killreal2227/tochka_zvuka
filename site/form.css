@@ -414,11 +414,8 @@
   }
   .lead-modal .pk .choice-name,
   .lead-modal .pk:nth-child(3n):not(.choice-unsure) .choice-name {
-    left:50%; right:auto; transform:translateX(-50%); text-align:center;
+    left:50%; right:auto; transform:translateX(calc(-50% + var(--caption-shift,0px))); text-align:center;
   }
-  /* Keep edge captions inside the row while preserving their single line. */
-  .lead-modal .pk:nth-child(3n):not(.choice-unsure) .choice-name { left:auto; right:0; transform:none; }
-  .lead-modal .pk:nth-child(3n + 1):not(.choice-unsure) .choice-name { left:0; right:auto; transform:none; }
   .lead-modal .choice-unsure { grid-column:1 / -1; justify-self:end; margin-top:-8px; }
   .lead-modal .choice-unsure label { flex-direction:row; align-items:center; justify-content:center; gap:0; min-height:28px; padding:4px 0; border:0; border-radius:0; background:transparent; }
   .lead-modal .choice-unsure .choice-icon { display:none; }

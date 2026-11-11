@@ -3,6 +3,19 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
+test('direction captions keep their center unless their actual width crosses the row edge',()=>{
+  const source=fs.readFileSync(new URL('../site/lead-form.js',import.meta.url),'utf8');
+  const fn=source.slice(source.indexOf('  function positionDirectionNames()'),source.indexOf("  window.addEventListener('resize',positionDirectionNames"));
+  const name=(left,right)=>({style:{setProperty(_,v){this.shift=v;}},getBoundingClientRect:()=>({left,right})});
+  const centered=name(180,260),right=name(310,460),left=name(10,120);
+  const context={modal:{hidden:false},$:()=>({getBoundingClientRect:()=>({left:20,right:430})}),$$:()=>[centered,right,left]};
+  vm.runInNewContext(fn+'positionDirectionNames();',context);
+  assert.equal(centered.style.shift,'0px');assert.equal(right.style.shift,'-30px');assert.equal(left.style.shift,'10px');
+  context.$=()=>({getBoundingClientRect:()=>({left:0,right:500})});
+  vm.runInNewContext('positionDirectionNames();',context);
+  assert.equal(right.style.shift,'0px');assert.equal(left.style.shift,'0px');
+});
+
 function scene(){
   const element=()=>({hidden:false,attrs:{},handlers:{},children:[],classList:{toggle(){}},
     setAttribute(k,v){this.attrs[k]=v;},removeAttribute(k){delete this.attrs[k];},
