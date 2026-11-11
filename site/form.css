@@ -183,7 +183,7 @@
 /* SVG canvases center their reconstructed circular element; each circle is 26px across. */
 .btn, .header-cta { position: relative; }
 .capsule-source { opacity: 0; }
-.btn > svg.capsule-caption, .header-cta > svg.capsule-caption {
+.btn > svg.capsule-caption, .header-cta > svg.capsule-caption, .branch-btn > svg.capsule-caption {
   position: absolute; inset: 0; width: 100% !important; height: 100% !important; max-width: none;
   margin: 0; padding: 0; pointer-events: none; overflow: visible;
   transform: none !important; transition: none !important; animation: none !important;
