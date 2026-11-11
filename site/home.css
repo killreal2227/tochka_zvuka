@@ -345,3 +345,30 @@ body.home-page .home-header {
 }
 
 body.home-page .home-header { position:relative; z-index:30; overflow:visible; }
+
+/* A quiet filled location trigger and clearly separated destination cards. */
+.home-page .home-branch .branch-btn {
+  border:0; background:#e7ded4; color:#585858;
+  font-family:"Architexture","Century Gothic",sans-serif;
+  font-size:16px; font-weight:400; text-transform:uppercase;
+}
+.home-page .home-branch .branch-btn:hover,
+.home-page .home-branch .branch-btn[aria-expanded=true] { background:#d9cec2; color:#383838; }
+.home-page .home-branch .branch-btn:focus-visible { outline:2px solid var(--bord); outline-offset:4px; }
+.home-page .home-branch-list {
+  display:grid; gap:8px; padding:10px; border:1px solid #d9cec2;
+  box-shadow:0 12px 28px #1a1a1a20;
+}
+.home-page .home-branch-list > a {
+  box-sizing:border-box; display:block; padding:16px 18px;
+  background:#f0e5d9; border:1px solid #d8c7b8; border-radius:10px;
+  font-family:"Architexture","Century Gothic",sans-serif;
+  transition:background-color .15s,border-color .15s;
+}
+.home-page .home-branch-list > a:hover,
+.home-page .home-branch-list > a:focus-visible {
+  background:#e7d7c8; border-color:var(--bord); outline:none;
+}
+.home-page .home-branch-list small { margin-top:4px; }
+@media(max-width:600px) { .home-page .home-branch .branch-btn { font-size:12px; } }
+@media(min-width:601px) and (max-width:760px) { .home-page .home-branch .branch-btn { font-size:16px; } }
