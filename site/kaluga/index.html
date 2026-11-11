@@ -433,8 +433,8 @@ img,svg{display:block;max-width:100%}
 .foot-legal a{font-size:15px}
 </style>
 <link rel="stylesheet" href="../experience.css?v=a0521dc172">
-<script src="../lead-form.js?v=f9c2f9f0e6" defer></script>
-<link rel="stylesheet" href="../form.css?v=c70616253b">
+<script src="../lead-form.js?v=77a254653e" defer></script>
+<link rel="stylesheet" href="../form.css?v=0c4420c2a8">
 <link rel="stylesheet" href="../city-ui.css?v=a9d1705919"><script src="../city-ui.js?v=f4871e6031" defer></script>
 <script src="../button-labels.js?v=62b93b8d03" defer></script>
 </head>
@@ -705,7 +705,14 @@ img,svg{display:block;max-width:100%}
           <label class="f" id="fName"><span class="sr">Как тебя зовут</span><input name="name" autocomplete="given-name" placeholder="Как тебя зовут" minlength="2" maxlength="80" required aria-describedby="nameError"><em class="err" id="nameError">Напиши имя: от 2 до 80 символов</em></label>
           <label class="f" id="fPhone"><span class="sr">Телефон</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required aria-describedby="phoneError"><em class="err" id="phoneError">Проверь номер&nbsp;— нужно 11 цифр, начиная с 7 или 8</em></label>
         </div>
-        <label class="lead-branch-label">Твоя точка<select name="branch" required><option value="">Выбери город</option><option value="troitsk">Троицк · 3-ая Нововатутинская, 2</option><option value="kaluga">Калуга · Ленина, 79</option></select></label>
+        <div class="lead-branch-label">
+          <label id="leadBranchLabel" for="leadBranchNative">Твоя точка</label>
+          <select id="leadBranchNative" name="branch" required><option value="">Выбери город</option><option value="troitsk">Троицк · 3-ая Нововатутинская, 2</option><option value="kaluga">Калуга · Ленина, 79</option></select>
+          <div class="lead-branch-picker" hidden>
+            <button id="leadBranchControl" class="lead-branch-control" type="button" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="leadBranchList" aria-labelledby="leadBranchLabel leadBranchValue" aria-required="true"><span id="leadBranchValue">Выбери город</span><span aria-hidden="true">⌄</span></button>
+            <ul id="leadBranchList" class="lead-branch-list" role="listbox" aria-labelledby="leadBranchLabel" hidden></ul>
+          </div>
+        </div>
         <fieldset class="pick" id="chips" aria-describedby="pickCap">
           <legend class="direction-legend">Выбери направление:</legend>
           <div class="pick-row">

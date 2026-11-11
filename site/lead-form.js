@@ -62,6 +62,50 @@ const formArt=(()=>{
   $$('.pk input').forEach(r=>{let was=false;r.closest('.pk').addEventListener('pointerdown',()=>{was=r.checked;});r.addEventListener('click',()=>{if(was){r.checked=false;was=false;formArt.tint();r.dispatchEvent(new Event('input',{bubbles:true}));}});});
   const pageCity=document.body.dataset.city||'';
   let lastFocus=null,pending=null,sending=false;
+  const branchPicker=(()=>{
+    const picker=$('.lead-branch-picker');
+    if(!picker)return {sync(){},close(){}};
+    const native=form.elements.branch,control=$('#leadBranchControl'),list=$('#leadBranchList'),value=$('#leadBranchValue');
+    const options=[...native.options];
+    let active=0,search='',searchTimer;
+    const items=options.map((option,index)=>{
+      const item=document.createElement('li');
+      item.id='leadBranchOption'+index;item.role='option';item.textContent=option.textContent;
+      item.addEventListener('pointerdown',event=>event.preventDefault());
+      item.addEventListener('click',()=>choose(index));list.append(item);return item;
+    });
+    function highlight(index){
+      active=(index+items.length)%items.length;
+      items.forEach((item,i)=>item.classList.toggle('is-active',i===active));
+      control.setAttribute('aria-activedescendant',items[active].id);
+      items[active].scrollIntoView({block:'nearest'});
+    }
+    function hide(){list.hidden=true;control.setAttribute('aria-expanded','false');control.removeAttribute('aria-activedescendant');}
+    function show(){list.hidden=false;control.setAttribute('aria-expanded','true');highlight(Math.max(0,native.selectedIndex));}
+    function sync(){value.textContent=native.selectedOptions[0]?.textContent||'Выбери город';items.forEach((item,i)=>item.setAttribute('aria-selected',String(i===native.selectedIndex)));if(native.value)control.removeAttribute('aria-invalid');}
+    function choose(index){native.value=options[index].value;sync();hide();native.dispatchEvent(new Event('input',{bubbles:true}));native.dispatchEvent(new Event('change',{bubbles:true}));control.focus();}
+    control.addEventListener('click',()=>list.hidden?show():hide());
+    control.addEventListener('keydown',event=>{
+      const key=event.key;
+      if(key==='Escape'&&!list.hidden){event.preventDefault();event.stopPropagation();hide();return;}
+      if(key==='Tab'){hide();return;}
+      if(['ArrowDown','ArrowUp','Home','End','Enter',' '].includes(key)){
+        event.preventDefault();
+        if(list.hidden){show();if(key==='Home')highlight(0);if(key==='End')highlight(items.length-1);return;}
+        if(key==='Enter'||key===' ')choose(active);
+        else highlight(key==='Home'?0:key==='End'?items.length-1:active+(key==='ArrowDown'?1:-1));
+      }else if(key.length===1&&!event.ctrlKey&&!event.metaKey&&!event.altKey){
+        event.preventDefault();if(list.hidden)show();search+=key.toLocaleLowerCase('ru');clearTimeout(searchTimer);searchTimer=setTimeout(()=>search='',700);
+        const index=options.findIndex(option=>option.textContent.toLocaleLowerCase('ru').startsWith(search));if(index>=0)highlight(index);
+      }
+    });
+    document.addEventListener('pointerdown',event=>{if(!picker.contains(event.target))hide();});
+    control.addEventListener('blur',hide);
+    native.addEventListener('invalid',event=>{event.preventDefault();control.setAttribute('aria-invalid','true');control.focus();show();status.textContent='Выбери свою точку.';});
+    native.addEventListener('change',sync);
+    native.hidden=true;picker.hidden=false;$('#leadBranchLabel').htmlFor=control.id;sync();
+    return {sync,close:hide};
+  })();
   function open(direction){
     lastFocus=document.activeElement;
     if(pageCity){form.elements.branch.value=pageCity;form.querySelector('.lead-branch-label').hidden=true;}
@@ -69,12 +113,13 @@ const formArt=(()=>{
     form.hidden=false;success.hidden=true;status.textContent='';
     modal.hidden=false;modal.classList.add('open');modal.setAttribute('aria-hidden','false');formArt.tint(true);formArt.start();document.body.style.overflow='hidden';sheet.focus({preventScroll:true});syncBranch();document.dispatchEvent(new CustomEvent('tz:lead-open'));
   }
-  function close(){if(sending)return;formArt.stop();modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.hidden=true;document.body.style.overflow='';lastFocus?.focus({preventScroll:true});}
+  function close(){if(sending)return;branchPicker.close();formArt.stop();modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.hidden=true;document.body.style.overflow='';lastFocus?.focus({preventScroll:true});}
   document.querySelectorAll('.openForm').forEach(el=>el.addEventListener('click',()=>open()));
   document.querySelectorAll('.card[data-dir]').forEach(el=>el.addEventListener('click',()=>open(el.dataset.dir)));
   modal.querySelector('.lead-close').addEventListener('click',close);
   modal.querySelector('[data-lead-dismiss]').addEventListener('click',close);
   function syncBranch(){
+    branchPicker.sync();
     const option=form.elements.branch.selectedOptions[0],caption=modal.querySelector('#leadBranchCaption');
     caption.textContent=option?.value?option.textContent:'Выбери город';
     caption.hidden=!option?.value;
