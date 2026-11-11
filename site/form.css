@@ -488,14 +488,21 @@
   justify-content:space-between; gap:12px; min-height:44px; padding:0;
   margin-bottom:8px;
 }
-.lead-modal #directionTitle { min-width:0; font-size:14px; text-transform:none; letter-spacing:0; white-space:nowrap; }
+.lead-modal #directionTitle { min-width:0; text-transform:none; letter-spacing:0; white-space:normal; }
 .lead-modal .direction-reset {
   flex:0 0 auto; border:0; background:transparent; color:var(--muted);
-  font:inherit; font-size:12px; text-transform:none; letter-spacing:0;
+  font:inherit; text-transform:none; letter-spacing:0;
   min-height:44px; padding:8px 0 8px 10px; cursor:pointer;
   text-decoration:underline; text-underline-offset:3px;
 }
 .lead-modal #pickCap {
   position:absolute; width:1px; height:1px; min-height:0; padding:0;
   margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap;
+}
+
+.lead-modal #directionTitle,
+.lead-modal .direction-reset {
+  font-family:"Architexture","Century Gothic",sans-serif;
+  font-size:20px; font-weight:400; font-style:normal; line-height:1.4;
+  font-synthesis:none;
 }
