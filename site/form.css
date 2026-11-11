@@ -540,3 +540,10 @@
   .lead-modal .pick .pick-row { padding-bottom:12px; }
   .lead-modal .pick { margin-bottom:12px; }
 }
+
+/* Angular, monoline chevron independent of font fallback. */
+.lead-modal .lead-branch-chevron {
+  display:block; flex:0 0 14px; width:14px; height:10px;
+  fill:none; stroke:currentColor; stroke-width:1.6;
+  stroke-linecap:square; stroke-linejoin:miter;
+}
