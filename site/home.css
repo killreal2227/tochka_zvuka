@@ -238,5 +238,13 @@ body.home-page .home-header {
 }
 .home-page .header-cta > svg:not(.capsule-caption) { right:16px; }
 @media(max-width:600px) {
-  body.home-page .home-header { flex-direction:column; justify-content:center; gap:4px; padding:4px 10px; }
+  body.home-page .home-header { flex-direction:row; justify-content:space-between; gap:12px; padding:8px 10px; padding-left:10px; padding-right:10px; }
+  .home-page .home-brand { width:150px; min-width:150px; max-width:150px; }
+  .home-page .header-cta,
+  .home-page .header-cta:hover,
+  .home-page .header-cta:focus-visible {
+    width:132px; min-width:132px; height:32px; min-height:32px; flex:0 0 132px;
+    font-size:10px !important; padding:5px 7px; border-radius:16px;
+  }
+  .home-page .header-cta > svg:not(.capsule-caption) { width:10px; height:10px; right:9px; }
 }
