@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 PUBLIC_BASE_URL = json.loads((ROOT / 'site-config.json').read_text(encoding='utf-8'))['public_base_url'].rstrip('/')
 CITIES = {
-    'troitsk': dict(name='Троицк', loc='Троицке', address='3-ая Нововатутинская, 2', full='г. Троицк, ул. 3-ая Нововатутинская, д. 2'),
-    'kaluga': dict(name='Калуга', loc='Калуге', address='Ленина, 79', full='г. Калуга, ул. Ленина, д. 79'),
+    'troitsk': dict(name='Троицк', loc='Троицке', address='ул. 3-ая Нововатутинская, 2', full='г. Троицк, ул. 3-ая Нововатутинская, д. 2'),
+    'kaluga': dict(name='Калуга', loc='Калуге', address='ул. Ленина, 79', full='г. Калуга, ул. Ленина, д. 79'),
 }
 
 def write(path, content):
