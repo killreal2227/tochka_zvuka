@@ -278,8 +278,10 @@ body.home-page .home-header {
   .home-page .header-cta:active .header-cta-icon { animation:none; }
 }
 
-/* Fit the complete background to viewport width instead of cropping it to page height. */
+/* Keep the artwork at a fixed scale; narrow viewports crop its edges. */
 .home-page .page-pattern > svg {
-  position:absolute; left:0; top:0; width:100%; height:auto;
-  aspect-ratio:706.05 / 366.67;
+  position:absolute; left:50%; top:0; width:1440px; max-width:none; height:auto;
+  transform:translateX(-50%); aspect-ratio:706.05 / 366.67;
 }
+
+.home-page .page-pattern { overflow:hidden; }

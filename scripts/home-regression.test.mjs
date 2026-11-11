@@ -56,7 +56,7 @@ test('mobile paint rate is capped and geometry is not read every frame', () => {
   assert.equal(s.reads, reads);
   // Two moving elements plus one occasional knob, at no more than 12 paints/s.
   assert.ok(s.writes - writes <= 51);
-  s.events.get('resize')(); assert.equal(s.reads, reads + 1);
+  assert.equal(s.reads,0); assert.equal(s.events.has('resize'),false);
 });
 
 /* Declaration-cascade regression, NOT a browser/layout engine. */

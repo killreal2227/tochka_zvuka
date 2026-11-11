@@ -11,9 +11,8 @@
   const all = [...lines, ...shapes, ...knobs];
   const period = el => 8 + ((+el.dataset.t * 1.37) % 6);
   const wave = (el, seconds) => Math.sin(seconds * 2 * Math.PI / period(el) + +el.dataset.p);
-  let scale = 1, frameId = 0, visible = false, lastTime = null, lastPaint = null, seconds = 0;
+  let frameId = 0, visible = false, lastTime = null, lastPaint = null, seconds = 0;
   const turns = knobs.map((_, i) => ({ next: .7 + i * .45, angle: 0 }));
-  function measure() { scale = Math.abs(svg.getScreenCTM()?.a || 1); }
   function frame(now) {
     frameId = 0;
     if (reduce.matches || document.hidden || !visible) return;
@@ -49,13 +48,11 @@
       if (reduce.matches) all.forEach(el => { el.style.transform = ''; });
       return;
     }
-    if (!frameId) { measure(); frameId = requestAnimationFrame(frame); }
+    if (!frameId) { frameId = requestAnimationFrame(frame); }
   }
   reduce.addEventListener('change', sync);
-  narrow.addEventListener('change', () => { measure(); sync(); });
+  narrow.addEventListener('change', sync);
   document.addEventListener('visibilitychange', sync);
-  window.addEventListener('resize', measure, { passive: true });
-  if ('ResizeObserver' in window) new ResizeObserver(measure).observe(svg);
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => { visible = entries[0].isIntersecting; sync(); }).observe(svg);
   } else { visible = true; sync(); }
