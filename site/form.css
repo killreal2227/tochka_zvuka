@@ -417,6 +417,8 @@
     left:50%; right:auto; transform:translateX(calc(-50% + var(--caption-shift,0px))); text-align:center;
   }
   .lead-modal .choice-unsure { grid-column:1 / -1; justify-self:end; margin-top:-8px; }
+  .lead-modal .pick.has:not(:has(.choice-unsure input:checked)) .choice-unsure { display:none; }
+  .lead-modal .pick.has:not(:has(.choice-unsure input:checked)) .pick-row { padding-bottom:36px; }
   .lead-modal .choice-unsure label { flex-direction:row; align-items:center; justify-content:center; gap:0; min-height:28px; padding:4px 0; border:0; border-radius:0; background:transparent; }
   .lead-modal .choice-unsure .choice-icon { display:none; }
   .lead-modal .choice-unsure .choice-name {
