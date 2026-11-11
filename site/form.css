@@ -608,3 +608,17 @@
   font:inherit; font-style:normal; background:var(--accent); color:var(--accent-on);
   padding:0 .1em .06em; -webkit-box-decoration-break:clone; box-decoration-break:clone;
 }
+
+/* Give the sent state its own line and an unbroken rectangular highlight. */
+.lead-modal .sheet .lead-success .success-message {
+  display:flex; flex-direction:column; align-items:flex-start; gap:8px;
+  margin-top:8px; margin-bottom:32px;
+}
+.lead-modal .sheet .lead-success .success-message > span {
+  font:inherit; font-size:18px; line-height:1.4;
+}
+.lead-modal .sheet .lead-success .success-message em {
+  display:inline-block; box-sizing:border-box; max-width:100%;
+  font-size:clamp(30px,6vw,46px); line-height:1.1; white-space:nowrap;
+  padding:8px 12px 10px; border-radius:0;
+}
