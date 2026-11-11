@@ -285,3 +285,9 @@ body.home-page .home-header {
 }
 
 .home-page .page-pattern { overflow:hidden; }
+
+/* Quick quarter-turns, staggered by the motion loop, with pauses between them. */
+.home-page .page-pattern .nd { transition:transform .18s cubic-bezier(.7,0,.3,1); }
+@media(prefers-reduced-motion:reduce) {
+  .home-page .page-pattern .nd { transition:none; }
+}

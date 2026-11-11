@@ -31,7 +31,7 @@ function scene({ reduced = false, mobile = false } = {}) {
   vm.runInNewContext(motion, context);
   observer([{ isIntersecting: true }]);
   function tick(t) { const batch = [...frames.values()]; frames.clear(); batch.forEach(fn => fn(t)); }
-  return { document, reduce, narrow, frames, events, line, tick, observer,
+  return { document, reduce, narrow, frames, events, line, knob, tick, observer,
     get reads() { return reads; }, get writes() { return writes; } };
 }
 
@@ -60,6 +60,16 @@ test('every display frame updates motion at 60 and 120Hz on desktop and mobile w
     assert.equal(s.reads,0);assert.equal(s.events.has('resize'),false);
     assert.equal(s.frames.size,1);
   }
+});
+
+test('partial-circle turns are quarter turns separated by a pause',()=>{
+  const s=scene();s.tick(0);
+  for(let t=100;t<=1000;t+=100)s.tick(t);
+  assert.equal(s.knob.style.transform,'rotate(-90deg)');
+  for(let t=1100;t<=3000;t+=100)s.tick(t);
+  assert.equal(s.knob.style.transform,'rotate(-90deg)');
+  for(let t=3100;t<=3500;t+=100)s.tick(t);
+  assert.equal(s.knob.style.transform,'rotate(-180deg)');
 });
 
 /* Declaration-cascade regression, NOT a browser/layout engine. */
