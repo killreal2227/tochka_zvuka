@@ -603,3 +603,8 @@
 @media(max-width:600px) {
   .lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-body { padding:56px 24px 28px; }
 }
+
+.lead-modal .sheet .lead-success .success-message em {
+  font:inherit; font-style:normal; background:var(--accent); color:var(--accent-on);
+  padding:0 .1em .06em; -webkit-box-decoration-break:clone; box-decoration-break:clone;
+}

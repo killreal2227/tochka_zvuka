@@ -3,6 +3,8 @@
   'use strict';
   const svg = document.querySelector('.page-pattern svg');
   if (!svg) return;
+  const dialog=document.getElementById?.('leadModal');
+  let formOpen=!!dialog&&!dialog.hidden;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const lines = [...svg.querySelectorAll('[data-f]')];
   const shapes = [...svg.querySelectorAll('[data-d]')];
@@ -14,7 +16,7 @@
   const turns = knobs.map((_, i) => ({ next: .7 + i * .45, angle: 0 }));
   function frame(now) {
     frameId = 0;
-    if (reduce.matches || document.hidden || !visible) return;
+    if (reduce.matches || document.hidden || !visible || formOpen) return;
     if (lastTime !== null) seconds += Math.min((now - lastTime) / 1000, .1);
     lastTime = now;
     lines.forEach(line => {
@@ -37,7 +39,7 @@
     frameId = requestAnimationFrame(frame);
   }
   function sync() {
-    if (reduce.matches || document.hidden || !visible) {
+    if (reduce.matches || document.hidden || !visible || formOpen) {
       if (frameId) cancelAnimationFrame(frameId);
       frameId = 0; lastTime = null;
       if (reduce.matches) all.forEach(el => { el.style.transform = ''; });
@@ -47,6 +49,8 @@
   }
   reduce.addEventListener('change', sync);
   document.addEventListener('visibilitychange', sync);
+  document.addEventListener('tz:lead-open',()=>{formOpen=true;sync();});
+  document.addEventListener('tz:lead-close',()=>{formOpen=false;sync();});
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => { visible = entries[0].isIntersecting; sync(); }).observe(svg);
   } else { visible = true; sync(); }

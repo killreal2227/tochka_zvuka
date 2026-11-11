@@ -72,6 +72,16 @@ test('partial-circle turns are quarter turns separated by a pause',()=>{
   assert.equal(s.knob.style.transform,'rotate(-180deg)');
 });
 
+test('opening the lead dialog pauses the background and closing resumes without a time jump',()=>{
+  const s=scene();s.tick(0);s.tick(16);
+  const value=s.line.style.transform,writes=s.writes;
+  s.events.get('tz:lead-open')();assert.equal(s.frames.size,0);
+  s.tick(100000);assert.equal(s.writes,writes);
+  s.events.get('tz:lead-close')();assert.equal(s.frames.size,1);
+  s.tick(100016);assert.equal(s.line.style.transform,value);
+  s.tick(100032);assert.notEqual(s.line.style.transform,value);
+});
+
 /* Declaration-cascade regression, NOT a browser/layout engine. */
 function splitSelectors(s) {
   const result = []; let depth = 0, start = 0;
