@@ -533,3 +533,10 @@
   font-size:14px; line-height:1.4; font-weight:400;
   color:var(--support-text); opacity:1;
 }
+
+/* The legend is the only visible direction name on every screen size. */
+.lead-modal .pk .choice-name { display:none; }
+@media(min-width:900px) {
+  .lead-modal .pick .pick-row { padding-bottom:12px; }
+  .lead-modal .pick { margin-bottom:12px; }
+}
