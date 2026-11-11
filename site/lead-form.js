@@ -36,7 +36,7 @@ const formArt=(()=>{
     $('#chips').classList.toggle('has',!!col[v]);
     $('#pickCap').textContent = col[v] ? directionLabels[v].toLocaleLowerCase('ru') : '';
     const title=$('#directionTitle'),reset=$('#directionReset');
-    if(title) title.textContent=col[v]?directionLabels[v]:'Направление';
+    if(title) title.textContent=col[v]?directionLabels[v]:'Не знаешь? Поможем выбрать';
     if(reset) reset.hidden=!col[v];
     positionDirectionNames();
   }
