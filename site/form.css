@@ -506,3 +506,30 @@
   font-size:20px; font-weight:400; font-style:normal; line-height:1.4;
   font-synthesis:none;
 }
+
+/* Consistent primary values and quieter supporting text throughout the form. */
+.lead-modal #leadForm { --field-text:#585858; --support-text:#786c62; }
+.lead-modal #leadForm .fields input,
+.lead-modal #leadForm .fields input::placeholder,
+.lead-modal #leadForm .lead-branch-control,
+.lead-modal #leadForm #leadBranchValue,
+.lead-modal #leadForm .lead-branch-label select,
+.lead-modal #leadForm #directionTitle,
+.lead-modal #leadForm .direction-reset {
+  color:var(--field-text); opacity:1;
+}
+.lead-modal #leadForm .fields input:autofill,
+.lead-modal #leadForm .fields input:-webkit-autofill,
+.lead-modal #leadForm .fields input:-webkit-autofill:hover,
+.lead-modal #leadForm .fields input:-webkit-autofill:focus {
+  -webkit-text-fill-color:var(--field-text); color:var(--field-text);
+}
+.lead-modal #leadForm #formIntro,
+.lead-modal #leadForm #leadBranchLabel,
+.lead-modal #leadForm .lead-consent,
+.lead-modal #leadForm .lead-consent .lead-reassurance,
+.lead-modal #leadForm .action-pane > .lead-address,
+.lead-modal #leadForm .lead-address a {
+  font-size:14px; line-height:1.4; font-weight:400;
+  color:var(--support-text); opacity:1;
+}
