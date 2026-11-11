@@ -256,26 +256,19 @@ body.home-page .home-header {
   .home-page .header-cta > svg:not(.capsule-caption) { width:12px; height:12px; right:10px; }
 }
 
-/* A circular action marker, with a springy press rather than a sideways turn. */
+/* Quiet cream marker with a fixed brand-red arrow. */
 .home-page .header-cta > svg.header-cta-icon:not(.capsule-caption) {
   width:40px; height:40px; right:6px; flex:0 0 40px;
   transform:none; transition:none; overflow:visible;
 }
-.home-page .header-cta .header-cta-icon circle { fill:var(--ink); stroke:none; }
+.home-page .header-cta .header-cta-icon circle { fill:var(--cream); stroke:none; }
 .home-page .header-cta .header-cta-icon path {
-  fill:none; stroke:var(--cream); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;
+  fill:none; stroke:var(--bord); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;
 }
 .home-page .header-cta:hover .header-cta-icon circle,
 .home-page .header-cta:focus-visible .header-cta-icon circle { fill:var(--cream); }
 .home-page .header-cta:hover .header-cta-icon path,
-.home-page .header-cta:focus-visible .header-cta-icon path { stroke:var(--ink); }
-.home-page .header-cta:active .header-cta-icon { animation:header-marker-press .4s cubic-bezier(.2,.8,.2,1); }
-@keyframes header-marker-press {
-  0% { transform:scale(1) rotate(0); }
-  35% { transform:scale(.78) rotate(-18deg); }
-  72% { transform:scale(1.08) rotate(8deg); }
-  100% { transform:scale(1) rotate(0); }
-}
+.home-page .header-cta:focus-visible .header-cta-icon path { stroke:var(--bord); }
 @media(max-width:600px) {
   .home-page .header-cta > svg.header-cta-icon:not(.capsule-caption) {
     width:28px; height:28px; right:4px; flex-basis:28px;
