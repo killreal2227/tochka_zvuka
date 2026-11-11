@@ -367,13 +367,13 @@
 .lead-modal .pk input:focus-visible+label .choice-icon { opacity:1; }
 
 /* Equal-width rounded actions with matching circular icons. */
-.lead-modal .send { grid-template-columns:repeat(2,minmax(0,1fr)); }
-.lead-modal .action-pane { grid-template-rows:64px minmax(42px,auto); }
+.lead-modal .send { grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); }
+.lead-modal .action-pane { grid-template-rows:56px minmax(42px,auto); }
 .lead-modal .btn.lead-submit,.lead-modal .btn.lead-call {
   position:relative; isolation:isolate; border:0; border-radius:var(--tz-panel-radius);
   background:transparent; padding:8px 10px 8px 18px; align-self:center;
 }
-.lead-modal .btn.lead-submit { --action-bg:var(--accent); height:64px; min-height:64px; font-size:18px; }
+.lead-modal .btn.lead-submit { --action-bg:var(--accent); height:56px; min-height:56px; font-size:16px; }
 .lead-modal .btn.lead-call { --action-bg:#e7ded4; height:56px; min-height:56px; font-size:16px; }
 .lead-modal .btn.lead-submit::before,.lead-modal .btn.lead-call::before {
   content:""; position:absolute; inset:0; z-index:-1; background:var(--action-bg);
