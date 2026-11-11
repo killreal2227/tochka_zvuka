@@ -459,7 +459,7 @@ img,svg{display:block;max-width:100%}
         <li><a class="branch-opt" data-branch="kaluga" href="../kaluga/"><span class="pt"></span><span><b>Калуга</b><span>Ленина, 79</span></span></a></li>
       </ul>
     </div>
-    <button class="btn sm openForm" type="button"><span data-lead-cta>Записаться</span><i><svg><use href="#i-arrow"/></svg></i></button>
+    <button class="btn sm openForm" type="button"><span data-lead-cta>Первое занятие</span><i><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12m-5-5 5 5 5-5"/></svg></i></button>
   </div>
 </header>
 
@@ -755,17 +755,26 @@ const stepsEl=$('#steps'), stepItems=$$('.step',stepsEl);
 /* Progress depends only on scroll position, with no timed sequencing. */
 function stepsUpdate(){
   const mobile=matchMedia('(max-width:680px)').matches;
-  if(mobile){
-    stepItems.forEach(step=>step.classList.toggle('on',reduce||step.getBoundingClientRect().top<=innerHeight*.72));
-    return;
-  }
   const r=stepsEl.getBoundingClientRect();
-  const raw=(innerHeight*.78-r.top)/Math.max(1,innerHeight*.5);
-  const progress=reduce?1:Math.max(0,Math.min(1,raw));
-  const track=stepItems[stepItems.length-1].offsetLeft-stepItems[0].offsetLeft;
+  let track,fill,progress;
+  if(mobile){
+    const first=stepItems[0].offsetTop+22;
+    track=stepItems[stepItems.length-1].offsetTop-stepItems[0].offsetTop;
+    fill=reduce?track:Math.max(0,Math.min(track,innerHeight*.65-r.top-first));
+    progress=track?fill/track:1;
+    stepsEl.style.setProperty('--steps-start',first+'px');
+  }else{
+    track=stepItems[stepItems.length-1].offsetLeft-stepItems[0].offsetLeft;
+    progress=reduce?1:Math.max(0,Math.min(1,(innerHeight*.78-r.top)/Math.max(1,innerHeight*.5)));
+    fill=track*progress;
+  }
   stepsEl.style.setProperty('--steps-track',track+'px');
-  stepsEl.style.setProperty('--steps-fill',(track*progress)+'px');
-  stepItems.forEach((step,i)=>step.classList.toggle('on',reduce||(raw>=0&&progress>=i/Math.max(1,stepItems.length-1))));
+  stepsEl.style.setProperty('--steps-fill',fill+'px');
+  const current=mobile?stepItems.reduce((last,step,i)=>step.offsetTop-stepItems[0].offsetTop<=fill?i:last,0):Math.min(stepItems.length-1,Math.floor(progress*(stepItems.length-1)));
+  stepItems.forEach((step,i)=>{
+    step.classList.toggle('on',reduce||i<=current);
+    step.classList.toggle('is-current',!reduce&&i===current);
+  });
 }
 let stepsFrame=0;
 function scheduleSteps(){if(!stepsFrame)stepsFrame=requestAnimationFrame(()=>{stepsFrame=0;stepsUpdate();});}
@@ -783,7 +792,7 @@ addEventListener('resize',scheduleSteps);stepsUpdate();
 
 /* фоны направлений: оригинальные SVG-паттерны (patterns/*.svg) встраиваются на лету, чтобы двигать их собственные фигуры.
    Без JS и при reduced-motion остаются обычные CSS-фоны из тех же файлов. */
-const bgReady = (!reduce && matchMedia('(hover:hover) and (pointer:fine)').matches && 'DOMParser' in window) ? (()=>{
+const bgReady = (!reduce && 'DOMParser' in window) ? (()=>{
   const kinds={vocal:['vocal'],guitar:['guitar'],drums:['drums'],piano:['piano'],actor:['actor-orange','actor-blue'],speech:['speech']};
   const load=file=>fetch('../patterns/'+file+'.svg').then(r=>r.ok?r.text():Promise.reject(r.status)).then(t=>{
     t=t.replace(/clip_(\d+)/g,`${file}_c$1`).replace(/ id="layer_\d+"/g,'');   // id уникальны в пределах страницы
@@ -872,10 +881,10 @@ function prepCard(card){
 /* Pointer-only playback; touch and keyboard focus do not start direction motion. */
 const directionMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(hover:hover) and (pointer:fine)');
-let hoveredCard=null;
+let hoveredCard=null,scrollCard=null;
 const directionPlayer=window.createDirectionPlayer({
   ready:bgReady, prepare:prepCard,
-  eligible:c=>finePointer.matches&&c===hoveredCard,
+  eligible:c=>finePointer.matches?c===hoveredCard:c===scrollCard,
   reduced:()=>directionMotion.matches,
   blocked:()=>document.hidden||!document.getElementById('leadModal').hidden
 });
@@ -893,6 +902,33 @@ directionMotion.addEventListener('change',stopDirections);
 finePointer.addEventListener('change',stopDirections);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopDirections();});
 document.addEventListener('tz:lead-open',stopDirections);
+/* Touch: one visible card plays and reveals its description near the viewport center. */
+const scrollCards=$$('.card[data-dir]');
+let cardFrame=0;
+function updateScrollCard(){
+  cardFrame=0;
+  let next=null,distance=Infinity;
+  if(!finePointer.matches&&!document.hidden&&document.getElementById('leadModal').hidden){
+    scrollCards.forEach(card=>{
+      const r=card.getBoundingClientRect();
+      if(r.bottom<=innerHeight*.2||r.top>=innerHeight*.8)return;
+      const d=Math.abs((r.top+r.bottom)/2-innerHeight*.5);
+      if(d<distance){distance=d;next=card;}
+    });
+  }
+  scrollCards.forEach(card=>card.classList.toggle('is-active',card===next));
+  if(next!==scrollCard){directionPlayer.stop();scrollCard=next;}
+  if(next)directionPlayer.request(next);
+}
+function scheduleScrollCard(){if(!cardFrame)cardFrame=requestAnimationFrame(updateScrollCard);}
+addEventListener('scroll',scheduleScrollCard,{passive:true});
+addEventListener('resize',scheduleScrollCard);
+finePointer.addEventListener('change',scheduleScrollCard);
+document.addEventListener('visibilitychange',scheduleScrollCard);
+document.addEventListener('tz:lead-open',scheduleScrollCard);
+document.addEventListener('tz:lead-close',scheduleScrollCard);
+scheduleScrollCard();
+
 
 /* ═════════ ЖИВЫЕ ИЛЛЮСТРАЦИИ ═════════ */
 /* крутит step(dt) только пока элемент на экране и вкладка видна */
