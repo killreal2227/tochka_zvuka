@@ -618,3 +618,12 @@
   pointer-events:none; -webkit-user-drag:none;
   -webkit-user-select:none; user-select:none;
 }
+
+/* One shared color treatment for the actual header CTA on every page. */
+body:is(.home-page,[data-city]) :is(.home-header,.top) button.header-cta {
+  background:var(--bord); border-color:var(--bord); color:var(--cream);
+}
+body:is(.home-page,[data-city]) :is(.home-header,.top) button.header-cta:hover,
+body:is(.home-page,[data-city]) :is(.home-header,.top) button.header-cta:focus-visible {
+  background:#802e38; border-color:#802e38; color:var(--cream);
+}
