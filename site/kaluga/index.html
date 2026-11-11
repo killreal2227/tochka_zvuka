@@ -435,7 +435,7 @@ img,svg{display:block;max-width:100%}
 <link rel="stylesheet" href="../experience.css?v=a0521dc172">
 <script src="../lead-form.js?v=da53518a31" defer></script>
 <link rel="stylesheet" href="../form.css?v=1aef385385">
-<link rel="stylesheet" href="../city-ui.css?v=212aec4a2d"><script src="../city-ui.js?v=f4871e6031" defer></script>
+<link rel="stylesheet" href="../city-ui.css?v=9eb9ee489b"><script src="../city-ui.js?v=f4871e6031" defer></script>
 <script src="../button-labels.js?v=3397abeb3f" defer></script>
 </head>
 <body data-city="kaluga">
@@ -660,6 +660,7 @@ img,svg{display:block;max-width:100%}
 </footer>
 
 
+<button class="direction-tour-skip" id="directionTourSkip" type="button" hidden>Продолжить прокрутку</button>
 <div class="modal lead-modal" id="leadModal" hidden aria-hidden="true">
   <div class="sheet lead-sheet" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="leadTitle">
     <button class="x lead-close" type="button" id="close" aria-label="Закрыть"><svg><use href="#i-x"/></svg></button>
@@ -755,7 +756,7 @@ img,svg{display:block;max-width:100%}
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="../direction-player.js?v=2486ffc222"></script>
+<script src="../direction-player.js?v=fb595bbb0a"></script>
 <script>
 const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
@@ -971,7 +972,7 @@ const directionPlayer=window.createDirectionPlayer({
 });
 $$('.card[data-dir]').forEach(card=>{
   card.addEventListener('pointerenter',e=>{
-    if(!finePointer.matches||e.pointerType==='touch')return;
+    if(directionHold||!finePointer.matches||e.pointerType==='touch')return;
     scrollTour.stop();hoveredCard=card;directionPlayer.request(card);
   });
   const leave=()=>{if(hoveredCard===card)hoveredCard=null;directionPlayer.leave(card);};
@@ -991,14 +992,32 @@ const scrollPlayers=new Map(scrollCards.map(card=>[card,window.createDirectionPl
   reduced:()=>directionMotion.matches,
   blocked:()=>document.hidden||!document.getElementById('leadModal').hidden
 })]));
+let directionHold=false,lastTourRow=null;
+const tourSeen=new WeakSet(),tourSkip=document.getElementById('directionTourSkip');
+function releaseDirectionHold(){
+  directionHold=false;document.documentElement.classList.remove('direction-tour-held');tourSkip.hidden=true;
+}
+function holdDirectionRow(cards){
+  tourSeen.add(cards[0]);
+  const r=cards[0].getBoundingClientRect();
+  const header=document.querySelector('.top').getBoundingClientRect().height;
+  const available=innerHeight-header-80;
+  if(r.height>available)return;
+  window.scrollTo({top:Math.max(0,scrollY+r.top-header-(available-r.height)/2),behavior:'instant'});
+  directionHold=true;document.documentElement.classList.add('direction-tour-held');tourSkip.hidden=false;
+}
 const scrollTour=window.createDirectionRowTour({
   ready:bgReady,prepare:prepCard,playerFor:card=>scrollPlayers.get(card),
+  onStart:holdDirectionRow,onFinish:releaseDirectionHold,
   activate:active=>scrollCards.forEach(card=>card.classList.toggle('is-active',card===active)),
   blocked:()=>directionMotion.matches||document.hidden||!document.getElementById('leadModal').hidden
 });
+tourSkip.addEventListener('click',()=>scrollTour.stop());
+document.addEventListener('keydown',e=>{if(directionHold&&e.key==='Escape'){e.preventDefault();scrollTour.stop();}});
 let cardFrame=0;
 function updateScrollCard(){
   cardFrame=0;
+  if(directionHold)return;
   let next=[];
   if(!document.hidden&&document.getElementById('leadModal').hidden){
     const candidates=scrollCards.map(card=>({card,rect:card.getBoundingClientRect(),row:card.offsetTop}))
@@ -1006,12 +1025,16 @@ function updateScrollCard(){
     const central=candidates.reduce((best,item)=>!best||Math.abs((item.rect.top+item.rect.bottom)/2-innerHeight*.5)<Math.abs((best.rect.top+best.rect.bottom)/2-innerHeight*.5)?item:best,null);
     if(central)next=candidates.filter(item=>Math.abs(item.row-central.row)<2).map(item=>item.card);
   }
+  const key=next[0]||null;
+  if(key===lastTourRow)return;
+  lastTourRow=key;
   if(next.length){hoveredCard=null;directionPlayer.stop();}
+  if(key&&tourSeen.has(key)){scrollTour.stop();return;}
   scrollTour.request(next);
 }
 function scheduleScrollCard(){if(!cardFrame)cardFrame=requestAnimationFrame(updateScrollCard);}
 addEventListener('scroll',scheduleScrollCard,{passive:true});
-addEventListener('resize',scheduleScrollCard);
+addEventListener('resize',()=>{stopDirections();lastTourRow=null;scheduleScrollCard();});
 finePointer.addEventListener('change',scheduleScrollCard);
 document.addEventListener('visibilitychange',scheduleScrollCard);
 document.addEventListener('tz:lead-open',scheduleScrollCard);
