@@ -149,7 +149,6 @@ const formArt=(()=>{
   document.querySelectorAll('.openForm').forEach(el=>el.addEventListener('click',()=>open()));
   document.querySelectorAll('.card[data-dir]').forEach(el=>el.addEventListener('click',()=>open(el.dataset.dir)));
   modal.querySelector('.lead-close').addEventListener('click',close);
-  modal.querySelector('[data-lead-dismiss]').addEventListener('click',close);
   function syncBranch(){
     branchPicker.sync();
     const option=form.elements.branch.selectedOptions[0],caption=modal.querySelector('#leadBranchCaption');
