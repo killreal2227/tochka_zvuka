@@ -4,7 +4,7 @@
   const ns = 'http://www.w3.org/2000/svg';
   const entries = [];
   const init = () => {
-    document.querySelectorAll('.btn, .header-cta').forEach(button => {
+    document.querySelectorAll('.btn, .header-cta, .branch-btn').forEach(button => {
       const arrow = button.querySelector(':scope > i, :scope > svg');
       if (!arrow) return;
       let source = button.querySelector(':scope > span');

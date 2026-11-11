@@ -199,3 +199,47 @@ body[data-city] .top .top-right > .btn:hover { background:var(--ink); color:var(
 body[data-city] .top .top-right > .btn i svg path {
   fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;
 }
+
+/* Reserve the arrow column so descriptions wrap instead of passing underneath it. */
+body[data-city] main .card .desc {
+  box-sizing:border-box; padding-right:64px; white-space:normal; overflow-wrap:break-word;
+}
+body[data-city] main .card.is-active .desc,
+body[data-city] main .card:focus-visible .desc { max-height:156px; }
+@media(hover:hover) and (pointer:fine) {
+  body[data-city] main .card:hover .desc { max-height:156px; }
+}
+@media(max-width:680px) { body[data-city] main .card { min-height:280px; } }
+/* Stable header button geometry; icons never shrink or drift with label metrics. */
+body[data-city] .top .top-right > .btn {
+  position:relative; display:inline-flex; align-items:center; justify-content:flex-start;
+  line-height:1.2; white-space:nowrap; padding:8px 54px 8px 20px;
+}
+body[data-city] .top .btn i,
+body[data-city] .top .btn:hover i {
+  position:absolute; top:50%; right:6px; margin:0; flex:none;
+  transform:translateY(-50%); transition:none; color:var(--bord);
+}
+body[data-city] .top .branch-btn {
+  position:relative; box-sizing:border-box; width:154px; height:54px;
+  display:flex; align-items:center; border:1px solid var(--ink);
+  padding:8px 36px 8px 16px; font-size:16px; line-height:1.2; gap:0;
+}
+body[data-city] .top .branch-btn > svg:not(.capsule-caption) {
+  position:absolute; right:14px; top:50%; margin-top:-6px; width:12px; height:12px; flex:none;
+}
+body[data-city] .top .branch-btn > svg.capsule-caption {
+  position:absolute; inset:0; width:100%!important; height:100%!important; max-width:none;
+  margin:0; padding:0; pointer-events:none; overflow:visible;
+  transform:none!important; transition:none!important; animation:none!important;
+  fill:currentColor; stroke:none; flex:none;
+}
+@media(max-width:760px) {
+  body[data-city] .top .top-right > .btn { padding:4px 38px 4px 12px; }
+  body[data-city] .top .btn i { right:4px; }
+  body[data-city] .top .branch-btn {
+    width:112px; height:30px; min-height:30px; font-size:13px;
+    padding:4px 28px 4px 12px;
+  }
+  body[data-city] .top .branch-btn > svg:not(.capsule-caption) { right:10px; width:10px; height:10px; margin-top:-5px; }
+}
