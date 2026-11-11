@@ -136,7 +136,7 @@ test('1000px is narrow and hides header cities; 1001px remains desktop', () => {
     assert.equal(resolve(width, 'grid')['grid-template-columns'], 'minmax(0, 1fr)');
     assert.equal(resolve(width, 'cities')['justify-content'], 'space-between');
     assert.equal(resolve(width, 'cities').display, 'none');
-    assert.equal(resolve(width, 'header').height, '72px');
+    assert.equal(resolve(width, 'header').height, 'calc(260px * 240 / 567)');
   }
   assert.equal(resolve(1001, 'header').display, 'flex');
   assert.equal(resolve(1001, 'grid')['grid-template-columns'], 'repeat(2, minmax(0, 1fr))');
@@ -166,23 +166,29 @@ test('hidden-navigation header keeps both items fixed-size and aligned at narrow
   for (const width of [320, 360, 375, 390, 393, 680, 768, 999.5]) {
     const header = resolve(width, 'header'), brand = resolve(width, 'brand'), cta = resolve(width, 'cta');
     assert.equal(header['flex-wrap'], 'nowrap');
-    assert.equal(header['justify-content'], 'space-between');
+    assert.equal(header['justify-content'], width<=600?'center':'space-between');
     assert.equal(header['align-items'], 'center');
-    assert.equal(brand.flex, `0 0 ${brand.width}`); assert.equal(cta.flex, `0 0 ${cta.width}`);
+    assert.equal(brand.flex, '0 0 auto'); assert.equal(cta.flex, '0 0 230px');
     const number = v => Number.parseFloat(v);
     const reserved = number(header['padding-left']) + number(brand.width) + number(header.gap)
       + number(cta.width) + number(header['padding-right']);
-    assert.ok(reserved <= width, `${width}px: reserved header widths ${reserved}`);
+    if(width>600) assert.ok(reserved <= width, `${width}px: reserved header widths ${reserved}`);
+    else {
+      assert.equal(header['flex-direction'],'column');
+      assert.ok(number(brand.width)+number(header['padding-left'])+number(header['padding-right'])<=width);
+      const stack=260*91/567+54+number(header.gap)+number(header['padding-top'])+number(header['padding-bottom']);
+      assert.ok(stack<=260*240/567,'fixed-size stack fits in three logo diameters');
+    }
   }
 });
 
 test('main header has fixed desktop and narrow sizes without viewport scaling', () => {
   for (const width of [320,375,680,768,999,1000,1001,1440,2560]) {
-    assert.equal(resolve(width,'brand').width,width>1000?'260px':width<=360?'144px':width<=390?'152px':'176px');
-    assert.equal(resolve(width,'cta').width,width>1000?'230px':width<=360?'136px':width<=390?'140px':'148px');
-    assert.equal(resolve(width,'cta')['font-size'],width>1000?'16px':'13px');
-    if(width>1000) assert.equal(resolve(width,'cta').height,'54px');
-    assert.equal(resolve(width,'header').height,'72px');
+    assert.equal(resolve(width,'brand').width,'260px');
+    assert.equal(resolve(width,'cta').width,'230px');
+    assert.equal(resolve(width,'cta')['font-size'],'16px');
+    assert.equal(resolve(width,'cta').height,'54px');
+    assert.equal(resolve(width,'header').height,'calc(260px * 240 / 567)');
     assert.equal(resolve(width,'brand').transform,'none');
   }
 });

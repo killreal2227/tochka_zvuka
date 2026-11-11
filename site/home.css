@@ -220,30 +220,22 @@
   }
 }
 
-/* Shorter header, with a modestly larger compact logo and enrollment button. */
-.home-page { --header-height:72px; }
-.home-page .home-header { height:72px; min-height:72px; padding-top:8px; padding-bottom:8px; }
-@media(max-width:1000px) {
-  .home-page .home-brand { width:176px; min-width:176px; max-width:176px; flex:0 0 176px; }
-  .home-page .header-cta,
-  .home-page .header-cta:hover,
-  .home-page .header-cta:focus-visible {
-    width:148px; min-width:148px; flex:0 0 148px; height:44px; min-height:44px;
-    font-size:13px !important; padding:8px 12px; border-radius:22px;
-  }
-  .home-page .header-cta > svg:not(.capsule-caption) { right:12px; }
+/* The round mark spans 80 units in the 567-unit logo. Header = 3 diameters. */
+.home-page { --header-height:calc(260px * 240 / 567); }
+.home-page .home-header {
+  height:calc(260px * 240 / 567); min-height:calc(260px * 240 / 567);
+  padding-top:8px; padding-bottom:8px; gap:24px;
 }
-@media(max-width:390px) {
-  .home-page .home-header { padding-left:12px; padding-right:12px; gap:8px; }
-  .home-page .home-brand { width:152px; min-width:152px; max-width:152px; flex:0 0 152px; }
-  .home-page .header-cta,
-  .home-page .header-cta:hover,
-  .home-page .header-cta:focus-visible { width:140px; min-width:140px; flex:0 0 140px; }
+.home-page .home-brand { width:260px; min-width:260px; max-width:260px; flex:0 0 auto; }
+.home-page .header-actions { display:flex; align-items:center; flex:0 0 auto; gap:28px; }
+.home-page .header-cities { width:auto; flex:0 0 auto; }
+.home-page .header-cta,
+.home-page .header-cta:hover,
+.home-page .header-cta:focus-visible {
+  width:230px; min-width:230px; height:54px; min-height:54px; flex:0 0 230px;
+  font-size:16px !important; padding:8px 12px; border-radius:27px;
 }
-@media(max-width:360px) {
-  .home-page .home-header { padding-left:10px; padding-right:10px; }
-  .home-page .home-brand { width:144px; min-width:144px; max-width:144px; flex:0 0 144px; }
-  .home-page .header-cta,
-  .home-page .header-cta:hover,
-  .home-page .header-cta:focus-visible { width:136px; min-width:136px; flex:0 0 136px; }
+.home-page .header-cta > svg:not(.capsule-caption) { right:16px; }
+@media(max-width:600px) {
+  .home-page .home-header { flex-direction:column; justify-content:center; gap:4px; padding:4px 10px; }
 }
