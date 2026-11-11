@@ -332,18 +332,3 @@ body[data-city] .top .branch-current-address { font-size:14px; line-height:1.3; 
   }
   body[data-city] .top .branch-current-address { font-size:14px; }
 }
-
-/* Hold a complete row for its one-time tour; the user can skip at any moment. */
-html.direction-tour-held, html.direction-tour-held body { overflow:hidden!important; overscroll-behavior:none; }
-html:has(body[data-city]) { scrollbar-gutter:stable; }
-.direction-tour-skip[hidden] { display:none!important; }
-.direction-tour-skip {
-  position:fixed; z-index:45; left:50%; bottom:max(20px,env(safe-area-inset-bottom));
-  transform:translateX(-50%); max-width:calc(100vw - 32px); min-height:44px;
-  padding:12px 24px; border:1px solid var(--bord); border-radius:22px;
-  background:var(--cream); color:var(--bord); box-shadow:0 4px 20px #1a1a1a18;
-  font-family:"Architexture","Century Gothic",sans-serif; font-size:16px; line-height:1.3;
-  cursor:pointer;
-}
-.direction-tour-skip:hover { background:var(--bord); color:var(--cream); }
-.direction-tour-skip:focus-visible { outline:2px solid var(--ink); outline-offset:4px; }

@@ -35,12 +35,11 @@
     return api;
   };
   // A single left-to-right pass; changing rows cancels every pending continuation.
-  window.createDirectionRowTour=({ready,prepare,playerFor,activate,blocked=()=>false,onStart=()=>{},onFinish=()=>{},clock=window})=>{
-    let row=[],timer=0,generation=0,started=false;
+  window.createDirectionRowTour=({ready,prepare,playerFor,activate,blocked=()=>false,clock=window})=>{
+    let row=[],timer=0,generation=0;
     function stop(){
       generation++;if(timer)clock.clearTimeout(timer);timer=0;
       row.forEach(card=>playerFor(card).stop());row=[];activate(null);
-      if(started){started=false;onFinish();}
     }
     function request(cards){
       if(cards.length===row.length&&cards.every((card,i)=>card===row[i]))return;
@@ -55,10 +54,9 @@
           timer=clock.setTimeout(()=>{
             timer=0;if(token!==generation)return;
             if(index+1<row.length)play(index+1);
-            else if(started){started=false;onFinish();}
           },duration*1000+250);
         }
-        if(token===generation&&!blocked()){started=true;onStart(row);play(0);}
+        if(token===generation&&!blocked())play(0);
       }).catch(()=>{if(token===generation)stop();});
     }
     return {request,stop};

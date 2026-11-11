@@ -261,7 +261,7 @@ function scrollCardScene(){
   const card=(top,bottom)=>({rect:{top,bottom},active:false,get offsetTop(){return this.rect.top;},getBoundingClientRect(){return this.rect;},classList:{toggle(_,value){this.owner.active=value;}}});
   const cards=[card(100,300),card(340,540),card(850,1050)];cards.forEach(c=>c.classList.owner=c);
   const calls=[],modal={hidden:true},document={hidden:false,getElementById:()=>modal};
-  const context={cardFrame:0,directionHold:false,lastTourRow:null,tourSeen:new WeakSet(),scrollCards:cards,scrollTour:{request(row){cards.forEach(c=>c.active=row.includes(c));calls.push(...row);}},hoveredCard:null,finePointer:{matches:false},document,innerHeight:800,
+  const context={cardFrame:0,scrollCards:cards,scrollTour:{request(row){cards.forEach(c=>c.active=row.includes(c));calls.push(...row);}},hoveredCard:null,finePointer:{matches:false},document,innerHeight:800,
     directionPlayer:{stop(){calls.push('stop');},request(c){calls.push(c);}}};
   vm.createContext(context);vm.runInContext(fn,context);
   return {context,cards,calls,modal,update:()=>context.updateScrollCard()};
@@ -307,23 +307,26 @@ test('branch header shows only its current address without a branch switching co
 });
 
 test('a three-column row tours left to right and cancels its timer on exit',async()=>{
-  const window={},timers=new Map();let sequence=0,active=null,holding=false;
+  const window={},timers=new Map();let sequence=0,active=null;
   vm.runInNewContext(source('direction-player.js'),{window,Promise});
   const cards=[{id:'left'},{id:'middle'},{id:'right'}],played=[];
   const players=new Map(cards.map(card=>[card,{stop(){},request(c){played.push(c.id);}}]));
   const tour=window.createDirectionRowTour({ready:Promise.resolve(),prepare:()=>2.9,playerFor:c=>players.get(c),
-    activate:c=>active=c,onStart:()=>holding=true,onFinish:()=>holding=false,clock:{setTimeout(fn){const id=++sequence;timers.set(id,fn);return id;},clearTimeout(id){timers.delete(id);}}});
+    activate:c=>active=c,clock:{setTimeout(fn){const id=++sequence;timers.set(id,fn);return id;},clearTimeout(id){timers.delete(id);}}});
   const advance=()=>{const batch=[...timers.values()];timers.clear();batch.forEach(fn=>fn());};
-  tour.request(cards);await settle();assert.equal(active,cards[0]);assert.equal(holding,true);
+  tour.request(cards);await settle();assert.equal(active,cards[0]);
   tour.request(cards);assert.equal(timers.size,1);
   advance();assert.equal(active,cards[1]);advance();assert.equal(active,cards[2]);
-  assert.deepEqual(played,['left','middle','right']);assert.equal(timers.size,1);advance();assert.equal(timers.size,0);assert.equal(holding,false);
+  assert.deepEqual(played,['left','middle','right']);assert.equal(timers.size,1);advance();assert.equal(timers.size,0);
   tour.request([]);assert.equal(active,null);
   tour.request(cards);await settle();assert.equal(timers.size,1);
-  tour.stop();assert.equal(timers.size,0);assert.equal(active,null);assert.equal(holding,false);
+  tour.stop();assert.equal(timers.size,0);assert.equal(active,null);
 });
 
-test('scroll cannot switch rows during the held tour',()=>{
-  const s=scrollCardScene();s.context.directionHold=true;s.update();assert.equal(s.calls.length,0);
-  s.context.directionHold=false;s.update();assert.ok(s.calls.length>0);
+test('direction tours never lock or reposition page scrolling',()=>{
+  const template=fs.readFileSync(new URL('../templates/city.html',import.meta.url),'utf8');
+  const section=template.slice(template.indexOf('const scrollCards='),template.indexOf('function liveLoop('));
+  const css=source('city-ui.css');
+  assert.ok(!section.includes('scrollTo('));assert.ok(!section.includes('preventDefault('));
+  assert.ok(!template.includes('directionTourSkip'));assert.ok(!css.includes('direction-tour-held'));
 });
