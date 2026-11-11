@@ -558,12 +558,12 @@
 
 /* Compact confirmation, with a single left-aligned content column. */
 .lead-modal .sheet:has(.lead-success:not([hidden])) {
-  width:min(560px,100%); height:auto; min-height:0;
+  width:min(488px,100%); height:auto; min-height:0;
   grid-template-columns:minmax(0,1fr); grid-template-rows:auto;
 }
 .lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-art { display:none; }
 .lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-body {
-  padding:64px 64px 56px; max-height:calc(100svh - 32px);
+  padding:56px 64px 48px; max-height:calc(100svh - 32px);
 }
 .lead-modal .sheet .lead-success {
   display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start;
@@ -571,33 +571,33 @@
   font-family:"Architexture","Century Gothic",sans-serif; font-synthesis:none;
 }
 .lead-modal .sheet .lead-success #doneText {
-  font-family:inherit; font-size:clamp(40px,6vw,64px); font-weight:400;
-  line-height:1.1; letter-spacing:0; color:var(--ink); margin:0 0 24px;
+  font-family:inherit; font-size:46px; font-weight:400;
+  line-height:1.1; letter-spacing:0; color:var(--ink); margin:0 0 16px;
 }
 .lead-modal .sheet .lead-success .success-message {
-  display:flex; flex-direction:column; align-items:flex-start; gap:8px;
+  display:flex; flex-direction:column; align-items:flex-start; gap:6px;
   max-width:100%; font-family:inherit; font-weight:400; line-height:1.4;
-  color:#786c62; margin:0 0 20px;
+  color:#786c62; margin:0 0 16px;
 }
 .lead-modal .sheet .lead-success .success-message > span {
-  font-family:inherit; font-size:18px; line-height:1.4;
+  font-family:inherit; font-size:16px; line-height:1.4;
 }
 .lead-modal .sheet .lead-success .success-message em {
   display:inline-block; box-sizing:border-box; width:max-content; max-width:100%;
-  font-family:inherit; font-size:44px; font-style:normal; font-weight:400; line-height:1.1;
-  white-space:nowrap; padding:8px 12px 10px; border-radius:0;
+  font-family:inherit; font-size:36px; font-style:normal; font-weight:400; line-height:1.1;
+  white-space:nowrap; padding:6px 10px 8px; border-radius:0;
   background:var(--bord); color:var(--cream);
 }
 .lead-modal .sheet .lead-success .success-followup {
-  max-width:100%; font-family:inherit; font-size:18px; font-weight:400;
-  line-height:1.4; color:#786c62; margin:0 0 32px; overflow-wrap:break-word;
+  max-width:100%; font-family:inherit; font-size:16px; font-weight:400;
+  line-height:1.4; color:#786c62; margin:0 0 28px; overflow-wrap:break-word;
 }
 .lead-modal .sheet .lead-success #doneClose {
-  position:relative; box-sizing:border-box; width:220px; max-width:100%;
-  height:auto; min-height:56px; padding:12px 24px; align-self:flex-start;
+  position:relative; box-sizing:border-box; width:168px; max-width:100%;
+  height:auto; min-height:48px; padding:10px 24px; align-self:flex-start;
   justify-content:center; border-radius:var(--tz-panel-radius);
   background:var(--bord); color:var(--cream); border:0;
-  font-family:inherit; font-size:20px; font-weight:400; line-height:1.4;
+  font-family:inherit; font-size:18px; font-weight:400; line-height:1.4;
   text-transform:none; white-space:normal;
 }
 .lead-modal .sheet .lead-success #doneClose:hover { background:#802e38; color:var(--cream); }
@@ -610,8 +610,9 @@
 }
 .lead-modal .sheet:has(.lead-success:not([hidden])) .lead-close svg { width:14px; height:14px; }
 @media(max-width:600px) {
-  .lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-body { padding:56px 24px 32px; }
-  .lead-modal .sheet .lead-success .success-message em { font-size:clamp(26px,7.5vw,44px); }
+  .lead-modal .sheet .lead-success #doneText { font-size:40px; }
+  .lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-body { padding:48px 24px 28px; }
+  .lead-modal .sheet .lead-success .success-message em { font-size:clamp(28px,7.5vw,36px); }
 }
 
 /* The same direction selection outline on desktop, tablet and phone. */
