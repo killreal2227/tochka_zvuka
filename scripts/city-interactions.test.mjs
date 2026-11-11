@@ -286,51 +286,40 @@ test('scroll selection reverses in three columns and ignores tiny boundary movem
   assert.equal(pick(.38,3,0),1);assert.equal(pick(.29,3,1),0);
   assert.equal(pick(.7,2,0),1);assert.equal(pick(.2,2,1),0);assert.equal(pick(.9,1,0),0);
 });
-function stickyScene(width=1735,height=900){
-  const events=()=>({handlers:new Map(),addEventListener(k,fn,options){const list=this.handlers.get(k)||[];list.push({fn,options});this.handlers.set(k,list);},emit(k,event={}){(this.handlers.get(k)||[]).forEach(x=>x.fn(event));}});
-  const element=()=>Object.assign(events(),{children:[],className:'',classes:new Set(),style:{props:{},setProperty(k,v){this.props[k]=v;}},rect:{top:250,bottom:650,height:400},
-    append(child){this.children.push(child);},getBoundingClientRect(){return this.rect;}});
-  const setup=node=>{node.classList={add:k=>node.classes.add(k),toggle(k,value){value?node.classes.add(k):node.classes.delete(k);},contains:k=>node.classes.has(k)};return node;};
-  const cards=Array.from({length:6},()=>setup(element())),grid=setup(element()),header=element(),modal={hidden:true};header.rect={height:110};
-  grid.querySelectorAll=()=>cards;grid.replaceChildren=fragment=>grid.children=[...fragment.children];
-  const document=Object.assign(events(),{hidden:false,querySelector:s=>s==='#dirs .grid'?grid:header,getElementById:()=>modal,
-    createDocumentFragment:()=>element(),createElement:()=>setup(element())});
-  const window=events(),frames=new Map();let sequence=0,active=null,requests=0;
-  const context={window,document,innerHeight:height,matchMedia:q=>({matches:q.includes('680px')?width<=680:q.includes('1000px')?width<=1000:q.includes('pointer:fine'),addEventListener(){}}),
-    requestAnimationFrame:fn=>{const id=++sequence;frames.set(id,fn);return id;}};
+function ordinaryScene(finePointer=false){
+  const events=()=>({handlers:new Map(),addEventListener(k,fn,options){const list=this.handlers.get(k)||[];list.push({fn,options});this.handlers.set(k,list);},emit(k,e={}){(this.handlers.get(k)||[]).forEach(x=>x.fn(e));}});
+  const cards=Array.from({length:6},(_,i)=>Object.assign(events(),{offsetTop:i<3?500:1100,rect:{top:i<3?500:1100,bottom:i<3?780:1380},classes:new Set(),getBoundingClientRect(){return this.rect;}}));
+  cards.forEach(card=>card.classList={toggle(k,v){v?card.classes.add(k):card.classes.delete(k);}});
+  const grid={querySelectorAll:()=>cards},modal={hidden:true},document=Object.assign(events(),{hidden:false,querySelector:()=>grid,getElementById:()=>modal});
+  const window=events(),frames=new Map(),played=[];let sequence=0;
+  const fine=Object.assign(events(),{matches:finePointer}),reduced=Object.assign(events(),{matches:false});
+  const context={window,document,innerHeight:900,Promise,WeakSet,Map,
+    matchMedia:q=>q.includes('pointer:fine')?fine:reduced,requestAnimationFrame:fn=>{const id=++sequence;frames.set(id,fn);return id;}};
   vm.runInNewContext(source('direction-player.js'),context);
-  window.createDirectionPlayer=()=>({stop(){active=null;},request(card){active=card;requests++;}});
-  vm.runInNewContext(source('direction-scroll.js'),context);window.createStickyDirections({ready:Promise.resolve(),prepare:()=>2.9});
-  function tick(){const pending=[...frames.values()];frames.clear();pending.forEach(fn=>fn());}
-  tick();grid.children.slice(1).forEach(row=>{row.rect={top:1600,bottom:2000,height:400};row.children[0].rect={top:1600,bottom:2000,height:400};});
-  return {cards,grid,window,document,modal,context,tick,get active(){return active;},get requests(){return requests;},scroll(progress){
-    const row=grid.children[0],stage=row.children[0];const span=parseFloat(row.style.height)-400;const top=parseFloat(stage.style.props['--direction-sticky-top']);
-    row.rect={top:top-progress*span,height:400+span};window.emit('scroll');tick();
-  }};
+  window.createDirectionPlayer=options=>({stop(){},request(card){if(options.eligible(card)&&!options.reduced()&&!options.blocked()){options.prepare(card);played.push(card);}}});
+  vm.runInNewContext(source('direction-scroll.js'),context);window.createDirectionInteractions({ready:Promise.resolve(),prepare:()=>2.9});
+  const tick=()=>{const batch=[...frames.values()];frames.clear();batch.forEach(fn=>fn());};tick();
+  return {cards,grid,modal,document,window,played,tick,scroll(top){cards.slice(0,3).forEach(c=>c.rect={top,bottom:top+280});window.emit('scroll');tick();}};
 }
-test('sticky desktop selects one card from scroll distance and stays still without scroll',()=>{
-  const s=stickyScene();assert.equal(s.grid.children.length,2);
-  s.scroll(0);assert.equal(s.active,s.cards[0]);s.scroll(.5);assert.equal(s.active,s.cards[1]);
-  const requests=s.requests;s.tick();assert.equal(s.requests,requests);assert.equal(s.active,s.cards[1]);
-  s.scroll(.9);assert.equal(s.active,s.cards[2]);s.scroll(.5);assert.equal(s.active,s.cards[1]);s.scroll(.1);assert.equal(s.active,s.cards[0]);
+test('ordinary touch cards animate once while descriptions stay selected without timer changes',()=>{
+  const s=ordinaryScene();s.scroll(700);assert.ok(s.cards[0].classes.has('is-active'));
+  s.scroll(500);assert.ok(s.cards[1].classes.has('is-active'));
+  s.scroll(300);assert.ok(s.cards[2].classes.has('is-active'));
+  const count=s.played.length;s.scroll(700);assert.ok(s.cards[0].classes.has('is-active'));assert.equal(s.played.length,count);
+  s.tick();assert.ok(s.cards[0].classes.has('is-active'));
   assert.equal(s.cards.filter(c=>c.classes.has('is-active')).length,1);
   assert.ok(s.window.handlers.get('scroll')[0].options.passive);
-  assert.equal(s.window.handlers.has('wheel'),false);assert.equal(s.window.handlers.has('touchmove'),false);
 });
-test('sticky rows regroup for one and two columns and disable pinning on short screens',()=>{
-  assert.equal(stickyScene(800).grid.children.length,3);assert.equal(stickyScene(390).grid.children.length,6);
-  const s=stickyScene(1735,450);assert.ok(s.grid.children.every(row=>row.classes.has('is-static')));
-  assert.ok(s.grid.children.every(row=>row.style.height===''));
+test('desktop cards use hover and retain their existing grid DOM',()=>{
+  const s=ordinaryScene(true);assert.equal(s.played.length,0);
+  s.cards[2].emit('pointerenter',{pointerType:'mouse'});assert.ok(s.cards[2].classes.has('is-active'));
+  s.cards[2].emit('pointerleave');s.tick();assert.ok(s.cards.every(c=>!c.classes.has('is-active')));
+  s.cards[2].emit('pointerenter',{pointerType:'mouse'});assert.equal(s.played.length,2);
+  s.modal.hidden=false;s.document.emit('tz:lead-open');assert.ok(s.cards.every(c=>!c.classes.has('is-active')));
 });
-test('hover can choose a card and the next scroll returns control to scroll position',()=>{
-  const s=stickyScene();s.scroll(.5);s.cards[2].emit('pointerenter',{pointerType:'mouse'});assert.equal(s.active,s.cards[2]);
-  s.scroll(.5);assert.equal(s.active,s.cards[1]);
-  s.modal.hidden=false;s.document.emit('tz:lead-open');assert.equal(s.active,null);
-  s.modal.hidden=true;s.document.emit('tz:lead-close');s.tick();assert.equal(s.active,s.cards[1]);
-});
-test('sticky controller never locks or repositions page scrolling and has no selection timers',()=>{
+test('direction interactions add no sticky wrappers, extra height or scroll interception',()=>{
   const controller=source('direction-scroll.js'),css=source('city-ui.css');
-  assert.ok(!controller.includes('scrollTo('));assert.ok(!controller.includes('preventDefault('));
-  assert.ok(!controller.includes('setTimeout('));assert.ok(!css.includes('direction-tour-held'));
+  for(const forbidden of ['scrollTo(','preventDefault(','setTimeout(','createElement(','replaceChildren(','style.height'])assert.ok(!controller.includes(forbidden),forbidden);
+  assert.ok(!css.includes('direction-row-stage'));assert.ok(!css.includes('direction-tour-held'));
   assert.ok(css.includes('@media(width < 1400px)'));assert.ok(css.includes('font-size:17px; line-height:1.35;'));
 });

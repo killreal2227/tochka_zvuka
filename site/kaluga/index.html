@@ -435,7 +435,7 @@ img,svg{display:block;max-width:100%}
 <link rel="stylesheet" href="../experience.css?v=a0521dc172">
 <script src="../lead-form.js?v=da53518a31" defer></script>
 <link rel="stylesheet" href="../form.css?v=1aef385385">
-<link rel="stylesheet" href="../city-ui.css?v=f175e7fdd3"><script src="../city-ui.js?v=f4871e6031" defer></script>
+<link rel="stylesheet" href="../city-ui.css?v=38de0ca925"><script src="../city-ui.js?v=f4871e6031" defer></script>
 <script src="../button-labels.js?v=3397abeb3f" defer></script>
 </head>
 <body data-city="kaluga">
@@ -756,7 +756,7 @@ img,svg{display:block;max-width:100%}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="../direction-player.js?v=0bd0606969"></script>
-<script src="../direction-scroll.js?v=de81294e5d"></script>
+<script src="../direction-scroll.js?v=2cdba5a08e"></script>
 <script>
 const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
@@ -960,8 +960,8 @@ function prepCard(card){
   return card._prep;
 }
 
-/* Pointer-only playback; handled together with sticky scroll selection by the shared controller. */
-window.createStickyDirections({ready:bgReady,prepare:prepCard});
+/* Pointer-only playback; touch effects follow ordinary scrolling without pinned rows. */
+window.createDirectionInteractions({ready:bgReady,prepare:prepCard});
 
 function liveLoop(el, step){
   let on=false, vis=false, last=0, id=0;

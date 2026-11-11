@@ -863,8 +863,8 @@ function prepCard(card){
   return card._prep;
 }
 
-/* Pointer-only playback; handled together with sticky scroll selection by the shared controller. */
-window.createStickyDirections({ready:bgReady,prepare:prepCard});
+/* Pointer-only playback; touch effects follow ordinary scrolling without pinned rows. */
+window.createDirectionInteractions({ready:bgReady,prepare:prepCard});
 
 function liveLoop(el, step){
   let on=false, vis=false, last=0, id=0;
