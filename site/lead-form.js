@@ -35,6 +35,8 @@ const formArt=(()=>{
     if(v==='actor' && advanceActor){sheet.dataset.actorColor=actorNextBlue?'blue':'orange';actorNextBlue=!actorNextBlue;}
     $('#chips').classList.toggle('has',!!col[v]);
     $('#pickCap').textContent = col[v] ? directionLabels[v].toLocaleLowerCase('ru') : '';
+    const hint=$('#directionHint');
+    if(hint)hint.textContent=col[v]?'Нажми на выбранный кружок ещё раз, чтобы снять выбор':'Можно пропустить — поможем выбрать';
     positionDirectionNames();
   }
   form.addEventListener('change',e=>{ if(e.target.name==='direction') tint(true); });
@@ -73,7 +75,15 @@ const formArt=(()=>{
 })();
   window.addEventListener('resize',()=>formArt.resize(),{passive:true});
   reduceQuery.addEventListener('change',()=>{reduce=reduceQuery.matches;if(reduce)formArt.stop();else if(!modal.hidden)formArt.start();});
-  $$('.pk input').forEach(r=>{let was=false;r.closest('.pk').addEventListener('pointerdown',()=>{was=r.checked;});r.addEventListener('click',()=>{if(was){r.checked=false;was=false;formArt.tint();r.dispatchEvent(new Event('input',{bubbles:true}));}});});
+  $$('.pk input').forEach(r=>{
+    let was=false;
+    const notify=()=>{formArt.tint();r.dispatchEvent(new Event('input',{bubbles:true}));r.dispatchEvent(new Event('change',{bubbles:true}));};
+    r.closest('.pk').addEventListener('pointerdown',()=>{was=r.checked;});
+    r.addEventListener('click',()=>{if(was){r.checked=false;was=false;notify();}});
+    r.addEventListener('keydown',event=>{
+      if(event.key===' '){event.preventDefault();if(event.repeat)return;r.checked=!r.checked;was=false;notify();}
+    });
+  });
   const pageCity=document.body.dataset.city||'';
   let lastFocus=null,pending=null,sending=false;
   const branchPicker=(()=>{

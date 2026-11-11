@@ -235,7 +235,7 @@
 .lead-modal #formIntro, .lead-modal .direction-legend { text-transform: uppercase; letter-spacing: .025em; font-size: 14px; font-weight: 400; }
 .lead-modal .direction-legend { color: var(--muted); }
 .lead-modal .pick-row {
-  box-sizing: border-box; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  box-sizing: border-box; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
   align-items: start;
   gap: 12px 6px; width: 100%; max-width: 100%; padding: 8px 0 0; overflow: visible;
 }
@@ -444,3 +444,14 @@
   .lead-modal .pk label[data-ico="actor"] .choice-name,
   .lead-modal .pk label[data-ico="speech"] .choice-name { font-size:14px; }
 }
+
+/* Shared field typography, including the displayed combobox value. */
+.lead-modal .fields input,
+.lead-modal .lead-branch-control,
+.lead-modal #leadBranchValue,
+.lead-modal .lead-branch-list [role="option"],
+.lead-modal .lead-branch-label select {
+  font-family:"Architexture","Century Gothic",sans-serif;
+  font-size:20px; font-weight:400; line-height:1.4;
+}
+.lead-modal .direction-hint { margin:0 0 16px; font-family:Arial,sans-serif; font-size:13px; line-height:1.4; color:var(--muted); }

@@ -3,6 +3,22 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
+test('selected direction can be cleared by a second pointer activation or Space',()=>{
+  const source=fs.readFileSync(new URL('../site/lead-form.js',import.meta.url),'utf8');
+  const start=source.indexOf("  $$('.pk input').forEach");
+  const handlers={},parentHandlers={},changes=[];
+  const radio={checked:false,closest:()=>({addEventListener:(key,fn)=>parentHandlers[key]=fn}),addEventListener:(key,fn)=>handlers[key]=fn,dispatchEvent:event=>changes.push(event.type)};
+  let paints=0;
+  vm.runInNewContext(source.slice(start,source.indexOf('  const pageCity=',start)),{$$:()=>[radio],formArt:{tint(){paints++;}},Event:class{constructor(type){this.type=type;}}});
+  parentHandlers.pointerdown();radio.checked=true;handlers.click();assert.equal(radio.checked,true);
+  parentHandlers.pointerdown();handlers.click();assert.equal(radio.checked,false);
+  assert.deepEqual(changes,['input','change']);
+  const space={key:' ',preventDefault(){}};
+  handlers.keydown(space);assert.equal(radio.checked,true);
+  handlers.keydown({...space,repeat:true});assert.equal(radio.checked,true);
+  handlers.keydown(space);assert.equal(radio.checked,false);assert.equal(paints,3);
+});
+
 test('direction captions keep their center unless their actual width crosses the row edge',()=>{
   const source=fs.readFileSync(new URL('../site/lead-form.js',import.meta.url),'utf8');
   const fn=source.slice(source.indexOf('  function positionDirectionNames()'),source.indexOf("  window.addEventListener('resize',positionDirectionNames"));
