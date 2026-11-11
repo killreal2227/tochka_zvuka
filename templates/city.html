@@ -450,14 +450,8 @@ img,svg{display:block;max-width:100%}
 <header class="top" id="top">
   <a class="brand" href="../" aria-label="Точка звука — школа музыки, на главную"><svg><use href="#logo-full"/></svg></a>
   <div class="top-right">
-    <div class="branch" id="branch">
-      <button class="branch-btn" id="branchBtn" aria-expanded="false" aria-controls="branchList">
-        <span id="branchLabel">{{name}}</span><svg><use href="#i-down"/></svg>
-      </button>
-      <ul class="branch-list" id="branchList" aria-label="Выбор филиала">
-        <li><a class="branch-opt" data-branch="troitsk" href="../troitsk/"><span class="pt"></span><span><b>Троицк</b><span>3-ая Нововатутинская, 2</span></span></a></li>
-        <li><a class="branch-opt" data-branch="kaluga" href="../kaluga/"><span class="pt"></span><span><b>Калуга</b><span>Ленина, 79</span></span></a></li>
-      </ul>
+    <div class="branch-current" aria-label="Текущий филиал">
+      <span>Филиал {{name}}</span><span class="branch-current-address">{{address}}</span>
     </div>
     <button class="header-cta openForm" type="button">ПЕРВОЕ ЗАНЯТИЕ <svg class="header-cta-icon" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19"/><path d="M20 12v16m-6-6 6 6 6-6"/></svg></button>
   </div>
@@ -668,18 +662,6 @@ const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.documentElement.classList.add('js');
-
-/* City links navigate to independently rendered pages. */
-const bBtn=$('#branchBtn'), bList=$('#branchList');
-$$('.branch-opt').forEach(a=>{if(a.dataset.branch===document.body.dataset.city)a.setAttribute('aria-current','page');});
-function toggleBranch(open){
-  const state=open ?? !bList.classList.contains('open');
-  bList.classList.toggle('open',state);bBtn.setAttribute('aria-expanded',String(state));
-}
-bBtn.addEventListener('click',()=>toggleBranch());
-document.addEventListener('click',e=>{if(!e.target.closest('#branch'))toggleBranch(false);});
-bList.addEventListener('keydown',e=>{if(e.key==='Escape'){toggleBranch(false);bBtn.focus();}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleBranch(false);});
 
 let ac;
 function ping(freq){

@@ -287,3 +287,11 @@ test('mobile steps connect actual dot positions and progress in scroll order',()
   assert.deepEqual(items.map(x=>x.on),[true,true,false]);
   top=-100;context.stepsUpdate();assert.equal(props['--steps-fill'],'400px');assert.ok(items.every(x=>x.on));
 });
+
+test('branch header shows only its current address without a branch switching control',()=>{
+  const template=fs.readFileSync(new URL('../templates/city.html',import.meta.url),'utf8');
+  const header=template.slice(template.indexOf('<header class="top"'),template.indexOf('</header>'));
+  assert.ok(header.includes('class="branch-current"'));assert.ok(header.includes('{{address}}'));
+  assert.ok(!header.includes('branchBtn'));assert.ok(!header.includes('branch-opt'));
+  assert.ok(!template.includes("const bBtn="));assert.ok(header.includes('header-cta openForm'));
+});

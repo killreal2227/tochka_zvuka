@@ -284,3 +284,19 @@ body[data-city] .top .header-cta .header-cta-icon path {
     width:28px; height:28px; right:4px; flex-basis:28px;
   }
 }
+
+/* Branch pages show the current location as text, without a switcher. */
+body[data-city] .top-right { min-width:0; }
+body[data-city] .branch-current {
+  display:flex; flex-direction:column; gap:2px; min-width:0; max-width:240px;
+  font-family:var(--brand-font); font-size:16px; line-height:1.3; color:var(--ink);
+}
+body[data-city] .branch-current-address { font-size:14px; color:#786c62; overflow-wrap:break-word; }
+@media(max-width:760px) {
+  body[data-city] .top { grid-template-rows:auto auto; height:auto; min-height:var(--header-height); }
+  body[data-city] .branch-current {
+    grid-column:1 / -1; grid-row:2; justify-self:end; max-width:100%;
+    flex-direction:row; flex-wrap:wrap; align-items:baseline; justify-content:flex-end;
+    column-gap:8px; row-gap:2px; font-size:14px;
+  }
+}
