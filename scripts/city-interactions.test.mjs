@@ -258,22 +258,32 @@ test('the single corner close control dismisses both form and confirmation',asyn
 function scrollCardScene(){
   const template=fs.readFileSync(new URL('../templates/city.html',import.meta.url),'utf8');
   const fn=template.slice(template.indexOf('function updateScrollCard(){'),template.indexOf('function scheduleScrollCard(){'));
-  const card=(top,bottom)=>({rect:{top,bottom},active:false,getBoundingClientRect(){return this.rect;},classList:{toggle(_,value){this.owner.active=value;}}});
+  const card=(top,bottom)=>({rect:{top,bottom},active:false,get offsetTop(){return this.rect.top;},getBoundingClientRect(){return this.rect;},classList:{toggle(_,value){this.owner.active=value;}}});
   const cards=[card(100,300),card(340,540),card(850,1050)];cards.forEach(c=>c.classList.owner=c);
   const calls=[],modal={hidden:true},document={hidden:false,getElementById:()=>modal};
-  const context={cardFrame:0,scrollCards:cards,scrollCard:null,finePointer:{matches:false},document,innerHeight:800,
+  const context={cardFrame:0,scrollCards:cards,scrollPlayers:new Map(cards.map(c=>[c,{request(card){calls.push(card);},stop(){calls.push("stop");}}])),finePointer:{matches:false},document,innerHeight:800,
     directionPlayer:{stop(){calls.push('stop');},request(c){calls.push(c);}}};
   vm.createContext(context);vm.runInContext(fn,context);
   return {context,cards,calls,modal,update:()=>context.updateScrollCard()};
 }
 test('touch scroll activates only the central visible direction and stops behind an open form',()=>{
   const s=scrollCardScene();s.update();
-  assert.equal(s.context.scrollCard,s.cards[1]);assert.deepEqual(s.cards.map(c=>c.active),[false,true,false]);
+  assert.ok(s.calls.includes(s.cards[1]));assert.deepEqual(s.cards.map(c=>c.active),[false,true,false]);
   s.cards[0].rect={top:-500,bottom:-300};s.cards[1].rect={top:-100,bottom:100};s.cards[2].rect={top:200,bottom:400};s.update();
-  assert.equal(s.context.scrollCard,s.cards[2]);assert.deepEqual(s.cards.map(c=>c.active),[false,false,true]);
-  s.modal.hidden=false;s.update();assert.equal(s.context.scrollCard,null);assert.ok(s.cards.every(c=>!c.active));
-  s.modal.hidden=true;s.context.finePointer.matches=true;s.update();assert.equal(s.context.scrollCard,null);
+  assert.ok(s.calls.includes(s.cards[2]));assert.deepEqual(s.cards.map(c=>c.active),[false,false,true]);
+  s.modal.hidden=false;s.update();assert.ok(s.cards.every(c=>!c.active));assert.ok(s.cards.every(c=>!c.active));
+  s.modal.hidden=true;s.context.finePointer.matches=true;s.update();assert.ok(s.cards.every(c=>!c.active));
 });
+test('touch scroll starts both columns in the visible row, with no left-column bias',()=>{
+  const s=scrollCardScene();
+  s.cards[0].rect={top:240,bottom:520};s.cards[1].rect={top:240,bottom:520};
+  s.update();assert.deepEqual(s.cards.map(c=>c.active),[true,true,false]);
+  assert.ok(s.calls.includes(s.cards[0]));assert.ok(s.calls.includes(s.cards[1]));
+  s.cards[0].rect={top:-400,bottom:-120};s.cards[1].rect={top:-400,bottom:-120};
+  s.cards[2].rect={top:220,bottom:500};s.update();
+  assert.deepEqual(s.cards.map(c=>c.active),[false,false,true]);
+});
+
 test('mobile steps connect actual dot positions and progress in scroll order',()=>{
   const template=fs.readFileSync(new URL('../templates/city.html',import.meta.url),'utf8');
   const fn=template.slice(template.indexOf('function stepsUpdate(){'),template.indexOf('let stepsFrame=0;'));

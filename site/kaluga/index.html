@@ -962,10 +962,10 @@ function prepCard(card){
 /* Pointer-only playback; touch and keyboard focus do not start direction motion. */
 const directionMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(hover:hover) and (pointer:fine)');
-let hoveredCard=null,scrollCard=null;
+let hoveredCard=null;
 const directionPlayer=window.createDirectionPlayer({
   ready:bgReady, prepare:prepCard,
-  eligible:c=>finePointer.matches?c===hoveredCard:c===scrollCard,
+  eligible:c=>finePointer.matches&&c===hoveredCard,
   reduced:()=>directionMotion.matches,
   blocked:()=>document.hidden||!document.getElementById('leadModal').hidden
 });
@@ -978,28 +978,35 @@ $$('.card[data-dir]').forEach(card=>{
   card.addEventListener('pointerleave',leave);
   card.addEventListener('pointercancel',leave);
 });
-const stopDirections=()=>{hoveredCard=null;directionPlayer.stop();};
+const stopDirections=()=>{hoveredCard=null;directionPlayer.stop();scrollPlayers.forEach(player=>player.stop());};
 directionMotion.addEventListener('change',stopDirections);
 finePointer.addEventListener('change',stopDirections);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopDirections();});
 document.addEventListener('tz:lead-open',stopDirections);
-/* Touch: one visible card plays and reveals its description near the viewport center. */
+/* Touch: every card in the central visible grid row can play, including right-hand columns. */
 const scrollCards=$$('.card[data-dir]');
+const scrollPlayers=new Map(scrollCards.map(card=>[card,window.createDirectionPlayer({
+  ready:bgReady,prepare:prepCard,
+  eligible:c=>!finePointer.matches&&c.classList.contains('is-active'),
+  reduced:()=>directionMotion.matches,
+  blocked:()=>document.hidden||!document.getElementById('leadModal').hidden
+})]));
 let cardFrame=0;
 function updateScrollCard(){
   cardFrame=0;
-  let next=null,distance=Infinity;
+  let next=[];
   if(!finePointer.matches&&!document.hidden&&document.getElementById('leadModal').hidden){
-    scrollCards.forEach(card=>{
-      const r=card.getBoundingClientRect();
-      if(r.bottom<=innerHeight*.2||r.top>=innerHeight*.8)return;
-      const d=Math.abs((r.top+r.bottom)/2-innerHeight*.5);
-      if(d<distance){distance=d;next=card;}
-    });
+    const candidates=scrollCards.map(card=>({card,rect:card.getBoundingClientRect(),row:card.offsetTop}))
+      .filter(({rect})=>rect.bottom>innerHeight*.2&&rect.top<innerHeight*.8);
+    const central=candidates.reduce((best,item)=>!best||Math.abs((item.rect.top+item.rect.bottom)/2-innerHeight*.5)<Math.abs((best.rect.top+best.rect.bottom)/2-innerHeight*.5)?item:best,null);
+    if(central)next=candidates.filter(item=>Math.abs(item.row-central.row)<2).map(item=>item.card);
   }
-  scrollCards.forEach(card=>card.classList.toggle('is-active',card===next));
-  if(next!==scrollCard){directionPlayer.stop();scrollCard=next;}
-  if(next)directionPlayer.request(next);
+  scrollCards.forEach(card=>{
+    const active=next.includes(card);
+    card.classList.toggle('is-active',active);
+    const player=scrollPlayers.get(card);
+    if(active)player.request(card);else player.stop();
+  });
 }
 function scheduleScrollCard(){if(!cardFrame)cardFrame=requestAnimationFrame(updateScrollCard);}
 addEventListener('scroll',scheduleScrollCard,{passive:true});
