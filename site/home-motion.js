@@ -8,7 +8,7 @@
   const shapes = [...svg.querySelectorAll('[data-d]')];
   const knobs = [...svg.querySelectorAll('.nd')];
   const all = [...lines, ...shapes, ...knobs];
-  const period = el => (8 + ((+el.dataset.t * 1.37) % 6)) * 1.2;
+  const period = el => (8 + ((+el.dataset.t * 1.37) % 6)) * 1.45;
   const wave = (el, seconds) => Math.sin(seconds * 2 * Math.PI / period(el) + +el.dataset.p);
   let frameId = 0, visible = false, lastTime = null, seconds = 0;
   const turns = knobs.map((_, i) => ({ next: .7 + i * .45, angle: 0 }));
