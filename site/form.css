@@ -313,10 +313,10 @@
 .lead-modal .pick.has .pk input:not(:checked)+label .choice-icon { filter:none; opacity:.3; }
 .lead-modal .pk input:focus-visible+label .choice-icon { filter:none; }
 @media(hover:hover) { .lead-modal .pk:hover .choice-name { visibility:visible; opacity:1; } }
-@media(max-width:1050px) and (min-width:901px) {
+@media(max-width:1050px) and (min-width:1001px) {
   .lead-modal .sheet-body { padding-left: 40px; padding-right: 40px; }
 }
-@media(max-width:900px) {
+@media(max-width:1000px) {
   .lead-modal .sheet { grid-template-columns: minmax(0, 1fr); grid-template-rows: 140px minmax(0, 1fr); }
   .lead-modal .sheet-art { height: 140px; min-height: 140px; }
   .lead-modal .sheet-art:after { border-right: 0; border-bottom: 2px solid var(--accent); }

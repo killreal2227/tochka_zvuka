@@ -130,13 +130,13 @@ test('card/title geometry declarations are identical through hover and focus', (
     for (const state of ['hover', 'focus-visible']) assert.deepEqual(select(resolve(width, target, state)), select(resolve(width, target)), `${width}px ${target} ${state}`);
   }
 });
-test('1000px is narrow; 1001px remains desktop; header cities hide strictly below 1000px', () => {
+test('1000px is narrow and hides header cities; 1001px remains desktop', () => {
   for (const width of widths.filter(w => w <= 1000)) {
     assert.equal(resolve(width, 'header').display, 'flex');
     assert.equal(resolve(width, 'grid')['grid-template-columns'], 'minmax(0, 1fr)');
     assert.equal(resolve(width, 'cities')['justify-content'], 'space-between');
-    assert.equal(resolve(width, 'cities').display, width < 1000 ? 'none' : 'flex');
-    assert.equal(resolve(width, 'header').height, '88px');
+    assert.equal(resolve(width, 'cities').display, 'none');
+    assert.equal(resolve(width, 'header').height, '72px');
   }
   assert.equal(resolve(1001, 'header').display, 'flex');
   assert.equal(resolve(1001, 'grid')['grid-template-columns'], 'repeat(2, minmax(0, 1fr))');
@@ -168,7 +168,7 @@ test('hidden-navigation header keeps both items fixed-size and aligned at narrow
     assert.equal(header['flex-wrap'], 'nowrap');
     assert.equal(header['justify-content'], 'space-between');
     assert.equal(header['align-items'], 'center');
-    assert.equal(brand.flex, '0 0 160px'); assert.equal(cta.flex, '0 0 132px');
+    assert.equal(brand.flex, `0 0 ${brand.width}`); assert.equal(cta.flex, `0 0 ${cta.width}`);
     const number = v => Number.parseFloat(v);
     const reserved = number(header['padding-left']) + number(brand.width) + number(header.gap)
       + number(cta.width) + number(header['padding-right']);
@@ -178,11 +178,11 @@ test('hidden-navigation header keeps both items fixed-size and aligned at narrow
 
 test('main header has fixed desktop and narrow sizes without viewport scaling', () => {
   for (const width of [320,375,680,768,999,1000,1001,1440,2560]) {
-    assert.equal(resolve(width,'brand').width,width>1000?'260px':'160px');
-    assert.equal(resolve(width,'cta').width,width>1000?'230px':'132px');
-    assert.equal(resolve(width,'cta')['font-size'],width>1000?'16px':'12px');
+    assert.equal(resolve(width,'brand').width,width>1000?'260px':width<=360?'144px':width<=390?'152px':'176px');
+    assert.equal(resolve(width,'cta').width,width>1000?'230px':width<=360?'136px':width<=390?'140px':'148px');
+    assert.equal(resolve(width,'cta')['font-size'],width>1000?'16px':'13px');
     if(width>1000) assert.equal(resolve(width,'cta').height,'54px');
-    assert.equal(resolve(width,'header').height,'88px');
+    assert.equal(resolve(width,'header').height,'72px');
     assert.equal(resolve(width,'brand').transform,'none');
   }
 });

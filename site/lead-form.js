@@ -25,7 +25,7 @@ window.TZ_LEADS = Object.assign({endpoint:null,consentVersion:'2026-11-10-v3'},w
   document.fonts?.ready.then(positionDirectionNames);
 
 const formArt=(()=>{
-  const box=$('.sheet-art'), svg=box?$('svg',box):null, mob=matchMedia('(max-width:900px)');
+  const box=$('.sheet-art'), svg=box?$('svg',box):null, mob=matchMedia('(max-width:1000px)');
   const col={vocal:'--vocal',guitar:'--guitar',drums:'--drums',piano:'--piano',actor:'--orange',speech:'--pink',unsure:'--grey'};
   const sheet=box?box.closest('.sheet'):modal.querySelector('.lead-sheet');
   let actorNextBlue=false;

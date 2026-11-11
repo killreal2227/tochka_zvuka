@@ -134,8 +134,8 @@
     justify-content: flex-start; gap: 8px 20px;
   }
 }
-/* Strictly below 1000px; the city cards keep their existing responsive rules. */
-@media (width < 1000px) {
+/* Include 1000px in the compact header. */
+@media (max-width: 1000px) {
   .home-page { --header-height: 72px; }
   .home-page .header-cities { display: none; }
   .home-page .home-header {
@@ -217,4 +217,32 @@
     width: 230px; min-width: 230px; height: 54px; min-height: 54px;
     flex: 0 0 230px; font-size: 16px !important;
   }
+}
+
+/* Shorter header, with a modestly larger compact logo and enrollment button. */
+.home-page { --header-height:72px; }
+.home-page .home-header { height:72px; min-height:72px; padding-top:8px; padding-bottom:8px; }
+@media(max-width:1000px) {
+  .home-page .home-brand { width:176px; min-width:176px; max-width:176px; flex:0 0 176px; }
+  .home-page .header-cta,
+  .home-page .header-cta:hover,
+  .home-page .header-cta:focus-visible {
+    width:148px; min-width:148px; flex:0 0 148px; height:44px; min-height:44px;
+    font-size:13px !important; padding:8px 12px; border-radius:22px;
+  }
+  .home-page .header-cta > svg:not(.capsule-caption) { right:12px; }
+}
+@media(max-width:390px) {
+  .home-page .home-header { padding-left:12px; padding-right:12px; gap:8px; }
+  .home-page .home-brand { width:152px; min-width:152px; max-width:152px; flex:0 0 152px; }
+  .home-page .header-cta,
+  .home-page .header-cta:hover,
+  .home-page .header-cta:focus-visible { width:140px; min-width:140px; flex:0 0 140px; }
+}
+@media(max-width:360px) {
+  .home-page .home-header { padding-left:10px; padding-right:10px; }
+  .home-page .home-brand { width:144px; min-width:144px; max-width:144px; flex:0 0 144px; }
+  .home-page .header-cta,
+  .home-page .header-cta:hover,
+  .home-page .header-cta:focus-visible { width:136px; min-width:136px; flex:0 0 136px; }
 }
