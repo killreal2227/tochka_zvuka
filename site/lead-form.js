@@ -142,7 +142,7 @@ const formArt=(()=>{
     lastFocus=document.activeElement;
     if(pageCity){form.elements.branch.value=pageCity;form.querySelector('.lead-branch-label').hidden=true;}
     if(direction){const radio=form.querySelector('input[name="direction"][value="'+direction+'"]');if(radio)radio.checked=true;}
-    form.hidden=false;success.hidden=true;status.textContent='';
+    form.hidden=false;success.hidden=true;sheet.setAttribute('aria-labelledby','leadTitle');status.textContent='';
     modal.hidden=false;modal.classList.add('open');modal.setAttribute('aria-hidden','false');formArt.tint(true);formArt.start();document.body.style.overflow='hidden';sheet.focus({preventScroll:true});syncBranch();document.dispatchEvent(new CustomEvent('tz:lead-open'));
   }
   function close(){if(sending)return;branchPicker.close();formArt.stop();modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.hidden=true;document.body.style.overflow='';lastFocus?.focus({preventScroll:true});}
@@ -191,7 +191,7 @@ maskPhone(phone);
   phone.addEventListener('input',()=>phone.setCustomValidity(''));
   form.addEventListener('input',()=>{pending=null;status.textContent='';});
   function showSuccess(){
-    form.hidden=true;success.hidden=false;status.textContent='';pending=null;
+    form.hidden=true;success.hidden=false;sheet.setAttribute('aria-labelledby','doneText');formArt.stop();status.textContent='';pending=null;
     form.reset();syncBranch();success.setAttribute('tabindex','-1');success.focus({preventScroll:true});
   }
   form.addEventListener('submit',async event=>{

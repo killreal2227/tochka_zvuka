@@ -589,3 +589,17 @@
   .lead-modal .lead-success .success-mark { width:60px; height:60px; margin-bottom:24px; }
   .lead-modal .sheet .lead-success #doneClose { width:100%; }
 }
+
+/* A compact, single-panel confirmation with one close icon in the corner. */
+.lead-modal .sheet:has(.lead-success:not([hidden])) {
+  width:min(520px,100%); grid-template-columns:minmax(0,1fr); grid-template-rows:auto;
+}
+.lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-art { display:none; }
+.lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-body {
+  padding:64px 40px 40px; max-height:calc(100svh - 32px);
+}
+.lead-modal .sheet .lead-success { min-height:0; margin:0; padding:0; }
+.lead-modal .sheet .lead-success #doneClose { justify-content:center; padding:8px 20px; }
+@media(max-width:600px) {
+  .lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-body { padding:56px 24px 28px; }
+}
