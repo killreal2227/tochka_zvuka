@@ -136,7 +136,7 @@ test('1000px is narrow and hides header cities; 1001px remains desktop', () => {
     assert.equal(resolve(width, 'grid')['grid-template-columns'], 'minmax(0, 1fr)');
     assert.equal(resolve(width, 'cities')['justify-content'], 'space-between');
     assert.equal(resolve(width, 'cities').display, 'none');
-    assert.equal(resolve(width, 'header').height, 'calc(260px * 240 / 567)');
+    assert.equal(resolve(width, 'header').height, width<=600?'var(--header-height)':'calc(260px * 240 / 567)');
   }
   assert.equal(resolve(1001, 'header').display, 'flex');
   assert.equal(resolve(1001, 'grid')['grid-template-columns'], 'repeat(2, minmax(0, 1fr))');
@@ -188,7 +188,7 @@ test('main header has fixed desktop and narrow sizes without viewport scaling', 
     assert.equal(resolve(width,'cta').width,width<=600?'156px':'230px');
     assert.equal(resolve(width,'cta')['font-size'],width<=600?'12px':'16px');
     assert.equal(resolve(width,'cta').height,width<=600?'38px':'54px');
-    assert.equal(resolve(width,'header').height,'calc(260px * 240 / 567)');
+    assert.equal(resolve(width,'header').height,width<=600?'var(--header-height)':'calc(260px * 240 / 567)');
     assert.equal(resolve(width,'brand').transform,'none');
   }
 });

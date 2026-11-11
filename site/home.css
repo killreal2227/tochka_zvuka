@@ -238,6 +238,12 @@ body.home-page .home-header {
 }
 .home-page .header-cta > svg:not(.capsule-caption) { right:16px; }
 @media(max-width:600px) {
+  /* Logo shrinks proportionally with the 180:156 header pair when space is tight. */
+  .home-page {
+    --compact-logo-width:min(180px,calc((100vw - 2 * clamp(24px,5vw,72px) - 12px) * 15 / 28));
+    --header-height:calc(var(--compact-logo-width) * 240 / 567);
+  }
+  body.home-page .home-header { height:var(--header-height); min-height:var(--header-height); }
   body.home-page .home-header { flex-direction:row; justify-content:space-between; gap:12px; padding-top:8px; padding-bottom:8px; padding-left:max(clamp(24px,5vw,72px),calc((100% - var(--header-content))/2)); padding-right:max(clamp(24px,5vw,72px),calc((100% - var(--header-content))/2)); }
   .home-page .home-brand { width:180px; min-width:0; max-width:180px; flex:0 1 180px; }
   .home-page .header-actions { flex:0 1 156px; min-width:0; }
