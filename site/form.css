@@ -96,7 +96,7 @@
 .lead-modal .lead-branch-list [role="option"].is-active{background:#585858;color:#FFF5EA;outline:0;box-shadow:none}
 .lead-honeypot{display:none!important}.lead-modal .consent{font-size:12px}.lead-modal .lead-alternative{font-size:12px;margin:20px 0 0}.lead-modal .send{gap:14px 20px}.lead-modal .pick-cap{font-size:16px;line-height:1.4;margin-bottom:0}.lead-modal .sheet-art{overflow:hidden}.lead-modal .lead-success[hidden]{display:none}
 .lead-modal :focus-visible{outline:2px solid var(--ink);outline-offset:4px}.lead-modal .pk input:focus-visible+label{outline:2px solid var(--ink);outline-offset:5px}
-@media(max-width:680px){.lead-modal .sheet{grid-template-columns:1fr}.lead-modal .sheet-art{height:110px;min-height:0}.lead-modal .sheet-art:after{border-right:0;border-bottom:2px solid var(--accent)}.lead-modal .fields{grid-template-columns:1fr}.lead-modal .pk label{width:44px;height:44px}.lead-modal .pick-row{gap:8px}.lead-modal .pk label img{height:29px;width:34px}.lead-modal .sheet-body{padding:28px 24px}.lead-modal .sheet h2{font-size:36px;margin-right:0}.lead-modal .sheet .sub{font-size:16px}.lead-modal .f input{font-size:21px}.lead-modal .btn{padding-left:22px;font-size:15px}.lead-modal .btn i{width:44px;height:44px}}
+@media(width < 900px){.lead-modal .sheet{grid-template-columns:1fr}.lead-modal .sheet-art{height:110px;min-height:0}.lead-modal .sheet-art:after{border-right:0;border-bottom:2px solid var(--accent)}.lead-modal .fields{grid-template-columns:1fr}.lead-modal .pk label{width:44px;height:44px}.lead-modal .pick-row{gap:8px}.lead-modal .pk label img{height:29px;width:34px}.lead-modal .sheet-body{padding:28px 24px}.lead-modal .sheet h2{font-size:36px;margin-right:0}.lead-modal .sheet .sub{font-size:16px}.lead-modal .f input{font-size:21px}.lead-modal .btn{padding-left:22px;font-size:15px}.lead-modal .btn i{width:44px;height:44px}}
 @media(prefers-reduced-motion:reduce){.lead-modal *{animation:none!important;transition:none!important}}
 
 .lead-modal [hidden]{display:none!important}.lead-modal .done h2{margin-top:0}.lead-modal .done p{font-size:17px}
@@ -175,7 +175,7 @@
   display: block; width: auto; height: 52px; max-width: none;
   object-fit: contain; object-position: center; margin: 0;
 }
-@media(max-width:680px) {
+@media(width < 900px) {
   .lead-modal .sheet h2, .lead-modal .lead-success h2 { font-size: 28px; }
   .lead-modal .sheet-body { padding: 28px 20px; }
 }
@@ -323,7 +323,7 @@
   .lead-modal .sheet-art:after { border-right: 0; border-bottom: 2px solid var(--accent); }
   .lead-modal .sheet-body { max-height: calc(100svh - 172px); padding: 28px; }
 }
-@media(max-width:680px) {
+@media(width < 900px) {
   .lead-modal .sheet-body { padding-left: 20px; padding-right: 20px; }
   .lead-modal .sheet #leadTitle { font-size: 46px; }
   .lead-modal .fields { grid-template-columns: minmax(0, 1fr); }
@@ -348,7 +348,7 @@
 .lead-modal .btn.lead-call i { flex:0 0 32px; width:32px; height:32px; background:transparent; color:inherit; }
 .lead-modal .btn.lead-call:hover { background:#d9cec2; color:#383838; }
 .lead-modal .btn.lead-call:focus-visible { background:#e7ded4; color:#383838; outline:2px solid #585858; outline-offset:4px; }
-@media(max-width:680px) {
+@media(width < 900px) {
   .lead-modal .choice-unsure label { flex-direction:column; }
   .lead-modal .choice-unsure .choice-name { min-height:2.6em; }
 }
@@ -399,7 +399,7 @@
   pointer-events:none; z-index:3;
 }
 .lead-modal .pick.has .pk:not(:has(input:checked)):hover .choice-name { visibility:hidden; opacity:0; }
-@media(max-width:680px) {
+@media(width < 900px) {
   .lead-modal .send { grid-template-columns:minmax(0,1fr); }
   .lead-modal .pick-row { row-gap:48px; }
   .lead-modal .pk .choice-name { font-size:16px; }
@@ -409,7 +409,7 @@
 }
 
 /* Compact phone layout: centered single-line names and one shared action stack. */
-@media(width < 680px) {
+@media(width < 900px) {
   .lead-modal .pick-row {
     grid-template-columns:repeat(3,minmax(0,1fr));
     gap:42px 12px; padding:10px 0 0;
@@ -462,7 +462,7 @@
 
 /* Reserve caption space even when no direction is selected or helper text exists. */
 .lead-modal .pick { margin-bottom:20px; }
-@media(width < 680px) {
+@media(width < 900px) {
   .lead-modal .pick .pick-row,
   .lead-modal .pick.has:not(:has(.choice-unsure input:checked)) .pick-row { padding-bottom:48px; }
 }
