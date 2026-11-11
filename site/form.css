@@ -389,7 +389,7 @@
 .lead-modal .btn.lead-submit i { flex:0 0 40px; width:40px; height:40px; border-radius:50%; }
 /* Fixed dark accent lettering for every direction and interaction state. */
 .lead-modal .sheet #leadTitle em,
-.lead-modal .sheet #submitBtn { color:#1a1a1a; }
+.lead-modal .sheet #submitBtn { color:var(--accent-on); }
 .lead-modal .sheet #submitBtn:hover { --action-bg:var(--accent); background:transparent; }
 .lead-modal .sheet #submitBtn i { background:#FFF5EA; }
 .lead-modal .pick-row { padding-top:10px; padding-bottom:42px; }
@@ -547,3 +547,11 @@
   fill:none; stroke:currentColor; stroke-width:1.6;
   stroke-linecap:square; stroke-linejoin:miter;
 }
+
+/* Light lettering on dark accent backgrounds, dark lettering on light ones. */
+.lead-modal .sheet #leadTitle em,
+.lead-modal .sheet #submitBtn,
+.lead-modal .sheet #submitBtn:hover,
+.lead-modal .sheet #submitBtn:focus-visible { color:var(--accent-on); }
+.lead-modal .sheet #submitBtn i,
+.lead-modal .sheet #submitBtn:hover i { background:var(--cream); color:var(--accent); }
