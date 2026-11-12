@@ -291,13 +291,16 @@ test('branch header shows only its current address without a branch switching co
   assert.ok(!template.includes("const bBtn="));assert.ok(header.includes('header-cta openForm'));
 });
 
-function ordinaryScene(finePointer=false,compactWidth=false){
+function ordinaryScene(finePointer=false,compactWidth=false,withPreviews=false){
   const events=()=>({handlers:new Map(),addEventListener(k,fn,options){const list=this.handlers.get(k)||[];list.push({fn,options});this.handlers.set(k,list);},emit(k,e={}){(this.handlers.get(k)||[]).forEach(x=>x.fn(e));}});
   const cards=Array.from({length:6},(_,i)=>Object.assign(events(),{rect:{top:900+i*160,bottom:1040+i*160},classes:new Set(),keyboardFocus:false,matches(){return this.keyboardFocus;},getBoundingClientRect(){return this.rect;}}));
-  cards.forEach(card=>card.classList={toggle(k,v){v?card.classes.add(k):card.classes.delete(k);}});
+  cards.forEach((card,i)=>{
+    card.dataset={dir:String(i)};card.querySelector=()=>({textContent:'direction'});card.setAttribute=()=>{};card.removeAttribute=()=>{};
+    card.classList={add:k=>card.classes.add(k),remove:k=>card.classes.delete(k),toggle(k,v){v?card.classes.add(k):card.classes.delete(k);}};
+  });
   const grid={querySelectorAll:()=>cards},header={getBoundingClientRect:()=>({bottom:76})},modal={hidden:true};
-  const document=Object.assign(events(),{hidden:false,querySelector:s=>s==='#dirs .grid'?grid:header,getElementById:()=>modal});
-  const window=events(),frames=new Map(),played=[];let sequence=0;
+  const document=Object.assign(events(),{body:{dataset:withPreviews?{city:'troitsk'}:{}},hidden:false,querySelector:s=>s==='#dirs .grid'?grid:header,getElementById:()=>modal});
+  const window=Object.assign(events(),{innerHeight:800}),frames=new Map(),played=[];let sequence=0;
   const fine=Object.assign(events(),{matches:finePointer}),compact=Object.assign(events(),{matches:compactWidth}),reduced=Object.assign(events(),{matches:false});
   const context={window,document,innerHeight:800,Promise,WeakSet,Map,
     matchMedia:q=>q.includes('pointer:fine')?fine:q.includes('max-width')?compact:reduced,
@@ -407,4 +410,16 @@ test('touch card reveals once, arrow opens immediately, and preview can be viewe
  callbacks[1]({...tap,target:arrows[1]});assert.deepEqual(opened,['vocal','guitar']);
  callbacks[1]({...tap,clientX:350,target:arrows[1]});assert.equal(opened.length,2);
  callbacks[0]({...tap,detail:0});assert.equal(opened.length,3);
+});
+
+test('touch preview survives outside taps, focus changes and visible scrolling',()=>{
+ const s=ordinaryScene(true,true,true),card=s.cards[0];
+ card.rect={left:20,right:300,top:100,bottom:400};
+ s.document.emit('tz:direction-preview',{detail:{card}});assert.equal(s.played.length,1);
+ s.document.emit('pointerdown',{target:{}});assert.ok(card.classes.has('is-preview'));
+ s.cards[1].emit('pointerenter',{pointerType:'mouse'});s.cards[1].keyboardFocus=true;s.cards[1].emit('focusin');
+ assert.equal(s.played.length,1);assert.ok(card.classes.has('is-active'));
+ s.window.emit('scroll');assert.ok(card.classes.has('is-preview'));
+ s.document.emit('tz:direction-preview',{detail:{card}});assert.equal(s.played.length,1);
+ card.rect={left:20,right:300,top:-400,bottom:0};s.window.emit('scroll');assert.ok(!card.classes.has('is-preview'));
 });

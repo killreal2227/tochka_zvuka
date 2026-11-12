@@ -24,7 +24,12 @@
         clearPreview();preview=card;card.classList.add('is-preview');card.setAttribute('aria-expanded','true');
         card.setAttribute('aria-label',card.querySelector('.name').textContent+' — нажмите на стрелку, чтобы записаться');select(card,true);
       });
-      document.addEventListener('pointerdown',event=>{if(preview&&!preview.contains(event.target)&&!modal.contains(event.target))stop();});
+      window.addEventListener('scroll',()=>{
+        if(!preview)return;
+        const r=preview.getBoundingClientRect(),header=document.querySelector('#top');
+        const top=header?.getBoundingClientRect().bottom||0;
+        if(r.bottom<=top||r.top>=window.innerHeight)stop();
+      },{passive:true});
     }
     cards.forEach(card=>{
       card.addEventListener('pointerenter',event=>{
@@ -32,11 +37,11 @@
           const r=card.getBoundingClientRect();
           if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)return;
         }
-        if(fine.matches&&event.pointerType!=='touch')select(card);
+        if(!preview&&fine.matches&&event.pointerType!=='touch')select(card);
       });
       const leave=()=>{if(active===card&&!preview)select(null);};
       card.addEventListener('pointerleave',leave);card.addEventListener('pointercancel',leave);
-      card.addEventListener('focusin',()=>{if(fine.matches&&card.matches(':focus-visible'))select(card);});
+      card.addEventListener('focusin',()=>{if(!preview&&fine.matches&&card.matches(':focus-visible'))select(card);});
       card.addEventListener('focusout',leave);
     });
     document.addEventListener('tz:lead-open',stop);
