@@ -201,3 +201,16 @@ body[data-city] #dirs .card.actor.live:focus-visible::after { opacity:1; transfo
 
 body[data-city] #dirs .card .go::after { content:""; position:absolute; inset:calc((var(--direction-arrow) - 44px) / 2); border-radius:50%; }
 body[data-city] #dirs .card .desc-copy { white-space:normal; overflow:visible; overflow-wrap:break-word; }
+
+/* The header signup CTA stays calm after touch activation. */
+body[data-city] #top .header-enrol,
+body[data-city] #top .header-enrol:hover,
+body[data-city] #top .header-enrol:active,
+body[data-city] #top .header-enrol:focus-visible {
+ background:var(--bord); color:var(--cream); transform:none; transition:none;
+ -webkit-tap-highlight-color:transparent;
+}
+body[data-city] #top .header-enrol i,
+body[data-city] #top .header-enrol:hover i,
+body[data-city] #top .header-enrol:active i { background:var(--cream); color:var(--bord); transition:none; }
+body[data-city] #top .header-enrol svg { transition:none; animation:none; }
