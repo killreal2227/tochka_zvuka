@@ -170,7 +170,7 @@ const formArt=(()=>{
   let fitFrame=0;
   function fitShortForm(){
     fitFrame=0;if(modal.hidden)return;
-    const landscape=window.innerWidth>window.innerHeight&&(window.innerHeight<=650||window.innerWidth<=750);
+    const landscape=window.innerWidth>window.innerHeight&&(window.innerHeight<=650||window.innerWidth<=800);
     const editing=form.contains(document.activeElement)&&['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName);
     if(editing)return;
     sheet.style.zoom='';sheet.style.maxHeight='';
@@ -180,7 +180,7 @@ const formArt=(()=>{
     sheet.style.maxHeight='none';
     const natural=sheet.getBoundingClientRect().height;
     const available=Math.max(1,(window.visualViewport?.height||window.innerHeight)-28);
-    const preferred=window.innerWidth<=750?.9:1;
+    const preferred=window.innerWidth<=800?.9:1;
     const scale=Math.min(preferred,Math.max(.65,available/Math.max(1,natural)));
     sheet.style.zoom=String(scale);
     sheet.style.maxHeight='calc((100dvh - 28px) / '+scale+')';

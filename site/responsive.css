@@ -40,9 +40,9 @@ html { scrollbar-gutter:stable; }
  .lead-modal .sheet .form-status:empty { display:none; }
  .lead-modal .sheet.field-focused .sheet-art { display:none; }
 }
-@media(max-width:700px), (max-height:500px) and (pointer:coarse) {
+@media(max-width:800px), (max-height:500px) and (pointer:coarse) {
  .lead-modal { align-items:end; padding:0; }
- .lead-modal .sheet { width:min(680px,calc(100% - 24px)); margin-bottom:calc(12px + env(safe-area-inset-bottom)); max-height:calc(100dvh - 24px - env(safe-area-inset-bottom)); border-radius:var(--tz-panel-radius); transform:translateY(calc(100% + 24px)); }
+ .lead-modal .sheet { width:min(576px,calc(100% - 24px)); margin-bottom:calc(12px + env(safe-area-inset-bottom)); max-height:calc(100dvh - 24px - env(safe-area-inset-bottom)); border-radius:var(--tz-panel-radius); transform:translateY(calc(100% + 24px)); }
  .lead-modal.open .sheet { transform:none; }
  .lead-modal .sheet .sheet-body { padding:18px 16px 10px; }
 }
@@ -215,7 +215,7 @@ body[data-city] #join .h2 { font-size:clamp(44px,6.6vw,108px); line-height:1.05;
 
 /* Give the greeting breathing room after removing the extra introductory line. */
 .lead-modal .sheet #leadForm #leadTitle { margin-top:20px; }
-@media(max-width:750px) and (orientation:landscape) {
+@media(max-width:800px) and (orientation:landscape) {
  .lead-modal .sheet .sheet-art { display:none; }
  .lead-modal .sheet #leadForm #leadTitle { margin-top:14px; }
 }
