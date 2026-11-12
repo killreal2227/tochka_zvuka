@@ -172,7 +172,7 @@ test('footer legal row and document row stack without changing content on narrow
     assert.equal(resolve(width, 'legal')['grid-row'], '2');
     assert.equal(resolve(width, 'documents')['grid-row'], '3');
     assert.equal(resolve(width, 'documents')['flex-wrap'], 'wrap');
-    assert.equal(resolve(width, 'legal')['font-size'], '14px');
+    assert.equal(resolve(width, 'legal')['font-size'], '12px');
   }
 });
 

@@ -377,8 +377,16 @@ body.home-page .home-header { position:relative; z-index:30; overflow:visible; }
 body.home-page > .site-footer { row-gap:2px; }
 body.home-page .footer-details,
 body.home-page .footer-bottom > span,
-body.home-page .footer-bottom nav { line-height:20px; }
+body.home-page .footer-bottom nav { font-size:12px; line-height:18px; }
 body.home-page .footer-details,
 body.home-page .footer-bottom nav { gap:2px 16px; }
 body.home-page .footer-details span,
 body.home-page .footer-bottom nav a { line-height:inherit; }
+
+/* Slightly quieter labels, with the existing glyph-based centering. */
+@media(min-width:1001px) {
+  body.home-page .header-cta,
+  body.home-page .header-cta:hover,
+  body.home-page .header-cta:focus-visible { font-size:14px!important; }
+  body.home-page .home-branch .branch-btn { font-size:14px; }
+}

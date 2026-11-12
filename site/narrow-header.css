@@ -8,6 +8,7 @@
     --narrow-label:clamp(10px,calc(10px + (100vw - 320px) * .008),12px);
     --header-height:calc(var(--narrow-logo) * 240 / 567);
   }
+  body.home-page { --narrow-label:clamp(9.5px,calc(9.5px + (100vw - 320px) * .006),11px); }
   body.home-page .home-header, body[data-city] .top {
     box-sizing:border-box; display:flex; flex-direction:row; flex-wrap:nowrap;
     align-items:center; justify-content:space-between; align-content:normal;
