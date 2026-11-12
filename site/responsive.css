@@ -4,7 +4,7 @@ html { scrollbar-gutter:stable; }
 /* Shared form: preserve the desktop reference, compact only constrained viewports. */
 .lead-modal .sheet { transform:translateY(48px); transition:transform .38s var(--ease); }
 .lead-modal.open .sheet { transform:none; }
-@media(max-width:1100px), (orientation:landscape) and (max-height:800px) {
+@media(max-width:1000px), (orientation:landscape) and (max-height:800px) {
  .lead-modal { padding:12px; }
  .lead-modal .sheet { display:block; width:min(680px,100%); max-height:calc(100dvh - 24px); overflow-y:auto; }
  .lead-modal .sheet .sheet-art { display:block; height:56px; min-height:0; }
