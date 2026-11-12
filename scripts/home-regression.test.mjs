@@ -108,12 +108,12 @@ function rules(css, viewport, active = true) {
   }
   return out;
 }
-const sheets = ['experience.css', 'home.css'].map(p => fs.readFileSync(new URL('site/' + p, root), 'utf8')).join('\n');
+const sheets = ['experience.css', 'home.css', 'narrow-header.css'].map(p => fs.readFileSync(new URL('site/' + p, root), 'utf8')).join('\n');
 function resolve(viewport, target, state = '') {
   const properties = new Map(); let order = 0;
   for (const rule of rules(sheets, viewport)) for (const selector of rule.selectors) {
     order++;
-    if (selector.includes(':is(') || selector.includes(':not(')) continue;
+    if (selector.includes(':is(') || selector.includes(':not(') || selector.includes('[data-city]')) continue;
     if (selector.includes(':hover') && state !== 'hover') continue;
     if (selector.includes(':focus-visible') && state !== 'focus-visible') continue;
     const plain = selector.replace(/:(?:hover|focus-visible|visited)/g, '');
@@ -155,11 +155,11 @@ test('card/title geometry declarations are identical through hover and focus', (
 });
 test('1000px is narrow and hides header cities; 1001px remains desktop', () => {
   for (const width of widths.filter(w => w <= 1000)) {
-    assert.equal(resolve(width, 'header').display, width<=760?'grid':'flex');
+    assert.equal(resolve(width, 'header').display, 'flex');
     assert.equal(resolve(width, 'grid')['grid-template-columns'], 'minmax(0, 1fr)');
     assert.equal(resolve(width, 'cities')['justify-content'], 'space-between');
     assert.equal(resolve(width, 'cities').display, 'none');
-    assert.equal(resolve(width, 'header').height, width<=600?'104px':width<=760?'120px':'calc(260px * 240 / 567)');
+    assert.equal(resolve(width, 'header').height, 'var(--header-height)');
   }
   assert.equal(resolve(1001, 'header').display, 'flex');
   assert.equal(resolve(1001, 'grid')['grid-template-columns'], 'repeat(2, minmax(0, 1fr))');
@@ -185,37 +185,35 @@ test('document links stay a compact left-aligned wrapping group at every width',
     assert.equal(links['flex-direction'], 'row', `${width}px direction`);
   }
 });
-test('hidden-navigation header keeps both items fixed-size and aligned at narrow widths', () => {
-  for (const width of [320, 360, 375, 390, 393, 680, 768, 999.5]) {
+test('compact home header keeps both actions together on the circle centerline', () => {
+  for (const width of [320, 360, 375, 390, 571, 600, 601, 760, 768, 816, 999, 1000]) {
     const header = resolve(width, 'header'), brand = resolve(width, 'brand'), cta = resolve(width, 'cta');
+    assert.equal(header.display, 'flex', `${width}px header`);
     assert.equal(header['flex-wrap'], 'nowrap');
-    assert.equal(header['justify-content'], 'space-between');
     assert.equal(header['align-items'], 'center');
-    assert.equal(brand.flex, width<=600?'0 1 180px':'0 0 auto'); assert.equal(cta.flex, width<=600?'1 1 156px':'0 0 230px');
-    const number = v => Number.parseFloat(v);
-    const reserved = number(header['padding-left']) + number(brand.width) + number(header.gap)
-      + number(cta.width) + number(header['padding-right']);
-    if(width>760) assert.ok(reserved <= width, `${width}px: reserved header widths ${reserved}`);
-    else if(width<=600) {
-      assert.equal(brand['min-width'],'0'); assert.equal(cta['min-width'],'0');
-      assert.equal(header['padding-left'],'max(clamp(24px,5vw,72px),calc((100% - var(--header-content))/2))');
-      assert.equal(header['padding-right'],header['padding-left']);
+    assert.equal(header['justify-content'], 'space-between');
+    assert.equal(header.height, 'var(--header-height)');
+    assert.equal(brand.width, 'var(--narrow-logo)');
+    assert.equal(brand['min-width'], brand.width);
+    assert.equal(cta.width, 'var(--narrow-cta)');
+    assert.equal(cta['min-width'], cta.width);
+    assert.equal(cta.height, 'var(--narrow-button-height)');
+    for (const state of ['hover', 'focus-visible']) {
+      const active = resolve(width, 'cta', state);
+      assert.equal(active.width, cta.width);
+      assert.equal(active.height, cta.height);
     }
-    if(width<=760) assert.equal(header.display,'grid');
   }
 });
 
-test('main header has fixed desktop and narrow sizes without viewport scaling', () => {
-  for (const width of [320,375,599,600,601,680,768,999,1000,1001,1440,2560]) {
-    assert.equal(resolve(width,'brand').width,width<=600?'var(--compact-logo-width)':'260px');
-    assert.equal(resolve(width,'cta').width,width<=600?'min(156px,calc((100vw - 2 * clamp(24px,5vw,72px) - 12px) * 13 / 28))':'230px');
-    assert.equal(resolve(width,'cta')['font-size'],width<=600?'12px':'16px');
-    assert.equal(resolve(width,'cta').height,width<=600?'38px':'54px');
-    assert.equal(resolve(width,'header').height,width<=600?'104px':width<=760?'120px':'calc(260px * 240 / 567)');
-    assert.equal(resolve(width,'brand').transform,'none');
+test('desktop header retains its original logo and button dimensions above 1000px', () => {
+  for (const width of [1001, 1440, 2560]) {
+    assert.equal(resolve(width, 'brand').width, '260px');
+    assert.equal(resolve(width, 'cta').width, '230px');
+    assert.equal(resolve(width, 'cta').height, '54px');
+    assert.equal(resolve(width, 'header').height, 'calc(260px * 240 / 567)');
   }
 });
-
 test('home branch menu supports keyboard navigation, Escape and outside dismissal',()=>{
   const handlers=()=>({handlers:{},addEventListener(k,fn){this.handlers[k]=fn;}});
   const document=handlers(),button=handlers(),list=handlers(),root=handlers();

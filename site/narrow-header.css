@@ -1,0 +1,71 @@
+/* A single compact header from 1000px down. The logo circle is 80/567 of its width. */
+@media(max-width:1000px) {
+  body.home-page, body[data-city] {
+    --narrow-logo:clamp(112px,calc(112px + (100vw - 320px) * .3),180px);
+    --narrow-gutter:clamp(12px,calc(12px + (100vw - 320px) * .04),24px);
+    --narrow-cta:clamp(112px,calc(112px + (100vw - 320px) * .176),156px);
+    --narrow-button-height:clamp(32px,6.65vw,38px);
+    --narrow-label:clamp(10px,calc(10px + (100vw - 320px) * .008),12px);
+    --header-height:calc(var(--narrow-logo) * 240 / 567);
+  }
+  body.home-page .home-header, body[data-city] .top {
+    box-sizing:border-box; display:flex; flex-direction:row; flex-wrap:nowrap;
+    align-items:center; justify-content:space-between; align-content:normal;
+    height:var(--header-height); min-height:var(--header-height);
+    padding:2px var(--narrow-gutter) 0; gap:8px;
+    grid-template-columns:none; grid-template-rows:none;
+  }
+  body.home-page .home-brand, body[data-city] .top .brand {
+    display:block; width:var(--narrow-logo); min-width:var(--narrow-logo);
+    max-width:var(--narrow-logo); flex:0 0 auto; margin:0;
+    /* The circle center is 41 units down in the 91-unit SVG, not at its midpoint. */
+    transform:translateY(calc(var(--narrow-logo) * 4.5 / 567));
+  }
+  body.home-page .home-brand svg, body[data-city] .top .brand svg {
+    display:block; width:100%; height:auto; aspect-ratio:567 / 91;
+  }
+  body.home-page .header-actions, body[data-city] .top .top-right {
+    display:flex; flex:0 0 auto; align-items:center; flex-wrap:nowrap; gap:8px;
+    min-width:0; margin:0;
+  }
+  body.home-page .home-branch { flex:0 0 auto; margin:0; }
+  body.home-page .home-branch .branch-btn {
+    width:clamp(56px,calc(56px + (100vw - 320px) * .064),72px);
+    height:var(--narrow-button-height); min-height:var(--narrow-button-height);
+    padding:4px 18px 4px 7px; border-radius:24px; font-size:var(--narrow-label);
+  }
+  body.home-page .home-branch .branch-btn > svg:not(.capsule-caption) {
+    width:8px; height:8px; right:7px; top:50%; margin-top:-4px;
+  }
+  body.home-page .header-cta, body.home-page .header-cta:hover,
+  body.home-page .header-cta:focus-visible,
+  body[data-city] .top .header-cta, body[data-city] .top .header-cta:hover,
+  body[data-city] .top .header-cta:focus-visible {
+    box-sizing:border-box; width:var(--narrow-cta); min-width:var(--narrow-cta);
+    height:var(--narrow-button-height); min-height:var(--narrow-button-height);
+    flex:0 0 auto; padding:4px 7px; font-size:var(--narrow-label)!important;
+    line-height:1.2; border-radius:24px; transform:none;
+  }
+  body.home-page .header-cta > svg.header-cta-icon:not(.capsule-caption),
+  body[data-city] .top .header-cta > svg.header-cta-icon:not(.capsule-caption) {
+    position:absolute; width:calc(var(--narrow-button-height) - 10px);
+    height:calc(var(--narrow-button-height) - 10px); right:3px;
+    top:0; bottom:0; margin:auto 0; flex:none; transform:none;
+  }
+  body.home-page .home-branch-list { right:0; width:min(320px,calc(100vw - 24px)); }
+
+  /* Address occupies a reserved baseline below the logo and CTA, with no free wrapping. */
+  body[data-city] { --narrow-logo:clamp(139px,calc(139px + (100vw - 320px) * .164),180px); }
+  body[data-city] .top .header-identity { display:contents; }
+  body[data-city] .top .branch-current {
+    position:absolute; left:var(--narrow-gutter); right:var(--narrow-gutter);
+    bottom:clamp(0px,calc((100vw - 400px) * .015),3px); display:flex; flex-direction:row; flex-wrap:nowrap;
+    align-items:baseline; justify-content:flex-start; gap:8px;
+    width:auto; min-width:0; max-width:none; min-height:0; margin:0;
+    padding:0; border:0; font-size:clamp(10px,2.1vw,12px); line-height:1.1;
+    white-space:nowrap; text-align:left; justify-self:stretch; grid-column:auto; grid-row:auto;
+  }
+  body[data-city] .top .branch-current > span { flex:0 0 auto; }
+  body[data-city] .top .branch-current-address { font-size:inherit; line-height:inherit; }
+  body[data-city] .hero { padding-top:calc(var(--header-height) + 28px); }
+}

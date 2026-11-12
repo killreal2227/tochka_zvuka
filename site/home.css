@@ -123,7 +123,7 @@
   gap: 8px 20px; min-width: 0;
 }
 .home-page .footer-bottom nav a { max-width: 100%; overflow-wrap: anywhere; }
-@media (max-width: 760px) {
+@media (max-width: 1000px) {
   .home-page > .site-footer { grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
   .home-page .footer-details {
     grid-column: 1; grid-row: 2; flex-direction: column;

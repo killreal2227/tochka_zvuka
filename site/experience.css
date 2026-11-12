@@ -430,3 +430,8 @@ html:has(body[data-city]){scroll-padding-top:calc(var(--header-height) + 8px)}
   :is(.home-page,[data-city]) .footer-bottom nav{grid-column:1;grid-row:4;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;font-size:13px;line-height:22px;gap:6px}
   :is(.home-page,[data-city]) .footer-bottom nav a{font-size:inherit;line-height:inherit}
 }
+
+/* Keep branch document links against the right gutter on tablets. */
+@media(min-width:681px) and (max-width:1000px){
+  body[data-city] .footer-bottom nav{justify-self:end;align-items:flex-end;text-align:right}
+}
