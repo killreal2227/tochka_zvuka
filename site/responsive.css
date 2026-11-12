@@ -52,20 +52,6 @@ html { scrollbar-gutter:stable; }
  .lead-modal .sheet #leadTitle { font-size:32px; }
  .lead-modal .sheet .sheet-body { padding-top:16px; }
 }
-@media(max-height:500px) and (min-width:701px) {
- .lead-modal .sheet { width:min(880px,calc(100% - 24px)); }
- .lead-modal .sheet .sheet-body { padding:16px 20px 12px; }
- .lead-modal .sheet #leadForm { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px 24px; }
- .lead-modal .sheet #leadTitle { grid-column:1; grid-row:1; font-size:28px; margin:0; }
- .lead-modal .sheet #leadTitle br { display:none; }
- .lead-modal .sheet #leadTitle em { margin-left:5px; }
- .lead-modal .sheet #formIntro { grid-column:2; grid-row:1; margin:0 24px 0 0; align-self:center; font-size:13px; }
- .lead-modal .sheet #contactFields { grid-column:1; grid-row:2; align-self:center; margin:0; }
- .lead-modal .sheet .lead-branch-label { grid-column:1; grid-row:3; margin:0; align-self:start; }
- .lead-modal .sheet #chips { grid-column:2; grid-row:2; margin:0; }
- .lead-modal .sheet #leadForm .send { grid-column:2; grid-row:3; }
- .lead-modal .sheet .form-status:not(:empty) { grid-column:1; grid-row:4; margin:0; }
-}
 @media(prefers-reduced-motion:reduce) { .lead-modal .sheet { transition:none; } }
 /* Keep both destinations together as the page narrows. */
 @media(max-width:1000px) {
