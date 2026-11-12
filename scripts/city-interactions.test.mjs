@@ -433,3 +433,13 @@ test('reassurance gets two lines exactly when the address wraps',()=>{
  height=34;ctx.syncFooterLines();assert.equal(wrapped,true);
  height=17;ctx.syncFooterLines();assert.equal(wrapped,false);
 });
+
+test('short landscape form shrinks only when necessary and restores after rotation',()=>{
+ const js=source('lead-form.js');const fn=js.slice(js.indexOf('let fitFrame=0;'),js.indexOf('function scheduleFormFit()'));
+ const body={style:{maxHeight:''}},sheet={style:{},getBoundingClientRect:()=>({height:500})};
+ const window={innerWidth:844,innerHeight:390,visualViewport:{height:390}};
+ const ctx={window,modal:{hidden:false,querySelector:()=>body},form:{contains:()=>false},document:{activeElement:null},sheet,syncFooterLines(){}};
+ vm.runInNewContext(fn+'fitShortForm();',ctx);assert.equal(Number(sheet.style.zoom),362/500);
+ window.innerHeight=600;window.visualViewport.height=600;ctx.fitShortForm();assert.equal(sheet.style.zoom,'1');
+ window.innerWidth=390;window.innerHeight=844;ctx.fitShortForm();assert.equal(sheet.style.zoom,'');assert.equal(sheet.style.maxHeight,'');
+});

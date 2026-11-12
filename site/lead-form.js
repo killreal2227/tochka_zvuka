@@ -166,6 +166,32 @@ const formArt=(()=>{
     open(el.dataset.dir);
   }));
   modal.querySelector('.lead-close').addEventListener('click',close);
+  /* Fit the whole form only when a short landscape viewport needs it. */
+  let fitFrame=0;
+  function fitShortForm(){
+    fitFrame=0;if(modal.hidden)return;
+    const landscape=window.innerWidth>window.innerHeight&&window.innerHeight<=650;
+    const editing=form.contains(document.activeElement)&&['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName);
+    if(editing)return;
+    sheet.style.zoom='';sheet.style.maxHeight='';
+    if(!landscape)return;
+    const body=modal.querySelector('.sheet-body');
+    const previousMax=body.style.maxHeight;body.style.maxHeight='none';
+    sheet.style.maxHeight='none';
+    const natural=sheet.getBoundingClientRect().height;
+    const available=Math.max(1,(window.visualViewport?.height||window.innerHeight)-28);
+    const scale=Math.min(1,Math.max(.65,available/Math.max(1,natural)));
+    sheet.style.zoom=String(scale);
+    sheet.style.maxHeight='calc((100dvh - 28px) / '+scale+')';
+    body.style.maxHeight=previousMax;
+    syncFooterLines();
+  }
+  function scheduleFormFit(){if(!fitFrame)fitFrame=requestAnimationFrame(fitShortForm);}
+  window.addEventListener('resize',scheduleFormFit,{passive:true});
+  window.visualViewport?.addEventListener('resize',scheduleFormFit,{passive:true});
+  document.fonts?.ready.then(scheduleFormFit);
+  form.addEventListener('change',scheduleFormFit);
+  form.addEventListener('focusout',scheduleFormFit);
   function syncFooterLines(){
     if(modal.hidden)return;
     const caption=modal.querySelector('#leadBranchCaption');
@@ -183,7 +209,7 @@ const formArt=(()=>{
     caption.textContent=option?.value?option.textContent:'Выбери город';
     caption.hidden=!option?.value;
     caption.href=option?.value?'https://yandex.ru/maps/?text='+encodeURIComponent(option.textContent.replace('·',',')):'#';
-    scheduleFooterLines();
+    scheduleFooterLines();scheduleFormFit();
   }
   form.elements.branch.addEventListener('change',syncBranch);
   let backdropStart=null,backdropDragged=false;
