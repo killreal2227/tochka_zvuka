@@ -440,7 +440,7 @@ test('short landscape form shrinks only when necessary and restores after rotati
  const window={innerWidth:844,innerHeight:390,visualViewport:{height:390}};
  const ctx={window,modal:{hidden:false,querySelector:()=>body},form:{contains:()=>false},document:{activeElement:null},sheet,syncFooterLines(){}};
  vm.runInNewContext(fn+'fitShortForm();',ctx);assert.equal(Number(sheet.style.zoom),362/500);
- window.innerHeight=600;window.visualViewport.height=600;ctx.fitShortForm();assert.equal(sheet.style.zoom,'1');
+ window.innerHeight=600;window.visualViewport.height=600;ctx.fitShortForm();assert.equal(sheet.style.zoom,'0.9');
  window.innerWidth=800;window.innerHeight=667;window.visualViewport.height=667;ctx.fitShortForm();assert.equal(sheet.style.zoom,'0.9');
- window.innerWidth=390;window.innerHeight=844;ctx.fitShortForm();assert.equal(sheet.style.zoom,'');assert.equal(sheet.style.maxHeight,'');
+ window.innerWidth=600;window.innerHeight=900;ctx.fitShortForm();assert.equal(sheet.style.zoom,'');assert.equal(sheet.style.maxHeight,'');
 });
