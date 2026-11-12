@@ -87,9 +87,9 @@ const formArt=(()=>{
     let was=false;
     const notify=()=>{formArt.tint();r.dispatchEvent(new Event('input',{bubbles:true}));r.dispatchEvent(new Event('change',{bubbles:true}));};
     r.closest('.pk').addEventListener('pointerdown',()=>{was=r.checked;});
-    r.addEventListener('click',()=>{if(was){r.checked=false;was=false;notify();}});
+    r.addEventListener('click',()=>{if(was&&document.body.dataset.city!=='troitsk'){r.checked=false;was=false;notify();}});
     r.addEventListener('keydown',event=>{
-      if(event.key===' '){event.preventDefault();if(event.repeat)return;r.checked=!r.checked;was=false;notify();}
+      if(event.key===' '){event.preventDefault();if(event.repeat)return;r.checked=document.body.dataset.city==='troitsk'?true:!r.checked;was=false;notify();}
     });
   });
   const pageCity=document.body.dataset.city||'';
@@ -140,6 +140,7 @@ const formArt=(()=>{
   })();
   function open(direction){
     lastFocus=document.activeElement;
+    if(pageCity==='troitsk'&&!direction) $$('input[name="direction"]').forEach(r=>{r.checked=false;});
     if(pageCity){form.elements.branch.value=pageCity;form.querySelector('.lead-branch-label').hidden=true;}
     if(direction){const radio=form.querySelector('input[name="direction"][value="'+direction+'"]');if(radio)radio.checked=true;}
     form.hidden=false;success.hidden=true;sheet.setAttribute('aria-labelledby','leadTitle');status.textContent='';
@@ -162,7 +163,7 @@ const formArt=(()=>{
     if(modal.hidden)return;
     if(event.key==='Escape')close();
     if(event.key==='Tab'){
-      const items=[...modal.querySelectorAll('a,button,input,select')].filter(el=>!el.disabled&&el.offsetParent!==null&&el.tabIndex!==-1&&(el.type!=='radio'||el.checked));
+      const items=[...modal.querySelectorAll('a,button,input,select')].filter(el=>!el.disabled&&el.offsetParent!==null&&el.tabIndex!==-1&&(el.type!=='radio'||el.checked||(!form.elements.direction.value&&el===$('.pk input'))));
       const first=items[0],last=items.at(-1);
       if(event.shiftKey&&(document.activeElement===first||document.activeElement===sheet)){event.preventDefault();last.focus();}
       else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}

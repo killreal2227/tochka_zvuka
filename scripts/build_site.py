@@ -23,7 +23,7 @@ def write(path, content):
             asset = (path.parent / match[2]).resolve()
             revision = hashlib.sha256(asset.read_bytes()).hexdigest()[:10]
             return f'{match[1]}{match[2]}?v={revision}"'
-        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|form\.css|home\.css|narrow-header\.css|home-motion\.js|home-branches\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|direction-scroll\.js|button-labels\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
+        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|form\.css|home\.css|narrow-header\.css|troitsk-enrolment\.css|troitsk-enrolment\.js|home-motion\.js|home-branches\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|direction-scroll\.js|button-labels\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding='utf-8')
 
@@ -38,7 +38,16 @@ def compose(page, root):
 def build():
     template = read('city.html')
     for slug, city in CITIES.items():
-        page = compose(template, '../')
+        source = template
+        if slug == 'troitsk':
+            source = re.sub(r'<header class="top".*?</header>', lambda _: read('troitsk-header.html'), source, count=1, flags=re.S)
+            source = re.sub(r'<span class="kicker hero-copy">.*?</span></span>', '<span class="kicker hero-copy">музыкальное пространство · филиал Троицк</span>', source, count=1)
+            source = source.replace('{{dialog}}', read('troitsk-lead-dialog.html').replace('{{root}}', '../'))
+            source = source.replace('</head>', '<link rel="stylesheet" href="../troitsk-enrolment.css"><script src="../troitsk-enrolment.js" defer></script>\n</head>')
+            source = source.replace("  const st=$('#stick'),", "  if(document.body.dataset.city==='troitsk')return;\n  const st=$('#stick'),")
+        page = compose(source, '../')
+        if slug == 'troitsk':
+            page = re.sub(r'(<button class="footer-enrol openForm"[^>]*>).*?(<svg)', r'\1Записаться \2', page, count=1)
         for key, value in dict(city, slug=slug).items():
             page = page.replace('{{' + key + '}}', escape(value))
         write(SITE / slug / 'index.html', page)

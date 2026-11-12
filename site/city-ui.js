@@ -1,6 +1,7 @@
 /* A single, non-modal invitation per browser session; never above an open form. */
 (() => {
   'use strict';
+  if(document.body?.dataset.city==='troitsk')return;
   const box = document.getElementById('lessonNudge');
   if (!box) return;
   const key = 'tz.lesson-invitation.seen';

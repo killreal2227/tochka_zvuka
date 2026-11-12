@@ -2,6 +2,7 @@
 (() => {
   'use strict';
   window.createDirectionInteractions=({ready,prepare})=>{
+    if(document.body?.dataset.city==='troitsk')return;
     const grid=document.querySelector('#dirs .grid');if(!grid)return;
     const cards=[...grid.querySelectorAll('.card[data-dir]')],modal=document.getElementById('leadModal');
     const header=document.querySelector('header.top');
