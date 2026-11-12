@@ -254,6 +254,6 @@ body[data-city] #top .header-enrol svg { transition:none; animation:none; }
 body[data-city] #dirs .card { border-radius:8px; }
 
 @media(max-width:1000px) {
- body[data-city] .hero-actions .link { padding-left:14px; padding-bottom:0; align-items:flex-end; line-height:1; }
- body[data-city] .hero-actions .link svg { transform:translateY(2px); }
+ body[data-city] .hero-actions .link { padding-left:14px; padding-bottom:4px; align-items:flex-end; line-height:1; }
+ body[data-city] .hero-actions .link svg { transform:none; }
 }
