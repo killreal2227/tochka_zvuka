@@ -593,11 +593,11 @@
   line-height:1.4; color:#786c62; margin:0; overflow-wrap:break-word;
 }
 .lead-modal .sheet .lead-close {
-  top:12px; right:12px; width:44px; height:44px; border:1px solid #b9aa9d; border-radius:50%;
-  background:#e7ded4; color:#383838;
+  top:12px; right:12px; width:44px; height:44px; border:1px solid #786c6238; border-radius:50%;
+  background:rgba(231,222,212,.45); color:#383838;
 }
 .lead-modal .sheet .lead-close:hover {
-  background:#d9cec2; color:#1a1a1a;
+  background:rgba(217,206,194,.7); color:#1a1a1a;
 }
 .lead-modal .sheet .lead-close svg { width:14px; height:14px; }
 @media(max-width:600px) {
