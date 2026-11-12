@@ -126,18 +126,18 @@ function nudgeScene(store=new Map(),blocked=false) {
   const close=events(), trigger={focused:false,focus(){this.focused=true;}};
   const modal={hidden:true};
   const box={hidden:true,querySelector:()=>close,contains:el=>el===close};
-  const document=events({hidden:false,activeElement:null,getElementById:id=>id==='lessonNudge'?box:modal,querySelector:()=>trigger});
+  const document=events({hidden:false,activeElement:null,getElementById:id=>id==='lessonNudge'?box:id==='leadModal'?modal:null,querySelector:selector=>selector==='.top .openForm'?trigger:null});
   const timers=[],frames=[];
   const window=events({scrollY:0,innerHeight:800,setTimeout:fn=>timers.push(fn)});
   Object.defineProperty(window,'sessionStorage',{get(){if(blocked)throw Error('blocked');return{getItem:k=>store.get(k),setItem:(k,v)=>store.set(k,v)};}});
   vm.runInNewContext(source('city-ui.js'),{document,window,requestAnimationFrame:fn=>{frames.push(fn);return 1;}});
   return {box,modal,document,window,close,trigger,timers,async scroll(){await window.emit('scroll');frames.splice(0).forEach(fn=>fn());},delay(){timers.splice(0).forEach(fn=>fn());}};
 }
-test('invitation waits for time and scroll, shows once across pages in a session',async()=>{
+test('invitation waits for time and scroll, shows once per page visit',async()=>{
   const store=new Map(),s=nudgeScene(store);s.delay();assert.equal(s.box.hidden,true);
   s.window.scrollY=500;await s.scroll();assert.equal(s.box.hidden,false);
   await s.close.emit('click');assert.equal(s.box.hidden,true);await s.scroll();assert.equal(s.box.hidden,true);
-  const next=nudgeScene(store);next.window.scrollY=500;next.delay();await next.scroll();assert.equal(next.box.hidden,true);
+  const next=nudgeScene(store);next.window.scrollY=500;next.delay();await next.scroll();assert.equal(next.box.hidden,false);
 });
 test('invitation never overlays open form; Escape and outside pointer dismiss',async()=>{
   const s=nudgeScene();s.window.scrollY=500;s.modal.hidden=false;s.delay();assert.equal(s.box.hidden,true);
@@ -146,8 +146,8 @@ test('invitation never overlays open form; Escape and outside pointer dismiss',a
   await other.document.emit('keydown',{key:'Escape',preventDefault(){}});assert.equal(other.box.hidden,true);assert.equal(other.trigger.focused,true);
   const outside=nudgeScene();outside.window.scrollY=500;outside.delay();await outside.document.emit('pointerdown',{target:{}});assert.equal(outside.box.hidden,true);
 });
-test('invitation stays disabled if session storage is unavailable',()=>{
-  const s=nudgeScene(new Map(),true);s.window.scrollY=500;s.delay();assert.equal(s.box.hidden,true);assert.equal(s.timers.length,0);
+test('invitation works if session storage is unavailable',()=>{
+  const s=nudgeScene(new Map(),true);s.window.scrollY=500;s.delay();assert.equal(s.box.hidden,false);assert.equal(s.timers.length,0);
 });
 
 function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',combinedDocs=false) {

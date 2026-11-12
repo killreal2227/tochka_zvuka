@@ -1,4 +1,4 @@
-/* Restore the established centered composition, typography and direction artwork. */
+/* Branch header and stable direction cards; forms use the shared responsive stylesheet. */
 body[data-city="troitsk"] { --header-height:110px; }
 body[data-city="troitsk"] .top {
   position:fixed; display:flex; align-items:center; justify-content:space-between;
@@ -27,42 +27,8 @@ body[data-city="troitsk"] .top .header-call svg { width:25px; height:25px; }
 body[data-city="troitsk"] .top .header-call:hover { background:#d9cec2; }
 body[data-city="troitsk"] .hero { padding-top:calc(var(--header-height) + 40px); }
 body[data-city="troitsk"] :focus-visible { outline:2px solid var(--bord); outline-offset:4px; }
-body[data-city="troitsk"] .lesson-nudge { display:none!important; }
-/* Keep the original form and its reset control; change proportions rather than its visual language. */
-body[data-city="troitsk"] .lead-modal { padding:16px; font-family:var(--brand-font); }
-body[data-city="troitsk"] .lead-modal .lead-sheet {
-  display:grid; grid-template-columns:300px minmax(0,1fr); grid-template-rows:auto;
-  width:min(1040px,100%); max-height:calc(100dvh - 32px); padding:0; overflow-y:auto;
-}
-body[data-city="troitsk"] .lead-modal .sheet-art { display:block; height:auto; min-height:100%; }
-body[data-city="troitsk"] .lead-modal .sheet-body { height:auto; max-height:none; min-height:0; overflow:visible; padding:40px 32px 28px; }
-body[data-city="troitsk"] .lead-modal .sheet #leadForm { display:block; font-family:var(--brand-font); }
-body[data-city="troitsk"] .lead-modal .sheet #leadTitle { font-size:52px; line-height:1.08; margin:0 20px 12px 0; }
-body[data-city="troitsk"] .lead-modal .sheet #formIntro { margin:12px 0 16px; font-size:16px; line-height:1.35; }
-body[data-city="troitsk"] .lead-modal .sheet #contactFields { display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr); gap:16px; margin:0 0 16px; }
-body[data-city="troitsk"] .lead-modal .sheet #contactFields .f { margin:0; }
-body[data-city="troitsk"] .lead-modal .sheet #contactFields input { min-height:44px; font-family:var(--brand-font); font-size:18px; }
-body[data-city="troitsk"] .lead-modal .sheet #chips { margin:0 0 16px; padding:0; }
-body[data-city="troitsk"] .lead-modal .sheet .direction-legend { display:flex; min-height:44px; justify-content:space-between; align-items:center; gap:8px; margin:0 0 8px; }
-body[data-city="troitsk"] .lead-modal .sheet #directionTitle { font-family:var(--brand-font); font-size:18px; line-height:1.2; }
-body[data-city="troitsk"] .lead-modal .sheet #directionReset { min-height:44px; font-family:var(--brand-font); font-size:16px; }
-body[data-city="troitsk"] .lead-modal .sheet #chips .pick-row,
-body[data-city="troitsk"] .lead-modal .sheet #chips.has .pick-row { display:flex; flex-wrap:nowrap; justify-content:space-between; width:100%; padding:6px 4px; margin:0; gap:8px; overflow:visible; }
-body[data-city="troitsk"] .lead-modal .sheet .pk { flex:0 0 60px; width:60px; height:60px; }
-body[data-city="troitsk"] .lead-modal .sheet .pk label { width:60px; height:60px; min-width:60px; min-height:60px; justify-content:center; padding:0; }
-body[data-city="troitsk"] .lead-modal .sheet .pk .choice-icon { flex:0 0 60px; width:60px; height:60px; }
-body[data-city="troitsk"] .lead-modal .sheet .pk label[data-ico] .choice-icon img { width:60px; height:60px; object-fit:contain; }
-body[data-city="troitsk"] .lead-modal .sheet #leadForm .send { display:grid; grid-template-columns:1.3fr 1fr; width:100%; gap:12px; margin:0; }
-body[data-city="troitsk"] .lead-modal .sheet #leadForm .action-pane { display:grid; grid-template-rows:62px auto; gap:8px; min-width:0; }
-body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-consent,
-body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-address { margin:0; font-family:var(--brand-font); font-size:13px; line-height:1.3; }
-body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-consent a,
-body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-address a { display:flex; align-items:center; min-height:44px; font-family:var(--brand-font); font-size:13px; line-height:1.3; }
-body[data-city="troitsk"] .lead-modal .sheet .form-status:empty { display:none; }
 
-body[data-city="troitsk"] .lead-modal .sheet:has(.lead-success:not([hidden])) { display:block; width:min(488px,100%); }
-body[data-city="troitsk"] .lead-modal .sheet:has(.lead-success:not([hidden])) .sheet-art { display:none; }
-body[data-city="troitsk"] .stick { display:none; }
+
 @media(max-width:1000px) {
   body[data-city="troitsk"] { --header-height:80px; }
   body[data-city="troitsk"] .top { padding-left:clamp(16px,4vw,24px); padding-right:clamp(16px,4vw,24px); gap:8px; }
@@ -75,191 +41,87 @@ body[data-city="troitsk"] .stick { display:none; }
   body[data-city="troitsk"] .top .header-call { width:44px; height:44px; flex-basis:44px; }
   body[data-city="troitsk"] .top .header-call svg { width:22px; height:22px; }
   body[data-city="troitsk"] .hero { padding-top:calc(var(--header-height) + 32px); }
-  body[data-city="troitsk"] .lead-modal .lead-sheet { grid-template-columns:minmax(0,1fr); grid-template-rows:80px auto; width:min(680px,100%); }
-  body[data-city="troitsk"] .lead-modal .sheet-art { height:80px; min-height:0; }
-  body[data-city="troitsk"] .lead-modal .sheet-art::after { border:0; border-bottom:2px solid var(--accent); }
-  body[data-city="troitsk"] .lead-modal .sheet-body { padding:24px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadTitle { font-size:44px; }
-  body[data-city="troitsk"] .lead-modal .sheet #contactFields input { font-size:16px; }
 }
-@media(max-width:700px) {
-  body[data-city="troitsk"] { padding-bottom:calc(80px + env(safe-area-inset-bottom)); }
-  body[data-city="troitsk"] .lead-modal { padding:0; align-items:end; }
-  body[data-city="troitsk"] .lead-modal .lead-sheet {
-    display:block; width:min(540px,calc(100% - 24px)); max-height:calc(100dvh - 24px - env(safe-area-inset-bottom));
-    margin:0 0 calc(12px + env(safe-area-inset-bottom)); border-radius:var(--tz-panel-radius); transform:translateY(28px);
-  }
-  body[data-city="troitsk"] .lead-modal.open .lead-sheet { transform:none; }
-  body[data-city="troitsk"] .lead-modal .sheet-body { padding:20px 16px 12px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadTitle { font-size:36px; line-height:1.05; margin-right:28px; }
-  body[data-city="troitsk"] .lead-modal .sheet #formIntro { font-size:14px; margin:8px 0 12px; }
-  body[data-city="troitsk"] .lead-modal .sheet #contactFields { gap:12px; margin-bottom:8px; }
-  body[data-city="troitsk"] .lead-modal .sheet #directionTitle { font-size:16px; }
-  body[data-city="troitsk"] .lead-modal .sheet #directionReset { font-size:14px; }
-  body[data-city="troitsk"] .lead-modal .sheet #chips { margin-bottom:10px; }
-  body[data-city="troitsk"] .lead-modal .sheet #chips .pick-row,
-  body[data-city="troitsk"] .lead-modal .sheet #chips.has .pick-row { padding:4px 1px; gap:0; }
-  body[data-city="troitsk"] .lead-modal .sheet .pk { width:48px; height:48px; flex-basis:48px; }
-  body[data-city="troitsk"] .lead-modal .sheet .pk label { width:48px; height:48px; min-width:48px; min-height:48px; }
-  body[data-city="troitsk"] .lead-modal .sheet .pk .choice-icon { width:48px; height:48px; flex-basis:48px; }
-  body[data-city="troitsk"] .lead-modal .sheet .pk label[data-ico] .choice-icon img { width:52px; height:52px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .send { position:relative; display:flex; align-items:center; gap:12px; padding-bottom:48px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .action-pane { display:contents; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm #submitBtn { flex:1; min-width:0; height:56px; min-height:56px; font-size:14px; padding-left:12px; padding-right:6px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm #submitBtn i { width:36px; height:36px; flex-basis:36px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-call { position:relative; width:56px; min-width:56px; height:56px; min-height:56px; flex:0 0 56px; padding:0; border-radius:50%; font-size:0; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-call i { position:absolute; inset:0; margin:auto; width:32px; height:32px; background:transparent; color:#383838; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-call svg { width:24px; height:24px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-consent,
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-address { position:absolute; bottom:0; width:48%; font-size:11px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-consent { left:0; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-address { right:0; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-consent a,
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-address a { min-height:44px; font-size:11px; }
-  body[data-city="troitsk"] .stick { display:flex; position:fixed; left:12px; right:12px; bottom:calc(12px + env(safe-area-inset-bottom)); z-index:50; min-height:56px; transform:translateY(calc(100% + 24px)); opacity:0; visibility:hidden; transition:transform .3s,opacity .3s,visibility .3s; }
-  body[data-city="troitsk"] .stick.show { transform:none; opacity:1; visibility:visible; }
-}
-@media(max-height:640px) {
-  body[data-city="troitsk"] .lead-modal .sheet-art { display:none; }
-  body[data-city="troitsk"] .lead-modal .lead-sheet { grid-template-rows:auto; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadTitle { font-size:32px; }
-  body[data-city="troitsk"] .lead-modal .sheet-body { padding-top:16px; }
-}
-@media(max-height:500px) and (min-width:701px) {
-  body[data-city="troitsk"] .lead-modal .lead-sheet { display:block; width:min(760px,calc(100% - 24px)); }
-  body[data-city="troitsk"] .lead-modal .sheet-body { padding:16px 20px 12px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm { display:grid; grid-template-columns:1fr 1fr; gap:8px 20px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadTitle { grid-column:1; font-size:28px; margin:0; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadTitle br { display:none; }
-  body[data-city="troitsk"] .lead-modal .sheet #formIntro { grid-column:2; grid-row:1; margin:0; align-self:center; font-size:13px; }
-  body[data-city="troitsk"] .lead-modal .sheet #contactFields { grid-column:1 / -1; grid-row:2; margin:0; }
-  body[data-city="troitsk"] .lead-modal .sheet #chips { grid-column:1; grid-row:3; margin:0; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .send { grid-column:2; grid-row:3; align-self:end; }
-  body[data-city="troitsk"] .lead-modal .sheet #chips .pick-row { padding:4px; }
-  body[data-city="troitsk"] .lead-modal .sheet .pk { width:44px; height:44px; flex-basis:44px; }
-  body[data-city="troitsk"] .lead-modal .sheet .pk label { width:44px; height:44px; min-width:44px; min-height:44px; }
-  body[data-city="troitsk"] .lead-modal .sheet .pk .choice-icon { width:44px; height:44px; flex-basis:44px; }
-  body[data-city="troitsk"] .lead-modal .sheet .pk label[data-ico] .choice-icon img { width:48px; height:48px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm #directionTitle { font-size:14px; }
-}
-@media(max-width:1000px) {
-  body[data-city="troitsk"] .lead-modal .sheet.field-focused { grid-template-rows:auto; }
-  body[data-city="troitsk"] .lead-modal .sheet.field-focused .sheet-art { display:none; }
-}
-@media(max-height:640px) {
-  body[data-city="troitsk"] .lead-modal .lead-sheet { grid-template-columns:minmax(0,1fr); }
-}
-@media(max-height:500px) and (min-width:701px) {
-  body[data-city="troitsk"] .lead-modal .sheet #leadTitle em { margin-left:5px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .send { position:relative; display:flex; flex-wrap:nowrap; align-items:center; gap:12px; width:100%; padding-bottom:48px; margin:0; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .action-pane { display:contents; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm #submitBtn { display:flex; flex:1; min-width:0; width:auto; height:56px; min-height:56px; padding:6px 6px 6px 12px; font-size:14px; gap:8px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm #submitBtn i { position:relative; inset:auto; margin:0; transform:none; width:36px; height:36px; flex:0 0 36px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-call { position:relative; width:56px; min-width:56px; height:56px; min-height:56px; flex:0 0 56px; padding:0; border-radius:50%; font-size:0; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-call i { position:absolute; inset:0; margin:auto; width:32px; height:32px; background:transparent; color:#383838; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-call svg { width:24px; height:24px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-consent,
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-address { position:absolute; bottom:0; width:48%; font-size:11px; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-consent { left:0; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-address { right:0; }
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-consent a,
-  body[data-city="troitsk"] .lead-modal .sheet #leadForm .lead-address a { min-height:44px; font-size:11px; }
-}
-@media(max-height:500px) and (min-width:701px) and (pointer:coarse) {
-  body[data-city="troitsk"] .lead-modal { padding:0; align-items:end; }
-  body[data-city="troitsk"] .lead-modal .lead-sheet { margin-bottom:calc(12px + env(safe-area-inset-bottom)); max-height:calc(100dvh - 24px); border-radius:var(--tz-panel-radius); }
-}
+
 
 body[data-city="troitsk"] .top .header-enrol:hover { transform:none; background:var(--ink); }
 body[data-city="troitsk"] .top .top-right > .header-enrol { text-transform:uppercase; }
-@media(max-width:1000px) {
-  body[data-city="troitsk"] .lead-modal { padding:0; align-items:end; }
-  body[data-city="troitsk"] .lead-modal .lead-sheet {
-    width:min(680px,calc(100% - 24px)); margin:0 0 calc(12px + env(safe-area-inset-bottom));
-    max-height:calc(100dvh - 24px - env(safe-area-inset-bottom)); border-radius:var(--tz-panel-radius);
-    transform:translateY(calc(100% + 24px)); transition:transform .38s var(--ease);
-  }
-  body[data-city="troitsk"] .lead-modal.open .lead-sheet { transform:none; }
-}
-@media(max-width:1000px) and (max-height:500px) and (min-width:701px) {
-  body[data-city="troitsk"] .lead-modal .lead-sheet { width:min(760px,calc(100% - 24px)); }
-}
 
 /* One stable layout: icons above, titles anchored at the bottom, descriptions out of flow. */
-body[data-city="troitsk"] #dirs { scroll-margin-top:calc(var(--header-height) + 20px); }
-body[data-city="troitsk"] #dirs .grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
-body[data-city="troitsk"] #dirs .card,
-body[data-city="troitsk"] #dirs .card:hover,
-body[data-city="troitsk"] #dirs .card:focus-visible {
+body[data-city] #dirs { scroll-margin-top:calc(var(--header-height) + 20px); }
+body[data-city] #dirs .grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+body[data-city] #dirs .card,
+body[data-city] #dirs .card:hover,
+body[data-city] #dirs .card:focus-visible {
   display:block; position:relative; height:clamp(330px,29vw,400px); min-height:0; padding:24px;
   transform:none; transition:none; opacity:1;
 }
-body[data-city="troitsk"] #dirs .card > .ico,
-body[data-city="troitsk"] #dirs .card:hover > .ico {
+body[data-city] #dirs .card > .ico,
+body[data-city] #dirs .card:hover > .ico {
   position:absolute; left:24px; top:24px; width:104px; height:96px; max-width:none;
   object-fit:contain; object-position:left top; transform:none;
 }
-body[data-city="troitsk"] #dirs .card > span:not(.bg-clip):not(.go),
-body[data-city="troitsk"] #dirs .card.is-active > span:not(.bg-clip):not(.go),
-body[data-city="troitsk"] #dirs .card:hover > span:not(.bg-clip):not(.go) {
+body[data-city] #dirs .card > span:not(.bg-clip):not(.go),
+body[data-city] #dirs .card.is-active > span:not(.bg-clip):not(.go),
+body[data-city] #dirs .card:hover > span:not(.bg-clip):not(.go) {
   position:absolute; left:24px; right:24px; bottom:24px; width:auto; min-width:0; padding:0;
   transform:none; transition:transform .32s var(--ease);
 }
-body[data-city="troitsk"] #dirs .card .name { font-size:clamp(35px,3.75vw,57.5px); line-height:1.08; max-width:none; }
-body[data-city="troitsk"] #dirs .card .desc,
-body[data-city="troitsk"] #dirs .card.is-active .desc,
-body[data-city="troitsk"] #dirs .card.is-preview .desc,
-body[data-city="troitsk"] #dirs .card:hover .desc,
-body[data-city="troitsk"] #dirs .card:focus-visible .desc {
+body[data-city] #dirs .card .name { font-size:clamp(35px,3.75vw,57.5px); line-height:1.08; max-width:none; }
+body[data-city] #dirs .card .desc,
+body[data-city] #dirs .card.is-active .desc,
+body[data-city] #dirs .card.is-preview .desc,
+body[data-city] #dirs .card:hover .desc,
+body[data-city] #dirs .card:focus-visible .desc {
   position:absolute; left:0; top:100%; width:calc(100% - 36px); height:auto; max-height:none;
   padding:0; margin:8px 0 0; overflow:visible; font-size:17px; line-height:1.3;
   opacity:0; visibility:hidden; transition:opacity .22s,visibility .22s;
 }
-body[data-city="troitsk"] #dirs .card .go,
-body[data-city="troitsk"] #dirs .card:hover .go,
-body[data-city="troitsk"] #dirs .card:focus-visible .go {
+body[data-city] #dirs .card .go,
+body[data-city] #dirs .card:hover .go,
+body[data-city] #dirs .card:focus-visible .go {
   top:auto; bottom:24px; right:20px; width:32px; height:32px; opacity:1; transform:none;
 }
-body[data-city="troitsk"] #dirs .card.is-preview > span:not(.bg-clip):not(.go),
-body[data-city="troitsk"] #dirs .card:focus-visible > span:not(.bg-clip):not(.go) { transform:translateY(calc(-1 * var(--description-rise,80px))); }
-body[data-city="troitsk"] #dirs .card.is-preview .desc,
-body[data-city="troitsk"] #dirs .card:focus-visible .desc { opacity:1; visibility:visible; }
-body[data-city="troitsk"] #dirs .card.is-preview .go,
-body[data-city="troitsk"] #dirs .card:focus-visible .go { opacity:1; }
+body[data-city] #dirs .card.is-preview > span:not(.bg-clip):not(.go),
+body[data-city] #dirs .card:focus-visible > span:not(.bg-clip):not(.go) { transform:translateY(calc(-1 * var(--description-rise,80px))); }
+body[data-city] #dirs .card.is-preview .desc,
+body[data-city] #dirs .card:focus-visible .desc { opacity:1; visibility:visible; }
+body[data-city] #dirs .card.is-preview .go,
+body[data-city] #dirs .card:focus-visible .go { opacity:1; }
 @media(hover:hover) and (pointer:fine) {
-  body[data-city="troitsk"] #dirs .card:hover > span:not(.bg-clip):not(.go) { transform:translateY(calc(-1 * var(--description-rise,80px))); }
-  body[data-city="troitsk"] #dirs .card:hover .desc { opacity:1; visibility:visible; }
-  body[data-city="troitsk"] #dirs .card:hover .go { opacity:1; }
+  body[data-city] #dirs .card:hover > span:not(.bg-clip):not(.go) { transform:translateY(calc(-1 * var(--description-rise,80px))); }
+  body[data-city] #dirs .card:hover .desc { opacity:1; visibility:visible; }
+  body[data-city] #dirs .card:hover .go { opacity:1; }
 }
 @media(min-width:700px) and (max-width:1000px) {
-  body[data-city="troitsk"] #dirs .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  body[data-city] #dirs .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 @media(max-width:1000px) {
-  body[data-city="troitsk"] #dirs .card,
-  body[data-city="troitsk"] #dirs .card:hover,
-  body[data-city="troitsk"] #dirs .card:focus-visible { height:300px; padding:16px; }
-  body[data-city="troitsk"] #dirs .card > .ico,
-  body[data-city="troitsk"] #dirs .card:hover > .ico { left:16px; top:16px; width:84px; height:64px; transform:none; }
-  body[data-city="troitsk"] #dirs .card > span:not(.bg-clip):not(.go),
-  body[data-city="troitsk"] #dirs .card.is-active > span:not(.bg-clip):not(.go),
-  body[data-city="troitsk"] #dirs .card.is-preview > span:not(.bg-clip):not(.go),
-  body[data-city="troitsk"] #dirs .card:hover > span:not(.bg-clip):not(.go),
-  body[data-city="troitsk"] #dirs .card:focus-visible > span:not(.bg-clip):not(.go) { left:16px; right:16px; bottom:20px; }
-  body[data-city="troitsk"] #dirs .card .name { font-size:clamp(27.5px,4vw,40px); }
-  body[data-city="troitsk"] #dirs .card .desc,
-  body[data-city="troitsk"] #dirs .card.is-active .desc,
-  body[data-city="troitsk"] #dirs .card.is-preview .desc,
-  body[data-city="troitsk"] #dirs .card:hover .desc,
-  body[data-city="troitsk"] #dirs .card:focus-visible .desc { font-size:16px; }
-  body[data-city="troitsk"] #dirs .card .go,
-  body[data-city="troitsk"] #dirs .card:hover .go,
-  body[data-city="troitsk"] #dirs .card:focus-visible .go { bottom:20px; right:16px; width:28px; height:28px; }
+  body[data-city] #dirs .card,
+  body[data-city] #dirs .card:hover,
+  body[data-city] #dirs .card:focus-visible { height:300px; padding:16px; }
+  body[data-city] #dirs .card > .ico,
+  body[data-city] #dirs .card:hover > .ico { left:16px; top:16px; width:84px; height:64px; transform:none; }
+  body[data-city] #dirs .card > span:not(.bg-clip):not(.go),
+  body[data-city] #dirs .card.is-active > span:not(.bg-clip):not(.go),
+  body[data-city] #dirs .card.is-preview > span:not(.bg-clip):not(.go),
+  body[data-city] #dirs .card:hover > span:not(.bg-clip):not(.go),
+  body[data-city] #dirs .card:focus-visible > span:not(.bg-clip):not(.go) { left:16px; right:16px; bottom:20px; }
+  body[data-city] #dirs .card .name { font-size:clamp(27.5px,4vw,40px); }
+  body[data-city] #dirs .card .desc,
+  body[data-city] #dirs .card.is-active .desc,
+  body[data-city] #dirs .card.is-preview .desc,
+  body[data-city] #dirs .card:hover .desc,
+  body[data-city] #dirs .card:focus-visible .desc { font-size:16px; }
+  body[data-city] #dirs .card .go,
+  body[data-city] #dirs .card:hover .go,
+  body[data-city] #dirs .card:focus-visible .go { bottom:20px; right:16px; width:28px; height:28px; }
 }
 @media(width < 700px) {
-  body[data-city="troitsk"] #dirs .grid { grid-template-columns:minmax(0,1fr); }
-  body[data-city="troitsk"] #dirs .card,
-  body[data-city="troitsk"] #dirs .card:hover,
-  body[data-city="troitsk"] #dirs .card:focus-visible { height:260px; }
+  body[data-city] #dirs .grid { grid-template-columns:minmax(0,1fr); }
+  body[data-city] #dirs .card,
+  body[data-city] #dirs .card:hover,
+  body[data-city] #dirs .card:focus-visible { height:260px; }
 }
 /* Compact vertical arrow, with no inherited rotation from generic button hover rules. */
 body[data-city="troitsk"] .top .header-enrol i,
@@ -271,63 +133,29 @@ body[data-city="troitsk"] .top .header-enrol i svg { width:18px; height:18px; }
   body[data-city="troitsk"] .top .header-enrol i svg { width:16px; height:16px; }
 }
 @media(prefers-reduced-motion:reduce) {
-  body[data-city="troitsk"] #dirs .card *,body[data-city="troitsk"] #dirs .card::before,
-  body[data-city="troitsk"] #dirs .card::after { animation:none!important; transition:none!important; }
+  body[data-city] #dirs .card *,body[data-city] #dirs .card::before,
+  body[data-city] #dirs .card::after { animation:none!important; transition:none!important; }
 }
 
-/* Preserve the narrow logo; the lesson button gives up horizontal space first. */
-body[data-city="troitsk"] .top .header-enrol i,
-body[data-city="troitsk"] .top .header-enrol:hover i { margin-right:4px; }
-@media(max-width:1000px) {
-  body[data-city="troitsk"] .top .header-identity { flex:0 0 180px; }
-  body[data-city="troitsk"] .top .brand { width:180px; min-width:180px; max-width:180px; }
-  body[data-city="troitsk"] .top .top-right { flex:0 1 auto; min-width:0; }
-  body[data-city="troitsk"] .top .top-right > .header-enrol { flex:0 1 156px; width:156px; min-width:64px; padding-right:40px; }
-  body[data-city="troitsk"] .top .header-enrol i,
-  body[data-city="troitsk"] .top .header-enrol:hover i { right:7px; margin:0; }
-}
-@media(max-width:480px) {
-  body[data-city="troitsk"] .top .header-enrol > svg.capsule-caption { display:none; }
-  body[data-city="troitsk"] .top .header-enrol > .header-enrol-label {
-    position:absolute; left:4px; right:34px; top:0; bottom:0;
-    display:flex; flex-direction:column; justify-content:center; align-items:center;
-    opacity:1; font-size:11px; line-height:12px; letter-spacing:0;
-  }
-}
-@media(width < 360px) {
-  body[data-city="troitsk"] .top { padding-left:12px; padding-right:12px; gap:4px; }
-  body[data-city="troitsk"] .top .top-right { gap:4px; }
-  body[data-city="troitsk"] .top .header-enrol-label > span:first-child { display:none; }
-}
 /* The pattern repeats at its original ratio instead of zooming and cropping. */
-body[data-city="troitsk"] #dirs .card .bg,
-body[data-city="troitsk"] #dirs .card .bg-clip .bg,
-body[data-city="troitsk"] #dirs .card:hover .bg,
-body[data-city="troitsk"] #dirs .card:focus-visible .bg {
+body[data-city] #dirs .card .bg,
+body[data-city] #dirs .card .bg-clip .bg,
+body[data-city] #dirs .card:hover .bg,
+body[data-city] #dirs .card:focus-visible .bg {
   position:absolute; inset:0; left:0; top:0; width:100%; height:100%; max-width:none;
   aspect-ratio:auto; transform:none; transition:none;
 }
-body[data-city="troitsk"] #dirs .card .bg-clip { inset:0; }
-body[data-city="troitsk"] #dirs .card::before,
-body[data-city="troitsk"] #dirs .card::after {
-  inset:0; background-size:100% 100%,100% auto; background-repeat:no-repeat,repeat;
+body[data-city] #dirs .card .bg-clip { inset:0; }
+body[data-city] #dirs .card::before,
+body[data-city] #dirs .card::after {
+  inset:0; background-size:100% 100%,540px auto; background-repeat:no-repeat,repeat;
   background-position:0 0; transform:none;
 }
-body[data-city="troitsk"] #dirs .card > .ico { transition:transform .25s var(--ease); }
-body[data-city="troitsk"] #dirs .card.is-preview > .ico { transform:scale(1.15); transform-origin:center; }
-body[data-city="troitsk"] #dirs .card .go { transition:background-color .2s,color .2s,box-shadow .2s,transform .2s; }
-body[data-city="troitsk"] #dirs .card.is-preview .go {
-  background:var(--cream); color:var(--ink); box-shadow:0 0 0 2px var(--ink);
-  transform:scale(1.12); animation:direction-ready .45s ease-out 1;
-}
-body[data-city="troitsk"] #dirs .card.is-preview .go svg { transform:rotate(45deg); transition:transform .25s ease; }
-@keyframes direction-ready { 0% { transform:scale(1); } 55% { transform:scale(1.2); } 100% { transform:scale(1.12); } }
-@media(hover:none), (pointer:coarse) {
-  body[data-city="troitsk"] .lead-modal { padding:0; align-items:end; }
-  body[data-city="troitsk"] .lead-modal .lead-sheet { width:min(760px,calc(100% - 24px)); margin:0 0 calc(12px + env(safe-area-inset-bottom)); max-height:calc(100dvh - 24px); transform:translateY(calc(100% + 24px)); }
-  body[data-city="troitsk"] .lead-modal.open .lead-sheet { transform:none; }
-}
+body[data-city] #dirs .card > .ico { transition:transform .25s var(--ease); }
+body[data-city] #dirs .card.is-preview > .ico { transform:scale(1.15); transform-origin:center; }
+body[data-city] #dirs .card .go { transition:background-color .2s,color .2s,box-shadow .2s,transform .2s; }
 
-@media(min-width:1001px) and (pointer:coarse) {
-  body[data-city="troitsk"] .lead-modal .lead-sheet { width:min(1040px,calc(100% - 24px)); }
+@media(max-width:1000px) {
+ body[data-city="troitsk"] .top .header-enrol i { right:7px; }
+ body[data-city="troitsk"] .top .top-right > .header-enrol { white-space:nowrap; font-size:clamp(10px,2.6vw,13px); padding-left:10px; }
 }

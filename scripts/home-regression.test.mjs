@@ -108,7 +108,7 @@ function rules(css, viewport, active = true) {
   }
   return out;
 }
-const sheets = ['experience.css', 'home.css', 'narrow-header.css'].map(p => fs.readFileSync(new URL('site/' + p, root), 'utf8')).join('\n');
+const sheets = ['experience.css', 'home.css', 'narrow-header.css', 'responsive.css'].map(p => fs.readFileSync(new URL('site/' + p, root), 'utf8')).join('\n');
 function resolve(viewport, target, state = '') {
   const properties = new Map(); let order = 0;
   for (const rule of rules(sheets, viewport)) for (const selector of rule.selectors) {
@@ -156,7 +156,7 @@ test('card/title geometry declarations are identical through hover and focus', (
 test('1000px is narrow and hides header cities; 1001px remains desktop', () => {
   for (const width of widths.filter(w => w <= 1000)) {
     assert.equal(resolve(width, 'header').display, 'flex');
-    assert.equal(resolve(width, 'grid')['grid-template-columns'], 'minmax(0, 1fr)');
+    assert.equal(resolve(width, 'grid')['grid-template-columns'], 'repeat(2, minmax(0, 1fr))');
     assert.equal(resolve(width, 'cities')['justify-content'], 'space-between');
     assert.equal(resolve(width, 'cities').display, 'none');
     assert.equal(resolve(width, 'header').height, 'var(--header-height)');

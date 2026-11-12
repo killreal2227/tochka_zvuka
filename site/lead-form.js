@@ -93,6 +93,8 @@ const formArt=(()=>{
     });
   });
   const pageCity=document.body.dataset.city||'';
+  const fieldFocused=()=>sheet.classList.toggle('field-focused',sheet.contains(document.activeElement)&&document.activeElement.matches('input:not([type="radio"])'));
+  sheet.addEventListener('focusin',fieldFocused);sheet.addEventListener('focusout',()=>queueMicrotask(fieldFocused));
   let lastFocus=null,pending=null,sending=false;
   const branchPicker=(()=>{
     const picker=$('.lead-branch-picker');
@@ -140,17 +142,17 @@ const formArt=(()=>{
   })();
   function open(direction){
     lastFocus=document.activeElement;
-    if(pageCity==='troitsk'&&!direction) $$('input[name="direction"]').forEach(r=>{r.checked=false;});
+    if(!direction) $$('input[name="direction"]').forEach(r=>{r.checked=false;});
     if(pageCity){form.elements.branch.value=pageCity;form.querySelector('.lead-branch-label').hidden=true;}
     if(direction){const radio=form.querySelector('input[name="direction"][value="'+direction+'"]');if(radio)radio.checked=true;}
     form.hidden=false;success.hidden=true;sheet.setAttribute('aria-labelledby','leadTitle');status.textContent='';
-    modal.hidden=false;if(pageCity==='troitsk'){modal.classList.remove('open');void sheet.offsetWidth;}modal.classList.add('open');modal.setAttribute('aria-hidden','false');formArt.tint(true);formArt.start();document.body.style.overflow='hidden';sheet.focus({preventScroll:true});syncBranch();document.dispatchEvent(new CustomEvent('tz:lead-open'));
+    modal.hidden=false;modal.classList.remove('open');void sheet.offsetWidth;modal.classList.add('open');modal.setAttribute('aria-hidden','false');formArt.tint(true);formArt.start();document.body.style.overflow='hidden';sheet.focus({preventScroll:true});syncBranch();document.dispatchEvent(new CustomEvent('tz:lead-open'));
   }
   function close(){if(sending)return;branchPicker.close();formArt.stop();modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.hidden=true;document.body.style.overflow='';lastFocus?.focus({preventScroll:true});document.dispatchEvent(new CustomEvent('tz:lead-close'));}
   document.querySelectorAll('.openForm').forEach(el=>el.addEventListener('click',()=>open()));
   document.querySelectorAll('.card[data-dir]').forEach(el=>el.addEventListener('click',event=>{
     const touch=matchMedia('(hover:none), (pointer:coarse)').matches;
-    if(pageCity==='troitsk'&&(matchMedia('(max-width:1000px)').matches||touch)&&(event.detail!==0||touch)&&!el.classList.contains('is-preview')){
+    if(pageCity&&(matchMedia('(max-width:1000px)').matches||touch)&&(event.detail!==0||touch)&&!el.classList.contains('is-preview')){
       document.dispatchEvent(new CustomEvent('tz:direction-preview',{detail:{card:el}}));return;
     }
     open(el.dataset.dir);

@@ -5,7 +5,7 @@
     const grid=document.querySelector('#dirs .grid');if(!grid)return;
     const cards=[...grid.querySelectorAll('.card[data-dir]')],modal=document.getElementById('leadModal');
     const fine=matchMedia('(hover:hover) and (pointer:fine)'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
-    const previews=document.body?.dataset.city==='troitsk';let active=null,preview=null;
+    const previews=!!document.body?.dataset.city;let active=null,preview=null;
     const player=window.createDirectionPlayer({ready,prepare,eligible:card=>card===active,
       reduced:()=>reduced.matches,blocked:()=>document.hidden||!modal.hidden});
     function select(card,restart=false){
