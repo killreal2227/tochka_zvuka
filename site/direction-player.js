@@ -34,14 +34,4 @@
     Promise.resolve(ready).then(() => { loaded = true; start(); }).catch(() => api.stop());
     return api;
   };
-  // Scroll position selects a card in either direction; hysteresis avoids boundary jitter.
-  window.getDirectionScrollIndex=(progress,count,previous=-1)=>{
-    if(count<=1)return 0;
-    const p=Math.max(0,Math.min(1,progress));
-    if(previous<0||previous>=count)return Math.min(count-1,Math.floor(p*count));
-    let index=previous;const margin=.035;
-    while(index<count-1&&p>(index+1)/count+margin)index++;
-    while(index>0&&p<index/count-margin)index--;
-    return index;
-  };
 })();

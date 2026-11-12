@@ -820,10 +820,10 @@ const bgReady = (!reduce && 'DOMParser' in window) ? (()=>{
 const SPREAD=.7, AFTER=SPREAD+.25;
 function prepCard(card){
   if(card._prep) return card._prep; card._prep=2.9;
-  const cr=card.getBoundingClientRect(), dir=card.dataset.dir;
+  const cr=card.getBoundingClientRect(), dir=card.dataset.dir,complete=document.body?.dataset.city==='troitsk';
   if(dir==='vocal'){
     const bands=$$('svg.bg path[stroke-width]',card).map(p=>({p,r:p.getBoundingClientRect()}))
-      .filter(({r})=>r.width>r.height*4&&r.right>=cr.left&&r.left<=cr.right&&r.bottom>=cr.top&&r.top<=cr.bottom)
+      .filter(({r})=>complete||(r.width>r.height*4&&r.right>=cr.left&&r.left<=cr.right&&r.bottom>=cr.top&&r.top<=cr.bottom))
       .sort((a,b)=>a.r.top-b.r.top||a.r.left-b.r.left);
     bands.forEach(({p},i)=>{
       p.setAttribute('pathLength',1); p.classList.add('ap','rev');
@@ -843,7 +843,7 @@ function prepCard(card){
   const items=[];
   $$('svg.bg path[stroke-width]',card).forEach(p=>{
     const r=p.getBoundingClientRect();
-    if(r.right<cr.left||r.left>cr.right||r.bottom<cr.top||r.top>cr.bottom) return;   // за пределами карточки — не трогаем
+    if(!complete&&(r.right<cr.left||r.left>cr.right||r.bottom<cr.top||r.top>cr.bottom)) return;   // за пределами карточки — не трогаем
     let rev=false;
     try{ const m=p.getScreenCTM(), P=l=>{ const q=p.getPointAtLength(l); return new DOMPoint(q.x,q.y).matrixTransform(m); },
          a=P(0), z=P(p.getTotalLength());
@@ -855,14 +855,14 @@ function prepCard(card){
   const n=Math.max(1,items.length-1);
   items.forEach((it,i)=>{ it.p.setAttribute('pathLength',1); it.p.classList.add('ap'); if(it.rev) it.p.classList.add('rev'); it.p.style.setProperty('--a',(i/n*SPREAD).toFixed(3)); });
   // узел движения: группа-обёртка с прозрачностью (в ней же её обрезка), если в ней одна линия; иначе своя обёртка
-  const unit=p=>{ const g=p.closest('g[opacity]'); if(g && g.querySelectorAll('path[stroke-width]').length===1) return g;
+  const unit=p=>{ const g=p.closest('g[opacity]'); if(g && (g.querySelectorAll('path[stroke-width]').length===1||(complete&&(dir==='actor'||dir==='speech')))) return g;
     const w=document.createElementNS('http://www.w3.org/2000/svg','g'); p.before(w); w.appendChild(p); return w; };
   const byX=[...items].sort((u,v)=>u.cx-v.cx);
   if(dir==='drums'){
     // круги бьют по рядам слева направо, палочки делают замах
     const G=$$('svg.bg g[opacity]',card), seen=new Set();
     byX.forEach((it,i)=>{ const g=it.p.closest('g[opacity]'); if(!g||seen.has(g)) return; seen.add(g);
-      const r=it.p.getBoundingClientRect(), cx=(r.left+r.right)/2-cr.left, k=Math.floor(cx/(cr.width/5));
+      const r=it.p.getBoundingClientRect(), cx=(r.left+r.right)/2-cr.left, k=complete?Math.min(4,Math.floor(i/Math.max(1,byX.length)*5)):Math.floor(cx/(cr.width/5));
       g.classList.add('bg-ring'); g.style.setProperty('--d',(AFTER+k*.16+(it.top>cr.height/2?.08:0)).toFixed(3));
       const bb=g.getBBox(); g.style.transformOrigin=`${bb.x+bb.width/2}px ${bb.y+bb.height/2}px`; });
   } else {

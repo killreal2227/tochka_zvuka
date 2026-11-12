@@ -277,15 +277,6 @@ test('branch header shows only its current address without a branch switching co
   assert.ok(!template.includes("const bBtn="));assert.ok(header.includes('header-cta openForm'));
 });
 
-test('scroll selection reverses in three columns and ignores tiny boundary movements',()=>{
-  const window={};vm.runInNewContext(source('direction-player.js'),{window,Promise});
-  const pick=window.getDirectionScrollIndex;
-  assert.equal(pick(0,3),0);assert.equal(pick(.5,3,0),1);assert.equal(pick(.9,3,1),2);
-  assert.equal(pick(.5,3,2),1);assert.equal(pick(.1,3,1),0);
-  assert.equal(pick(.34,3,0),0);assert.equal(pick(.36,3,1),1);
-  assert.equal(pick(.38,3,0),1);assert.equal(pick(.29,3,1),0);
-  assert.equal(pick(.7,2,0),1);assert.equal(pick(.2,2,1),0);assert.equal(pick(.9,1,0),0);
-});
 function ordinaryScene(finePointer=false,compactWidth=false){
   const events=()=>({handlers:new Map(),addEventListener(k,fn,options){const list=this.handlers.get(k)||[];list.push({fn,options});this.handlers.set(k,list);},emit(k,e={}){(this.handlers.get(k)||[]).forEach(x=>x.fn(e));}});
   const cards=Array.from({length:6},(_,i)=>Object.assign(events(),{rect:{top:900+i*160,bottom:1040+i*160},classes:new Set(),getBoundingClientRect(){return this.rect;}}));
@@ -304,22 +295,18 @@ function ordinaryScene(finePointer=false,compactWidth=false){
   return {cards,grid,modal,document,window,played,tick,reduced,scroll(top){cards.forEach((c,i)=>c.rect={top:top+i*160,bottom:top+i*160+140});window.emit('scroll');tick();}};
 }
 
-test('touch cards start only when fully visible and never replay during ordinary scrolling',()=>{
-  const s=ordinaryScene();s.scroll(661);assert.equal(s.played.length,0);
-  s.scroll(660);assert.deepEqual(s.played,[s.cards[0]]);
-  s.scroll(500);assert.deepEqual(s.played,[s.cards[0],s.cards[1]]);
-  s.scroll(340);assert.deepEqual(s.played,[s.cards[0],s.cards[1],s.cards[2]]);
-  s.scroll(700);s.scroll(340);assert.equal(s.played.length,3);
-  assert.ok(s.window.handlers.get('scroll')[0].options.passive);
+test('touch scrolling and resize never start direction playback',()=>{
+  const s=ordinaryScene();for(const top of [700,660,500,340,0])s.scroll(top);
+  s.window.emit('resize');s.tick();assert.equal(s.played.length,0);
+  assert.equal(s.cards.filter(c=>c.classes.has('is-active')).length,0);
 });
 
-test('compact cards autoplay with a mouse too and respect the header, dialog and reduced motion',()=>{
-  const s=ordinaryScene(true,true);s.scroll(660);assert.equal(s.played.length,1);
-  s.modal.hidden=false;s.document.emit('tz:lead-open');s.scroll(340);assert.equal(s.played.length,1);
-  s.modal.hidden=true;s.reduced.matches=true;s.scroll(340);assert.equal(s.played.length,1);
-  s.reduced.matches=false;s.scroll(70);assert.ok(!s.played.includes(s.cards[0])||s.played.filter(c=>c===s.cards[0]).length===1);
-  assert.ok(!s.cards[0].classes.has('is-active'));
+test('narrow mouse viewport starts effects only on intentional hover',()=>{
+  const s=ordinaryScene(true,true);s.scroll(340);assert.equal(s.played.length,0);
+  s.cards[2].emit('pointerenter',{pointerType:'mouse'});assert.deepEqual(s.played,[s.cards[2]]);
+  s.cards[2].emit('pointerleave');assert.ok(s.cards.every(c=>!c.classes.has('is-active')));
 });
+
 test('desktop cards use hover and retain their existing grid DOM',()=>{
   const s=ordinaryScene(true);assert.equal(s.played.length,0);
   s.cards[2].emit('pointerenter',{pointerType:'mouse'});assert.ok(s.cards[2].classes.has('is-active'));
