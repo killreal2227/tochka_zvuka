@@ -67,7 +67,7 @@ body[data-city] #dirs .card:hover > span:not(.bg-clip):not(.go) {
   position:absolute; left:24px; right:76px; bottom:46px; width:auto; min-width:0; padding:0;
   transform:translateY(50%); transition:transform .16s var(--ease);
 }
-body[data-city] #dirs .card .name { font-size:clamp(35px,3.75vw,57.5px); line-height:1.08; max-width:none; }
+body[data-city] #dirs .card .name { font-size:clamp(35px,3.75vw,57.5px); line-height:1.08; max-width:none; transform:translateY(-.1em); }
 body[data-city] #dirs .card .desc,
 body[data-city] #dirs .card.is-active .desc,
 body[data-city] #dirs .card.is-preview .desc,
