@@ -88,10 +88,10 @@ body[data-city] .site-footer .footer-details,
 body[data-city] .site-footer .footer-bottom > span,
 body[data-city] .site-footer .footer-bottom nav { font-size:11px; line-height:16px; gap:2px 12px; }
 @media(max-width:1000px) {
- body[data-city] #env,body[data-city] #join { padding-top:48px; padding-bottom:40px; gap:24px; }
- body[data-city] #env .poster { position:relative; top:0; width:160px; max-width:100%; justify-self:center; }
+ body[data-city] #env,body[data-city] #join { padding-top:36px; padding-bottom:32px; gap:20px; }
+ body[data-city] #env .poster { position:relative; top:0; width:192px; max-width:100%; justify-self:center; }
  body[data-city] #env .poster .tag { font-size:8px; padding:6px; left:6px; right:6px; bottom:6px; gap:4px; }
- body[data-city] #join .arch { width:140px; justify-self:center; }
+ body[data-city] #join .arch { width:168px; justify-self:center; }
  body[data-city] .site-footer .footer-brand { width:130px; }
  body[data-city] .site-footer .footer-phone { font-size:18px; }
  body[data-city] .site-footer .footer-email { font-size:11px; }
@@ -106,7 +106,27 @@ body[data-city] .site-footer .footer-bottom nav { font-size:11px; line-height:16
  body[data-city] .stick.show { transform:none; opacity:1; visibility:visible; }
 }
 @media(max-height:500px) and (min-width:701px) and (max-width:1000px) {
- body[data-city] #env,body[data-city] #join { grid-template-columns:minmax(0,1fr) 150px; gap:24px; padding-top:36px; padding-bottom:32px; }
- body[data-city] #env .poster { width:140px; }
- body[data-city] #join .arch { width:130px; }
+ body[data-city] #env,body[data-city] #join { grid-template-columns:minmax(0,1fr) 180px; gap:20px; padding-top:28px; padding-bottom:24px; }
+ body[data-city] #env .poster { width:168px; }
+ body[data-city] #join .arch { width:156px; }
+}
+
+/* Clear selection without enlarging or shifting the controls. */
+.lead-modal .sheet #chips .pk input:checked+label .choice-icon { outline-width:3px; }
+@media(max-width:1000px) {
+ body[data-city] #env .kicker,body[data-city] #join .kicker { font-size:11px; margin-bottom:14px; }
+ body[data-city] #env .h2,body[data-city] #join .h2 { font-size:clamp(32px,6vw,52px); margin-bottom:22px; }
+ body[data-city] #env .path { padding-left:44px; }
+ body[data-city] #env .path li { padding-bottom:22px; }
+ body[data-city] #env .path li:last-child { padding-bottom:0; }
+ body[data-city] #env .path li::before { left:-44px; }
+ body[data-city] #env .path h3 { font-size:23px; margin-bottom:8px; }
+ body[data-city] #env .path p,body[data-city] #join .lead { font-size:15px; line-height:1.4; }
+ body[data-city] #join .lead { margin-bottom:24px; }
+ body[data-city] #join > div:first-child { padding-bottom:0; }
+ body[data-city] #join .addr { margin-top:28px; padding-top:20px; gap:16px; }
+ body[data-city] #join .addr b { font-size:11px; }
+ body[data-city] #join .addr span { font-size:15px; }
+ body[data-city] #join .btn { min-height:50px; padding-top:6px; padding-bottom:6px; font-size:14px; }
+ body[data-city] #join .btn i { width:38px; height:38px; }
 }

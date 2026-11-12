@@ -796,7 +796,7 @@ const bgReady = ((!reduce||document.body.dataset.city==='troitsk') && 'DOMParser
     const sv=document.importNode(new DOMParser().parseFromString(t,'image/svg+xml').documentElement,true);
     sv.removeAttribute('width'); sv.removeAttribute('height');
     const box=sv.viewBox.baseVal;sv.style.aspectRatio=box.width+'/'+box.height;
-    sv.setAttribute('preserveAspectRatio','xMidYMid slice'); sv.setAttribute('aria-hidden','true'); sv.setAttribute('class','bg');
+    sv.setAttribute('preserveAspectRatio','xMidYMid meet'); sv.setAttribute('aria-hidden','true'); sv.setAttribute('class','bg');
     return sv; });
   return Promise.all($$('.card').map(card=>{
     const files=kinds[card.dataset.dir]; if(!files) return null;

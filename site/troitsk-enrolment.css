@@ -137,19 +137,19 @@ body[data-city="troitsk"] .top .header-enrol i svg { width:18px; height:18px; }
   body[data-city] #dirs .card::after { animation:none!important; transition:none!important; }
 }
 
-/* Original artwork at a fixed scale: no cloned contours or repeated tiles. */
+/* Fit the complete original artwork, including in the widest cards. */
 body[data-city] #dirs .card .bg,
 body[data-city] #dirs .card .bg-clip .bg,
 body[data-city] #dirs .card:hover .bg,
 body[data-city] #dirs .card:focus-visible .bg {
-  position:absolute; inset:auto; left:0; top:0; width:540px; height:auto; max-width:none;
+  position:absolute; inset:auto; left:0; top:0; width:100%; height:100%; max-width:none;
   transform:none; transition:none;
 }
 body[data-city] #dirs .card .bg-clip { inset:0; }
 body[data-city] #dirs .card::before,
 body[data-city] #dirs .card::after {
-  inset:0; background-size:100% 100%,540px auto; background-repeat:no-repeat,no-repeat;
-  background-position:0 0; transform:none;
+  inset:0; background-size:100% 100%,contain; background-repeat:no-repeat,no-repeat;
+  background-position:center; transform:none;
 }
 body[data-city] #dirs .card > .ico { transition:transform .25s var(--ease); }
 body[data-city] #dirs .card.is-preview > .ico { transform:scale(1.15); transform-origin:center; }

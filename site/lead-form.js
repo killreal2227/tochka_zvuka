@@ -87,9 +87,9 @@ const formArt=(()=>{
     let was=false;
     const notify=()=>{formArt.tint();r.dispatchEvent(new Event('input',{bubbles:true}));r.dispatchEvent(new Event('change',{bubbles:true}));};
     r.closest('.pk').addEventListener('pointerdown',()=>{was=r.checked;});
-    r.addEventListener('click',()=>{if(was&&document.body.dataset.city!=='troitsk'){r.checked=false;was=false;notify();}});
+    r.addEventListener('click',()=>{if(was){r.checked=false;was=false;notify();}});
     r.addEventListener('keydown',event=>{
-      if(event.key===' '){event.preventDefault();if(event.repeat)return;r.checked=document.body.dataset.city==='troitsk'?true:!r.checked;was=false;notify();}
+      if(event.key===' '){event.preventDefault();if(event.repeat)return;r.checked=!r.checked;was=false;notify();}
     });
   });
   const pageCity=document.body.dataset.city||'';
