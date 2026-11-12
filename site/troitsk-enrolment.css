@@ -137,7 +137,7 @@ body[data-city="troitsk"] .top .header-enrol i svg { width:18px; height:18px; }
   body[data-city] #dirs .card::after { animation:none!important; transition:none!important; }
 }
 
-/* Fit the complete original artwork, including in the widest cards. */
+/* Fill each card proportionally; crop surplus artwork at the edges. */
 body[data-city] #dirs .card .bg,
 body[data-city] #dirs .card .bg-clip .bg,
 body[data-city] #dirs .card:hover .bg,
@@ -148,7 +148,7 @@ body[data-city] #dirs .card:focus-visible .bg {
 body[data-city] #dirs .card .bg-clip { inset:0; }
 body[data-city] #dirs .card::before,
 body[data-city] #dirs .card::after {
-  inset:0; background-size:100% 100%,contain; background-repeat:no-repeat,no-repeat;
+  inset:0; background-size:100% 100%,cover; background-repeat:no-repeat,no-repeat;
   background-position:center; transform:none;
 }
 body[data-city] #dirs .card > .ico { transition:transform .25s var(--ease); }
