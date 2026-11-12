@@ -41,7 +41,7 @@ def build():
         source = template
         if slug == 'troitsk':
             source = re.sub(r'<header class="top".*?</header>', lambda _: read('troitsk-header.html'), source, count=1, flags=re.S)
-            source = re.sub(r'<span class="kicker hero-copy">.*?</span></span>', '<span class="kicker hero-copy">музыкальное пространство · филиал Троицк</span>', source, count=1)
+            source = re.sub(r'<span class="kicker hero-copy">.*?</span></span>', '<span class="kicker hero-copy">музыкальное проство · <span class="hero-branch-line">филиал Троицк</span></span>', source, count=1)
         source = source.replace('</head>', '<link rel="stylesheet" href="../troitsk-enrolment.css"><script src="../troitsk-enrolment.js" defer></script>\n</head>')
         page = compose(source, '../')
         if slug == 'troitsk':
