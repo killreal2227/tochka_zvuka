@@ -277,3 +277,23 @@ body[data-city] #dirs .card { border-radius:8px; }
  body[data-city] .btn > span { white-space:nowrap; }
  body[data-city] #top .header-enrol-label { flex:1 1 auto; text-align:center; }
 }
+
+/* Native touch labels are centered in the space before the fixed arrow circle. */
+@media(pointer:coarse) {
+ body[data-city] .hero-actions .btn.openForm {
+  display:grid; grid-template-columns:minmax(0,1fr) 32px; column-gap:8px;
+  padding:6px; align-items:center;
+ }
+ body[data-city] .hero-actions .btn.openForm > span {
+  display:block; width:100%; text-align:center; padding-top:2px; line-height:1.2;
+ }
+ body[data-city="troitsk"] #top .top-right > .header-enrol {
+  display:grid; grid-template-columns:minmax(0,1fr) 32px; gap:6px; padding:6px;
+ }
+ body[data-city="troitsk"] #top .header-enrol-label { display:block; width:100%; padding-top:1px; text-align:center; }
+ body[data-city="troitsk"] #top .header-enrol i,
+ body[data-city="troitsk"] #top .header-enrol:hover i { position:static; transform:none; margin:0; }
+}
+@media(pointer:coarse) and (max-width:1000px) {
+ body[data-city="troitsk"] #top .top-right > .header-enrol { grid-template-columns:minmax(0,1fr) 24px; gap:6px; padding:4px; }
+}
