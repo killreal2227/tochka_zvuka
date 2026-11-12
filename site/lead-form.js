@@ -166,22 +166,25 @@ const formArt=(()=>{
     open(el.dataset.dir);
   }));
   modal.querySelector('.lead-close').addEventListener('click',close);
-  /* Fit the whole form only when a short landscape viewport needs it. */
+  /* Preserve the 500px composition below that width; fit height in landscape. */
   let fitFrame=0;
   function fitShortForm(){
     fitFrame=0;if(modal.hidden)return;
     const landscape=window.innerWidth>window.innerHeight&&window.innerHeight<=800;
+    const narrow=window.innerWidth<500;
     const editing=form.contains(document.activeElement)&&['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName);
     if(editing)return;
-    sheet.style.zoom='';sheet.style.maxHeight='';
-    if(!landscape)return;
+    sheet.style.zoom='';sheet.style.maxHeight='';sheet.style.width='';sheet.style.maxWidth='';
+    if(!landscape&&!narrow)return;
+    if(narrow){sheet.style.width='476px';sheet.style.maxWidth='none';}
     const body=modal.querySelector('.sheet-body');
     const previousMax=body.style.maxHeight;body.style.maxHeight='none';
     sheet.style.maxHeight='none';
     const natural=sheet.getBoundingClientRect().height;
     const available=Math.max(1,(window.visualViewport?.height||window.innerHeight)-28);
-    const preferred=window.innerHeight<=800?.9:1;
-    const scale=Math.min(preferred,Math.max(.65,available/Math.max(1,natural)));
+    const widthScale=narrow?Math.max(1,window.innerWidth-24)/476:1;
+    const heightScale=landscape?Math.max(.6,available/Math.max(1,natural)):1;
+    const scale=Math.min(1,widthScale,heightScale);
     sheet.style.zoom=String(scale);
     sheet.style.maxHeight='calc((100dvh - 28px) / '+scale+')';
     body.style.maxHeight=previousMax;
