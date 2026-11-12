@@ -220,3 +220,8 @@ body[data-city] #join .h2 { font-size:clamp(44px,6.6vw,108px); line-height:1.05;
  .lead-modal .sheet #chips .pk input:checked+label .choice-icon { outline-width:2px; }
  .lead-modal .sheet.has-wrapped-address .lead-reassurance .reassurance-break { display:block; }
 }
+
+@media(min-width:500px) {
+ .lead-modal .sheet.has-wrapped-address .lead-reassurance .reassurance-break { display:none; }
+ .lead-modal .sheet .lead-reassurance > span { white-space:nowrap; }
+}
