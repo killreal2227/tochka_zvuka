@@ -473,7 +473,7 @@
 /* Touch layout: one stable shared caption instead of names under individual icons. */
 @media(width < 900px) {
   .lead-modal .pk .choice-name { display:none; }
-  .lead-modal .pk .choice-icon { outline:1px solid #69594d; outline-offset:3px; }
+  .lead-modal .pk .choice-icon { outline:2px solid #69594d; outline-offset:3px; }
   .lead-modal .pk input:checked+label .choice-icon { outline:2px solid #1a1a1a; outline-offset:4px; }
   .lead-modal .pick .pick-row,
   .lead-modal .pick.has:not(:has(.choice-unsure input:checked)) .pick-row {
@@ -607,7 +607,7 @@
 }
 
 /* The same direction selection outline on desktop, tablet and phone. */
-.lead-modal .pk .choice-icon { outline:1px solid #69594d; outline-offset:3px; }
+.lead-modal .pk .choice-icon { outline:2px solid #69594d; outline-offset:3px; }
 .lead-modal .pk input:checked+label .choice-icon { outline:2px solid #1a1a1a; outline-offset:4px; }
 
 /* Direction chips behave as controls, without text/image selection or native dragging. */
