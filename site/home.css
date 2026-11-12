@@ -372,3 +372,13 @@ body.home-page .home-header { position:relative; z-index:30; overflow:visible; }
 .home-page .home-branch-list small { margin-top:4px; }
 @media(max-width:600px) { .home-page .home-branch .branch-btn { font-size:12px; } }
 @media(min-width:601px) and (max-width:760px) { .home-page .home-branch .branch-btn { font-size:16px; } }
+
+/* Match the compact rhythm of the shared footer. */
+body.home-page > .site-footer { row-gap:2px; }
+body.home-page .footer-details,
+body.home-page .footer-bottom > span,
+body.home-page .footer-bottom nav { line-height:20px; }
+body.home-page .footer-details,
+body.home-page .footer-bottom nav { gap:2px 16px; }
+body.home-page .footer-details span,
+body.home-page .footer-bottom nav a { line-height:inherit; }

@@ -286,29 +286,39 @@ test('scroll selection reverses in three columns and ignores tiny boundary movem
   assert.equal(pick(.38,3,0),1);assert.equal(pick(.29,3,1),0);
   assert.equal(pick(.7,2,0),1);assert.equal(pick(.2,2,1),0);assert.equal(pick(.9,1,0),0);
 });
-function ordinaryScene(finePointer=false){
+function ordinaryScene(finePointer=false,compactWidth=false){
   const events=()=>({handlers:new Map(),addEventListener(k,fn,options){const list=this.handlers.get(k)||[];list.push({fn,options});this.handlers.set(k,list);},emit(k,e={}){(this.handlers.get(k)||[]).forEach(x=>x.fn(e));}});
-  const cards=Array.from({length:6},(_,i)=>Object.assign(events(),{offsetTop:i<3?500:1100,rect:{top:i<3?500:1100,bottom:i<3?780:1380},classes:new Set(),getBoundingClientRect(){return this.rect;}}));
+  const cards=Array.from({length:6},(_,i)=>Object.assign(events(),{rect:{top:900+i*160,bottom:1040+i*160},classes:new Set(),getBoundingClientRect(){return this.rect;}}));
   cards.forEach(card=>card.classList={toggle(k,v){v?card.classes.add(k):card.classes.delete(k);}});
-  const grid={querySelectorAll:()=>cards},modal={hidden:true},document=Object.assign(events(),{hidden:false,querySelector:()=>grid,getElementById:()=>modal});
+  const grid={querySelectorAll:()=>cards},header={getBoundingClientRect:()=>({bottom:76})},modal={hidden:true};
+  const document=Object.assign(events(),{hidden:false,querySelector:s=>s==='#dirs .grid'?grid:header,getElementById:()=>modal});
   const window=events(),frames=new Map(),played=[];let sequence=0;
-  const fine=Object.assign(events(),{matches:finePointer}),reduced=Object.assign(events(),{matches:false});
-  const context={window,document,innerHeight:900,Promise,WeakSet,Map,
-    matchMedia:q=>q.includes('pointer:fine')?fine:reduced,requestAnimationFrame:fn=>{const id=++sequence;frames.set(id,fn);return id;}};
+  const fine=Object.assign(events(),{matches:finePointer}),compact=Object.assign(events(),{matches:compactWidth}),reduced=Object.assign(events(),{matches:false});
+  const context={window,document,innerHeight:800,Promise,WeakSet,Map,
+    matchMedia:q=>q.includes('pointer:fine')?fine:q.includes('max-width')?compact:reduced,
+    requestAnimationFrame:fn=>{const id=++sequence;frames.set(id,fn);return id;}};
   vm.runInNewContext(source('direction-player.js'),context);
   window.createDirectionPlayer=options=>({stop(){},request(card){if(options.eligible(card)&&!options.reduced()&&!options.blocked()){options.prepare(card);played.push(card);}}});
   vm.runInNewContext(source('direction-scroll.js'),context);window.createDirectionInteractions({ready:Promise.resolve(),prepare:()=>2.9});
   const tick=()=>{const batch=[...frames.values()];frames.clear();batch.forEach(fn=>fn());};tick();
-  return {cards,grid,modal,document,window,played,tick,scroll(top){cards.slice(0,3).forEach(c=>c.rect={top,bottom:top+280});window.emit('scroll');tick();}};
+  return {cards,grid,modal,document,window,played,tick,reduced,scroll(top){cards.forEach((c,i)=>c.rect={top:top+i*160,bottom:top+i*160+140});window.emit('scroll');tick();}};
 }
-test('ordinary touch cards animate once while descriptions stay selected without timer changes',()=>{
-  const s=ordinaryScene();s.scroll(700);assert.ok(s.cards[0].classes.has('is-active'));
-  s.scroll(500);assert.ok(s.cards[1].classes.has('is-active'));
-  s.scroll(300);assert.ok(s.cards[2].classes.has('is-active'));
-  const count=s.played.length;s.scroll(700);assert.ok(s.cards[0].classes.has('is-active'));assert.equal(s.played.length,count);
-  s.tick();assert.ok(s.cards[0].classes.has('is-active'));
-  assert.equal(s.cards.filter(c=>c.classes.has('is-active')).length,1);
+
+test('touch cards start only when fully visible and never replay during ordinary scrolling',()=>{
+  const s=ordinaryScene();s.scroll(661);assert.equal(s.played.length,0);
+  s.scroll(660);assert.deepEqual(s.played,[s.cards[0]]);
+  s.scroll(500);assert.deepEqual(s.played,[s.cards[0],s.cards[1]]);
+  s.scroll(340);assert.deepEqual(s.played,[s.cards[0],s.cards[1],s.cards[2]]);
+  s.scroll(700);s.scroll(340);assert.equal(s.played.length,3);
   assert.ok(s.window.handlers.get('scroll')[0].options.passive);
+});
+
+test('compact cards autoplay with a mouse too and respect the header, dialog and reduced motion',()=>{
+  const s=ordinaryScene(true,true);s.scroll(660);assert.equal(s.played.length,1);
+  s.modal.hidden=false;s.document.emit('tz:lead-open');s.scroll(340);assert.equal(s.played.length,1);
+  s.modal.hidden=true;s.reduced.matches=true;s.scroll(340);assert.equal(s.played.length,1);
+  s.reduced.matches=false;s.scroll(70);assert.ok(!s.played.includes(s.cards[0])||s.played.filter(c=>c===s.cards[0]).length===1);
+  assert.ok(!s.cards[0].classes.has('is-active'));
 });
 test('desktop cards use hover and retain their existing grid DOM',()=>{
   const s=ordinaryScene(true);assert.equal(s.played.length,0);

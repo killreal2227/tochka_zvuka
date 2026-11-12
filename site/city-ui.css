@@ -336,3 +336,47 @@ body[data-city] .top .branch-current-address { font-size:14px; line-height:1.3; 
 @media(width < 1400px) {
   body[data-city] main .card .desc { font-size:17px; line-height:1.35; }
 }
+
+/* Full-width short direction cards on tablets and phones, with readable descriptions. */
+@media(max-width:1000px) {
+  body[data-city] #dirs .grid { grid-template-columns:minmax(0,1fr); gap:10px; }
+  body[data-city] #dirs .card,
+  body[data-city] #dirs .card:hover,
+  body[data-city] #dirs .card:focus-visible {
+    display:grid; grid-template-columns:52px minmax(0,1fr); align-items:center;
+    gap:14px; min-height:132px; height:auto; padding:16px; opacity:1;
+    transform:none; transition:none; text-align:left;
+  }
+  body[data-city] #dirs .card > .ico,
+  body[data-city] #dirs .card:hover > .ico {
+    grid-column:1; grid-row:1; width:auto; height:52px; max-width:52px;
+    align-self:center; justify-self:center; transform:none;
+  }
+  body[data-city] #dirs .card > span:not(.bg-clip):not(.go),
+  body[data-city] #dirs .card:hover > span:not(.bg-clip):not(.go),
+  body[data-city] #dirs .card.is-active > span:not(.bg-clip):not(.go) {
+    position:static; grid-column:2; grid-row:1; width:auto; min-width:0;
+    padding-right:32px; transform:none; align-self:center;
+  }
+  body[data-city] #dirs .card .name { font-size:clamp(22px,3.2vw,28px); line-height:1.1; max-width:none; }
+  body[data-city] #dirs .card .desc,
+  body[data-city] #dirs .card:hover .desc,
+  body[data-city] #dirs .card.is-active .desc,
+  body[data-city] #dirs .card:focus-visible .desc {
+    position:static; max-height:none; height:auto; margin:6px 0 0; padding:0;
+    font-size:14px; line-height:1.25; opacity:1; visibility:visible; overflow:visible; transition:none;
+  }
+  body[data-city] #dirs .card .go,
+  body[data-city] #dirs .card:hover .go,
+  body[data-city] #dirs .card:focus-visible .go {
+    width:28px; height:28px; right:12px; top:50%; bottom:auto; transform:translateY(-50%);
+  }
+  body[data-city] #dirs .card .go svg { width:14px; height:14px; }
+  body[data-city] #dirs .card .bg { height:max(calc(100% + 32px),220px); }
+  body[data-city] #dirs .card .bg-clip .bg { height:max(100%,220px); }
+  body[data-city] #dirs .card::before,
+  body[data-city] #dirs .card::after { background-size:auto max(100%,220px); }
+  body[data-city] .poster { width:min(100%,240px); justify-self:center; margin:0; }
+  body[data-city] .poster .tag { left:10px; right:10px; bottom:10px; padding:8px 10px; font-size:10px; }
+  body[data-city] .arch { width:min(100%,220px); justify-self:center; }
+}

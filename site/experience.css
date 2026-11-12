@@ -435,3 +435,23 @@ html:has(body[data-city]){scroll-padding-top:calc(var(--header-height) + 8px)}
 @media(min-width:681px) and (max-width:1000px){
   body[data-city] .footer-bottom nav{justify-self:end;align-items:flex-end;text-align:right}
 }
+
+/* Compact legal lines; branch documents share the INN/OGRNIP rows on wider screens. */
+:is(.home-page,[data-city]) > .site-footer { row-gap:2px; }
+:is(.home-page,[data-city]) .footer-details,
+:is(.home-page,[data-city]) .footer-bottom > span,
+:is(.home-page,[data-city]) .footer-bottom nav { line-height:20px; }
+:is(.home-page,[data-city]) .footer-details,
+:is(.home-page,[data-city]) .footer-bottom nav { gap:2px 16px; }
+@media(min-width:681px) {
+  body[data-city] > .site-footer { grid-template-columns:minmax(0,1fr) auto; column-gap:24px; }
+  body[data-city] .footer-details {
+    grid-column:1; grid-row:3; display:flex; flex-direction:column; gap:2px;
+    font-size:13px; line-height:20px; align-items:flex-start;
+  }
+  body[data-city] .footer-bottom nav {
+    grid-column:2; grid-row:3; align-self:end; justify-self:end;
+    display:flex; flex-direction:column; align-items:flex-end; gap:2px;
+    font-size:13px; line-height:20px; text-align:right;
+  }
+}
