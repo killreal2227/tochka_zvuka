@@ -1,3 +1,6 @@
+/* Keep page width stable when the lead form locks body scrolling. */
+html { scrollbar-gutter:stable; }
+
 /* Shared form: preserve the desktop reference, compact only constrained viewports. */
 .lead-modal .sheet { transform:translateY(48px); transition:transform .38s var(--ease); }
 .lead-modal.open .sheet { transform:none; }
