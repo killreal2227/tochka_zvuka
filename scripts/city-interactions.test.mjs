@@ -333,3 +333,42 @@ test('direction interactions add no sticky wrappers, extra height or scroll inte
   assert.ok(!css.includes('direction-row-stage'));assert.ok(!css.includes('direction-tour-held'));
   assert.ok(css.includes('@media(width < 1400px)'));assert.ok(css.includes('font-size:17px; line-height:1.35;'));
 });
+
+function eyeScene(){
+  const template=fs.readFileSync(new URL('../templates/city.html',import.meta.url),'utf8');
+  const start=template.indexOf("const stage=$('#stage');"),end=template.indexOf('\n/*',start);
+  const handlers=new Map(),frames=new Map(),dot={style:{}};let next=0;
+  const on=(name,fn)=>{const list=handlers.get(name)||[];list.push(fn);handlers.set(name,list);};
+  const emit=(name,value={})=>(handlers.get(name)||[]).forEach(fn=>fn(value));
+  const pointer={matches:true,addEventListener:(_,fn)=>on('pointer-change',fn)},reduced={matches:false,addEventListener:(_,fn)=>on('reduce-change',fn)};
+  const document={hidden:false,addEventListener:on};
+  vm.runInNewContext(template.slice(start,end),{dot,document,innerWidth:1000,innerHeight:800,
+    $:()=>({getBoundingClientRect:()=>({left:0,top:0,width:100,height:100})}),
+    matchMedia:q=>q.includes('pointer:fine')?pointer:reduced,addEventListener:on,
+    requestAnimationFrame:fn=>{const id=++next;frames.set(id,fn);return id;},cancelAnimationFrame:id=>frames.delete(id)});
+  const tick=()=>{const batch=[...frames.values()];frames.clear();batch.forEach(fn=>fn());};
+  return {emit,tick,frames,dot,document,reduced};
+}
+
+test('hero eye restarts after blur/focus even when the old frame was discarded',()=>{
+  const s=eyeScene();s.emit('pointermove',{clientX:900,clientY:700});assert.equal(s.frames.size,1);
+  s.frames.clear();s.emit('blur');s.emit('focus');assert.equal(s.frames.size,1);
+  s.tick();const before=s.dot.style.transform;
+  s.emit('pointermove',{clientX:0,clientY:0});for(let i=0;i<60;i++)s.tick();
+  assert.notEqual(s.dot.style.transform,before);assert.ok(!s.dot.style.transform.includes('NaN'));assert.equal(s.frames.size,0);
+});
+
+test('hero eye pauses while hidden and resumes with only one pending frame',()=>{
+  const s=eyeScene();s.emit('pointermove',{clientX:900,clientY:700});
+  s.document.hidden=true;s.emit('visibilitychange');assert.equal(s.frames.size,0);
+  s.document.hidden=false;s.emit('visibilitychange');s.emit('focus');assert.equal(s.frames.size,1);
+  s.tick();assert.match(s.dot.style.transform,/translate\(/);
+});
+
+test('hero eye ignores invalid pointer coordinates and respects reduced motion after returning',()=>{
+  const s=eyeScene();s.emit('pointermove',{clientX:NaN,clientY:Infinity});assert.equal(s.frames.size,0);
+  s.emit('pointermove',{clientX:900,clientY:700});s.tick();
+  s.reduced.matches=true;s.emit('reduce-change');s.emit('focus');assert.equal(s.frames.size,0);assert.equal(s.dot.style.transform,'');
+  s.reduced.matches=false;s.emit('reduce-change');s.emit('pointermove',{clientX:0,clientY:0});s.tick();
+  assert.match(s.dot.style.transform,/translate\(/);assert.ok(!s.dot.style.transform.includes('NaN'));
+});

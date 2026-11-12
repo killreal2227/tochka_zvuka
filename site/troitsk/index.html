@@ -802,20 +802,36 @@ dot.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventD
 
 /* точка следит за курсором */
 const stage=$('#stage');
-let tx=0,ty=0,cx=0,cy=0,raf;
-if(!reduce && matchMedia('(hover:hover)').matches){
-  addEventListener('pointermove',e=>{
-    const r=stage.getBoundingClientRect();
-    const mx=(e.clientX-(r.left+r.width/2))/innerWidth, my=(e.clientY-(r.top+r.height/2))/innerHeight;
-    tx=Math.max(-1,Math.min(1,mx*3)); ty=Math.max(-1,Math.min(1,my*3));
-    if(!raf) raf=requestAnimationFrame(loop);
-  },{passive:true});
+let tx=0,ty=0,cx=0,cy=0,raf=0,eyeFocused=true;
+const eyePointer=matchMedia('(hover:hover) and (pointer:fine)'),eyeReduce=matchMedia('(prefers-reduced-motion: reduce)');
+function stopEye(){if(raf)cancelAnimationFrame(raf);raf=0;}
+function startEye(){
+  if(document.hidden||!eyeFocused||eyeReduce.matches||!eyePointer.matches)return;
+  if(!raf)raf=requestAnimationFrame(loop);
 }
+addEventListener('pointermove',e=>{
+  if(!Number.isFinite(e.clientX)||!Number.isFinite(e.clientY)||innerWidth<=0||innerHeight<=0)return;
+  const r=stage.getBoundingClientRect();if(r.width<=0||r.height<=0)return;
+  tx=Math.max(-1,Math.min(1,(e.clientX-r.left-r.width/2)/innerWidth*3));
+  ty=Math.max(-1,Math.min(1,(e.clientY-r.top-r.height/2)/innerHeight*3));
+  startEye();
+},{passive:true});
 function loop(){
-  cx+=(tx-cx)*.12; cy+=(ty-cy)*.12;
+  raf=0;
+  if(document.hidden||!eyeFocused||eyeReduce.matches||!eyePointer.matches)return;
+  cx+=(tx-cx)*.12;cy+=(ty-cy)*.12;
   dot.style.transform=`translate(${(cx*4.5).toFixed(2)}px,${(cy*4.5).toFixed(2)}px)`;
-  raf = (Math.abs(tx-cx)>.002||Math.abs(ty-cy)>.002) ? requestAnimationFrame(loop) : null;
+  if(Math.abs(tx-cx)>.002||Math.abs(ty-cy)>.002)startEye();
 }
+function resumeEye(){stopEye();startEye();}
+addEventListener('blur',()=>{eyeFocused=false;stopEye();});
+addEventListener('focus',()=>{eyeFocused=true;resumeEye();});
+addEventListener('pageshow',()=>{eyeFocused=true;resumeEye();});
+document.addEventListener('visibilitychange',resumeEye);
+eyePointer.addEventListener('change',resumeEye);
+eyeReduce.addEventListener('change',()=>{
+  stopEye();if(eyeReduce.matches){tx=ty=cx=cy=0;dot.style.transform='';}else startEye();
+});
 
 /* ═════════ ПОЯВЛЕНИЕ ПРИ СКРОЛЛЕ ═════════ */
 const io = 'IntersectionObserver' in window ? new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{threshold:.12,rootMargin:'0px 0px -6% 0px'}) : null;
