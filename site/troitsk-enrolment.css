@@ -166,3 +166,12 @@ body[data-city="troitsk"] .footer-contact a { justify-content:flex-end; }
   body[data-city="troitsk"] #dirs .card.actor:hover::after,
   body[data-city="troitsk"] #dirs .card.actor:focus-visible::after { transform:translate(-12px,8px); transition:transform .6s; }
 }
+
+@media(max-height:500px) and (pointer:coarse) {
+  body[data-city="troitsk"] .lead-modal { padding:0; align-items:end; }
+  body[data-city="troitsk"] .lead-modal .lead-sheet {
+    width:100%; max-height:100dvh; border-radius:var(--tz-panel-radius) var(--tz-panel-radius) 0 0;
+    transform:translateY(100%);
+  }
+  body[data-city="troitsk"] .lead-modal.open .lead-sheet { transform:none; }
+}
