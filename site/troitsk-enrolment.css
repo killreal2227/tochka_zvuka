@@ -250,9 +250,5 @@ body[data-city] #top .header-enrol svg { transition:none; animation:none; }
  body[data-city="troitsk"] #top .brand { width:128px; min-width:128px; max-width:128px; }
 }
 
-/* Small cut corners preserve the geometric direction-card style. */
-body[data-city] #dirs .card {
- --corner-cut:8px;
- clip-path:polygon(var(--corner-cut) 0,calc(100% - var(--corner-cut)) 0,100% var(--corner-cut),100% calc(100% - var(--corner-cut)),calc(100% - var(--corner-cut)) 100%,var(--corner-cut) 100%,0 calc(100% - var(--corner-cut)),0 var(--corner-cut));
-}
-body[data-city] #dirs .card:focus-visible { outline-offset:-3px; }
+/* Soft corners on direction cards. */
+body[data-city] #dirs .card { border-radius:8px; }
