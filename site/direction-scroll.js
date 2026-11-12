@@ -1,8 +1,44 @@
 /* Desktop hover; compact/touch cards play once when fully visible below the header. */
 (() => {
   'use strict';
+  function troitskInteractions({ready,prepare}){
+    const cards=[...document.querySelectorAll('#dirs .card[data-dir]')],modal=document.getElementById('leadModal');
+    const fine=matchMedia('(hover:hover) and (pointer:fine)'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
+    const played=new WeakSet();let active=null,manual=null,frame=0;
+    const player=window.createDirectionPlayer({ready,
+      prepare:card=>{if(!fine.matches)played.add(card);return prepare(card);},
+      eligible:card=>card===active&&(fine.matches||!played.has(card)),
+      reduced:()=>reduced.matches,blocked:()=>document.hidden||!modal.hidden});
+    function select(card){
+      if(card===active)return;player.stop();active=card;
+      cards.forEach(item=>item.classList.toggle('is-active',item===card));
+      if(card)player.request(card);
+    }
+    function update(){
+      frame=0;if(document.hidden||!modal.hidden||reduced.matches){select(null);return;}
+      if(fine.matches){select(manual);return;}
+      const top=Math.max(0,document.querySelector('.top').getBoundingClientRect().bottom);
+      let nearest=null,distance=Infinity;
+      cards.forEach(card=>{const r=card.getBoundingClientRect();if(r.bottom<=top||r.top>=innerHeight)return;
+        const d=((r.left+r.right)/2-innerWidth/2)**2+((r.top+r.bottom)/2-innerHeight/2)**2;
+        if(d<distance){nearest=card;distance=d;}
+      });select(nearest);
+    }
+    function schedule(){if(!frame)frame=requestAnimationFrame(update);}
+    cards.forEach(card=>{
+      card.addEventListener('pointerenter',e=>{if(!fine.matches||e.pointerType==='touch')return;manual=card;select(card);});
+      const leave=()=>{if(manual===card){manual=null;schedule();}};
+      card.addEventListener('pointerleave',leave);card.addEventListener('pointercancel',leave);
+      card.addEventListener('focusin',()=>{if(fine.matches){manual=card;select(card);}});
+      card.addEventListener('focusout',()=>{manual=null;schedule();});
+    });
+    window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});
+    document.addEventListener('tz:lead-open',()=>{manual=null;select(null);});document.addEventListener('tz:lead-close',schedule);
+    document.addEventListener('visibilitychange',schedule);
+    [fine,reduced].forEach(q=>q.addEventListener('change',()=>{manual=null;select(null);schedule();}));schedule();
+  }
   window.createDirectionInteractions=({ready,prepare})=>{
-    if(document.body?.dataset.city==='troitsk')return;
+    if(document.body?.dataset.city==='troitsk')return troitskInteractions({ready,prepare});
     const grid=document.querySelector('#dirs .grid');if(!grid)return;
     const cards=[...grid.querySelectorAll('.card[data-dir]')],modal=document.getElementById('leadModal');
     const header=document.querySelector('header.top');
