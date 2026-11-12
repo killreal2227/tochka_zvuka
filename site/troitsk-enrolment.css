@@ -166,12 +166,15 @@ body[data-city] #dirs .card::before,
 body[data-city] #dirs .card::after { pointer-events:none; }
 
 /* Explicit signup affordance; repeated taps on the preview do not restart playback. */
-body[data-city] #dirs .card .go { pointer-events:auto; width:44px; height:44px; background:transparent; isolation:isolate; }
+body[data-city] #dirs .card .go,
+body[data-city] #dirs .card:hover .go,
+body[data-city] #dirs .card:focus-visible .go,
+body[data-city] #dirs .card.is-preview .go { pointer-events:auto; width:44px; height:44px; background:transparent; isolation:isolate; }
 body[data-city] #dirs .card .go::before { content:""; position:absolute; inset:6px; z-index:-1; border-radius:50%; background:var(--fg); transition:transform .3s var(--ease); }
 body[data-city] #dirs .card.actor .go::before { background:var(--ink); }
 body[data-city] #dirs .card .go svg { pointer-events:none; transition:transform .35s var(--ease); }
 body[data-city] #dirs .card.is-preview .go::before { transform:scale(1.15); animation:direction-cta-pulse 1.2s ease-in-out .35s 2; }
-body[data-city] #dirs .card.is-preview .go svg { transform:rotate(-135deg); }
+body[data-city] #dirs .card.is-preview .go svg { transform:rotate(-135deg) scale(1.15); }
 @keyframes direction-cta-pulse { 0%,100% { transform:scale(1.15); } 50% { transform:scale(1.23); } }
 @media(prefers-reduced-motion:reduce) {
  body[data-city] #dirs .card.is-preview .go::before { animation:none; }
