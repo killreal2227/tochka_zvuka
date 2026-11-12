@@ -219,8 +219,8 @@ body[data-city] #top .header-enrol svg { transition:none; animation:none; }
  body[data-city="troitsk"] { --header-height:64px; }
  body[data-city="troitsk"] #top .header-identity { width:144px; flex:0 0 144px; }
  body[data-city="troitsk"] #top .brand { width:144px; min-width:144px; max-width:144px; transform:translateY(1.14px); }
- body[data-city="troitsk"] #top .top-right { width:144px; flex:0 0 144px; gap:6px; }
- body[data-city="troitsk"] #top .top-right > .header-enrol { width:102px; min-width:102px; height:36px; min-height:36px; padding:4px 30px 4px 8px; font-size:10px; }
+ body[data-city="troitsk"] #top .top-right { width:152px; flex:0 0 152px; gap:6px; }
+ body[data-city="troitsk"] #top .top-right > .header-enrol { width:110px; min-width:110px; height:36px; min-height:36px; padding:4px 30px 4px 8px; font-size:10px; }
  body[data-city="troitsk"] #top .header-enrol-label { display:flex; flex-direction:column; align-items:center; line-height:1.05; }
  body[data-city="troitsk"] #top .header-enrol i,
  body[data-city="troitsk"] #top .header-enrol:hover i { width:24px; height:24px; right:4px; top:50%; transform:translateY(-50%); }
@@ -231,7 +231,7 @@ body[data-city] #top .header-enrol svg { transition:none; animation:none; }
  body[data-city] .hero-actions { display:flex; flex-direction:column; align-items:flex-start; gap:12px; }
  body[data-city] .hero-actions .btn.openForm,
  body[data-city] .hero-actions .link { box-sizing:border-box; width:190px; max-width:100%; min-height:44px; }
- body[data-city] .hero-actions .link { justify-content:space-between; font-size:12px; letter-spacing:.025em; }
+ body[data-city] .hero-actions .link { padding-left:18px; padding-right:6px; justify-content:space-between; font-size:12px; letter-spacing:.025em; }
 }
 @media(orientation:landscape) and (max-height:650px) and (max-width:1000px) {
  body[data-city="troitsk"] { --header-height:54px; }
