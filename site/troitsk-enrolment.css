@@ -236,3 +236,7 @@ body[data-city] #top .header-enrol svg { transition:none; animation:none; }
 @media(orientation:landscape) and (max-height:650px) and (max-width:1000px) {
  body[data-city="troitsk"] { --header-height:54px; }
 }
+
+@media(max-width:360px) {
+ body[data-city="troitsk"] #top { gap:4px; }
+}
