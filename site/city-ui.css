@@ -177,7 +177,7 @@ body[data-city].js .step > *,
 .js body[data-city] .step > * { opacity:.55; transform:none; transition:opacity .35s ease,color .35s ease; }
 body[data-city].js .step.on > *,
 .js body[data-city] .step.on > * { opacity:1; transform:none; }
-body[data-city] .step.on::before { border-color:var(--bord); }
+body[data-city] .step::before { box-sizing:border-box; border-color:var(--ink); }
 body[data-city] .step.is-current::before { box-shadow:0 0 0 5px #9b3e4714; }
 @media(max-width:680px) {
   body[data-city] .steps { gap:32px; }
