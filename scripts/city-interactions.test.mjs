@@ -139,12 +139,12 @@ test('invitation waits four seconds without scrolling, does not repeat immediate
   await s.close.emit('click');assert.equal(s.box.hidden,true);await s.scroll();assert.equal(s.box.hidden,true);
   const next=nudgeScene(store);next.window.scrollY=500;next.delay();await next.scroll();assert.equal(next.box.hidden,false);
 });
-test('invitation never overlays open form; Escape and outside pointer dismiss',async()=>{
+test('invitation never overlays open form; only its close control dismisses it',async()=>{
   const s=nudgeScene();s.window.scrollY=500;s.modal.hidden=false;s.delay();assert.equal(s.box.hidden,true);
   await s.document.emit('tz:lead-open');s.modal.hidden=true;await s.scroll();assert.equal(s.box.hidden,true);
   const other=nudgeScene();other.window.scrollY=500;other.delay();other.document.activeElement=other.close;
-  await other.document.emit('keydown',{key:'Escape',preventDefault(){}});assert.equal(other.box.hidden,true);assert.equal(other.trigger.focused,true);
-  const outside=nudgeScene();outside.window.scrollY=500;outside.delay();await outside.document.emit('click',{target:{}});assert.equal(outside.box.hidden,true);
+  await other.document.emit('keydown',{key:'Escape',preventDefault(){}});assert.equal(other.box.hidden,false);await other.close.emit('click');assert.equal(other.box.hidden,true);assert.equal(other.trigger.focused,true);
+  const outside=nudgeScene();outside.window.scrollY=500;outside.delay();await outside.document.emit('click',{target:{}});assert.equal(outside.box.hidden,false);
 });
 test('invitation works if session storage is unavailable',()=>{
   const s=nudgeScene(new Map(),true);s.window.scrollY=500;s.delay();assert.equal(s.box.hidden,false);assert.equal(s.timers.length,0);
@@ -159,9 +159,9 @@ test('repeat waits after dismissal, requires middle page, stops after two or for
  const other=nudgeScene();other.delay();await other.close.emit('click');
  await other.document.emit('tz:lead-open');other.window.scrollY=1100;other.delay();await other.scroll();assert.equal(other.box.hidden,true);
 });
-test('invitation ignores swipe start and closes on an outside tap',async()=>{
+test('invitation ignores swipes and outside taps',async()=>{
  const s=nudgeScene();s.delay();await s.document.emit('pointerdown',{target:{}});assert.equal(s.box.hidden,false);
- await s.document.emit('click',{target:{}});assert.equal(s.box.hidden,true);
+ await s.document.emit('click',{target:{}});assert.equal(s.box.hidden,false);
 });
 
 function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',combinedDocs=false) {

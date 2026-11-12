@@ -14,7 +14,7 @@
   if(restore&&inside)document.querySelector('.top .openForm')?.focus({preventScroll:true});
  }
  function maybeShow(){
-  if(nearJoin){close();return;}
+  if(nearJoin)return;
   if(!eligible||disabled||!box.hidden||shown>=2||document.hidden||!modal?.hidden)return;
   if(shown===1){
    const range=(document.documentElement?.scrollHeight||0)-window.innerHeight;
@@ -24,10 +24,8 @@
   shown++;box.hidden=false;
  }
  box.querySelector('.lesson-nudge-close').addEventListener('click',()=>close(true));
- document.addEventListener('keydown',e=>{if(!box.hidden&&e.key==='Escape'){e.preventDefault();close(true);}});
- document.addEventListener('click',e=>{if(!box.hidden&&!box.contains(e.target))close();});
  document.addEventListener('tz:lead-open',()=>{disabled=true;close();});
- document.addEventListener('visibilitychange',()=>{if(document.hidden)close();else update();});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});
  function update(){frame=0;
   nearJoin=!!join&&join.getBoundingClientRect().top<=window.innerHeight+100;
   maybeShow();
