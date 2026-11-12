@@ -21,10 +21,10 @@ body[data-city="troitsk"] .top .header-enrol:hover i {
 body[data-city="troitsk"] .top .header-enrol i svg { width:20px; height:20px; }
 body[data-city="troitsk"] .top .header-call {
   display:grid; place-items:center; flex:0 0 62px; width:62px; height:62px;
-  border-radius:50%; background:#e7ded4; color:#383838;
+  border-radius:50%; background:#d9cec2; color:#383838;
 }
 body[data-city="troitsk"] .top .header-call svg { width:25px; height:25px; }
-body[data-city="troitsk"] .top .header-call:hover { background:#d9cec2; }
+body[data-city="troitsk"] .top .header-call:hover { background:#cfc1b2; }
 body[data-city="troitsk"] .hero { padding-top:calc(var(--header-height) + 40px); }
 body[data-city="troitsk"] :focus-visible { outline:2px solid var(--bord); outline-offset:4px; }
 
