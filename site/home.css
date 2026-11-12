@@ -383,10 +383,12 @@ body.home-page .footer-bottom nav { gap:2px 16px; }
 body.home-page .footer-details span,
 body.home-page .footer-bottom nav a { line-height:inherit; }
 
-/* Slightly quieter labels, with the existing glyph-based centering. */
+/* Desktop labels and optical alignment use the actual round logo mark. */
 @media(min-width:1001px) {
+  body.home-page .home-header { padding-top:10px; padding-bottom:8px; }
+  body.home-page .home-brand { transform:translateY(calc(260px * 4.5 / 567)); }
   body.home-page .header-cta,
   body.home-page .header-cta:hover,
-  body.home-page .header-cta:focus-visible { font-size:14px!important; }
-  body.home-page .home-branch .branch-btn { font-size:14px; }
+  body.home-page .header-cta:focus-visible { font-size:15px!important; }
+  body.home-page .home-branch .branch-btn { font-size:15px; }
 }
