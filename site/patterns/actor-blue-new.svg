@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <pattern id="dots" width="120" height="120" patternUnits="userSpaceOnUse">
+      <circle cx="60" cy="60" r="3" fill="#231300" opacity="0.15"/>
+    </pattern>
+  </defs>
+  <rect width="1920" height="1080" fill="#51a2d9"/>
+  <rect width="1920" height="1080" fill="url(#dots)"/>
+  <path d="M400 300 L600 280 L800 320 L1000 290" fill="none" stroke="#231300" stroke-width="2" opacity="0.2"/>
+  <path d="M600 600 L900 580 L1200 620 L1500 590" fill="none" stroke="#231300" stroke-width="2" opacity="0.2"/>
+  <rect x="320" y="240" width="80" height="80" fill="none" stroke="#231300" stroke-width="2" opacity="0.2" transform="rotate(15 360 280)"/>
+  <rect x="1280" y="720" width="100" height="100" fill="none" stroke="#231300" stroke-width="2" opacity="0.2" transform="rotate(-20 1330 770)"/>
+</svg>
