@@ -137,18 +137,18 @@ body[data-city="troitsk"] .top .header-enrol i svg { width:18px; height:18px; }
   body[data-city] #dirs .card::after { animation:none!important; transition:none!important; }
 }
 
-/* The pattern repeats at its original ratio instead of zooming and cropping. */
+/* Original artwork at a fixed scale: no cloned contours or repeated tiles. */
 body[data-city] #dirs .card .bg,
 body[data-city] #dirs .card .bg-clip .bg,
 body[data-city] #dirs .card:hover .bg,
 body[data-city] #dirs .card:focus-visible .bg {
-  position:absolute; inset:0; left:0; top:0; width:100%; height:100%; max-width:none;
-  aspect-ratio:auto; transform:none; transition:none;
+  position:absolute; inset:auto; left:0; top:0; width:540px; height:auto; max-width:none;
+  transform:none; transition:none;
 }
 body[data-city] #dirs .card .bg-clip { inset:0; }
 body[data-city] #dirs .card::before,
 body[data-city] #dirs .card::after {
-  inset:0; background-size:100% 100%,540px auto; background-repeat:no-repeat,repeat;
+  inset:0; background-size:100% 100%,540px auto; background-repeat:no-repeat,no-repeat;
   background-position:0 0; transform:none;
 }
 body[data-city] #dirs .card > .ico { transition:transform .25s var(--ease); }

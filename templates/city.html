@@ -789,49 +789,13 @@ addEventListener('resize',scheduleSteps);stepsUpdate();
 
 /* фоны направлений: оригинальные SVG-паттерны (patterns/*.svg) встраиваются на лету, чтобы двигать их собственные фигуры.
    Без JS и при reduced-motion остаются обычные CSS-фоны из тех же файлов. */
-const directionPatternTiles=new WeakMap();
-function repeatDirectionPattern(svg,card){
-  let data=directionPatternTiles.get(svg);
-  if(!data){
-    const box=svg.viewBox.baseVal;
-    data={x:box.x,y:box.y,width:box.width,height:box.height,
-      seeds:[...svg.children].filter(e=>e.tagName.toLowerCase()!=='defs').map(e=>e.cloneNode(true)),viewHeight:0};
-    if(card.dataset.dir==='guitar'){
-      const lines=[...svg.querySelectorAll('path[stroke-width]')],a=lines[0].transform.baseVal.consolidate().matrix,b=lines[1].transform.baseVal.consolidate().matrix;
-      data.lines={seed:lines[0].cloneNode(true),phase:a.e+a.f,step:(b.e+b.f)-(a.e+a.f),scale:Math.hypot(a.a,a.b),opacity:lines[0].closest('g[opacity]')?.getAttribute('opacity')||'1'};
-    }
-    directionPatternTiles.set(svg,data);
-    if('ResizeObserver' in window)new ResizeObserver(()=>repeatDirectionPattern(svg,card)).observe(card);
-    else window.addEventListener('resize',()=>repeatDirectionPattern(svg,card),{passive:true});
-  }
-  const r=card.getBoundingClientRect();if(!r.width||!r.height)return;
-  const scale=540/data.width,viewWidth=r.width/scale,viewHeight=r.height/scale;
-  if(Math.abs(viewHeight-data.viewHeight)<.01&&Math.abs(viewWidth-data.viewWidth)<.01)return;
-  data.viewWidth=viewWidth;
-  data.viewHeight=viewHeight;
-  [...svg.children].filter(e=>e.tagName.toLowerCase()!=='defs').forEach(e=>e.remove());
-  if(data.lines){
-    const group=document.createElementNS('http://www.w3.org/2000/svg','g');group.classList.add('pattern-tile');group.setAttribute('opacity',data.lines.opacity);
-    for(let phase=data.lines.phase;phase<viewWidth+viewHeight;phase+=data.lines.step){
-      const line=data.lines.seed.cloneNode(true);line.removeAttribute('transform');
-      line.setAttribute('stroke-width',Number(line.getAttribute('stroke-width'))*data.lines.scale);
-      line.setAttribute('d',`M0 ${phase}L${viewWidth} ${phase-viewWidth}`);group.appendChild(line);
-    }svg.appendChild(group);
-  }else for(let i=0;i<Math.ceil(viewHeight/data.height);i++)for(let j=0;j<Math.ceil(viewWidth/data.width);j++){
-    const tile=document.createElementNS('http://www.w3.org/2000/svg','g');
-    tile.classList.add('pattern-tile');tile.setAttribute('transform',`translate(${j*data.width} ${i*data.height})`);
-    data.seeds.forEach(e=>tile.appendChild(e.cloneNode(true)));svg.appendChild(tile);
-  }
-  svg.setAttribute('viewBox',`${data.x} ${data.y} ${viewWidth} ${viewHeight}`);
-  svg.setAttribute('preserveAspectRatio','xMidYMid meet');delete card._prep;
-}
-
 const bgReady = ((!reduce||document.body.dataset.city==='troitsk') && 'DOMParser' in window) ? (()=>{
   const kinds={vocal:['vocal'],guitar:['guitar'],drums:['drums'],piano:['piano'],actor:['actor-orange','actor-blue'],speech:['speech']};
   const load=file=>fetch('../patterns/'+file+'.svg').then(r=>r.ok?r.text():Promise.reject(r.status)).then(t=>{
     t=t.replace(/clip_(\d+)/g,`${file}_c$1`).replace(/ id="layer_\d+"/g,'');   // id уникальны в пределах страницы
     const sv=document.importNode(new DOMParser().parseFromString(t,'image/svg+xml').documentElement,true);
     sv.removeAttribute('width'); sv.removeAttribute('height');
+    const box=sv.viewBox.baseVal;sv.style.aspectRatio=box.width+'/'+box.height;
     sv.setAttribute('preserveAspectRatio','xMidYMid slice'); sv.setAttribute('aria-hidden','true'); sv.setAttribute('class','bg');
     return sv; });
   return Promise.all($$('.card').map(card=>{
@@ -840,7 +804,6 @@ const bgReady = ((!reduce||document.body.dataset.city==='troitsk') && 'DOMParser
       card.prepend(main);
       if(second){ const clip=document.createElement('span'); clip.className='bg-clip'; clip.appendChild(second); main.after(clip); }
       card.classList.add('live');
-      repeatDirectionPattern(main,card);if(second)repeatDirectionPattern(second,card);
     }).catch(()=>{});     // не загрузилось — остаётся CSS-фон
   }));
 })() : Promise.resolve();
