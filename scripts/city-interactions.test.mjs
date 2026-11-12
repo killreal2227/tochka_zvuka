@@ -423,3 +423,13 @@ test('touch preview survives outside taps, focus changes and visible scrolling',
  s.document.emit('tz:direction-preview',{detail:{card}});assert.equal(s.played.length,1);
  card.rect={left:20,right:300,top:-400,bottom:0};s.window.emit('scroll');assert.ok(!card.classes.has('is-preview'));
 });
+
+test('reassurance gets two lines exactly when the address wraps',()=>{
+ const js=source('lead-form.js');const fn=js.slice(js.indexOf('function syncFooterLines(){'),js.indexOf('const scheduleFooterLines='));
+ let height=17,wrapped=false;
+ const caption={hidden:false,getBoundingClientRect:()=>({height})};
+ const ctx={modal:{hidden:false,querySelector:()=>caption},sheet:{classList:{toggle:(name,value)=>{wrapped=value;}}},getComputedStyle:()=>({lineHeight:'17px'})};
+ vm.runInNewContext(fn+'syncFooterLines();',ctx);assert.equal(wrapped,false);
+ height=34;ctx.syncFooterLines();assert.equal(wrapped,true);
+ height=17;ctx.syncFooterLines();assert.equal(wrapped,false);
+});

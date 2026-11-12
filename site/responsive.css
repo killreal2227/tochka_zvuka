@@ -212,3 +212,11 @@ body[data-city] #join .h2 { font-size:clamp(44px,6.6vw,108px); line-height:1.05;
  .lead-modal .sheet #leadForm .action-pane { grid-template-rows:44px minmax(44px,auto); }
  .lead-modal .sheet #leadForm .action-pane > .btn { height:44px; min-height:44px; font-size:12px; }
 }
+
+/* Compact form supporting copy and outlines in either phone orientation. */
+@media(max-width:1100px), (max-height:650px), (pointer:coarse) {
+ .lead-modal .sheet #leadForm #formIntro { font-size:12px; line-height:1.35; letter-spacing:0; text-transform:none; }
+ .lead-modal .sheet #chips .pk .choice-icon { outline-width:1px; }
+ .lead-modal .sheet #chips .pk input:checked+label .choice-icon { outline-width:2px; }
+ .lead-modal .sheet.has-wrapped-address .lead-reassurance .reassurance-break { display:block; }
+}

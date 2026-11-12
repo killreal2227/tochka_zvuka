@@ -166,12 +166,24 @@ const formArt=(()=>{
     open(el.dataset.dir);
   }));
   modal.querySelector('.lead-close').addEventListener('click',close);
+  function syncFooterLines(){
+    if(modal.hidden)return;
+    const caption=modal.querySelector('#leadBranchCaption');
+    if(!caption||caption.hidden)return;
+    const line=parseFloat(getComputedStyle(caption).lineHeight);
+    sheet.classList.toggle('has-wrapped-address',Number.isFinite(line)&&caption.getBoundingClientRect().height>line*1.5);
+  }
+  const scheduleFooterLines=()=>requestAnimationFrame(syncFooterLines);
+  window.addEventListener('resize',scheduleFooterLines,{passive:true});
+  document.fonts?.ready.then(scheduleFooterLines);
+  if(window.ResizeObserver){const footerObserver=new window.ResizeObserver(scheduleFooterLines);footerObserver.observe(modal.querySelector('#leadBranchCaption'));}
   function syncBranch(){
     branchPicker.sync();
     const option=form.elements.branch.selectedOptions[0],caption=modal.querySelector('#leadBranchCaption');
     caption.textContent=option?.value?option.textContent:'Выбери город';
     caption.hidden=!option?.value;
     caption.href=option?.value?'https://yandex.ru/maps/?text='+encodeURIComponent(option.textContent.replace('·',',')):'#';
+    scheduleFooterLines();
   }
   form.elements.branch.addEventListener('change',syncBranch);
   let backdropStart=null,backdropDragged=false;
