@@ -114,7 +114,7 @@ body[data-city] .site-footer .footer-bottom nav { font-size:11px; line-height:16
 .lead-modal .sheet #chips .pk input:checked+label .choice-icon { outline-width:3px; }
 @media(max-width:1000px) {
  body[data-city] #env .kicker,body[data-city] #join .kicker { font-size:11px; margin-bottom:14px; }
- body[data-city] #env .h2,body[data-city] #join .h2 { font-size:clamp(32px,6vw,52px); margin-bottom:22px; }
+ body[data-city] #env .h2,body[data-city] #join .h2 { margin-bottom:22px; }
  body[data-city] #env .path { padding-left:44px; }
  body[data-city] #env .path li { padding-bottom:22px; }
  body[data-city] #env .path li:last-child { padding-bottom:0; }
@@ -134,12 +134,8 @@ body[data-city] .site-footer .footer-bottom nav { font-size:11px; line-height:16
 body[data-city] #dirs .h2,
 body[data-city] #env .h2,
 body[data-city] #how .h2,
-body[data-city] #join .h2 { font-size:clamp(38px,5.6vw,84px); line-height:1.05; }
+body[data-city] #join .h2 { font-size:clamp(44px,6.6vw,108px); line-height:1.05; }
 @media(max-width:1000px) {
- body[data-city] #dirs .h2,
- body[data-city] #env .h2,
- body[data-city] #how .h2,
- body[data-city] #join .h2 { font-size:clamp(32px,6vw,52px); }
  body[data-city] #env .path { padding-left:36px; }
  body[data-city] #env .path li::before { box-sizing:border-box; width:18px; height:18px; left:-33px; top:5px; }
  body[data-city] #env .path li.on::before { box-shadow:0 0 0 4px var(--ink),0 0 0 6px var(--bord); }
