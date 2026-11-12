@@ -219,9 +219,9 @@ body[data-city] #top .header-enrol svg { transition:none; animation:none; }
  body[data-city="troitsk"] { --header-height:64px; }
  body[data-city="troitsk"] #top .header-identity { width:144px; flex:0 0 144px; }
  body[data-city="troitsk"] #top .brand { width:144px; min-width:144px; max-width:144px; transform:translateY(1.14px); }
- body[data-city="troitsk"] #top .top-right { width:152px; flex:0 0 152px; gap:6px; }
- body[data-city="troitsk"] #top .top-right > .header-enrol { width:110px; min-width:110px; height:36px; min-height:36px; padding:4px 30px 4px 8px; font-size:10px; }
- body[data-city="troitsk"] #top .header-enrol-label { display:flex; flex-direction:column; align-items:center; line-height:1.05; }
+ body[data-city="troitsk"] #top .top-right { width:166px; flex:0 0 166px; gap:6px; }
+ body[data-city="troitsk"] #top .top-right > .header-enrol { width:124px; min-width:124px; height:36px; min-height:36px; padding:4px 30px 4px 8px; font-size:10px; }
+ body[data-city="troitsk"] #top .header-enrol-label { display:inline; white-space:nowrap; line-height:1.2; }
  body[data-city="troitsk"] #top .header-enrol i,
  body[data-city="troitsk"] #top .header-enrol:hover i { width:24px; height:24px; right:4px; top:50%; transform:translateY(-50%); }
  body[data-city="troitsk"] #top .header-enrol i svg { width:14px; height:14px; }
@@ -239,4 +239,13 @@ body[data-city] #top .header-enrol svg { transition:none; animation:none; }
 
 @media(max-width:360px) {
  body[data-city="troitsk"] #top { gap:4px; }
+}
+
+@media(max-width:1000px) {
+ body[data-city] .hero-actions .link { width:max-content; min-width:190px; white-space:nowrap; flex-wrap:nowrap; }
+ body[data-city] .hero-actions .link svg { flex:0 0 14px; }
+}
+@media(max-width:360px) {
+ body[data-city="troitsk"] #top .header-identity { width:128px; flex-basis:128px; }
+ body[data-city="troitsk"] #top .brand { width:128px; min-width:128px; max-width:128px; }
 }
