@@ -149,7 +149,8 @@ const formArt=(()=>{
   function close(){if(sending)return;branchPicker.close();formArt.stop();modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.hidden=true;document.body.style.overflow='';lastFocus?.focus({preventScroll:true});document.dispatchEvent(new CustomEvent('tz:lead-close'));}
   document.querySelectorAll('.openForm').forEach(el=>el.addEventListener('click',()=>open()));
   document.querySelectorAll('.card[data-dir]').forEach(el=>el.addEventListener('click',event=>{
-    if(pageCity==='troitsk'&&matchMedia('(max-width:1000px)').matches&&event.detail!==0&&!el.classList.contains('is-preview')){
+    const touch=matchMedia('(hover:none), (pointer:coarse)').matches;
+    if(pageCity==='troitsk'&&(matchMedia('(max-width:1000px)').matches||touch)&&(event.detail!==0||touch)&&!el.classList.contains('is-preview')){
       document.dispatchEvent(new CustomEvent('tz:direction-preview',{detail:{card:el}}));return;
     }
     open(el.dataset.dir);

@@ -35,7 +35,8 @@
     });
     document.addEventListener('tz:lead-open',stop);
     document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
-    window.addEventListener('resize',stop,{passive:true});
+    let viewportWidth=window.innerWidth;
+    window.addEventListener('resize',()=>{if(window.innerWidth!==viewportWidth){viewportWidth=window.innerWidth;stop();}},{passive:true});
     [fine,reduced].forEach(query=>query.addEventListener('change',stop));
   };
 })();

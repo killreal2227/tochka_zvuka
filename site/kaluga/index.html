@@ -433,7 +433,7 @@ img,svg{display:block;max-width:100%}
 .foot-legal a{font-size:15px}
 </style>
 <link rel="stylesheet" href="../experience.css?v=de1fc54135">
-<script src="../lead-form.js?v=926406c2e7" defer></script>
+<script src="../lead-form.js?v=15781f7456" defer></script>
 <link rel="stylesheet" href="../form.css?v=1aef385385">
 <link rel="stylesheet" href="../city-ui.css?v=b799d02d38"><script src="../city-ui.js?v=b3b1c31cfb" defer></script>
 <script src="../button-labels.js?v=3397abeb3f" defer></script>
@@ -757,7 +757,7 @@ img,svg{display:block;max-width:100%}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="../direction-player.js?v=2e10576c3d"></script>
-<script src="../direction-scroll.js?v=c7358f224e"></script>
+<script src="../direction-scroll.js?v=9d882d21ee"></script>
 <script>
 const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
@@ -891,7 +891,44 @@ addEventListener('resize',scheduleSteps);stepsUpdate();
 
 /* фоны направлений: оригинальные SVG-паттерны (patterns/*.svg) встраиваются на лету, чтобы двигать их собственные фигуры.
    Без JS и при reduced-motion остаются обычные CSS-фоны из тех же файлов. */
-const bgReady = (!reduce && 'DOMParser' in window) ? (()=>{
+const directionPatternTiles=new WeakMap();
+function repeatDirectionPattern(svg,card){
+  if(document.body.dataset.city!=='troitsk')return;
+  let data=directionPatternTiles.get(svg);
+  if(!data){
+    const box=svg.viewBox.baseVal;
+    data={x:box.x,y:box.y,width:box.width,height:box.height,
+      seeds:[...svg.children].filter(e=>e.tagName.toLowerCase()!=='defs').map(e=>e.cloneNode(true)),viewHeight:0};
+    if(card.dataset.dir==='guitar'){
+      const lines=[...svg.querySelectorAll('path[stroke-width]')],a=lines[0].transform.baseVal.consolidate().matrix,b=lines[1].transform.baseVal.consolidate().matrix;
+      data.lines={seed:lines[0].cloneNode(true),phase:a.e+a.f,step:(b.e+b.f)-(a.e+a.f),scale:Math.hypot(a.a,a.b),opacity:lines[0].closest('g[opacity]')?.getAttribute('opacity')||'1'};
+    }
+    directionPatternTiles.set(svg,data);
+    if('ResizeObserver' in window)new ResizeObserver(()=>repeatDirectionPattern(svg,card)).observe(card);
+    else window.addEventListener('resize',()=>repeatDirectionPattern(svg,card),{passive:true});
+  }
+  const r=card.getBoundingClientRect();if(!r.width||!r.height)return;
+  const viewHeight=r.height/r.width*data.width;
+  if(Math.abs(viewHeight-data.viewHeight)<.01)return;
+  data.viewHeight=viewHeight;
+  [...svg.children].filter(e=>e.tagName.toLowerCase()!=='defs').forEach(e=>e.remove());
+  if(data.lines){
+    const group=document.createElementNS('http://www.w3.org/2000/svg','g');group.classList.add('pattern-tile');group.setAttribute('opacity',data.lines.opacity);
+    for(let phase=data.lines.phase;phase<data.width+viewHeight;phase+=data.lines.step){
+      const line=data.lines.seed.cloneNode(true);line.removeAttribute('transform');
+      line.setAttribute('stroke-width',Number(line.getAttribute('stroke-width'))*data.lines.scale);
+      line.setAttribute('d',`M0 ${phase}L${data.width} ${phase-data.width}`);group.appendChild(line);
+    }svg.appendChild(group);
+  }else for(let i=0;i<Math.ceil(viewHeight/data.height);i++){
+    const tile=document.createElementNS('http://www.w3.org/2000/svg','g');
+    tile.classList.add('pattern-tile');tile.setAttribute('transform',`translate(0 ${i*data.height})`);
+    data.seeds.forEach(e=>tile.appendChild(e.cloneNode(true)));svg.appendChild(tile);
+  }
+  svg.setAttribute('viewBox',`${data.x} ${data.y} ${data.width} ${viewHeight}`);
+  svg.setAttribute('preserveAspectRatio','xMidYMid meet');delete card._prep;
+}
+
+const bgReady = ((!reduce||document.body.dataset.city==='troitsk') && 'DOMParser' in window) ? (()=>{
   const kinds={vocal:['vocal'],guitar:['guitar'],drums:['drums'],piano:['piano'],actor:['actor-orange','actor-blue'],speech:['speech']};
   const load=file=>fetch('../patterns/'+file+'.svg').then(r=>r.ok?r.text():Promise.reject(r.status)).then(t=>{
     t=t.replace(/clip_(\d+)/g,`${file}_c$1`).replace(/ id="layer_\d+"/g,'');   // id уникальны в пределах страницы
@@ -905,6 +942,7 @@ const bgReady = (!reduce && 'DOMParser' in window) ? (()=>{
       card.prepend(main);
       if(second){ const clip=document.createElement('span'); clip.className='bg-clip'; clip.appendChild(second); main.after(clip); }
       card.classList.add('live');
+      repeatDirectionPattern(main,card);if(second)repeatDirectionPattern(second,card);
     }).catch(()=>{});     // не загрузилось — остаётся CSS-фон
   }));
 })() : Promise.resolve();

@@ -191,7 +191,7 @@ body[data-city="troitsk"] #dirs .grid { grid-template-columns:repeat(3,minmax(0,
 body[data-city="troitsk"] #dirs .card,
 body[data-city="troitsk"] #dirs .card:hover,
 body[data-city="troitsk"] #dirs .card:focus-visible {
-  display:block; position:relative; height:clamp(300px,29vw,400px); min-height:0; padding:24px;
+  display:block; position:relative; height:clamp(330px,29vw,400px); min-height:0; padding:24px;
   transform:none; transition:none; opacity:1;
 }
 body[data-city="troitsk"] #dirs .card > .ico,
@@ -205,7 +205,7 @@ body[data-city="troitsk"] #dirs .card:hover > span:not(.bg-clip):not(.go) {
   position:absolute; left:24px; right:24px; bottom:24px; width:auto; min-width:0; padding:0;
   transform:none; transition:transform .32s var(--ease);
 }
-body[data-city="troitsk"] #dirs .card .name { font-size:clamp(28px,3vw,46px); line-height:1.08; max-width:none; }
+body[data-city="troitsk"] #dirs .card .name { font-size:clamp(35px,3.75vw,57.5px); line-height:1.08; max-width:none; }
 body[data-city="troitsk"] #dirs .card .desc,
 body[data-city="troitsk"] #dirs .card.is-active .desc,
 body[data-city="troitsk"] #dirs .card.is-preview .desc,
@@ -218,7 +218,7 @@ body[data-city="troitsk"] #dirs .card:focus-visible .desc {
 body[data-city="troitsk"] #dirs .card .go,
 body[data-city="troitsk"] #dirs .card:hover .go,
 body[data-city="troitsk"] #dirs .card:focus-visible .go {
-  top:auto; bottom:24px; right:20px; width:32px; height:32px; opacity:0; transform:none;
+  top:auto; bottom:24px; right:20px; width:32px; height:32px; opacity:1; transform:none;
 }
 body[data-city="troitsk"] #dirs .card.is-preview > span:not(.bg-clip):not(.go),
 body[data-city="troitsk"] #dirs .card:focus-visible > span:not(.bg-clip):not(.go) { transform:translateY(calc(-1 * var(--description-rise,80px))); }
@@ -231,7 +231,7 @@ body[data-city="troitsk"] #dirs .card:focus-visible .go { opacity:1; }
   body[data-city="troitsk"] #dirs .card:hover .desc { opacity:1; visibility:visible; }
   body[data-city="troitsk"] #dirs .card:hover .go { opacity:1; }
 }
-@media(min-width:420px) and (max-width:1000px) {
+@media(min-width:700px) and (max-width:1000px) {
   body[data-city="troitsk"] #dirs .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 @media(max-width:1000px) {
@@ -245,7 +245,7 @@ body[data-city="troitsk"] #dirs .card:focus-visible .go { opacity:1; }
   body[data-city="troitsk"] #dirs .card.is-preview > span:not(.bg-clip):not(.go),
   body[data-city="troitsk"] #dirs .card:hover > span:not(.bg-clip):not(.go),
   body[data-city="troitsk"] #dirs .card:focus-visible > span:not(.bg-clip):not(.go) { left:16px; right:16px; bottom:20px; }
-  body[data-city="troitsk"] #dirs .card .name { font-size:clamp(22px,3.2vw,32px); }
+  body[data-city="troitsk"] #dirs .card .name { font-size:clamp(27.5px,4vw,40px); }
   body[data-city="troitsk"] #dirs .card .desc,
   body[data-city="troitsk"] #dirs .card.is-active .desc,
   body[data-city="troitsk"] #dirs .card.is-preview .desc,
@@ -255,7 +255,7 @@ body[data-city="troitsk"] #dirs .card:focus-visible .go { opacity:1; }
   body[data-city="troitsk"] #dirs .card:hover .go,
   body[data-city="troitsk"] #dirs .card:focus-visible .go { bottom:20px; right:16px; width:28px; height:28px; }
 }
-@media(width < 420px) {
+@media(width < 700px) {
   body[data-city="troitsk"] #dirs .grid { grid-template-columns:minmax(0,1fr); }
   body[data-city="troitsk"] #dirs .card,
   body[data-city="troitsk"] #dirs .card:hover,
@@ -273,4 +273,61 @@ body[data-city="troitsk"] .top .header-enrol i svg { width:18px; height:18px; }
 @media(prefers-reduced-motion:reduce) {
   body[data-city="troitsk"] #dirs .card *,body[data-city="troitsk"] #dirs .card::before,
   body[data-city="troitsk"] #dirs .card::after { animation:none!important; transition:none!important; }
+}
+
+/* Preserve the narrow logo; the lesson button gives up horizontal space first. */
+body[data-city="troitsk"] .top .header-enrol i,
+body[data-city="troitsk"] .top .header-enrol:hover i { margin-right:4px; }
+@media(max-width:1000px) {
+  body[data-city="troitsk"] .top .header-identity { flex:0 0 180px; }
+  body[data-city="troitsk"] .top .brand { width:180px; min-width:180px; max-width:180px; }
+  body[data-city="troitsk"] .top .top-right { flex:0 1 auto; min-width:0; }
+  body[data-city="troitsk"] .top .top-right > .header-enrol { flex:0 1 156px; width:156px; min-width:64px; padding-right:40px; }
+  body[data-city="troitsk"] .top .header-enrol i,
+  body[data-city="troitsk"] .top .header-enrol:hover i { right:7px; margin:0; }
+}
+@media(max-width:480px) {
+  body[data-city="troitsk"] .top .header-enrol > svg.capsule-caption { display:none; }
+  body[data-city="troitsk"] .top .header-enrol > .header-enrol-label {
+    position:absolute; left:4px; right:34px; top:0; bottom:0;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    opacity:1; font-size:11px; line-height:12px; letter-spacing:0;
+  }
+}
+@media(width < 360px) {
+  body[data-city="troitsk"] .top { padding-left:12px; padding-right:12px; gap:4px; }
+  body[data-city="troitsk"] .top .top-right { gap:4px; }
+  body[data-city="troitsk"] .top .header-enrol-label > span:first-child { display:none; }
+}
+/* The pattern repeats at its original ratio instead of zooming and cropping. */
+body[data-city="troitsk"] #dirs .card .bg,
+body[data-city="troitsk"] #dirs .card .bg-clip .bg,
+body[data-city="troitsk"] #dirs .card:hover .bg,
+body[data-city="troitsk"] #dirs .card:focus-visible .bg {
+  position:absolute; inset:0; left:0; top:0; width:100%; height:100%; max-width:none;
+  aspect-ratio:auto; transform:none; transition:none;
+}
+body[data-city="troitsk"] #dirs .card .bg-clip { inset:0; }
+body[data-city="troitsk"] #dirs .card::before,
+body[data-city="troitsk"] #dirs .card::after {
+  inset:0; background-size:100% 100%,100% auto; background-repeat:no-repeat,repeat;
+  background-position:0 0; transform:none;
+}
+body[data-city="troitsk"] #dirs .card > .ico { transition:transform .25s var(--ease); }
+body[data-city="troitsk"] #dirs .card.is-preview > .ico { transform:scale(1.15); transform-origin:center; }
+body[data-city="troitsk"] #dirs .card .go { transition:background-color .2s,color .2s,box-shadow .2s,transform .2s; }
+body[data-city="troitsk"] #dirs .card.is-preview .go {
+  background:var(--cream); color:var(--ink); box-shadow:0 0 0 2px var(--ink);
+  transform:scale(1.12); animation:direction-ready .45s ease-out 1;
+}
+body[data-city="troitsk"] #dirs .card.is-preview .go svg { transform:rotate(45deg); transition:transform .25s ease; }
+@keyframes direction-ready { 0% { transform:scale(1); } 55% { transform:scale(1.2); } 100% { transform:scale(1.12); } }
+@media(hover:none), (pointer:coarse) {
+  body[data-city="troitsk"] .lead-modal { padding:0; align-items:end; }
+  body[data-city="troitsk"] .lead-modal .lead-sheet { width:min(760px,calc(100% - 24px)); margin:0 0 calc(12px + env(safe-area-inset-bottom)); max-height:calc(100dvh - 24px); transform:translateY(calc(100% + 24px)); }
+  body[data-city="troitsk"] .lead-modal.open .lead-sheet { transform:none; }
+}
+
+@media(min-width:1001px) and (pointer:coarse) {
+  body[data-city="troitsk"] .lead-modal .lead-sheet { width:min(1040px,calc(100% - 24px)); }
 }
