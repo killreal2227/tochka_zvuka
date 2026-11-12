@@ -133,3 +133,31 @@ body[data-city] .site-footer .footer-bottom nav { font-size:11px; line-height:16
  body[data-city] #join .btn { min-height:50px; padding-top:6px; padding-bottom:6px; font-size:14px; }
  body[data-city] #join .btn i { width:38px; height:38px; }
 }
+
+/* One heading scale across branch sections. */
+body[data-city] #dirs .h2,
+body[data-city] #env .h2,
+body[data-city] #how .h2,
+body[data-city] #join .h2 { font-size:clamp(38px,5.6vw,84px); line-height:1.05; }
+@media(max-width:1000px) {
+ body[data-city] #dirs .h2,
+ body[data-city] #env .h2,
+ body[data-city] #how .h2,
+ body[data-city] #join .h2 { font-size:clamp(32px,6vw,52px); }
+ body[data-city] #env .path { padding-left:36px; }
+ body[data-city] #env .path li::before { box-sizing:border-box; width:18px; height:18px; left:-33px; top:5px; }
+ body[data-city] #env .path li.on::before { box-shadow:0 0 0 4px var(--ink),0 0 0 6px var(--bord); }
+ body[data-city] #env .path h3 { font-size:20px; line-height:1.15; }
+ body[data-city] #env .path p { font-size:14px; line-height:1.4; }
+ body[data-city] #how .step::before { width:24px; height:24px; left:4px; top:4px; }
+ body[data-city] #how .step::after { width:8px; height:8px; left:12px; top:12px; }
+ body[data-city] #how .step.is-current::before { box-shadow:0 0 0 3px #9b3e4714; }
+ body[data-city] #how .step .n { font-size:48px; margin-bottom:12px; }
+ body[data-city] #how .step h3 { font-size:21px; margin-bottom:8px; }
+ body[data-city] #how .step p { font-size:14px; line-height:1.4; }
+}
+@media(max-width:680px) {
+ body[data-city] #how .step { padding-left:44px; }
+ body[data-city] #how .step::before { top:10px; }
+ body[data-city] #how .step::after { top:18px; }
+}
