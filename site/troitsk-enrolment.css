@@ -257,3 +257,8 @@ body[data-city] #dirs .card { border-radius:8px; }
  body[data-city] .hero-actions .link { padding-left:14px; padding-bottom:4px; align-items:flex-end; line-height:1; }
  body[data-city] .hero-actions .link svg { transform:none; }
 }
+
+@media(max-width:1000px) {
+ body[data-city] .hero-actions .link { position:relative; border-bottom-color:transparent; }
+ body[data-city] .hero-actions .link::after { content:""; position:absolute; left:8px; right:0; bottom:-2px; height:2px; background:var(--bord); }
+}
