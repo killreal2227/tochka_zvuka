@@ -246,7 +246,7 @@ test('invalid phone is rejected before any external request',async()=>{
 
 test('direction title and reset button follow selection and reset only the direction',async()=>{
   const s=formScene();await s.trigger.emit('click');s.fill();
-  assert.equal(s.directionTitle.textContent,'Выбери направление');
+  assert.equal(s.directionTitle.textContent,'Направление — подберём вместе');
   assert.equal(s.directionReset.hidden,true);
   s.form.elements.direction.value='speech';
   await s.form.emit('change',{target:{name:'direction'}});
@@ -254,7 +254,7 @@ test('direction title and reset button follow selection and reset only the direc
   assert.equal(s.directionReset.hidden,false);
   await s.directionReset.emit('click');
   assert.equal(s.form.elements.direction.value,'');
-  assert.equal(s.directionTitle.textContent,'Выбери направление');
+  assert.equal(s.directionTitle.textContent,'Направление — подберём вместе');
   assert.equal(s.directionReset.hidden,true);
   assert.equal(s.caption.textContent,'');
   assert.equal(s.form.elements.name.value,'Иван');
