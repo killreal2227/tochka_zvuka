@@ -293,7 +293,7 @@ test('branch header shows only its current address without a branch switching co
 
 function ordinaryScene(finePointer=false,compactWidth=false){
   const events=()=>({handlers:new Map(),addEventListener(k,fn,options){const list=this.handlers.get(k)||[];list.push({fn,options});this.handlers.set(k,list);},emit(k,e={}){(this.handlers.get(k)||[]).forEach(x=>x.fn(e));}});
-  const cards=Array.from({length:6},(_,i)=>Object.assign(events(),{rect:{top:900+i*160,bottom:1040+i*160},classes:new Set(),getBoundingClientRect(){return this.rect;}}));
+  const cards=Array.from({length:6},(_,i)=>Object.assign(events(),{rect:{top:900+i*160,bottom:1040+i*160},classes:new Set(),keyboardFocus:false,matches(){return this.keyboardFocus;},getBoundingClientRect(){return this.rect;}}));
   cards.forEach(card=>card.classList={toggle(k,v){v?card.classes.add(k):card.classes.delete(k);}});
   const grid={querySelectorAll:()=>cards},header={getBoundingClientRect:()=>({bottom:76})},modal={hidden:true};
   const document=Object.assign(events(),{hidden:false,querySelector:s=>s==='#dirs .grid'?grid:header,getElementById:()=>modal});
@@ -381,4 +381,12 @@ test('lead form backdrop ignores swipes but accepts a stationary tap',async()=>{
  await s.modal.emit('click',{target:s.modal});assert.equal(s.modal.hidden,false);
  await s.modal.emit('pointerdown',{clientX:10,clientY:100});
  await s.modal.emit('click',{target:s.modal});assert.equal(s.modal.hidden,true);
+});
+
+test('direction hover ignores points outside card bounds and focus requires keyboard visibility',()=>{
+ const s=ordinaryScene(true),card=s.cards[0];card.rect={left:20,right:300,top:100,bottom:400};
+ card.emit('pointerenter',{pointerType:'mouse',clientX:340,clientY:200});assert.equal(s.played.length,0);
+ card.emit('focusin');assert.equal(s.played.length,0);
+ card.emit('pointerenter',{pointerType:'mouse',clientX:200,clientY:200});assert.deepEqual(s.played,[card]);
+ card.emit('pointerleave');card.keyboardFocus=true;card.emit('focusin');assert.equal(s.played.length,2);
 });

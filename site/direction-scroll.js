@@ -27,10 +27,16 @@
       document.addEventListener('pointerdown',event=>{if(preview&&!preview.contains(event.target)&&!modal.contains(event.target))stop();});
     }
     cards.forEach(card=>{
-      card.addEventListener('pointerenter',event=>{if(fine.matches&&event.pointerType!=='touch')select(card);});
+      card.addEventListener('pointerenter',event=>{
+        if(Number.isFinite(event.clientX)&&Number.isFinite(event.clientY)){
+          const r=card.getBoundingClientRect();
+          if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)return;
+        }
+        if(fine.matches&&event.pointerType!=='touch')select(card);
+      });
       const leave=()=>{if(active===card&&!preview)select(null);};
       card.addEventListener('pointerleave',leave);card.addEventListener('pointercancel',leave);
-      card.addEventListener('focusin',()=>{if(fine.matches)select(card);});
+      card.addEventListener('focusin',()=>{if(fine.matches&&card.matches(':focus-visible'))select(card);});
       card.addEventListener('focusout',leave);
     });
     document.addEventListener('tz:lead-open',stop);

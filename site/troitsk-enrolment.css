@@ -159,3 +159,8 @@ body[data-city] #dirs .card .go { transition:background-color .2s,color .2s,box-
  body[data-city="troitsk"] .top .header-enrol i { right:7px; }
  body[data-city="troitsk"] .top .top-right > .header-enrol { white-space:nowrap; font-size:clamp(10px,2.6vw,13px); padding-left:10px; }
 }
+
+/* Decorative SVGs and captions must never extend the card's hit area. */
+body[data-city] #dirs .card > *,
+body[data-city] #dirs .card::before,
+body[data-city] #dirs .card::after { pointer-events:none; }
