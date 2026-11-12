@@ -150,16 +150,18 @@ const formArt=(()=>{
   }
   function close(){if(sending)return;branchPicker.close();formArt.stop();modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.hidden=true;document.body.style.overflow='';lastFocus?.focus({preventScroll:true});document.dispatchEvent(new CustomEvent('tz:lead-close'));}
   document.querySelectorAll('.openForm').forEach(el=>el.addEventListener('click',()=>open()));
-  const previewedDirections=new WeakSet();
+  /* Preview and signup are separate actions on touch screens. */
   document.querySelectorAll('.card[data-dir]').forEach(el=>el.addEventListener('click',event=>{
     if(event.detail!==0&&Number.isFinite(event.clientX)&&Number.isFinite(event.clientY)){
       const r=el.getBoundingClientRect();
       if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)return;
     }
     const touch=matchMedia('(hover:none), (pointer:coarse)').matches;
-    if(pageCity&&(matchMedia('(max-width:1000px)').matches||touch)&&(event.detail!==0||touch)&&!previewedDirections.has(el)){
-      previewedDirections.add(el);
-      document.dispatchEvent(new CustomEvent('tz:direction-preview',{detail:{card:el}}));return;
+    if(pageCity&&(matchMedia('(max-width:1000px)').matches||touch)&&event.detail!==0){
+      const arrow=el.querySelector('.go');
+      if(arrow?.contains(event.target)){open(el.dataset.dir);return;}
+      if(!el.classList.contains('is-preview'))document.dispatchEvent(new CustomEvent('tz:direction-preview',{detail:{card:el}}));
+      return;
     }
     open(el.dataset.dir);
   }));

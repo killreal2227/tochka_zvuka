@@ -391,17 +391,20 @@ test('direction hover ignores points outside card bounds and focus requires keyb
  card.emit('pointerleave');card.keyboardFocus=true;card.emit('focusin');assert.equal(s.played.length,2);
 });
 
-test('a direction needs preview only once even after scrolling or another direction selection',()=>{
+
+test('touch card reveals once, arrow opens immediately, and preview can be viewed again',()=>{
  const js=source('lead-form.js');
- const handler=js.slice(js.indexOf('const previewedDirections='),js.indexOf("modal.querySelector('.lead-close')"));
+ const handler=js.slice(js.indexOf('/* Preview and signup'),js.indexOf("modal.querySelector('.lead-close')"));
  const callbacks=[],opened=[],previews=[];
- const cards=['vocal','guitar'].map(dir=>({dataset:{dir},addEventListener:(_,fn)=>callbacks.push(fn),getBoundingClientRect:()=>({left:20,right:300,top:100,bottom:400})}));
- const document={querySelectorAll:()=>cards,dispatchEvent:e=>previews.push(e.detail.card)};
+ const arrows=[{},{}];arrows.forEach(a=>a.contains=t=>t===a);
+ const cards=['vocal','guitar'].map((dir,i)=>({preview:false,dataset:{dir},classList:{contains:()=>cards[i].preview},querySelector:()=>arrows[i],addEventListener:(_,fn)=>callbacks.push(fn),getBoundingClientRect:()=>({left:20,right:300,top:100,bottom:400})}));
+ const document={querySelectorAll:()=>cards,dispatchEvent:e=>{e.detail.card.preview=true;previews.push(e.detail.card);}};
  vm.runInNewContext(handler,{document,pageCity:'troitsk',matchMedia:()=>({matches:true}),open:dir=>opened.push(dir),CustomEvent:class{constructor(type,options){this.detail=options.detail;}}});
- const tap={detail:1,clientX:100,clientY:200};
- callbacks[0](tap);assert.deepEqual(previews,[cards[0]]);assert.equal(opened.length,0);
- callbacks[1](tap);assert.deepEqual(previews,cards);
- callbacks[0](tap);assert.deepEqual(opened,['vocal']);
- callbacks[0](tap);assert.deepEqual(opened,['vocal','vocal']);
- callbacks[1]({...tap,clientX:350});assert.equal(opened.length,2);
+ const tap={detail:1,clientX:100,clientY:200,target:cards[0]};
+ callbacks[0](tap);callbacks[0](tap);callbacks[0](tap);assert.deepEqual(previews,[cards[0]]);assert.equal(opened.length,0);
+ callbacks[0]({...tap,target:arrows[0]});assert.deepEqual(opened,['vocal']);
+ cards[0].preview=false;callbacks[0](tap);assert.equal(previews.length,2);
+ callbacks[1]({...tap,target:arrows[1]});assert.deepEqual(opened,['vocal','guitar']);
+ callbacks[1]({...tap,clientX:350,target:arrows[1]});assert.equal(opened.length,2);
+ callbacks[0]({...tap,detail:0});assert.equal(opened.length,3);
 });

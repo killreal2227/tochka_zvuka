@@ -20,9 +20,9 @@
     if(previews){
       cards.forEach(card=>{const desc=card.querySelector('.desc');desc.id='direction-description-'+card.dataset.dir;card.setAttribute('aria-controls',desc.id);card.setAttribute('aria-expanded','false');});
       document.addEventListener('tz:direction-preview',event=>{
-        const card=event.detail?.card;if(!cards.includes(card))return;
+        const card=event.detail?.card;if(!cards.includes(card)||preview===card)return;
         clearPreview();preview=card;card.classList.add('is-preview');card.setAttribute('aria-expanded','true');
-        card.setAttribute('aria-label',card.querySelector('.name').textContent+' — нажмите ещё раз, чтобы записаться');select(card,true);
+        card.setAttribute('aria-label',card.querySelector('.name').textContent+' — нажмите на стрелку, чтобы записаться');select(card,true);
       });
       document.addEventListener('pointerdown',event=>{if(preview&&!preview.contains(event.target)&&!modal.contains(event.target))stop();});
     }
