@@ -241,3 +241,15 @@ test('short landscape header is compact at 1229x571 without changing tall layout
   assert.equal(resolve(1229,'brand','',900).width,'260px');
   assert.equal(resolve(571,'brand','',1229).width,'var(--narrow-logo)');
 });
+
+test('touch viewports below 500 scale the full page composition and restore on rotation',()=>{
+ let content='width=device-width, initial-scale=1',writes=0;
+ const handlers={};const viewport={width:390,scale:1,addEventListener:(k,fn)=>{handlers.visual=fn;}};
+ const window={visualViewport:viewport,matchMedia:()=>({matches:true}),addEventListener:(k,fn)=>{handlers.resize=fn;}};
+ const document={querySelector:()=>({getAttribute:()=>content,setAttribute:(k,v)=>{content=v;writes++;}})};
+ vm.runInNewContext(fs.readFileSync(new URL('site/viewport-scale.js',root),'utf8'),{window,document});
+ assert.equal(content,'width=500, initial-scale=0.78');
+ viewport.width=500;viewport.scale=.78;handlers.visual();assert.equal(writes,1);
+ viewport.width=320;viewport.scale=1;handlers.resize();assert.equal(content,'width=500, initial-scale=0.64');
+ viewport.width=844;viewport.scale=1;handlers.resize();assert.equal(content,'width=device-width, initial-scale=1');
+});
