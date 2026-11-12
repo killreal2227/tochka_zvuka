@@ -200,3 +200,15 @@ body[data-city] #join .h2 { font-size:clamp(44px,6.6vw,108px); line-height:1.05;
  body.home-page .home-brand, body[data-city] #top .brand { width:144px; min-width:144px; max-width:144px; }
  body[data-city] #top .header-identity { gap:10px; }
 }
+
+/* Quieter signup actions on phones/tablets and short landscape screens. */
+@media(max-width:1000px), (orientation:landscape) and (max-height:650px) {
+ body[data-city] main .btn.openForm,
+ body[data-city] #join .btn.openForm { height:44px; min-height:44px; padding:6px 6px 6px 18px; font-size:13px; gap:12px; }
+ body[data-city] main .btn.openForm i,
+ body[data-city] #join .btn.openForm i { width:32px; height:32px; }
+ body[data-city] main .btn.openForm i svg { width:16px; height:16px; }
+ body[data-city] .lesson-nudge .btn { min-height:44px; }
+ .lead-modal .sheet #leadForm .action-pane { grid-template-rows:44px minmax(44px,auto); }
+ .lead-modal .sheet #leadForm .action-pane > .btn { height:44px; min-height:44px; font-size:12px; }
+}

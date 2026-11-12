@@ -126,14 +126,14 @@ function nudgeScene(store=new Map(),blocked=false) {
   const close=events(), trigger={focused:false,focus(){this.focused=true;}};
   const modal={hidden:true};
   const box={hidden:true,querySelector:()=>close,contains:el=>el===close};
-  const document=events({hidden:false,activeElement:null,getElementById:id=>id==='lessonNudge'?box:id==='leadModal'?modal:null,querySelector:selector=>selector==='.top .openForm'?trigger:null});
+  const document=events({documentElement:{scrollHeight:3000},hidden:false,activeElement:null,getElementById:id=>id==='lessonNudge'?box:id==='leadModal'?modal:null,querySelector:selector=>selector==='.top .openForm'?trigger:null});
   const timers=[],frames=[];
-  const window=events({scrollY:0,innerHeight:800,setTimeout:(fn,ms)=>{assert.equal(ms,4000);return timers.push(fn);}});
+  const window=events({scrollY:0,innerHeight:800,setTimeout:(fn,ms)=>{assert.ok(ms===4000||(ms>=25000&&ms<=35000));return timers.push(fn);}});
   Object.defineProperty(window,'sessionStorage',{get(){if(blocked)throw Error('blocked');return{getItem:k=>store.get(k),setItem:(k,v)=>store.set(k,v)};}});
   vm.runInNewContext(source('city-ui.js'),{document,window,requestAnimationFrame:fn=>{frames.push(fn);return 1;}});
   return {box,modal,document,window,close,trigger,timers,async scroll(){await window.emit('scroll');frames.splice(0).forEach(fn=>fn());},delay(){timers.splice(0).forEach(fn=>fn());}};
 }
-test('invitation waits four seconds without scrolling, shows once per page visit',async()=>{
+test('invitation waits four seconds without scrolling, does not repeat immediately',async()=>{
   const store=new Map(),s=nudgeScene(store);assert.equal(s.box.hidden,true);s.delay();assert.equal(s.box.hidden,false);
   s.window.scrollY=500;await s.scroll();assert.equal(s.box.hidden,false);
   await s.close.emit('click');assert.equal(s.box.hidden,true);await s.scroll();assert.equal(s.box.hidden,true);
@@ -144,10 +144,24 @@ test('invitation never overlays open form; Escape and outside pointer dismiss',a
   await s.document.emit('tz:lead-open');s.modal.hidden=true;await s.scroll();assert.equal(s.box.hidden,true);
   const other=nudgeScene();other.window.scrollY=500;other.delay();other.document.activeElement=other.close;
   await other.document.emit('keydown',{key:'Escape',preventDefault(){}});assert.equal(other.box.hidden,true);assert.equal(other.trigger.focused,true);
-  const outside=nudgeScene();outside.window.scrollY=500;outside.delay();await outside.document.emit('pointerdown',{target:{}});assert.equal(outside.box.hidden,true);
+  const outside=nudgeScene();outside.window.scrollY=500;outside.delay();await outside.document.emit('click',{target:{}});assert.equal(outside.box.hidden,true);
 });
 test('invitation works if session storage is unavailable',()=>{
   const s=nudgeScene(new Map(),true);s.window.scrollY=500;s.delay();assert.equal(s.box.hidden,false);assert.equal(s.timers.length,0);
+});
+
+test('repeat waits after dismissal, requires middle page, stops after two or form opening',async()=>{
+ const s=nudgeScene();s.delay();await s.close.emit('click');
+ s.window.scrollY=1100;await s.scroll();assert.equal(s.box.hidden,true);
+ s.window.scrollY=0;s.delay();assert.equal(s.box.hidden,true);
+ s.window.scrollY=1100;await s.scroll();assert.equal(s.box.hidden,false);
+ await s.close.emit('click');s.delay();await s.scroll();assert.equal(s.box.hidden,true);
+ const other=nudgeScene();other.delay();await other.close.emit('click');
+ await other.document.emit('tz:lead-open');other.window.scrollY=1100;other.delay();await other.scroll();assert.equal(other.box.hidden,true);
+});
+test('invitation ignores swipe start and closes on an outside tap',async()=>{
+ const s=nudgeScene();s.delay();await s.document.emit('pointerdown',{target:{}});assert.equal(s.box.hidden,false);
+ await s.document.emit('click',{target:{}});assert.equal(s.box.hidden,true);
 });
 
 function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',combinedDocs=false) {
@@ -358,4 +372,13 @@ test('hero eye ignores invalid pointer coordinates and respects reduced motion a
   s.reduced.matches=true;s.emit('reduce-change');s.emit('focus');assert.equal(s.frames.size,0);assert.equal(s.dot.style.transform,'');
   s.reduced.matches=false;s.emit('reduce-change');s.emit('pointermove',{clientX:0,clientY:0});s.tick();
   assert.match(s.dot.style.transform,/translate\(/);assert.ok(!s.dot.style.transform.includes('NaN'));
+});
+
+test('lead form backdrop ignores swipes but accepts a stationary tap',async()=>{
+ const s=formScene();await s.trigger.emit('click');
+ await s.modal.emit('pointerdown',{clientX:10,clientY:300});
+ await s.modal.emit('pointermove',{clientX:10,clientY:100});
+ await s.modal.emit('click',{target:s.modal});assert.equal(s.modal.hidden,false);
+ await s.modal.emit('pointerdown',{clientX:10,clientY:100});
+ await s.modal.emit('click',{target:s.modal});assert.equal(s.modal.hidden,true);
 });

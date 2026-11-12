@@ -166,7 +166,11 @@ const formArt=(()=>{
     caption.href=option?.value?'https://yandex.ru/maps/?text='+encodeURIComponent(option.textContent.replace('·',',')):'#';
   }
   form.elements.branch.addEventListener('change',syncBranch);
-  modal.addEventListener('click',event=>{if(event.target===modal)close();});
+  let backdropStart=null,backdropDragged=false;
+  modal.addEventListener('pointerdown',event=>{backdropStart={x:event.clientX,y:event.clientY};backdropDragged=false;});
+  modal.addEventListener('pointermove',event=>{if(backdropStart&&Math.hypot(event.clientX-backdropStart.x,event.clientY-backdropStart.y)>10)backdropDragged=true;});
+  modal.addEventListener('pointercancel',()=>{backdropDragged=true;backdropStart=null;});
+  modal.addEventListener('click',event=>{if(event.target===modal&&!backdropDragged)close();});
   document.addEventListener('keydown',event=>{
     if(modal.hidden)return;
     if(event.key==='Escape')close();
