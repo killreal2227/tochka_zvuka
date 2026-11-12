@@ -392,3 +392,9 @@ body.home-page .footer-bottom nav a { line-height:inherit; }
   body.home-page .header-cta:focus-visible { font-size:15px!important; }
   body.home-page .home-branch .branch-btn { font-size:15px; }
 }
+
+@media(max-width:1000px) {
+  body.home-page .footer-details,
+  body.home-page .footer-bottom > span,
+  body.home-page .footer-bottom nav { font-size:11px; line-height:16px; }
+}
