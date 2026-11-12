@@ -593,7 +593,7 @@
   line-height:1.4; color:#786c62; margin:0; overflow-wrap:break-word;
 }
 .lead-modal .sheet .lead-close {
-  top:12px; right:12px; width:44px; height:44px; border:1px solid #786c6238; border-radius:50%;
+  top:6px; right:10px; width:36px; height:36px; border:1px solid #786c6238; border-radius:50%;
   background:rgba(231,222,212,.45); color:#383838;
 }
 .lead-modal .sheet .lead-close:hover {

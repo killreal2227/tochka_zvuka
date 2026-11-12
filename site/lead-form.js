@@ -69,7 +69,7 @@ const formArt=(()=>{
   }
   return {
     tint, resize:measure,
-    start(){ if(reduce||id) return; measure();lastPaint=null;t0=performance.now()-run; id=requestAnimationFrame(frame);   // продолжаем с того же места
+    start(){ if(reduce||window.innerHeight<=500||id) return; measure();lastPaint=null;t0=performance.now()-run; id=requestAnimationFrame(frame);   // продолжаем с того же места
       N.forEach((n,i)=>later(()=>knob(n),700+i*450)); },
     stop(){ if(!id) return; cancelAnimationFrame(id); id=0; run=performance.now()-t0; timers.forEach(clearTimeout);timers.clear(); }
   };
@@ -81,7 +81,7 @@ const formArt=(()=>{
     form.dispatchEvent(new Event('input',{bubbles:true}));
     $('.pk input')?.focus({preventScroll:true});
   });
-  window.addEventListener('resize',()=>formArt.resize(),{passive:true});
+  window.addEventListener('resize',()=>{formArt.resize();if(window.innerHeight<=500)formArt.stop();else if(!modal.hidden)formArt.start();},{passive:true});
   reduceQuery.addEventListener('change',()=>{reduce=reduceQuery.matches;if(reduce)formArt.stop();else if(!modal.hidden)formArt.start();});
   $$('.pk input').forEach(r=>{
     let was=false;

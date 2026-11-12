@@ -226,3 +226,9 @@ body[data-city] #join .h2 { font-size:clamp(44px,6.6vw,108px); line-height:1.05;
  .lead-modal .sheet.has-wrapped-address .lead-reassurance .reassurance-break { display:none; }
  .lead-modal .sheet .lead-reassurance > span { white-space:nowrap; }
 }
+
+@media(max-height:500px) {
+ .lead-modal .sheet .sheet-art { display:none; }
+ .lead-modal .sheet { border-radius:var(--tz-panel-radius); }
+ .lead-modal .sheet, .lead-modal .sheet * { animation:none!important; transition:none!important; }
+}
