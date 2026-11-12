@@ -4,6 +4,8 @@
   const ns = 'http://www.w3.org/2000/svg';
   const entries = [];
   const init = () => {
+    // Native text avoids SVG glyph-metric offsets on touch browsers.
+    if (window.matchMedia?.('(pointer:coarse)').matches) return;
     document.querySelectorAll('.btn, .header-cta, .branch-btn').forEach(button => {
       const arrow = button.querySelector(':scope > i, :scope > svg');
       if (!arrow) return;

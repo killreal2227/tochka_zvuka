@@ -455,3 +455,10 @@ test('portrait form preserves 500px composition below 500 and grows normally abo
  window.innerWidth=500;ctx.fitShortForm();assert.equal(sheet.style.width,'');assert.equal(sheet.style.zoom,'');
  window.innerWidth=700;ctx.fitShortForm();assert.equal(sheet.style.maxWidth,'');
 });
+
+test('touch buttons retain native text instead of adding SVG caption layers',()=>{
+ let queried=false;
+ const document={readyState:'complete',querySelectorAll(){queried=true;throw Error('SVG caption must not initialize on touch');}};
+ vm.runInNewContext(source('button-labels.js'),{document,window:{matchMedia:()=>({matches:true})}});
+ assert.equal(queried,false);
+});

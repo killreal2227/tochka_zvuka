@@ -271,3 +271,9 @@ body[data-city] #dirs .card { border-radius:8px; }
 @media(min-width:1001px) {
  body[data-city] #env .poster { position:relative; top:0; align-self:stretch; height:auto; aspect-ratio:auto; min-height:0; }
 }
+
+@media(pointer:coarse) {
+ body[data-city] button.btn { -webkit-appearance:none; appearance:none; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+ body[data-city] .btn > span { white-space:nowrap; }
+ body[data-city] #top .header-enrol-label { flex:1 1 auto; text-align:center; }
+}
