@@ -263,6 +263,6 @@ body[data-city] #dirs .card { border-radius:8px; }
  body[data-city] .hero-actions .link::after { content:""; position:absolute; left:8px; right:8px; bottom:-2px; height:2px; background:var(--bord); }
 }
 
-@media(orientation:landscape) and (max-height:500px) {
+@media(min-width:500px) {
  body[data-city] .hero-actions { flex-direction:row; flex-wrap:wrap; align-items:center; gap:12px 16px; }
 }
