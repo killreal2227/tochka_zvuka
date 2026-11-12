@@ -58,8 +58,8 @@ body[data-city] #dirs .card:focus-visible {
 }
 body[data-city] #dirs .card > .ico,
 body[data-city] #dirs .card:hover > .ico {
-  position:absolute; left:24px; top:24px; width:104px; height:96px; max-width:none;
-  object-fit:contain; object-position:left top; transform:none;
+  position:absolute; left:24px; top:24px; width:96px; height:96px; max-width:none; overflow:visible;
+  object-fit:contain; object-position:center; transform:none;
 }
 body[data-city] #dirs .card > span:not(.bg-clip):not(.go),
 body[data-city] #dirs .card.is-active > span:not(.bg-clip):not(.go),
@@ -101,7 +101,7 @@ body[data-city] #dirs .card:focus-visible .go { opacity:1; }
   body[data-city] #dirs .card:hover,
   body[data-city] #dirs .card:focus-visible { height:300px; padding:16px; }
   body[data-city] #dirs .card > .ico,
-  body[data-city] #dirs .card:hover > .ico { left:16px; top:16px; width:84px; height:64px; transform:none; }
+  body[data-city] #dirs .card:hover > .ico { left:16px; top:16px; width:64px; height:64px; transform:none; }
   body[data-city] #dirs .card > span:not(.bg-clip):not(.go),
   body[data-city] #dirs .card.is-active > span:not(.bg-clip):not(.go),
   body[data-city] #dirs .card.is-preview > span:not(.bg-clip):not(.go),
