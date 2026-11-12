@@ -91,7 +91,7 @@ function splitSelectors(s) {
   }
   result.push(s.slice(start).trim()); return result;
 }
-function rules(css, viewport, active = true) {
+function rules(css, viewport, active = true, height = 1000) {
   const out = []; css = css.replace(/\/\*[\s\S]*?\*\//g, '');
   for (let pos = 0; pos < css.length;) {
     const open = css.indexOf('{', pos); if (open < 0) break;
@@ -102,16 +102,18 @@ function rules(css, viewport, active = true) {
       let yes = active;
       for (const [, op, n] of head.matchAll(/(max|min)-width\s*:\s*(\d+)px/g)) yes &&= op === 'max' ? viewport <= +n : viewport >= +n;
       for (const [, op, n] of head.matchAll(/\(width\s*(<|>)\s*(\d+)px\)/g)) yes &&= op === '<' ? viewport < +n : viewport > +n;
+      for (const [, op, n] of head.matchAll(/(max|min)-height\s*:\s*(\d+)px/g)) yes &&= op === 'max' ? height <= +n : height >= +n;
+      if (head.includes('orientation:landscape')) yes &&= viewport > height;
       if (head.includes('prefers-reduced-motion')) yes = false;
-      if (yes) out.push(...rules(body, viewport));
+      if (yes) out.push(...rules(body, viewport, true, height));
     } else if (active && !head.startsWith('@')) out.push({ selectors: splitSelectors(head), body });
   }
   return out;
 }
 const sheets = ['experience.css', 'home.css', 'narrow-header.css', 'responsive.css'].map(p => fs.readFileSync(new URL('site/' + p, root), 'utf8')).join('\n');
-function resolve(viewport, target, state = '') {
+function resolve(viewport, target, state = '', height = 1000) {
   const properties = new Map(); let order = 0;
-  for (const rule of rules(sheets, viewport)) for (const selector of rule.selectors) {
+  for (const rule of rules(sheets, viewport, true, height)) for (const selector of rule.selectors) {
     order++;
     if (selector.includes(':is(') || selector.includes(':not(') || selector.includes('[data-city]')) continue;
     if (selector.includes(':hover') && state !== 'hover') continue;
@@ -231,3 +233,11 @@ test('home branch menu supports keyboard navigation, Escape and outside dismissa
   assert.equal(button.attrs['aria-expanded'],'false');
 });
 function rootURL(){return new URL('../',import.meta.url);}
+
+test('short landscape header is compact at 1229x571 without changing tall layouts',()=>{
+  assert.equal(resolve(1229,'header','',571).height,'54px');
+  assert.equal(resolve(1229,'brand','',571).width,'180px');
+  assert.equal(resolve(1229,'cta','',571).height,'40px');
+  assert.equal(resolve(1229,'brand','',900).width,'260px');
+  assert.equal(resolve(571,'brand','',1229).width,'var(--narrow-logo)');
+});

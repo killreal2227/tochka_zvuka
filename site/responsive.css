@@ -166,3 +166,41 @@ body[data-city] #join .h2 { font-size:clamp(38px,5.6vw,84px); line-height:1.05; 
  body[data-city] .lesson-nudge .btn { font-size:13px; padding:6px 6px 6px 14px; gap:12px; }
  body[data-city] .lesson-nudge .btn i { width:30px; height:30px; }
 }
+
+/* Landscape phones need a shallow header even above the desktop width breakpoint. */
+@media(orientation:landscape) and (max-height:650px) {
+ body.home-page, body[data-city][data-city] { --header-height:54px; }
+ body.home-page .home-header, body[data-city] #top {
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:nowrap;
+  height:54px; min-height:54px; padding:0 clamp(12px,3vw,36px); gap:12px;
+ }
+ body.home-page .home-brand, body[data-city] #top .brand {
+  width:180px; min-width:180px; max-width:180px; margin:0; flex:0 0 auto;
+  transform:translateY(1.43px);
+ }
+ body[data-city] #top .header-identity { position:relative; display:flex; width:auto; height:auto; flex:1 1 auto; align-items:center; gap:16px; }
+ body[data-city] #top .branch-current {
+  position:static; display:flex; flex-direction:column; align-items:flex-start;
+  width:auto; max-width:none; min-height:0; padding:0 0 0 12px; margin:0;
+  border-left:1px solid #9b3e4740; font-size:12px; line-height:1.2; gap:2px;
+ }
+ body[data-city] #top .branch-current-address { font-size:11px; line-height:1.2; }
+ body[data-city] #top .top-right, body.home-page .header-actions { display:flex; align-items:center; gap:8px; flex:0 0 auto; }
+ body[data-city] #top .top-right > .btn,
+ body.home-page .home-header .header-cta {
+  height:40px; min-height:40px; width:156px; min-width:156px;
+  padding:4px 38px 4px 12px; font-size:12px!important; line-height:1.2; gap:8px;
+ }
+ body[data-city] #top .header-enrol i, body[data-city] #top .header-enrol:hover i {
+  position:absolute; top:50%; right:5px; width:30px; height:30px; flex-basis:30px; transform:translateY(-50%);
+ }
+ body[data-city] #top .header-enrol i svg { width:16px; height:16px; }
+ body[data-city] #top .header-call { width:40px; height:40px; flex-basis:40px; }
+ body[data-city] #top .header-call svg { width:20px; height:20px; }
+ body.home-page .home-header .branch-btn { height:36px; min-height:36px; font-size:12px; }
+ body[data-city][data-city] .hero { padding-top:calc(var(--header-height) + 24px); }
+}
+@media(orientation:landscape) and (max-height:650px) and (max-width:760px) {
+ body.home-page .home-brand, body[data-city] #top .brand { width:144px; min-width:144px; max-width:144px; }
+ body[data-city] #top .header-identity { gap:10px; }
+}
