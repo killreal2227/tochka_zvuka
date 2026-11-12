@@ -390,3 +390,18 @@ test('direction hover ignores points outside card bounds and focus requires keyb
  card.emit('pointerenter',{pointerType:'mouse',clientX:200,clientY:200});assert.deepEqual(s.played,[card]);
  card.emit('pointerleave');card.keyboardFocus=true;card.emit('focusin');assert.equal(s.played.length,2);
 });
+
+test('a direction needs preview only once even after scrolling or another direction selection',()=>{
+ const js=source('lead-form.js');
+ const handler=js.slice(js.indexOf('const previewedDirections='),js.indexOf("modal.querySelector('.lead-close')"));
+ const callbacks=[],opened=[],previews=[];
+ const cards=['vocal','guitar'].map(dir=>({dataset:{dir},addEventListener:(_,fn)=>callbacks.push(fn),getBoundingClientRect:()=>({left:20,right:300,top:100,bottom:400})}));
+ const document={querySelectorAll:()=>cards,dispatchEvent:e=>previews.push(e.detail.card)};
+ vm.runInNewContext(handler,{document,pageCity:'troitsk',matchMedia:()=>({matches:true}),open:dir=>opened.push(dir),CustomEvent:class{constructor(type,options){this.detail=options.detail;}}});
+ const tap={detail:1,clientX:100,clientY:200};
+ callbacks[0](tap);assert.deepEqual(previews,[cards[0]]);assert.equal(opened.length,0);
+ callbacks[1](tap);assert.deepEqual(previews,cards);
+ callbacks[0](tap);assert.deepEqual(opened,['vocal']);
+ callbacks[0](tap);assert.deepEqual(opened,['vocal','vocal']);
+ callbacks[1]({...tap,clientX:350});assert.equal(opened.length,2);
+});
