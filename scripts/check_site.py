@@ -74,6 +74,12 @@ def check():
     assert 'href="./documents/"' in home and 'href="./requisites/"' in home
     requisites = (SITE/'requisites/index.html').read_text(encoding='utf-8')
     assert '732595555858' in requisites and '326774600083329' in requisites
+    troitsk = (SITE/'troitsk/index.html').read_text(encoding='utf-8')
+    city_template = (ROOT/'templates/city.html').read_text(encoding='utf-8')
+    descriptions = re.findall(r'data-dir="([^"]+)">.*?<span class="desc-copy">(.*?)</span>', city_template, re.S)
+    assert len(descriptions) == 6
+    for direction, description in descriptions:
+        assert '<span class="desc-copy">' + description + '</span>' in troitsk, 'Incomplete description: ' + direction
     for slug in ('troitsk', 'kaluga'):
         assert 'home.css' not in (SITE/slug/'index.html').read_text(encoding='utf-8')
     for asset in ('lead-form.js', 'home-motion.js', 'direction-player.js', 'city-ui.js', 'button-labels.js', 'troitsk-enrolment.js', 'troitsk-page.js'):

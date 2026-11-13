@@ -6,7 +6,7 @@
     const cards=[...grid.querySelectorAll('.card[data-dir]')],modal=document.getElementById('leadModal');
     const fine=matchMedia('(hover:hover) and (pointer:fine)'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
     if(grid.dataset?.interaction==='disclosure'){
-      let active=null;
+      let active=null,expandedCard=null;
       const player=window.createDirectionPlayer({ready,prepare,
         eligible:card=>card===active&&card.classList.contains('is-expanded'),
         reduced:()=>reduced.matches,blocked:()=>document.hidden||!modal.hidden});
@@ -14,13 +14,20 @@
       cards.forEach(card=>{
         const toggle=card.querySelector('.direction-toggle'),signup=card.querySelector('.direction-signup');
         signup.setAttribute('aria-label','Записаться: '+card.querySelector('.name').textContent);
+        const setExpanded=(target,expanded)=>{
+          target.querySelector('.direction-toggle').setAttribute('aria-expanded',String(expanded));
+          target.classList.toggle('is-expanded',expanded);
+          const action=target.querySelector('.direction-signup');
+          action.inert=!expanded;action.setAttribute('aria-hidden',String(!expanded));
+        };
         toggle.addEventListener('click',()=>{
-          const expanded=toggle.getAttribute('aria-expanded')!=='true';
-          toggle.setAttribute('aria-expanded',String(expanded));card.classList.toggle('is-expanded',expanded);
-          signup.inert=!expanded;signup.setAttribute('aria-hidden',String(!expanded));
-          if(expanded){stop();active=card;card.classList.add('is-active');player.request(card);
+          const opening=expandedCard!==card;
+          stop();
+          if(expandedCard)setExpanded(expandedCard,false);
+          expandedCard=opening?card:null;
+          if(opening){setExpanded(card,true);active=card;card.classList.add('is-active');player.request(card);
             document.dispatchEvent(new CustomEvent('tz:direction-preview',{detail:{card}}));
-          }else if(active===card)stop();
+          }
         });
       });
       document.addEventListener('tz:lead-open',stop);

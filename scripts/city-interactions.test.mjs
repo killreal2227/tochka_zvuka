@@ -514,13 +514,22 @@ test('Troitsk invitation never interrupts direction card interaction',async()=>{
  await visible.document.emit('visibilitychange');assert.equal(visible.box.hidden,true);
 });
 
-test('disclosure cards stay static until activated and toggle description and signup independently',()=>{
+test('disclosure cards allow only one expanded direction and toggle it closed',()=>{
  const s=ordinaryScene(true,false,true,true),[a,b]=s.cards;
  a.emit('pointerenter',{pointerType:'mouse'});assert.equal(s.played.length,0);
- a.toggle.emit('click');assert.equal(a.toggle.getAttribute('aria-expanded'),'true');assert.equal(a.signup.inert,false);assert.equal(s.played.length,1);
- b.toggle.emit('click');assert.equal(a.classes.has('is-expanded'),true);assert.equal(b.classes.has('is-expanded'),true);assert.equal(s.played.length,2);
- a.toggle.emit('click');assert.equal(a.signup.inert,true);assert.equal(a.classes.has('is-expanded'),false);assert.equal(b.classes.has('is-expanded'),true);
- b.toggle.emit('click');assert.equal(b.signup.inert,true);assert.equal(b.toggle.getAttribute('aria-expanded'),'false');
+ a.toggle.emit('click');assert.equal(a.toggle.getAttribute('aria-expanded'),'true');assert.equal(a.signup.inert,false);
+ b.toggle.emit('click');assert.equal(a.classes.has('is-expanded'),false);assert.equal(a.signup.inert,true);assert.equal(b.classes.has('is-expanded'),true);
+ a.toggle.emit('click');assert.equal(b.signup.inert,true);assert.equal(b.classes.has('is-expanded'),false);assert.equal(a.classes.has('is-expanded'),true);
+ a.toggle.emit('click');assert.equal(a.signup.inert,true);assert.equal(a.toggle.getAttribute('aria-expanded'),'false');
+});
+test('rapid disclosure changes never retain two expanded cards or stale signup controls',()=>{
+ const s=ordinaryScene(false,true,true,true);
+ for(let i=0;i<100;i++){
+  s.cards[(i*7+i%3)%s.cards.length].toggle.emit('click');
+  const opened=s.cards.filter(c=>c.classes.has('is-expanded'));
+  assert.ok(opened.length<=1);
+  for(const card of s.cards)assert.equal(card.signup.inert,!card.classes.has('is-expanded'));
+ }
 });
 test('disclosures remain open when playback is stopped for scrolling or a form',()=>{
  const s=ordinaryScene(false,true,true,true),[card]=s.cards;card.toggle.emit('click');

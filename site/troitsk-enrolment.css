@@ -491,3 +491,47 @@ body[data-city="troitsk"] .lesson-nudge .lesson-nudge-close svg { display:block;
  body[data-city="troitsk"] #dirs { --direction-transition:0s; }
  body[data-city="troitsk"] #dirs .card[data-disclosure] * { transition:none!important; }
 }
+
+/* Single-open cards: actual component bounds and card-width responsive layout. */
+body[data-city="troitsk"] #dirs .card[data-disclosure] {
+ container:direction-card / inline-size;
+ --direction-action-width:176px; --direction-action-height:48px;
+}
+body[data-city="troitsk"] #dirs .card[data-disclosure] > .direction-copy {
+ right:var(--direction-inset)!important;
+ bottom:calc(var(--direction-inset) + var(--direction-action-height) + 12px * var(--direction-control-scale))!important;
+}
+body[data-city="troitsk"] #dirs .card[data-disclosure] .name,
+body[data-city="troitsk"] #dirs .card[data-disclosure] .desc,
+body[data-city="troitsk"] #dirs .card[data-disclosure] .desc-copy {
+ overflow:visible!important; text-overflow:clip!important; -webkit-line-clamp:unset!important; line-clamp:unset!important;
+ max-height:none!important; max-width:none!important; white-space:normal; overflow-wrap:anywhere; word-break:normal;
+}
+body[data-city="troitsk"] #dirs .card[data-disclosure] .name { font-size:clamp(28px,8cqw,44px); line-height:1.12; }
+body[data-city="troitsk"] #dirs .card[data-disclosure] .desc { padding:0!important; font-size:clamp(15px,3.6cqw,18px); line-height:1.45; }
+body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-signup {
+ --cta-ratio:1; --cta-height:48px; --cta-circle:32px; --cta-inset:8px; --cta-leading:20px;
+ --cta-gap:10px; --cta-font:14px; --cta-min-width:176px; --cta-arrow:20px; --cta-stroke:1.8;
+}
+body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator {
+ width:var(--direction-action-height); height:var(--direction-action-height);
+}
+@container direction-card (min-width:480px) {
+ body[data-city="troitsk"] #dirs .card[data-disclosure] > .direction-copy {
+  right:calc(var(--direction-inset) + var(--direction-action-width) + 12px * var(--direction-control-scale))!important;
+  bottom:var(--direction-inset)!important;
+ }
+}
+@container direction-card (max-width:320px) {
+ body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-signup {
+  --cta-height:44px; --cta-circle:30px; --cta-inset:7px; --cta-leading:16px;
+  --cta-gap:8px; --cta-font:13px; --cta-min-width:160px; --cta-arrow:18px; --cta-stroke:2;
+ }
+}
+@media(max-width:1000px) {
+ body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-signup {
+  --cta-height:36px; --cta-circle:24px; --cta-inset:6px; --cta-leading:12px;
+  --cta-gap:6px; --cta-font:11px; --cta-min-width:124px; --cta-arrow:16px; --cta-stroke:2.25;
+ }
+}
+[data-scaled-phone] body[data-city="troitsk"] #dirs .card[data-disclosure] .desc { font-size:calc(13px * var(--touch-ui-factor)); }
