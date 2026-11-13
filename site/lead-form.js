@@ -245,7 +245,33 @@ function fmtPhone(v){
   return o;
 }
 function maskPhone(el){
-  el.addEventListener('input',e=>{ if(e.inputType==='deleteContentBackward' && !/\d$/.test(el.value)) { el.value=el.value.replace(/[^\d]*$/,''); } el.value=fmtPhone(el.value); });
+  const digitsBefore=(value,end)=>value.slice(0,end).replace(/\D/g,'').length;
+  function render(value,count){
+    el.value=fmtPhone(value);
+    let caret=0,seen=0;
+    while(caret<el.value.length&&seen<count){if(/\d/.test(el.value[caret]))seen++;caret++;}
+    el.setSelectionRange?.(caret,caret);
+  }
+  el.addEventListener('beforeinput',event=>{
+    if(!['deleteContentBackward','deleteContentForward'].includes(event.inputType)||!event.cancelable)return;
+    const value=el.value,start=el.selectionStart,end=el.selectionEnd;
+    if(start===null||end===null)return;
+    const digits=value.replace(/\D/g,'');
+    let first=digitsBefore(value,start),last=digitsBefore(value,end);
+    if(start===end){
+      if(event.inputType==='deleteContentBackward')first=Math.max(0,first-1);
+      else last=Math.min(digits.length,last+1);
+    }
+    event.preventDefault();
+    render(digits.slice(0,first)+digits.slice(last),first);
+    el.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+  el.addEventListener('input',()=>{
+    const value=el.value,position=el.selectionStart??value.length;
+    let count=digitsBefore(value,position);
+    if(value.replace(/\D/g,'')&&!/^[78]/.test(value.replace(/\D/g,'')))count++;
+    render(value,count);
+  });
   el.addEventListener('blur',()=>{ if(el.value.replace(/\D/g,'').length<2) el.value=''; });
 }
 maskPhone(phone);
