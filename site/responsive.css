@@ -258,7 +258,7 @@ body[data-city] #join .h2 { font-size:clamp(44px,6.6vw,108px); line-height:1.05;
  body.home-page .home-header .branch-btn > span { display:block; text-align:center; padding-top:1px; }
  body.home-page .home-header .branch-btn > svg { position:static; margin:0; }
 }
-[data-scaled-phone] body.home-page { --narrow-logo:calc(90px * var(--touch-ui-factor)); --narrow-gutter:calc(8px * var(--touch-ui-factor)); }
+[data-scaled-phone] body.home-page { --narrow-logo:calc(90px * var(--touch-ui-factor)); --narrow-gutter:calc(20px * var(--touch-ui-factor)); }
 [data-scaled-phone] body.home-page .home-header .header-cta { width:calc(138px * var(--touch-ui-factor)); min-width:calc(138px * var(--touch-ui-factor)); grid-template-columns:minmax(0,1fr) calc(28px * var(--touch-ui-factor)); font-size:calc(11px * var(--touch-ui-factor))!important; }
 [data-scaled-phone] body.home-page .home-header .header-cta > svg.header-cta-icon { width:calc(28px * var(--touch-ui-factor)); height:calc(28px * var(--touch-ui-factor)); }
 
