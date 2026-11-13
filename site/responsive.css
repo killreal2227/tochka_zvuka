@@ -261,3 +261,23 @@ body[data-city] #join .h2 { font-size:clamp(44px,6.6vw,108px); line-height:1.05;
 [data-scaled-phone] body.home-page { --narrow-logo:calc(90px * var(--touch-ui-factor)); --narrow-gutter:calc(8px * var(--touch-ui-factor)); }
 [data-scaled-phone] body.home-page .home-header .header-cta { width:calc(138px * var(--touch-ui-factor)); min-width:calc(138px * var(--touch-ui-factor)); grid-template-columns:minmax(0,1fr) calc(28px * var(--touch-ui-factor)); font-size:calc(11px * var(--touch-ui-factor))!important; }
 [data-scaled-phone] body.home-page .home-header .header-cta > svg.header-cta-icon { width:calc(28px * var(--touch-ui-factor)); height:calc(28px * var(--touch-ui-factor)); }
+
+/* Home: one school chooser and a quiet reading area. */
+body.home-page .page-pattern { opacity:.16; mask-image:linear-gradient(to bottom,#000 0%,#000 60%,transparent 100%); }
+body.home-page .intro-copy h1 { margin-bottom:20px; }
+body.home-page .intro-description { max-width:32em; margin:0; font-size:clamp(18px,1.6vw,24px); line-height:1.5; }
+body.home-page .intro-panel { padding-bottom:28px; }
+body.home-page .choice-heading h2 { max-width:34em; font-size:clamp(19px,1.6vw,24px); line-height:1.4; font-weight:400; }
+body.home-page .home-header .home-branch .branch-btn { width:180px; min-width:180px; height:54px; min-height:54px; font-size:15px; white-space:nowrap; }
+@media(max-width:1000px) {
+ body.home-page .home-header .home-branch .branch-btn { width:170px; min-width:170px; height:48px; min-height:48px; font-size:14px; }
+ body.home-page .intro-panel { padding-bottom:20px; }
+}
+[data-scaled-phone] body.home-page .home-header .home-branch .branch-btn { width:calc(154px * var(--touch-ui-factor)); min-width:calc(154px * var(--touch-ui-factor)); height:calc(48px * var(--touch-ui-factor)); min-height:calc(48px * var(--touch-ui-factor)); font-size:calc(13px * var(--touch-ui-factor)); }
+[data-scaled-phone] body.home-page .intro-description { font-size:calc(17px * var(--touch-ui-factor)); }
+
+body.home-page > main { justify-content:flex-start; }
+body.home-page .home-gateway { padding-top:clamp(40px,7vh,72px); }
+body.home-page .intro-copy { background:var(--cream); box-shadow:0 0 28px 24px var(--cream); }
+body.home-page .page-pattern .nd { transition:transform 1.8s cubic-bezier(.45,0,.55,1); }
+@media(prefers-reduced-motion:reduce) { body.home-page .page-pattern .nd { transition:none; } }
