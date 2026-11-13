@@ -421,46 +421,73 @@ body[data-city="troitsk"] .lesson-nudge p { margin:0 0 calc(12px * var(--nudge-s
 body[data-city="troitsk"] .lesson-nudge .lesson-nudge-close { position:relative; inset:auto; width:calc(24px * var(--nudge-scale)); height:calc(24px * var(--nudge-scale)); margin:0; padding:0; font-size:calc(23px * var(--nudge-scale)); line-height:1; color:var(--bord); }
 body[data-city="troitsk"] .lesson-nudge .lesson-nudge-close::before { content:""; position:absolute; inset:calc(-10px * var(--nudge-scale)); }
 
-/* Troitsk direction disclosures: stable artwork until explicit activation. */
+
+/* One disclosure layout: only the measured description lifts the title. */
+body[data-city="troitsk"] #dirs {
+ --direction-control-scale:1; --direction-cta-ratio:.9; --direction-control-gap:12px;
+ --direction-cta-width:calc(124px * var(--direction-cta-ratio) * var(--direction-control-scale));
+ --direction-control-height:calc(36px * var(--direction-cta-ratio) * var(--direction-control-scale));
+ --direction-transition:240ms cubic-bezier(.22,.61,.36,1);
+}
+[data-scaled-phone] body[data-city="troitsk"] #dirs { --direction-control-scale:var(--touch-ui-factor); }
 body[data-city="troitsk"] #dirs .card[data-disclosure] { text-align:left; }
-body[data-city="troitsk"] #dirs .card[data-disclosure] > .direction-copy,
-body[data-city="troitsk"] #dirs .card[data-disclosure]:hover > .direction-copy,
-body[data-city="troitsk"] #dirs .card[data-disclosure]:focus-visible > .direction-copy { left:var(--direction-inset); right:var(--direction-inset); bottom:var(--direction-inset); transform:none; transition:bottom .25s var(--ease); pointer-events:none; }
-body[data-city="troitsk"] #dirs .card[data-disclosure] .name { display:block; padding-right:38px; }
+body[data-city="troitsk"] #dirs .card[data-disclosure] > .direction-copy {
+ left:var(--direction-inset)!important;
+ right:calc(var(--direction-inset) + var(--direction-cta-width) + var(--direction-control-gap) * var(--direction-control-scale))!important;
+ bottom:var(--direction-inset)!important; pointer-events:none;
+ transform:translateY(0)!important; transition:transform var(--direction-transition);
+}
+body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded > .direction-copy {
+ transform:translateY(calc(-1 * var(--description-rise,48px)))!important;
+}
+body[data-city="troitsk"] #dirs .card[data-disclosure] .name { display:block; padding-right:0; font-size:clamp(30px,3.2vw,44px); line-height:1.08; }
 body[data-city="troitsk"] #dirs .card[data-disclosure] .desc,
 body[data-city="troitsk"] #dirs .card[data-disclosure]:hover .desc,
-body[data-city="troitsk"] #dirs .card[data-disclosure]:focus-visible .desc { display:block; position:static; width:100%; height:auto; max-height:0; overflow:hidden; padding:0; margin:0; opacity:0; visibility:hidden; transition:opacity .22s ease,max-height .25s ease,margin .25s ease,visibility 0s linear .25s; }
-body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded > .direction-copy { bottom:calc(var(--direction-inset) + 48px * var(--direction-control-scale,1)); }
-body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded .name { padding-right:0; }
-body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded .desc { max-height:120px; margin-top:8px; opacity:1; visibility:visible; transition:opacity .25s ease,max-height .25s ease,margin .25s ease,visibility 0s; }
-body[data-city="troitsk"] #dirs .direction-toggle { position:absolute; z-index:2; inset:0; width:100%; height:100%; border:0; padding:0; background:transparent; border-radius:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+body[data-city="troitsk"] #dirs .card[data-disclosure]:focus-visible .desc {
+ display:block; position:absolute; left:0; top:100%; width:100%; height:auto; max-height:none;
+ overflow:visible; padding:0; margin:8px 0 0; opacity:0; visibility:hidden;
+ font-size:15px; line-height:1.35; text-wrap:pretty;
+ transition:opacity var(--direction-transition),visibility 0s linear 240ms;
+}
+body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded .desc { opacity:1; visibility:visible; transition-delay:0s; }
+body[data-city="troitsk"] #dirs .direction-toggle { position:absolute; z-index:2; inset:0; width:100%; height:100%; border:0; padding:0; background:transparent; border-radius:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent; pointer-events:auto; }
 body[data-city="troitsk"] #dirs .direction-toggle:focus-visible { outline:3px solid var(--ink); outline-offset:-5px; }
-body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator { display:grid; place-items:center; width:32px; height:32px; bottom:var(--direction-inset); right:var(--direction-inset); border:1px solid currentColor; border-radius:50%; background:transparent; color:inherit; font-size:26px; line-height:1; transform:none; pointer-events:none; }
+body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator {
+ display:grid; place-items:center; width:var(--direction-control-height); height:var(--direction-control-height);
+ bottom:var(--direction-inset); right:var(--direction-inset); border:0; border-radius:50%;
+ background:var(--cream); color:var(--ink); transform:none; padding:0; pointer-events:none;
+ opacity:1; visibility:visible; transition:opacity var(--direction-transition),visibility 0s;
+}
+body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator svg {
+ width:calc(17px * var(--direction-control-scale)); height:calc(17px * var(--direction-control-scale));
+ display:block; fill:none; stroke:currentColor; stroke-width:2.1; stroke-linecap:round; transform:none; transition:none;
+}
 body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator::before,
 body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator::after { content:none; }
-body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded .direction-indicator { visibility:hidden; }
-body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-signup { --cta-position:absolute; position:absolute!important; z-index:3; right:var(--direction-inset); bottom:var(--direction-inset); }
-body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-signup[hidden] { display:none!important; }
+body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded .direction-indicator { opacity:0; visibility:hidden; transition-delay:0s,240ms; }
+body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-signup {
+ --cta-position:absolute; --cta-ratio:var(--direction-cta-ratio);
+ --cta-bg:#1a1a1a; --cta-text:#fff; --cta-circle-bg:var(--cream); --cta-icon-color:#1a1a1a; --cta-hover:#000;
+ --cta-transition:opacity var(--direction-transition),visibility 0s linear 240ms,background-color .2s;
+ z-index:3; right:var(--direction-inset); bottom:var(--direction-inset);
+ opacity:0; visibility:hidden; pointer-events:none;
+}
+body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded .direction-signup {
+ --cta-transition:opacity var(--direction-transition),visibility 0s,background-color .2s;
+ opacity:1; visibility:visible; pointer-events:auto;
+}
 body[data-city="troitsk"] #dirs .card[data-disclosure]:not(.is-expanded)::before,
 body[data-city="troitsk"] #dirs .card[data-disclosure]:not(.is-expanded)::after { transform:translateY(12%); opacity:.8; }
 @media(max-width:1000px) {
+ body[data-city="troitsk"] #dirs .card[data-disclosure],
+ body[data-city="troitsk"] #dirs .card[data-disclosure]:hover { height:280px; }
  body[data-city="troitsk"] #dirs .card[data-disclosure] .name { font-size:30px; }
  body[data-city="troitsk"] #dirs .card[data-disclosure] > .ico { width:56px; height:56px; }
 }
+[data-scaled-phone] body[data-city="troitsk"] #dirs .card[data-disclosure] .desc { font-size:calc(13px * var(--touch-ui-factor)); }
+body[data-city="troitsk"] .lesson-nudge .lesson-nudge-close { display:grid; place-items:center; border-radius:50%; background:var(--cream); }
+body[data-city="troitsk"] .lesson-nudge .lesson-nudge-close svg { display:block; width:calc(17px * var(--nudge-scale)); height:calc(17px * var(--nudge-scale)); fill:none; stroke:currentColor; stroke-width:2.1; stroke-linecap:round; }
 @media(prefers-reduced-motion:reduce) {
+ body[data-city="troitsk"] #dirs { --direction-transition:0s; }
  body[data-city="troitsk"] #dirs .card[data-disclosure] * { transition:none!important; }
 }
-
-body[data-city="troitsk"] #dirs .card[data-disclosure] > .direction-toggle,
-body[data-city="troitsk"] #dirs .card[data-disclosure] > .direction-signup { pointer-events:auto; }
-
-@media(max-width:1000px) {
- body[data-city="troitsk"] #dirs .card[data-disclosure],
- body[data-city="troitsk"] #dirs .card[data-disclosure]:hover { height:280px; }
-}
-[data-scaled-phone] body[data-city="troitsk"] #dirs { --direction-control-scale:var(--touch-ui-factor); }
-[data-scaled-phone] body[data-city="troitsk"] #dirs .card[data-disclosure] .desc { font-size:calc(13px * var(--touch-ui-factor)); }
-
-/* Legacy hover selectors must not reposition disclosure content. */
-body[data-city="troitsk"] #dirs .card[data-disclosure] > .direction-copy { left:var(--direction-inset)!important; right:var(--direction-inset)!important; bottom:var(--direction-inset)!important; transform:none!important; }
-body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded > .direction-copy { bottom:calc(var(--direction-inset) + 48px * var(--direction-control-scale,1))!important; }

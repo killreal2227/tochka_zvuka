@@ -17,7 +17,7 @@
         toggle.addEventListener('click',()=>{
           const expanded=toggle.getAttribute('aria-expanded')!=='true';
           toggle.setAttribute('aria-expanded',String(expanded));card.classList.toggle('is-expanded',expanded);
-          signup.hidden=!expanded;
+          signup.inert=!expanded;signup.setAttribute('aria-hidden',String(!expanded));
           if(expanded){stop();active=card;card.classList.add('is-active');player.request(card);
             document.dispatchEvent(new CustomEvent('tz:direction-preview',{detail:{card}}));
           }else if(active===card)stop();

@@ -50,10 +50,12 @@ def troitsk_directions(content):
             classes, direction, inner = m.groups()
             inner = re.sub(r'<span class="go">.*?</span>$', '', inner, flags=re.S)
             inner = inner.replace('<span><span class="name">', '<span class="direction-copy"><span class="name" id="direction-name-' + direction + '">', 1)
+            summaries = dict(vocal='Голос, дыхание и уверенность', guitar='От аккордов до любимых песен', drums='Ритм, драйв и координация', piano='Мелодии, гармония и свобода', actor='Сцена, эмоции и свобода', speech='Говори так, чтобы тебя слышали')
+            inner = re.sub(r'(<span class="desc-copy">).*?(</span>)', lambda n: n[1] + summaries[direction] + n[2], inner, count=1)
             inner = inner.replace('class="desc"', 'class="desc" id="direction-description-' + direction + '"', 1)
             toggle = '<button class="direction-toggle" type="button" aria-expanded="false" aria-controls="direction-description-' + direction + '" aria-labelledby="direction-name-' + direction + '"></button>'
-            plus = '<span class="go direction-indicator" aria-hidden="true">+</span>'
-            signup = '<button class="btn direction-signup" data-cta-size="compact" type="button" hidden><span>Записаться</span><i><svg><use href="#i-arrow"/></svg></i></button>'
+            plus = '<span class="go direction-indicator" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 5v14M5 12h14"/></svg></span>'
+            signup = '<button class="btn direction-signup" data-cta-size="compact" type="button" inert aria-hidden="true"><span>Записаться</span><i><svg><use href="#i-arrow"/></svg></i></button>'
             return '<article class="card' + classes + '" data-dir="' + direction + '" data-disclosure="true">' + inner + toggle + plus + signup + '</article>'
         body, count = re.subn(r'<button class="card([^"]*)" type="button" data-dir="([^"]*)">(.*?)</button>', card, body, flags=re.S)
         assert count == 6, 'Expected six Troitsk direction cards'

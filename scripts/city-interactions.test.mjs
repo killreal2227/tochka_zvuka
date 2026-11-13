@@ -301,7 +301,7 @@ function ordinaryScene(finePointer=false,compactWidth=false,withPreviews=false,d
   if(disclosures)cards.forEach(card=>{
     const attrs=new Map([['aria-expanded','false']]);
     card.toggle=Object.assign(events(),{getAttribute:k=>attrs.get(k),setAttribute:(k,v)=>attrs.set(k,v)});
-    card.signup={hidden:true,setAttribute(){}};
+    card.signup={inert:true,setAttribute(){}};
     card.querySelector=s=>s==='.direction-toggle'?card.toggle:s==='.direction-signup'?card.signup:{textContent:'direction'};
   });
   const grid={dataset:disclosures?{interaction:'disclosure'}:{},querySelectorAll:()=>cards},header={getBoundingClientRect:()=>({bottom:76})},modal={hidden:true};
@@ -517,13 +517,13 @@ test('Troitsk invitation never interrupts direction card interaction',async()=>{
 test('disclosure cards stay static until activated and toggle description and signup independently',()=>{
  const s=ordinaryScene(true,false,true,true),[a,b]=s.cards;
  a.emit('pointerenter',{pointerType:'mouse'});assert.equal(s.played.length,0);
- a.toggle.emit('click');assert.equal(a.toggle.getAttribute('aria-expanded'),'true');assert.equal(a.signup.hidden,false);assert.equal(s.played.length,1);
+ a.toggle.emit('click');assert.equal(a.toggle.getAttribute('aria-expanded'),'true');assert.equal(a.signup.inert,false);assert.equal(s.played.length,1);
  b.toggle.emit('click');assert.equal(a.classes.has('is-expanded'),true);assert.equal(b.classes.has('is-expanded'),true);assert.equal(s.played.length,2);
- a.toggle.emit('click');assert.equal(a.signup.hidden,true);assert.equal(a.classes.has('is-expanded'),false);assert.equal(b.classes.has('is-expanded'),true);
- b.toggle.emit('click');assert.equal(b.signup.hidden,true);assert.equal(b.toggle.getAttribute('aria-expanded'),'false');
+ a.toggle.emit('click');assert.equal(a.signup.inert,true);assert.equal(a.classes.has('is-expanded'),false);assert.equal(b.classes.has('is-expanded'),true);
+ b.toggle.emit('click');assert.equal(b.signup.inert,true);assert.equal(b.toggle.getAttribute('aria-expanded'),'false');
 });
 test('disclosures remain open when playback is stopped for scrolling or a form',()=>{
  const s=ordinaryScene(false,true,true,true),[card]=s.cards;card.toggle.emit('click');
- s.scroll(-500);assert.equal(card.classes.has('is-expanded'),true);assert.equal(card.signup.hidden,false);
+ s.scroll(-500);assert.equal(card.classes.has('is-expanded'),true);assert.equal(card.signup.inert,false);
  s.document.emit('tz:lead-open');assert.equal(card.classes.has('is-expanded'),true);assert.equal(card.toggle.getAttribute('aria-expanded'),'true');
 });
