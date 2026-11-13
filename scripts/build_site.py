@@ -125,6 +125,7 @@ def build():
         if slug == 'troitsk':
             source = re.sub(r'<header class="top".*?</header>', lambda _: read('troitsk-header.html'), source, count=1, flags=re.S)
             source = source.replace('{{nudge}}', read('troitsk-nudge.html'))
+            source = source.replace('{{footer}}', read('home-footer.html').replace('{{root}}', '../'))
             source = troitsk_directions(source)
             source = troitsk_environment(source)
             source = troitsk_how(source)
@@ -156,7 +157,7 @@ def build():
     symbols = re.findall(r'<svg width="0".*?</svg>', template, re.S)
     if len(symbols)>1:
         home_template = home_template.replace(logo, logo + '\n' + symbols[1], 1)
-    home_template = home_template.replace('{{footer}}', read('home-footer.html'))
+    home_template = home_template.replace('{{footer}}', read('home-footer.html').replace('{{root}}', './'))
     home = compose(home_template, './')
     write(SITE / 'index.html', home)
     for name in ('privacy', 'consent'):

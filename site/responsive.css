@@ -304,11 +304,15 @@ body.home-page .choice-heading { margin-bottom:16px; }
 @media(max-width:700px) { body.home-page .intro-copy #home-title { font-size:clamp(28px,8.4vw,42px); } }
 
 /* A quiet two-line home footer; proprietor details have their own page. */
-body.home-page > .home-footer { display:flex; flex-direction:column; align-items:flex-start; gap:2px; padding-top:14px; padding-bottom:14px; color:#756258; }
-body.home-page .home-footer .footer-tagline { margin:0; font-size:14px; line-height:1.4; }
-body.home-page .home-footer .footer-meta { display:flex; flex-wrap:wrap; align-items:center; gap:4px 16px; font-size:11px; line-height:1.5; }
-body.home-page .home-footer .footer-meta nav { display:flex; flex-wrap:wrap; gap:4px 14px; }
-body.home-page .home-footer .footer-meta a { display:inline-flex; align-items:center; min-height:24px; text-underline-offset:3px; }
-body.home-page .home-footer .footer-meta a:hover { color:var(--bord); text-decoration:underline; }
-[data-scaled-phone] body.home-page .home-footer .footer-tagline { font-size:calc(13px * var(--touch-ui-factor)); }
-[data-scaled-phone] body.home-page .home-footer .footer-meta { font-size:calc(10px * var(--touch-ui-factor)); gap:4px 12px; }
+body:is(.home-page,[data-city="troitsk"]) > .home-footer { display:flex; flex-direction:column; align-items:flex-start; gap:2px; padding-top:14px; padding-bottom:14px; color:#756258; }
+body:is(.home-page,[data-city="troitsk"]) .home-footer .footer-tagline { margin:0; font-size:14px; line-height:1.4; }
+body:is(.home-page,[data-city="troitsk"]) .home-footer .footer-meta { display:flex; flex-wrap:wrap; align-items:center; gap:4px 16px; font-size:11px; line-height:1.5; }
+body:is(.home-page,[data-city="troitsk"]) .home-footer .footer-meta nav { display:flex; flex-wrap:wrap; gap:4px 14px; }
+body:is(.home-page,[data-city="troitsk"]) .home-footer .footer-meta a { display:inline-flex; align-items:center; min-height:24px; text-underline-offset:3px; }
+body:is(.home-page,[data-city="troitsk"]) .home-footer .footer-meta a:hover { color:var(--bord); text-decoration:underline; }
+[data-scaled-phone] body:is(.home-page,[data-city="troitsk"]) .home-footer .footer-tagline { font-size:calc(13px * var(--touch-ui-factor)); }
+[data-scaled-phone] body:is(.home-page,[data-city="troitsk"]) .home-footer .footer-meta { font-size:calc(10px * var(--touch-ui-factor)); gap:4px 12px; }
+
+/* The main page and Troitsk share the same compact footer and gutters. */
+body:is(.home-page,[data-city="troitsk"]) > .home-footer { padding-left:clamp(24px,5vw,72px); padding-right:clamp(24px,5vw,72px); }
+@media(max-width:1000px) { body:is(.home-page,[data-city="troitsk"]) > .home-footer { padding-left:24px; padding-right:24px; } }

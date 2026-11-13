@@ -56,7 +56,8 @@ def check():
             assert f'data-city="{slug}"' in text
             assert f'{PUBLIC_BASE_URL}/{slug}/' in text
             contact_phone = '+74951280448' if slug == 'troitsk' else '+79957907670'
-            assert 'tel:' + contact_phone in text and 'mailto:tzvuka@yandex.ru' in text
+            assert 'tel:' + contact_phone in text
+            assert 'mailto:tzvuka@yandex.ru' in text or 'href="../requisites/"' in text
             assert 'id="leadForm"' in text and 'localStorage' not in text
             assert 'lessonNudge' in text and 'direction-player.js' in text
             assert 'name="consent"' not in text
