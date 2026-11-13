@@ -281,3 +281,22 @@ body.home-page .page-pattern .nd { transition:transform 1.8s cubic-bezier(.45,0,
 @media(prefers-reduced-motion:reduce) { body.home-page .page-pattern .nd { transition:none; } }
 
 body.home-page .intro-copy #home-title { white-space:nowrap; font-size:clamp(28px,5.4vw,64px); }
+
+/* Compact home copy and balanced phone navigation. */
+body.home-page .home-gateway { gap:8px; }
+body.home-page .home-gateway .intro-panel { padding-bottom:0; }
+body.home-page .intro-description,
+body.home-page .choice-heading h2 { font-size:clamp(16px,1.25vw,19px); line-height:1.4; }
+body.home-page .choice-heading { margin-bottom:16px; }
+@media(max-width:700px) {
+ body.home-page .city-line,
+ body.home-page .city-line+.city-line,
+ body.home-page .city-line:hover,
+ body.home-page .city-line:focus-visible,
+ body.home-page .city-line+.city-line:hover,
+ body.home-page .city-line+.city-line:focus-visible { min-height:160px; padding:14px 12px 40px; gap:8px; }
+}
+[data-scaled-phone] body.home-page { --narrow-logo:calc(128px * var(--touch-ui-factor)); }
+[data-scaled-phone] body.home-page .home-header .home-branch .branch-btn { width:calc(118px * var(--touch-ui-factor)); min-width:calc(118px * var(--touch-ui-factor)); height:calc(44px * var(--touch-ui-factor)); min-height:calc(44px * var(--touch-ui-factor)); font-size:calc(11px * var(--touch-ui-factor)); background:transparent; border-color:#d8c7b8; }
+[data-scaled-phone] body.home-page .intro-description,
+[data-scaled-phone] body.home-page .choice-heading h2 { font-size:calc(15px * var(--touch-ui-factor)); line-height:1.4; }
