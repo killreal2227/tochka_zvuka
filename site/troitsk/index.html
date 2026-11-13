@@ -441,7 +441,7 @@ img,svg{display:block;max-width:100%}
 <link rel="stylesheet" href="../narrow-header.css?v=78e5098dd8">
 <link rel="stylesheet" href="../responsive.css?v=82eccd62c1">
 <script src="../troitsk-page.js?v=60c91933a0" defer></script>
-<link rel="stylesheet" href="../troitsk-enrolment.css?v=67074e8212"><script src="../troitsk-enrolment.js?v=32707d9c69" defer></script>
+<link rel="stylesheet" href="../troitsk-enrolment.css?v=129bffcff0"><script src="../troitsk-enrolment.js?v=32707d9c69" defer></script>
 <link rel="stylesheet" href="../cta.css?v=f98d97422f">
 </head>
 <body data-city="troitsk">
@@ -472,7 +472,7 @@ img,svg{display:block;max-width:100%}
         <span class="ln"><span>тебе нужно</span></span>
         <span class="ln"><span>начать.</span></span>
       </h1>
-      <p class="lead hero-copy">Музыка, сцена и люди, с которыми хочется пробовать новое. Для детей и взрослых — независимо от опыта. Без экзаменов и ожидания „подходящего момента“.</p>
+      <p class="lead hero-copy">Музыка, сцена и люди, с которыми хочется пробовать новое. Для детей и взрослых — независимо от опыта. Без экзаменов и ожидания «подходящего момента».</p>
       <div class="hero-actions hero-copy">
         <button class="btn openForm tz-cta tz-cta--standard" type="button"><span data-lead-cta class="tz-cta-label">Записаться</span><i class="tz-cta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></i></button>
         <a class="link" href="#dirs"><span class="hero-direction-label">Выбрать направление</span><svg><use href="#i-down2"/></svg></a>
@@ -746,10 +746,12 @@ img,svg{display:block;max-width:100%}
 </div>
 
 <aside class="lesson-nudge" id="lessonNudge" role="dialog" aria-modal="false" aria-labelledby="lessonNudgeTitle" hidden>
-  <button class="lesson-nudge-close" type="button" aria-label="Закрыть приглашение">×</button>
-  <h2 id="lessonNudgeTitle">Попробуем музыку?</h2>
+  <div class="nudge-heading">
+    <h2 id="lessonNudgeTitle">Попробуем музыку?</h2>
+    <button class="lesson-nudge-close" type="button" aria-label="Закрыть приглашение">×</button>
+  </div>
   <p>Познакомься со школой и найди своё направление.</p>
-  <button class="btn openForm tz-cta tz-cta--standard" type="button"><span class="tz-cta-label">Записаться</span><i class="tz-cta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></i></button>
+  <button class="btn openForm tz-cta tz-cta--compact" data-cta-size="compact" type="button"><span class="tz-cta-label">Записаться</span><i class="tz-cta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></i></button>
 </aside>
 
 

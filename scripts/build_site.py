@@ -20,7 +20,8 @@ def cta_components(content):
         tokens = classes.split()
         if not (('btn' in tokens and not {'light', 'lead-call'} & set(tokens)) or 'header-cta' in tokens):
             return match[0]
-        compact = bool({'header-enrol', 'header-cta'} & set(tokens))
+        is_header = bool({'header-enrol', 'header-cta'} & set(tokens))
+        compact = is_header or 'data-cta-size="compact"' in attrs
         label = re.split(r'<(?:i|svg)\b', inner, maxsplit=1)[0].strip()
         if label.startswith('<span'):
             first = re.match(r'<span([^>]*)>', label)
@@ -34,7 +35,7 @@ def cta_components(content):
             label = '<span class="tz-cta-label">' + label + '</span>'
         size = 'compact' if compact else 'standard'
         attrs = attrs.replace('class="' + classes + '"', 'class="' + classes + ' tz-cta tz-cta--' + size + '"', 1)
-        path = 'M12 5v14m-6-6 6 6 6-6' if compact else 'M6 18 18 6M6 6h12v12'
+        path = 'M12 5v14m-6-6 6 6 6-6' if is_header else 'M6 18 18 6M6 6h12v12'
         icon = '<i class="tz-cta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="' + path + '"/></svg></i>'
         return '<' + tag + attrs + '>' + label + icon + '</' + tag + '>'
     return re.sub(r'<(button|a)\b([^>]*\bclass="([^"]*)"[^>]*)>(.*?)</\1>', render, content, flags=re.S)
@@ -75,7 +76,7 @@ def build():
             source = re.sub(r'(<a class="link" href="#dirs">)([^<]+)(<svg)', lambda m: m[1] + '<span class="hero-direction-label">' + m[2] + '</span>' + m[3], source, count=1)
 
             source = source.replace('</head>', '<script src="../troitsk-page.js" defer></script>\n</head>')
-            source = re.sub(r'(<p class="lead hero-copy">).*?(</p>)', lambda m: m[1] + 'Музыка, сцена и люди, с которыми хочется пробовать новое. Для детей и взрослых — независимо от опыта. Без экзаменов и ожидания „подходящего момента“.' + m[2], source, count=1, flags=re.S)
+            source = re.sub(r'(<p class="lead hero-copy">).*?(</p>)', lambda m: m[1] + 'Музыка, сцена и люди, с которыми хочется пробовать новое. Для детей и взрослых — независимо от опыта. Без экзаменов и ожидания «подходящего момента».' + m[2], source, count=1, flags=re.S)
 
             source = re.sub(r'<span class="kicker hero-copy">.*?</span></span>', '<span class="kicker hero-copy">музыкальное пространство · <span class="hero-branch-line">филиал Троицк</span></span>', source, count=1)
         source = source.replace('</head>', '<link rel="stylesheet" href="../troitsk-enrolment.css"><script src="../troitsk-enrolment.js" defer></script>\n</head>')

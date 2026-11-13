@@ -371,12 +371,6 @@ body[data-city="troitsk"] #how { padding-top:var(--section-space); padding-botto
 body[data-city="troitsk"] #join { padding-top:var(--section-space); }
 body[data-city="troitsk"] .sec-head { margin-bottom:32px; }
 body[data-city="troitsk"] .stick { display:none!important; }
-body[data-city="troitsk"] .lesson-nudge { box-sizing:border-box; width:min(320px,calc(100vw - 32px)); right:max(16px,env(safe-area-inset-right)); bottom:calc(12px + env(safe-area-inset-bottom)); padding:16px; max-height:calc(100dvh - 32px); overflow:auto; overscroll-behavior:contain; }
-body[data-city="troitsk"] .lesson-nudge h2 { font-size:23px; margin:0 36px 8px 0; }
-body[data-city="troitsk"] .lesson-nudge p { font-size:14px; line-height:1.4; margin:0 0 12px; }
-body[data-city="troitsk"] .lesson-nudge-close { top:4px; right:4px; width:44px; height:44px; }
-body[data-city="troitsk"] .lesson-nudge .btn { min-height:44px; height:44px; font-size:13px; padding:5px 5px 5px 14px; gap:12px; }
-body[data-city="troitsk"] .lesson-nudge .btn i { width:30px; height:30px; }
 @media(max-width:1000px) {
  body[data-city="troitsk"] .hero { padding-top:calc(var(--header-height) + 28px); padding-bottom:28px; }
  body[data-city="troitsk"] .hero h1 { margin-top:16px; margin-bottom:20px; }
@@ -388,11 +382,6 @@ body[data-city="troitsk"] .lesson-nudge .btn i { width:30px; height:30px; }
 [data-scaled-phone] body[data-city="troitsk"] #top .header-enrol::before,
 [data-scaled-phone] body[data-city="troitsk"] #top .header-call::before { content:""; position:absolute; inset:calc(-6px * var(--touch-ui-factor)) 0; }
 [data-scaled-phone] body[data-city="troitsk"] #top .header-call { position:relative; }
-[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge { width:min(calc(304px * var(--touch-ui-factor)),calc(100vw - 32px * var(--touch-ui-factor))); right:calc(16px * var(--touch-ui-factor)); bottom:calc((12px + env(safe-area-inset-bottom)) * var(--touch-ui-factor)); padding:calc(14px * var(--touch-ui-factor)); }
-[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge h2 { font-size:calc(20px * var(--touch-ui-factor)); margin-right:calc(36px * var(--touch-ui-factor)); margin-bottom:calc(6px * var(--touch-ui-factor)); }
-[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge p { font-size:calc(13px * var(--touch-ui-factor)); margin-bottom:calc(10px * var(--touch-ui-factor)); }
-[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge-close { width:calc(44px * var(--touch-ui-factor)); height:calc(44px * var(--touch-ui-factor)); font-size:calc(26px * var(--touch-ui-factor)); }
-[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge .btn { min-height:calc(44px * var(--touch-ui-factor)); height:calc(44px * var(--touch-ui-factor)); font-size:calc(13px * var(--touch-ui-factor)); }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
 
 [data-scaled-phone] body[data-city="troitsk"] #top .header-call::before { inset:calc(-6px * var(--touch-ui-factor)); }
@@ -400,9 +389,6 @@ body[data-city="troitsk"] .lesson-nudge .btn i { width:30px; height:30px; }
 /* A lighter invitation and consistent first-screen action typography. */
 body[data-city="troitsk"] #top .header-call { background:#eee1d4; color:var(--bord); }
 body[data-city="troitsk"] #top .header-call:hover { background:#e5cfc2; }
-body[data-city="troitsk"] .lesson-nudge { width:min(280px,calc(100vw - 32px)); padding:10px; }
-body[data-city="troitsk"] .lesson-nudge h2 { font-size:20px; line-height:1.15; margin-bottom:3px; }
-body[data-city="troitsk"] .lesson-nudge p { font-size:13px; line-height:1.3; margin-bottom:4px; }
 @media(max-width:1000px) {
  body[data-city="troitsk"] .hero-actions { flex-wrap:wrap; gap:10px 20px; }
  body[data-city="troitsk"] .hero-actions .btn.openForm,
@@ -418,6 +404,19 @@ body[data-city="troitsk"] .lesson-nudge p { font-size:13px; line-height:1.3; mar
 [data-scaled-phone] body[data-city="troitsk"] .hero-actions .hero-direction-label,
 [data-scaled-phone] body[data-city="troitsk"] #top .header-enrol-label { transform:translateY(calc(2px * var(--touch-ui-factor))); }
 [data-scaled-phone] body[data-city="troitsk"] #top .top-right > .header-enrol { font-size:calc(12px * var(--touch-ui-factor)); }
-[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge { width:min(calc(280px * var(--touch-ui-factor)),calc(100vw - 32px * var(--touch-ui-factor))); padding:calc(8px * var(--touch-ui-factor)); }
-[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge h2 { font-size:calc(18px * var(--touch-ui-factor)); line-height:1.15; margin-bottom:calc(3px * var(--touch-ui-factor)); }
-[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge p { font-size:calc(12px * var(--touch-ui-factor)); line-height:1.3; margin-bottom:calc(4px * var(--touch-ui-factor)); }
+
+/* Invitation rhythm: a shared heading row, separated copy and a compact CTA. */
+body[data-city="troitsk"] .lesson-nudge {
+ --nudge-scale:1; box-sizing:border-box;
+ width:min(calc(280px * var(--nudge-scale)),calc(100vw - 32px * var(--nudge-scale)));
+ padding:calc(14px * var(--nudge-scale));
+ right:max(calc(16px * var(--nudge-scale)),env(safe-area-inset-right));
+ bottom:calc((12px + env(safe-area-inset-bottom)) * var(--nudge-scale));
+ max-height:calc(100dvh - 32px); overflow:auto; overscroll-behavior:contain;
+}
+[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge { --nudge-scale:var(--touch-ui-factor); }
+body[data-city="troitsk"] .lesson-nudge .nudge-heading { display:grid; grid-template-columns:minmax(0,1fr) calc(24px * var(--nudge-scale)); align-items:center; gap:calc(8px * var(--nudge-scale)); margin-bottom:calc(8px * var(--nudge-scale)); }
+body[data-city="troitsk"] .lesson-nudge h2 { margin:0; font-size:calc(18px * var(--nudge-scale)); line-height:1.2; font-weight:400; }
+body[data-city="troitsk"] .lesson-nudge p { margin:0 0 calc(12px * var(--nudge-scale)); font-size:calc(12px * var(--nudge-scale)); line-height:1.4; text-wrap:pretty; }
+body[data-city="troitsk"] .lesson-nudge .lesson-nudge-close { position:relative; inset:auto; width:calc(24px * var(--nudge-scale)); height:calc(24px * var(--nudge-scale)); margin:0; padding:0; font-size:calc(23px * var(--nudge-scale)); line-height:1; color:var(--bord); }
+body[data-city="troitsk"] .lesson-nudge .lesson-nudge-close::before { content:""; position:absolute; inset:calc(-10px * var(--nudge-scale)); }
