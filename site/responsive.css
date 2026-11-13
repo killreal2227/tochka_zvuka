@@ -279,3 +279,5 @@ body.home-page .home-header .home-branch .branch-btn { width:180px; min-width:18
 body.home-page .intro-copy { background:var(--cream); box-shadow:0 0 28px 24px var(--cream); }
 body.home-page .page-pattern .nd { transition:transform 1.8s cubic-bezier(.45,0,.55,1); }
 @media(prefers-reduced-motion:reduce) { body.home-page .page-pattern .nd { transition:none; } }
+
+body.home-page .intro-copy #home-title { white-space:nowrap; font-size:clamp(28px,5.4vw,64px); }
