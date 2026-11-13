@@ -29,6 +29,26 @@ class Page(HTMLParser):
             if key in attrs:
                 self.links.append(attrs[key])
 
+
+def css_urls(text):
+    """Extract resource URLs without treating examples in comments as requests."""
+    text = re.sub(r'/\*.*?\*/', '', text, flags=re.S)
+    return [match[1] or match[2] for match in re.finditer(
+        r'url\(\s*(?:["\'](.*?)["\']|([^\s)]+))\s*\)', text, re.I)]
+
+
+def check_css_assets():
+    for stylesheet in sorted(SITE.rglob('*.css')):
+        for href in css_urls(stylesheet.read_text(encoding='utf-8')):
+            link = urlsplit(href)
+            if link.scheme or link.netloc or not link.path:
+                continue
+            target = (SITE / unquote(link.path).lstrip('/') if link.path.startswith('/')
+                      else stylesheet.parent / unquote(link.path)).resolve()
+            assert target.is_relative_to(SITE.resolve()), (stylesheet.name, href, 'outside site')
+            assert target.is_file(), (stylesheet.name, href, 'missing CSS asset')
+
+
 def check():
     for name in PAGES:
         path = SITE / name
@@ -116,8 +136,11 @@ def check():
         assert '<span class="desc-copy">' + description + '</span>' in troitsk, 'Incomplete description: ' + direction
     for slug in ('troitsk', 'kaluga'):
         assert 'home.css' not in (SITE/slug/'index.html').read_text(encoding='utf-8')
-    for asset in ('lead-form.js', 'lead-viewport.js', 'home-motion.js', 'direction-player.js', 'city-ui.js', 'button-labels.js', 'troitsk-enrolment.js', 'troitsk-page.js'):
-        subprocess.run(['node','--check',str(SITE/asset)],check=True,capture_output=True)
+    check_css_assets()
+    for directory in ('site', 'backend', 'routing', 'scripts'):
+        for asset in sorted((ROOT / directory).rglob('*')):
+            if asset.suffix in {'.js', '.mjs'}:
+                subprocess.run(['node', '--check', str(asset)], check=True, capture_output=True)
     print('All static checks passed.')
 
 if __name__ == '__main__':
