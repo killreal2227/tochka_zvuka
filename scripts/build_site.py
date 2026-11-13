@@ -77,6 +77,21 @@ def troitsk_environment(content):
         return body
     return re.sub(r'<section class="env on-dark" id="env">.*?</section>', section, content, count=1, flags=re.S)
 
+def troitsk_how(content):
+    def section(match):
+        body = match[0]
+        body = re.sub(r'(<span class="kicker rv">).*?(</span>)', lambda m: m[1] + 'КАК ЭТО РАБОТАЕТ' + m[2], body, count=1)
+        body = re.sub(r'(<h2 class="h2 rv d1">).*?(</h2>)', lambda m: m[1] + 'всё проще,<br><em>чем кажется.</em>' + m[2], body, count=1, flags=re.S)
+        entries = [
+            ('Оставляешь заявку', 'Удобный способ познакомиться с нами, задать вопросы и сделать первый шаг к занятиям.'),
+            ('Выбираешь время', 'Подберём удобное время для первого урока, ответим на вопросы и расскажем, чего ожидать.'),
+            ('Пробуешь', 'Приходишь на первый урок, погружаешься в процесс и получаешь первые впечатления от занятий.'),
+        ]
+        items = ''.join('<li class="step"><span class="n">' + str(i).zfill(2) + '</span><h3>' + title + '</h3><p>' + text + '</p></li>' for i, (title, text) in enumerate(entries, 1))
+        body = re.sub(r'(<ol class="steps" id="steps">).*?(</ol>)', lambda m: m[1] + items + m[2], body, count=1, flags=re.S)
+        return body
+    return re.sub(r'<section class="how" id="how">.*?</section>', section, content, count=1, flags=re.S)
+
 def write(path, content):
     if path.suffix == '.html':
         content = cta_components(content)
@@ -112,6 +127,7 @@ def build():
             source = source.replace('{{nudge}}', read('troitsk-nudge.html'))
             source = troitsk_directions(source)
             source = troitsk_environment(source)
+            source = troitsk_how(source)
             source = re.sub(r'(<a class="link" href="#dirs">)([^<]+)(<svg)', lambda m: m[1] + '<span class="hero-direction-label">' + m[2] + '</span>' + m[3], source, count=1)
 
             source = source.replace('</head>', '<script src="../troitsk-page.js" defer></script>\n</head>')

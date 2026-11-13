@@ -564,3 +564,29 @@ body[data-city="troitsk"] #env .poster { border-radius:8px; overflow:hidden; iso
  body[data-city="troitsk"] #env .path p { max-width:none; font-size:17px; line-height:1.5; }
  body[data-city="troitsk"] #env .poster { position:relative; top:0; width:100%; max-width:none; align-self:stretch; height:auto; min-height:0; aspect-ratio:auto; }
 }
+
+/* One generous desktop scale for the three modules after directions. */
+@media(min-width:1001px) {
+ body[data-city="troitsk"] { --content-module-height:clamp(900px,90svh,1040px); --content-module-padding:clamp(72px,6vw,96px); --content-module-heading:clamp(56px,6.6vw,108px); }
+ body[data-city="troitsk"] #env,
+ body[data-city="troitsk"] #how,
+ body[data-city="troitsk"] #join { min-height:var(--content-module-height); padding-top:var(--content-module-padding); }
+ body[data-city="troitsk"] #env,
+ body[data-city="troitsk"] #how { padding-bottom:var(--content-module-padding); }
+ body[data-city="troitsk"] #env .h2,
+ body[data-city="troitsk"] #how .h2,
+ body[data-city="troitsk"] #join .h2 { font-size:var(--content-module-heading); line-height:1.05; margin-bottom:40px; }
+ body[data-city="troitsk"] #env .kicker,
+ body[data-city="troitsk"] #how .kicker,
+ body[data-city="troitsk"] #join .kicker { margin-bottom:22px; }
+ body[data-city="troitsk"] #env > div:first-child { display:flex; flex-direction:column; }
+ body[data-city="troitsk"] #env .path { display:flex; flex:1; flex-direction:column; justify-content:space-between; margin-top:0; }
+ body[data-city="troitsk"] #how { display:flex; flex-direction:column; }
+ body[data-city="troitsk"] #how .h2 { margin-bottom:48px; }
+ body[data-city="troitsk"] #how .steps { margin-top:clamp(48px,8vh,96px); margin-bottom:auto; }
+ body[data-city="troitsk"] #env .path h3,
+ body[data-city="troitsk"] #how .step h3 { font-size:clamp(26px,2.3vw,34px); line-height:1.15; }
+ body[data-city="troitsk"] #env .path p,
+ body[data-city="troitsk"] #how .step p { font-size:18px; line-height:1.5; max-width:none; }
+ body[data-city="troitsk"] #join > div:first-child { padding-bottom:var(--content-module-padding); }
+}
