@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 PUBLIC_BASE_URL = json.loads((ROOT / 'site-config.json').read_text(encoding='utf-8'))['public_base_url'].rstrip('/')
 CITIES = {
-    'troitsk': dict(name='Троицк', loc='Троицке', address='ул. 3-ая Нововатутинская, 2', full='г. Троицк, ул. 3-ая Нововатутинская, д. 2'),
-    'kaluga': dict(name='Калуга', loc='Калуге', address='ул. Ленина, 79', full='г. Калуга, ул. Ленина, д. 79'),
+    'troitsk': dict(name='Троицк', loc='Троицке', phone_display='+7 (495) 128-04-48', phone_tel='+74951280448', address='ул. 3-ая Нововатутинская, 2', full='г. Троицк, ул. 3-ая Нововатутинская, д. 2'),
+    'kaluga': dict(name='Калуга', loc='Калуге', phone_display='+7 (920) 098-80-03', phone_tel='+79200988003', address='ул. Ленина, 79', full='г. Калуга, ул. Ленина, д. 79'),
 }
 
 def cta_components(content):
@@ -40,7 +40,7 @@ def cta_components(content):
         return '<' + tag + attrs + '>' + label + icon + '</' + tag + '>'
     return re.sub(r'<(button|a)\b([^>]*\bclass="([^"]*)"[^>]*)>(.*?)</\1>', render, content, flags=re.S)
 
-def troitsk_directions(content):
+def branch_directions(content):
     def section(match):
         body = match[0]
         body = body.replace('<div class="grid"', '<div class="grid" data-interaction="disclosure"', 1)
@@ -58,11 +58,11 @@ def troitsk_directions(content):
             signup = '<button class="btn direction-signup" data-cta-size="compact" type="button" inert aria-hidden="true"><span>Записаться</span><i><svg><use href="#i-arrow"/></svg></i></button>'
             return '<article class="card' + classes + '" data-dir="' + direction + '" data-disclosure="true">' + inner + toggle + plus + signup + '</article>'
         body, count = re.subn(r'<button class="card([^"]*)" type="button" data-dir="([^"]*)">(.*?)</button>', card, body, flags=re.S)
-        assert count == 6, 'Expected six Troitsk direction cards'
+        assert count == 6, 'Expected six branch direction cards'
         return body
     return re.sub(r'<section class="dirs" id="dirs">.*?</section>', section, content, count=1, flags=re.S)
 
-def troitsk_environment(content):
+def branch_environment(content):
     def section(match):
         body = match[0]
         body = re.sub(r'(<span class="kicker rv">).*?(</span>)', lambda m: m[1] + 'НЕ ТОЛЬКО УРОКИ' + m[2], body, count=1)
@@ -77,7 +77,7 @@ def troitsk_environment(content):
         return body
     return re.sub(r'<section class="env on-dark" id="env">.*?</section>', section, content, count=1, flags=re.S)
 
-def troitsk_how(content):
+def branch_how(content):
     def section(match):
         body = match[0]
         body = re.sub(r'(<span class="kicker rv">).*?(</span>)', lambda m: m[1] + 'КАК ЭТО РАБОТАЕТ' + m[2], body, count=1)
@@ -122,29 +122,25 @@ def build():
     template = read('city.html')
     for slug, city in CITIES.items():
         source = template
-        if slug == 'troitsk':
-            source = re.sub(r'<header class="top".*?</header>', lambda _: read('troitsk-header.html'), source, count=1, flags=re.S)
-            source = source.replace('{{nudge}}', read('troitsk-nudge.html'))
-            source = source.replace('{{footer}}', read('home-footer.html').replace('{{root}}', '../'))
-            source = troitsk_directions(source)
-            source = troitsk_environment(source)
-            source = troitsk_how(source)
-            source = re.sub(r'(<p class="lead rv d2" id="joinMessage">).*?(</p>)', lambda m: m[1] + 'Начни с пробного урока и почувствуй атмосферу «Точки звука».' + m[2], source, count=1)
-            source = source.replace('class="btn light openForm"', 'class="btn openForm join-primary"', 1)
+        source = re.sub(r'<header class="top".*?</header>', lambda _: read('troitsk-header.html'), source, count=1, flags=re.S)
+        source = source.replace('{{nudge}}', read('troitsk-nudge.html'))
+        source = source.replace('{{footer}}', read('home-footer.html').replace('{{root}}', '../'))
+        source = branch_directions(source)
+        source = branch_environment(source)
+        source = branch_how(source)
+        source = re.sub(r'(<p class="lead rv d2" id="joinMessage">).*?(</p>)', lambda m: m[1] + 'Начни с пробного урока и почувствуй атмосферу «Точки звука».' + m[2], source, count=1)
+        source = source.replace('class="btn light openForm"', 'class="btn openForm join-primary"', 1)
 
-            source = re.sub(r'(<a class="link" href="#dirs">)([^<]+)(<svg)', lambda m: m[1] + '<span class="hero-direction-label">' + m[2] + '</span>' + m[3], source, count=1)
+        source = re.sub(r'(<a class="link" href="#dirs">)([^<]+)(<svg)', lambda m: m[1] + '<span class="hero-direction-label">' + m[2] + '</span>' + m[3], source, count=1)
 
-            source = source.replace('</head>', '<script src="../troitsk-page.js" defer></script>\n</head>')
-            source = re.sub(r'(<p class="lead hero-copy">).*?(</p>)', lambda m: m[1] + 'Музыка, сцена и люди, с которыми хочется пробовать новое. Для детей и взрослых — независимо от опыта. Без экзаменов и ожидания «подходящего момента».' + m[2], source, count=1, flags=re.S)
+        source = source.replace('</head>', '<script src="../troitsk-page.js" defer></script>\n</head>')
+        source = re.sub(r'(<p class="lead hero-copy">).*?(</p>)', lambda m: m[1] + 'Музыка, сцена и люди, с которыми хочется пробовать новое. Для детей и взрослых — независимо от опыта. Без экзаменов и ожидания «подходящего момента».' + m[2], source, count=1, flags=re.S)
 
-            source = re.sub(r'<span class="kicker hero-copy">.*?</span></span>', '<span class="kicker hero-copy">музыкальное пространство · <span class="hero-branch-line">филиал Троицк</span></span>', source, count=1)
+        source = re.sub(r'<span class="kicker hero-copy">.*?</span></span>', '<span class="kicker hero-copy">музыкальное пространство · <span class="hero-branch-line">филиал {{name}}</span></span>', source, count=1)
         source = source.replace('</head>', '<link rel="stylesheet" href="../troitsk-enrolment.css"><script src="../troitsk-enrolment.js" defer></script>\n</head>')
         page = compose(source, '../')
-        if slug == 'troitsk':
-            page = re.sub(r'(<button class="footer-enrol openForm"[^>]*>).*?(<svg)', r'\1Записаться \2', page, count=1)
-        if slug == 'troitsk':
-            page = page.replace('+79957907670', '+74951280448').replace('+7 995 790-76-70', '+7 (495) 128-04-48')
-            page = re.sub(r'(<body\b[^>]*)(>)', lambda m: m[1] + ' data-contact-phone="+7 (495) 128-04-48"' + m[2], page, count=1)
+        page = page.replace('+79957907670', city['phone_tel']).replace('+7 995 790-76-70', city['phone_display'])
+        page = re.sub(r'(<body\b[^>]*)(>)', lambda m: m[1] + ' data-contact-phone="' + city['phone_display'] + '"' + m[2], page, count=1)
         for key, value in dict(city, slug=slug).items():
             page = page.replace('{{' + key + '}}', escape(value))
         write(SITE / slug / 'index.html', page)

@@ -13,7 +13,7 @@
 
 /* Give the two final mobile sections the taller natural content height, or one screen. */
 (() => {
- if(document.body.dataset.city!=='troitsk')return;
+ if(!document.body.dataset.city)return;
  const modules=['how','join'].map(id=>document.getElementById(id));
  if(modules.some(section=>!section))return;
  const mobile=matchMedia('(max-width:1000px)');

@@ -436,12 +436,12 @@ img,svg{display:block;max-width:100%}
 <link rel="stylesheet" href="../experience.css?v=de1fc54135">
 <script src="../lead-form.js?v=da8dce2b64" defer></script>
 <link rel="stylesheet" href="../form.css?v=bbbe06838c">
-<link rel="stylesheet" href="../city-ui.css?v=9d83da0cd3"><script src="../city-ui.js?v=2db41f6479" defer></script>
+<link rel="stylesheet" href="../city-ui.css?v=9d83da0cd3"><script src="../city-ui.js?v=0736c1ff95" defer></script>
 <script src="../button-labels.js?v=831480a973" defer></script>
 <link rel="stylesheet" href="../narrow-header.css?v=78e5098dd8">
-<link rel="stylesheet" href="../responsive.css?v=11f773c1cc">
-<script src="../troitsk-page.js?v=5dade76aae" defer></script>
-<link rel="stylesheet" href="../troitsk-enrolment.css?v=338e17a64c"><script src="../troitsk-enrolment.js?v=76d06c2868" defer></script>
+<link rel="stylesheet" href="../responsive.css?v=68d71c9b0e">
+<script src="../troitsk-page.js?v=b9d0022178" defer></script>
+<link rel="stylesheet" href="../troitsk-enrolment.css?v=414f2b7953"><script src="../troitsk-enrolment.js?v=2a4bdff252" defer></script>
 <link rel="stylesheet" href="../cta.css?v=43c1b2b2a4">
 </head>
 <body data-city="troitsk" data-contact-phone="+7 (495) 128-04-48">
@@ -875,7 +875,7 @@ addEventListener('resize',scheduleSteps);stepsUpdate();
 
 /* фоны направлений: оригинальные SVG-паттерны (patterns/*.svg) встраиваются на лету, чтобы двигать их собственные фигуры.
    Без JS и при reduced-motion остаются обычные CSS-фоны из тех же файлов. */
-const bgReady = ((!reduce||document.body.dataset.city==='troitsk') && 'DOMParser' in window) ? (()=>{
+const bgReady = ((!reduce||!!document.body.dataset.city) && 'DOMParser' in window) ? (()=>{
   const kinds={vocal:['vocal'],guitar:['guitar'],drums:['drums'],piano:['piano'],actor:['actor-orange','actor-blue'],speech:['speech']};
   const load=file=>fetch('../patterns/'+file+'.svg').then(r=>r.ok?r.text():Promise.reject(r.status)).then(t=>{
     t=t.replace(/clip_(\d+)/g,`${file}_c$1`).replace(/ id="layer_\d+"/g,'');   // id уникальны в пределах страницы
@@ -937,7 +937,7 @@ function prepCard(card){
   const n=Math.max(1,items.length-1);
   items.forEach((it,i)=>{ it.p.setAttribute('pathLength',1); it.p.classList.add('ap'); if(it.rev) it.p.classList.add('rev'); it.p.style.setProperty('--a',(i/n*SPREAD).toFixed(3)); });
   // узел движения: группа-обёртка с прозрачностью (в ней же её обрезка), если в ней одна линия; иначе своя обёртка
-  const unit=p=>{ const g=p.closest('g[opacity]'); if(g && !(document.body.dataset.city==='troitsk'&&dir==='actor') && (g.querySelectorAll('path[stroke-width]').length===1||(complete&&(dir==='actor'||dir==='speech')))) return g;
+  const unit=p=>{ const g=p.closest('g[opacity]'); if(g && !(!!document.body.dataset.city&&dir==='actor') && (g.querySelectorAll('path[stroke-width]').length===1||(complete&&(dir==='actor'||dir==='speech')))) return g;
     const w=document.createElementNS('http://www.w3.org/2000/svg','g'); p.before(w); w.appendChild(p); return w; };
   const byX=[...items].sort((u,v)=>u.cx-v.cx);
   if(dir==='drums'){

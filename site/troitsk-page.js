@@ -1,7 +1,7 @@
 /* Troitsk: a single, dismissible invitation. */
 (() => {
  'use strict';
- if(document.body.dataset.city!=='troitsk')return;
+ if(!document.body.dataset.city)return;
  const directionLink=document.querySelector('.hero-actions .link[href="#dirs"]');
  directionLink?.addEventListener?.('click',async event=>{
   event.preventDefault();
@@ -14,7 +14,7 @@
  });
  const box=document.getElementById('lessonNudge'),modal=document.getElementById('leadModal');
  if(!box)return;
- const key='tz:troitsk:invitation-dismissed-until',week=7*24*60*60*1000;
+ const key='tz:'+document.body.dataset.city+':invitation-dismissed-until',week=7*24*60*60*1000;
  let ready=false,shown=false,blocked=false;
  const read=()=>{try{return Number(window.localStorage.getItem(key))||0;}catch{return 0;}};
  function hide(){box.hidden=true;}

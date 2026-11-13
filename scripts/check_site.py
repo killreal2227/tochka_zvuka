@@ -55,8 +55,12 @@ def check():
             slug = name.split('/')[0]
             assert f'data-city="{slug}"' in text
             assert f'{PUBLIC_BASE_URL}/{slug}/' in text
-            contact_phone = '+74951280448' if slug == 'troitsk' else '+79957907670'
+            contact_phone = '+74951280448' if slug == 'troitsk' else '+79200988003'
             assert 'tel:' + contact_phone in text
+            assert set(re.findall(r'href="tel:([^"]+)"', text)) == {contact_phone}
+            assert 'data-interaction="disclosure"' in text and text.count('data-disclosure="true"') == 6
+            assert 'home-footer' in text and 'troitsk-page.js' in text
+            assert 'филиал ' + ('Троицк' if slug == 'troitsk' else 'Калуга') in text
             assert 'mailto:tzvuka@yandex.ru' in text or 'href="../requisites/"' in text
             assert 'id="leadForm"' in text and 'localStorage' not in text
             assert 'lessonNudge' in text and 'direction-player.js' in text

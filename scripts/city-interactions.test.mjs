@@ -471,10 +471,10 @@ test('touch buttons retain native text instead of adding SVG caption layers',()=
 });
 
 
-function troitskInvitationScene(store=new Map(),now=100000,storageBlocked=false){
+function troitskInvitationScene(store=new Map(),now=100000,storageBlocked=false,city='troitsk'){
  const close=events(),modal={hidden:true},trigger={focus(){}};
  const box=events({hidden:true,querySelector:()=>close,contains:()=>false});
- const document=events({body:{dataset:{city:'troitsk'}},hidden:false,activeElement:null,
+ const document=events({body:{dataset:{city}},hidden:false,activeElement:null,
   getElementById:id=>id==='lessonNudge'?box:modal,querySelector:()=>trigger});
  const timers=[];
  const window=events({innerHeight:844,visualViewport:events({height:844,scale:1}),
@@ -579,4 +579,13 @@ test('demo failure preserves fields and never opens confirmation',async()=>{
  await s.form.emit('submit',{preventDefault(){}});
  assert.equal(s.calls,0);assert.equal(s.success.hidden,true);assert.equal(s.form.hidden,false);
  assert.equal(s.phone.value,'+79950000000');assert.match(s.status.textContent,/Не удалось отправить заявку/);
+});
+
+test('Kaluga uses the same invitation timing with independent dismissal storage',async()=>{
+ const store=new Map(),s=troitskInvitationScene(store,100000,false,'kaluga');
+ assert.equal(s.timers[0].ms,18000);s.run();assert.equal(s.box.hidden,false);
+ await s.close.emit('click');
+ assert.ok(store.has('tz:kaluga:invitation-dismissed-until'));
+ assert.equal(store.has('tz:troitsk:invitation-dismissed-until'),false);
+ const other=troitskInvitationScene(store);other.run();assert.equal(other.box.hidden,false);
 });

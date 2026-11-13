@@ -601,7 +601,7 @@ img,svg{display:block;max-width:100%}
         <g id="pC" transform="translate(107.27 109.04)"><circle fill="#1a1a1a" cx="97.73" cy="235.96" r="18.38"/></g>
         <g id="pD" transform="translate(-534.4 67.2)"><circle fill="#9b3e47" cx="594.4" cy="262.8" r="13.42"/></g>
       </svg>
-      <div class="tag"><span>точка звука</span><b data-b="name">Троицк</b></div>
+      <div class="tag"><span>точка звука</span><b data-b="name">{{name}}</b></div>
     </div>
   </section>
 
@@ -789,7 +789,7 @@ addEventListener('resize',scheduleSteps);stepsUpdate();
 
 /* фоны направлений: оригинальные SVG-паттерны (patterns/*.svg) встраиваются на лету, чтобы двигать их собственные фигуры.
    Без JS и при reduced-motion остаются обычные CSS-фоны из тех же файлов. */
-const bgReady = ((!reduce||document.body.dataset.city==='troitsk') && 'DOMParser' in window) ? (()=>{
+const bgReady = ((!reduce||!!document.body.dataset.city) && 'DOMParser' in window) ? (()=>{
   const kinds={vocal:['vocal'],guitar:['guitar'],drums:['drums'],piano:['piano'],actor:['actor-orange','actor-blue'],speech:['speech']};
   const load=file=>fetch('../patterns/'+file+'.svg').then(r=>r.ok?r.text():Promise.reject(r.status)).then(t=>{
     t=t.replace(/clip_(\d+)/g,`${file}_c$1`).replace(/ id="layer_\d+"/g,'');   // id уникальны в пределах страницы
@@ -851,7 +851,7 @@ function prepCard(card){
   const n=Math.max(1,items.length-1);
   items.forEach((it,i)=>{ it.p.setAttribute('pathLength',1); it.p.classList.add('ap'); if(it.rev) it.p.classList.add('rev'); it.p.style.setProperty('--a',(i/n*SPREAD).toFixed(3)); });
   // узел движения: группа-обёртка с прозрачностью (в ней же её обрезка), если в ней одна линия; иначе своя обёртка
-  const unit=p=>{ const g=p.closest('g[opacity]'); if(g && !(document.body.dataset.city==='troitsk'&&dir==='actor') && (g.querySelectorAll('path[stroke-width]').length===1||(complete&&(dir==='actor'||dir==='speech')))) return g;
+  const unit=p=>{ const g=p.closest('g[opacity]'); if(g && !(!!document.body.dataset.city&&dir==='actor') && (g.querySelectorAll('path[stroke-width]').length===1||(complete&&(dir==='actor'||dir==='speech')))) return g;
     const w=document.createElementNS('http://www.w3.org/2000/svg','g'); p.before(w); w.appendChild(p); return w; };
   const byX=[...items].sort((u,v)=>u.cx-v.cx);
   if(dir==='drums'){
