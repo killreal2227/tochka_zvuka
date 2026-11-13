@@ -608,3 +608,6 @@ body[data-city="troitsk"] #join .join-primary { --cta-bg:var(--cream); --cta-tex
   align-self:center;
  }
 }
+
+/* Match the lower illustration corners to the environment animation. */
+body[data-city=troitsk] #join .arch { border-bottom-left-radius:8px; border-bottom-right-radius:8px; overflow:hidden; isolation:isolate; }
