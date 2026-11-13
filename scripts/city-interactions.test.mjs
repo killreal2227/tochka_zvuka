@@ -165,15 +165,15 @@ test('invitation ignores swipes and outside taps',async()=>{
 });
 
 function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',combinedDocs=false) {
-  const element=()=>events({hidden:false,disabled:false,offsetParent:{},tabIndex:0,style:{},dataset:{},classList:{add(){},remove(){},toggle(){}},setAttribute(){},focus(){document.activeElement=this;}});
+  const element=()=>events({hidden:false,disabled:false,offsetParent:{},tabIndex:0,style:{},dataset:{},classList:{add(){},remove(){},toggle(){},contains(){return false;}},setAttribute(){},focus(){document.activeElement=this;}});
   const input=()=>Object.assign(element(),{value:'',setCustomValidity(v){this.validity=v;},reportValidity(){return !this.validity;}});
-  const name=input(),phone=input(),website=input(),direction=input(),branch=input();
+  const name=input(),surname=input(),phone=input(),website=input(),direction=input(),branch=input();
   Object.defineProperty(branch,'selectedOptions',{get:()=>[{value:branch.value,textContent:branch.value||'choose'}]});
   const submit=element(),status=element(),sheet=element(),success=element(),close=element(),dismiss=element(),trigger=element();
   success.hidden=true;
   const chips=element(),caption=element(),branchCaption=element(),branchLabel=element(),directionTitle=element(),directionReset=element();
   let calls=0,uuids=0,payload;
-  const form=Object.assign(element(),{elements:{name,phone,website,direction,branch},reportValidity:()=>name.value.trim().length>=2&&!!branch.value,
+  const form=Object.assign(element(),{elements:{name,surname,phone,website,direction,branch},reportValidity:()=>name.value.trim().length>=2&&!!branch.value,
     reset(){for(const e of Object.values(this.elements))e.value='';},querySelector:s=>s==='.lead-submit'?submit:s==='.lead-branch-label'?branchLabel:null});
   form.dispatchEvent=e=>{form.emit(e.type,e);};
   const svg={setAttribute(){},querySelectorAll:()=>[],getScreenCTM:()=>({a:1})};
@@ -194,7 +194,7 @@ function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',co
     CustomEvent:class{constructor(type){this.type=type;}},
     fetch:async(_,options)=>{calls++;payload=JSON.parse(options.body);return{ok:reply==='success',status:reply==='success'?200:502,
       json:async()=>reply==='success'?{ok:true,requestId:payload.requestId,leadId:'1'}:{ok:false}};}});
-  const fill=()=>{name.value='Иван';phone.value='+79950000000';branch.value='kaluga';};
+  const fill=()=>{surname.value='Ivanov';name.value='Иван';phone.value='+79950000000';branch.value='kaluga';};
   return {trigger,close,form,success,modal,phone,status,caption,branchCaption,directionTitle,directionReset,fill,get calls(){return calls;},get uuids(){return uuids;},get payload(){return payload;}};
 }
 test('address link searches the selected branch and hides when no branch is selected',async()=>{
@@ -213,18 +213,18 @@ test('selected direction caption is lowercase and clears without permanent helpe
   s.form.elements.direction.value='';await s.form.emit('change',{target:{name:'direction'}});
   assert.equal(s.caption.textContent,'');
 });
-test('unconfigured form gives requested feedback without request, storage or lead ID',async()=>{
+test('unconfigured form reports unavailable delivery without a false success',async()=>{
   const s=formScene();await s.trigger.emit('click');s.fill();await s.form.emit('submit',{preventDefault(){}});
-  assert.equal(s.calls,0);assert.equal(s.uuids,0);assert.equal(s.success.hidden,false);assert.equal(s.form.hidden,true);
-  assert.equal(s.phone.value,'');await s.trigger.emit('click');assert.equal(s.form.hidden,false);assert.equal(s.success.hidden,true);
+  assert.equal(s.calls,0);assert.equal(s.uuids,0);assert.equal(s.success.hidden,true);assert.equal(s.form.hidden,false);assert.ok(s.status.textContent);
+  assert.equal(s.phone.value,'+79950000000');await s.trigger.emit('click');assert.equal(s.form.hidden,false);assert.equal(s.success.hidden,true);
 });
-test('single-column branch form opens and confirms locally without decorative SVG',async()=>{
+test('single-column branch form preserves branch and reports unavailable delivery',async()=>{
   for(const city of ['kaluga','troitsk']){
     const s=formScene(null,'success',true,city);await s.trigger.emit('click');
     assert.equal(s.modal.hidden,false);assert.equal(s.form.elements.branch.value,city);
     s.fill();s.form.elements.branch.value=city;
     await s.form.emit('submit',{preventDefault(){}});
-    assert.equal(s.success.hidden,false);assert.equal(s.calls,0);assert.equal(s.uuids,0);
+    assert.equal(s.success.hidden,true);assert.equal(s.calls,0);assert.equal(s.uuids,0);assert.ok(s.status.textContent);
   }
 });
 test('configured form uses transport acknowledgement and includes button-consent metadata',async()=>{
@@ -246,7 +246,7 @@ test('invalid phone is rejected before any external request',async()=>{
 
 test('direction title and reset button follow selection and reset only the direction',async()=>{
   const s=formScene();await s.trigger.emit('click');s.fill();
-  assert.equal(s.directionTitle.textContent,'Выбери направление. Не знаешь какое — поможем');
+  assert.equal(s.directionTitle.textContent,'Что тебе интересно?');
   assert.equal(s.directionReset.hidden,true);
   s.form.elements.direction.value='speech';
   await s.form.emit('change',{target:{name:'direction'}});
@@ -254,7 +254,7 @@ test('direction title and reset button follow selection and reset only the direc
   assert.equal(s.directionReset.hidden,false);
   await s.directionReset.emit('click');
   assert.equal(s.form.elements.direction.value,'');
-  assert.equal(s.directionTitle.textContent,'Выбери направление. Не знаешь какое — поможем');
+  assert.equal(s.directionTitle.textContent,'Что тебе интересно?');
   assert.equal(s.directionReset.hidden,true);
   assert.equal(s.caption.textContent,'');
   assert.equal(s.form.elements.name.value,'Иван');
@@ -262,7 +262,7 @@ test('direction title and reset button follow selection and reset only the direc
 });
 
 test('the single corner close control dismisses both form and confirmation',async()=>{
-  const s=formScene();await s.trigger.emit('click');
+  const s=formScene('https://example.invalid/leads');await s.trigger.emit('click');
   await s.close.emit('click');assert.equal(s.modal.hidden,true);
   await s.trigger.emit('click');s.fill();await s.form.emit('submit',{preventDefault(){}});
   assert.equal(s.success.hidden,false);assert.equal(s.modal.hidden,false);
@@ -445,7 +445,7 @@ test('short landscape form shrinks only when necessary and restores after rotati
  const js=source('lead-form.js');const fn=js.slice(js.indexOf('let fitFrame=0;'),js.indexOf('function scheduleFormFit()'));
  const body={style:{maxHeight:''}},sheet={style:{},getBoundingClientRect:()=>({height:500})};
  const window={innerWidth:844,innerHeight:390,visualViewport:{height:390}};
- const ctx={window,modal:{hidden:false,querySelector:()=>body},form:{contains:()=>false},document:{activeElement:null},sheet,syncFooterLines(){}};
+ const ctx={window,modal:{hidden:false,classList:{contains:()=>false},querySelector:()=>body},form:{contains:()=>false},document:{activeElement:null},sheet,syncFooterLines(){}};
  vm.runInNewContext(fn+'fitShortForm();',ctx);assert.equal(Number(sheet.style.zoom),362/500);
  window.innerHeight=600;window.visualViewport.height=600;ctx.fitShortForm();assert.equal(sheet.style.zoom,'1');
  window.innerWidth=800;window.innerHeight=667;window.visualViewport.height=667;ctx.fitShortForm();assert.equal(sheet.style.zoom,'1');
@@ -456,7 +456,7 @@ test('portrait form preserves 500px composition below 500 and grows normally abo
  const js=source('lead-form.js');const fn=js.slice(js.indexOf('let fitFrame=0;'),js.indexOf('function scheduleFormFit()'));
  const body={style:{maxHeight:''}},sheet={style:{},getBoundingClientRect:()=>({height:500})};
  const window={innerWidth:390,innerHeight:844,visualViewport:{height:844}};
- const ctx={window,modal:{hidden:false,querySelector:()=>body},form:{contains:()=>false},document:{activeElement:null},sheet,syncFooterLines(){}};
+ const ctx={window,modal:{hidden:false,classList:{contains:()=>false},querySelector:()=>body},form:{contains:()=>false},document:{activeElement:null},sheet,syncFooterLines(){}};
  vm.runInNewContext(fn+'fitShortForm();',ctx);assert.equal(sheet.style.width,'476px');assert.equal(Number(sheet.style.zoom),366/476);
  window.innerWidth=320;ctx.fitShortForm();assert.equal(Number(sheet.style.zoom),296/476);
  window.innerWidth=500;ctx.fitShortForm();assert.equal(sheet.style.width,'');assert.equal(sheet.style.zoom,'');
@@ -560,4 +560,16 @@ test('fine-pointer focus exposes the signup control without requiring hover',()=
  const s=ordinaryScene(true,false,true,true),[card]=s.cards;
  card.emit('focusin',{target:{matches:()=>false}});assert.equal(card.classes.has('is-expanded'),true);assert.equal(card.signup.inert,false);
  card.emit('focusout',{relatedTarget:null});assert.equal(card.classes.has('is-expanded'),false);
+});
+
+test('surname is required before sending and preserves all letters except the first',async()=>{
+ const s=formScene('https://example.invalid/leads');s.fill();
+ s.form.elements.surname.value='  ';await s.form.emit('submit',{preventDefault(){}});
+ assert.equal(s.calls,0);assert.equal(s.success.hidden,true);assert.ok(s.form.elements.surname.validity);
+ for(const key of ['name','surname']){
+  const f=s.form.elements[key];f.value='иВаНов';await f.emit('input',{isComposing:false});
+  assert.equal(f.value,'ИВаНов');
+ }
+ await s.form.emit('submit',{preventDefault(){}});
+ assert.equal(s.calls,1);assert.equal(s.payload.surname,'ИВаНов');
 });

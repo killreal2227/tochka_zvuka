@@ -16,6 +16,7 @@ async function leadBody(request){
 
 function leadValid(data,origin){
   if(!data||data.schemaVersion!==1||typeof data.requestId!=='string'||!/^[a-f0-9-]{36}$/i.test(data.requestId))return false;
+  if(data.surname!==undefined&&(typeof data.surname!=='string'||data.surname.trim().length<2||data.surname.length>80||/[\x00-\x1f\x7f]/.test(data.surname)))return false;
   if(typeof data.name!=='string'||data.name.trim().length<2||data.name.length>80||/[\x00-\x1f\x7f]/.test(data.name))return false;
   if(typeof data.phone!=='string'||!/^\+7\d{10}$/.test(data.phone))return false;
   if(!Object.hasOwn(LEAD_BRANCHES,data.branch)||!Object.hasOwn(LEAD_DIRECTIONS,data.direction))return false;
@@ -48,7 +49,7 @@ export async function handleLeads(request,env,upstream=(...args)=>globalThis.fet
     if(!(await env.LEADS_RATE_LIMITER.limit({key})).success)return leadJson({error:'Too many requests'},429,allowed);
     const data=await leadBody(request);
     if(!leadValid(data,allowed))return leadJson({error:'Invalid request'},400,allowed);
-    const text=['Новая заявка с сайта «Точка звука»','',`Филиал: ${LEAD_BRANCHES[data.branch]}`,`Имя: ${data.name.trim()}`,`Телефон: ${data.phone}`,`Направление: ${LEAD_DIRECTIONS[data.direction]}`,'',`Заявка: ${data.requestId}`,`Страница: ${data.pagePath}`,`Согласие: ${data.consent.version}, ${data.consent.acceptedAt}`,`Документ: ${data.consent.documentUrl}`].join('\n');
+    const text=['Новая заявка с сайта «Точка звука»','',`Филиал: ${LEAD_BRANCHES[data.branch]}`,`Имя: ${data.name.trim()}${data.surname?" "+data.surname.trim():""}`,`Телефон: ${data.phone}`,`Направление: ${LEAD_DIRECTIONS[data.direction]}`,'',`Заявка: ${data.requestId}`,`Страница: ${data.pagePath}`,`Согласие: ${data.consent.version}, ${data.consent.acceptedAt}`,`Документ: ${data.consent.documentUrl}`].join('\n');
     const response=await upstream(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({chat_id:env.LEADS_CHAT_ID,text,link_preview_options:{is_disabled:true}}),redirect:'error',signal:AbortSignal.timeout(10000)});
     let telegram;try{telegram=await response.json();}catch{return leadJson({error:'Delivery not confirmed'},502,allowed);}
     if(!response.ok||telegram.ok!==true||!Number.isSafeInteger(telegram.result?.message_id))return leadJson({error:'Delivery not confirmed'},502,allowed);

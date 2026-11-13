@@ -316,3 +316,64 @@ body:is(.home-page,[data-city="troitsk"]) .home-footer .footer-meta a:hover { co
 /* The main page and Troitsk share the same compact footer and gutters. */
 body:is(.home-page,[data-city="troitsk"]) > .home-footer { padding-left:max(clamp(24px,5vw,72px),calc((100% - var(--home-content,1440px))/2)); padding-right:max(clamp(24px,5vw,72px),calc((100% - var(--home-content,1440px))/2)); }
 @media(max-width:1000px) { body:is(.home-page,[data-city="troitsk"]) > .home-footer { padding-left:24px; padding-right:24px; } }
+
+/* Shared form fields, CTA colors and compact confirmation. */
+.lead-modal .sheet #leadForm .send { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.lead-modal { --form-scale:1; }
+[data-scaled-phone] .lead-modal { --form-scale:var(--touch-ui-factor); }
+.lead-modal .sheet #contactFields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px 24px; }
+.lead-modal .sheet #contactFields #fPhone { grid-column:1/-1; }
+.lead-modal .sheet #contactFields input { color:var(--ink); padding:14px 0 3px; line-height:1.35; }
+.lead-modal .sheet #contactFields input::placeholder { color:#998d83; opacity:1; }
+.lead-modal .sheet #directionTitle,.lead-modal .sheet #directionReset { font-size:15px; }
+.lead-modal .sheet .lead-submit { --cta-bg:var(--accent); --cta-text:var(--accent-on); --cta-circle-bg:var(--accent-on); --cta-icon-color:var(--accent); --cta-hover:var(--accent); --cta-transition:none; }
+.lead-modal .sheet .lead-call { --cta-bg:#e7ded4; --cta-text:var(--ink); --cta-circle-bg:var(--cream); --cta-icon-color:var(--ink); --cta-hover:#ddd1c5; width:100%!important; }
+.lead-modal .sheet .action-pane { grid-template-rows:56px minmax(42px,auto); }
+.lead-modal.is-success { align-items:center!important; justify-content:center; }
+.lead-modal.is-success .sheet { width:min(560px,100%)!important; margin:0!important; transform:none!important; transition:none!important; animation:none!important; }
+.lead-modal.is-success .sheet .sheet-body { padding:60px 40px 40px; }
+.lead-modal.is-success .sheet #doneText { font-size:48px; line-height:1.04; margin:0 0 20px; }
+.lead-modal.is-success .sheet #doneText em { background:none; padding:0; color:var(--bord); font-style:normal; }
+.lead-modal.is-success .sheet .success-followup { font-size:17px; line-height:1.45; margin:0 0 28px; }
+.lead-modal .success-confirm { background:var(--bord); color:var(--cream); border:0; border-radius:999px; padding:0 28px; height:48px; font:400 15px var(--brand-font); cursor:pointer; }
+.lead-modal .success-confirm:focus-visible { outline:2px solid var(--ink); outline-offset:4px; }
+.lead-modal.is-success .sheet .lead-close,.lead-modal.is-success .sheet .lead-close:hover { background:transparent; border:0; border-radius:0; color:var(--ink); width:44px; height:44px; }
+@media(max-width:1000px) {
+ .lead-modal { padding:calc(12px * var(--form-scale)); }
+ .lead-modal .sheet { margin-bottom:0; max-height:calc(100dvh - 24px * var(--form-scale) - env(safe-area-inset-bottom)); }
+ .lead-modal .sheet .sheet-art { display:none!important; }
+ .lead-modal .sheet .sheet-body { padding:calc(38px * var(--form-scale)) calc(12px * var(--form-scale)) calc(16px * var(--form-scale)); max-height:none; overflow:visible; }
+ .lead-modal .sheet #leadForm #leadTitle { margin-top:0; }
+ .lead-modal .sheet #contactFields { grid-template-columns:minmax(0,1fr); gap:8px; }
+ .lead-modal .sheet #contactFields input { font-size:calc(16px * var(--form-scale)); min-height:calc(44px * var(--form-scale)); padding:calc(14px * var(--form-scale)) 0 calc(3px * var(--form-scale)); }
+ .lead-modal .sheet #directionTitle,.lead-modal .sheet #directionReset { font-size:calc(14px * var(--form-scale)); }
+ .lead-modal .sheet #chips .pick-row { gap:0; justify-content:space-between; }
+ .lead-modal .sheet #chips .pk,.lead-modal .sheet #chips .pk label,.lead-modal .sheet #chips .pk .choice-icon {
+  width:calc(44px * var(--form-scale)); height:calc(44px * var(--form-scale)); min-width:0; min-height:0; flex:0 0 calc(44px * var(--form-scale)); padding:0;
+ }
+ .lead-modal .sheet #chips .pk label[data-ico] .choice-icon img { width:100%; height:100%; }
+ .lead-modal .sheet #leadForm .send { grid-template-columns:minmax(0,1fr); gap:8px; }
+ .lead-modal .sheet #leadForm .action-pane { grid-template-rows:calc(48px * var(--form-scale)) auto; gap:4px; }
+ .lead-modal .sheet #leadForm .action-pane > .tz-cta { --cta-height:48px; --cta-circle:34px; --cta-inset:7px; --cta-leading:18px; --cta-gap:10px; --cta-font:14px; --cta-min-width:0px; --cta-arrow:20px; }
+ .lead-modal .sheet #leadForm .lead-consent,.lead-modal .sheet #leadForm .lead-address,.lead-modal .sheet #leadForm .lead-consent a,.lead-modal .sheet #leadForm .lead-address a { font-size:calc(12px * var(--form-scale)); line-height:1.4; min-height:calc(28px * var(--form-scale)); }
+ .lead-modal .sheet #leadForm .lead-reassurance > span { white-space:normal; }
+ .lead-modal .sheet .lead-close,.lead-modal .sheet .lead-close:hover { background:transparent; border:0; border-radius:0; color:var(--ink); width:calc(44px * var(--form-scale)); height:calc(44px * var(--form-scale)); top:0; right:0; }
+ .lead-modal .sheet .lead-close svg { width:calc(18px * var(--form-scale)); height:calc(18px * var(--form-scale)); }
+ .lead-modal.is-success .sheet { width:min(calc(400px * var(--form-scale)),100%)!important; }
+ .lead-modal.is-success .sheet .sheet-body { padding:calc(52px * var(--form-scale)) calc(20px * var(--form-scale)) calc(24px * var(--form-scale)); }
+ .lead-modal.is-success .sheet #doneText { font-size:calc(32px * var(--form-scale)); line-height:1.04; margin-bottom:calc(16px * var(--form-scale)); }
+ .lead-modal.is-success .sheet .success-followup { font-size:calc(15px * var(--form-scale)); margin-bottom:calc(24px * var(--form-scale)); }
+ .lead-modal.is-success .success-confirm { height:calc(44px * var(--form-scale)); width:100%; font-size:calc(14px * var(--form-scale)); }
+ .lead-modal.is-success .sheet .lead-close { width:calc(44px * var(--form-scale)); height:calc(44px * var(--form-scale)); }
+}
+
+@media(max-width:1000px) {
+ .lead-modal:not(.is-success) .sheet { width:100%!important; }
+ .lead-modal { top:var(--form-viewport-top,0px); bottom:auto; height:var(--form-viewport-height,100dvh); }
+ .lead-modal .sheet { max-height:calc(var(--form-viewport-height,100dvh) - 24px * var(--form-scale) - env(safe-area-inset-bottom)); }
+}
+
+@media(max-width:1000px) {
+ .lead-modal .sheet #chips .pk .choice-icon { outline-offset:-1px; }
+ .lead-modal .sheet #chips .pk input:checked+label .choice-icon { outline-offset:-2px; transform:none; }
+}

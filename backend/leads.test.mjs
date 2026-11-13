@@ -19,3 +19,11 @@ test('oversized input is rejected',async()=>{assert.equal((await handleLeads(req
 test('preflight admits only the expected origin',async()=>{const response=await handleLeads(new Request('https://test.workers.dev/leads',{method:'OPTIONS',headers:{origin:'https://tzvuka.ru'}}),env);assert.equal(response.status,204);assert.equal(response.headers.get('access-control-allow-methods'),'POST, OPTIONS');});
 test('wrapper preserves the existing relay health route',async()=>{const response=await worker.fetch(new Request('https://test.workers.dev/health'),{});assert.equal(response.status,200);assert.equal((await response.json()).relay,'OK');});
 test('wrapper preserves authentication on the existing outbound route',async()=>{const response=await worker.fetch(new Request('https://test.workers.dev/api/sendMessage',{method:'POST',headers:{'content-type':'application/json'},body:'{}'}),{});assert.equal(response.status,403);});
+
+test('surname is validated and retained in the existing delivery payload',async()=>{
+ for(const surname of [' ', 'A', 'A\u000aB', 'x'.repeat(81)])
+  assert.equal((await handleLeads(request({...payload(),surname}),env,()=>assert.fail())).status,400);
+ let sent;
+ const response=await handleLeads(request({...payload(),surname:'Ivanova'}),env,async(_,options)=>{sent=JSON.parse(options.body).text;return Response.json({ok:true,result:{message_id:42}});});
+ assert.equal(response.status,200);assert.ok(sent.includes('Ivanova'));
+});

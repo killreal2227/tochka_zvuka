@@ -36,7 +36,7 @@ const formArt=(()=>{
     $('#chips').classList.toggle('has',!!col[v]);
     $('#pickCap').textContent = col[v] ? directionLabels[v].toLocaleLowerCase('ru') : '';
     const title=$('#directionTitle'),reset=$('#directionReset');
-    if(title) title.textContent=col[v]?directionLabels[v]:'Выбери направление. Не знаешь какое — поможем';
+    if(title) title.textContent=col[v]?directionLabels[v]:'Что тебе интересно?';
     if(reset) reset.hidden=!col[v];
     positionDirectionNames();
   }
@@ -69,7 +69,7 @@ const formArt=(()=>{
   }
   return {
     tint, resize:measure,
-    start(){ if(reduce||window.innerHeight<=500||id) return; measure();lastPaint=null;t0=performance.now()-run; id=requestAnimationFrame(frame);   // продолжаем с того же места
+    start(){ if(reduce||mob.matches||window.innerHeight<=500||id) return; measure();lastPaint=null;t0=performance.now()-run; id=requestAnimationFrame(frame);   // продолжаем с того же места
       N.forEach((n,i)=>later(()=>knob(n),700+i*450)); },
     stop(){ if(!id) return; cancelAnimationFrame(id); id=0; run=performance.now()-t0; timers.forEach(clearTimeout);timers.clear(); }
   };
@@ -146,7 +146,7 @@ const formArt=(()=>{
     if(!direction) $$('input[name="direction"]').forEach(r=>{r.checked=false;});
     if(pageCity){form.elements.branch.value=pageCity;form.querySelector('.lead-branch-label').hidden=true;}
     if(direction){const radio=form.querySelector('input[name="direction"][value="'+direction+'"]');if(radio)radio.checked=true;}
-    form.hidden=false;success.hidden=true;sheet.setAttribute('aria-labelledby','leadTitle');status.textContent='';
+    modal.classList.remove('is-success');form.hidden=false;success.hidden=true;sheet.setAttribute('aria-labelledby','leadTitle');status.textContent='';
     modal.hidden=false;modal.classList.remove('open');void sheet.offsetWidth;modal.classList.add('open');modal.setAttribute('aria-hidden','false');formArt.tint(true);formArt.start();document.body.style.overflow='hidden';sheet.focus({preventScroll:true});syncBranch();document.dispatchEvent(new CustomEvent('tz:lead-open'));
   }
   function close(){if(sending)return;branchPicker.close();formArt.stop();modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.hidden=true;document.body.style.overflow='';lastFocus?.focus({preventScroll:true});document.dispatchEvent(new CustomEvent('tz:lead-close'));}
@@ -172,10 +172,11 @@ const formArt=(()=>{
     open(el.dataset.dir);
   }));
   modal.querySelector('.lead-close').addEventListener('click',close);
+  $('[data-lead-dismiss]')?.addEventListener('click',close);
   /* Preserve the 500px composition below that width; fit height in landscape. */
   let fitFrame=0;
   function fitShortForm(){
-    fitFrame=0;if(modal.hidden)return;
+    fitFrame=0;if(modal.hidden||modal.classList.contains('is-success'))return;
     const landscape=window.innerWidth>window.innerHeight&&window.innerHeight<=800;
     const narrow=window.innerWidth<500;
     const editing=form.contains(document.activeElement)&&['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName);
@@ -199,6 +200,18 @@ const formArt=(()=>{
   function scheduleFormFit(){if(!fitFrame)fitFrame=requestAnimationFrame(fitShortForm);}
   window.addEventListener('resize',scheduleFormFit,{passive:true});
   window.visualViewport?.addEventListener('resize',scheduleFormFit,{passive:true});
+  function syncFormViewport(){
+    const viewport=window.visualViewport;
+    modal.style.setProperty?.('--form-viewport-height',(viewport?.height||window.innerHeight)+'px');
+    modal.style.setProperty?.('--form-viewport-top',(viewport?.offsetTop||0)+'px');
+  }
+  window.visualViewport?.addEventListener('resize',syncFormViewport,{passive:true});
+  window.visualViewport?.addEventListener('scroll',syncFormViewport,{passive:true});
+  document.addEventListener('tz:lead-open',syncFormViewport);
+  sheet.addEventListener('focusin',()=>setTimeout(()=>{
+    if(form.contains(document.activeElement))document.activeElement.scrollIntoView?.({block:'nearest'});
+  },250));
+
   document.fonts?.ready.then(scheduleFormFit);
   form.addEventListener('change',scheduleFormFit);
   form.addEventListener('focusout',scheduleFormFit);
@@ -285,7 +298,7 @@ maskPhone(phone);
   phone.addEventListener('input',()=>phone.setCustomValidity(''));
   form.addEventListener('input',()=>{pending=null;status.textContent='';});
   function showSuccess(){
-    form.hidden=true;success.hidden=false;sheet.setAttribute('aria-labelledby','doneText');formArt.stop();status.textContent='';pending=null;
+    modal.classList.add('is-success');sheet.style.zoom='';sheet.style.width='';sheet.style.maxWidth='';sheet.style.maxHeight='';form.hidden=true;success.hidden=false;sheet.setAttribute('aria-labelledby','doneText');formArt.stop();status.textContent='';pending=null;
     form.reset();syncBranch();success.setAttribute('tabindex','-1');success.focus({preventScroll:true});
     document.dispatchEvent(new CustomEvent('tz:lead-success'));
   }
@@ -296,14 +309,15 @@ maskPhone(phone);
     if(!form.reportValidity())return;
     if(form.elements.website.value)return;
     if(form.elements.name.value.trim().length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}
+    if(form.elements.surname.value.trim().length<2){form.elements.surname.setCustomValidity('Введи фамилию: минимум 2 символа.');form.elements.surname.reportValidity();return;}
     const endpoint=window.TZ_LEADS.endpoint;
-    // Local feedback only: no request, identifier, storage or fictitious lead record.
+    // Confirmation requires a real server acknowledgement.
     // To enable real delivery, configure TZ_LEADS.endpoint after server acceptance tests.
-    if(!endpoint){showSuccess();return;}
+    if(!endpoint){status.textContent='Отправка заявки пока недоступна. Позвони нам: '+contactPhone+'.';return;}
     let url;try{url=new URL(endpoint,location.href);}catch{status.textContent='Не удалось открыть запись. Позвони: '+contactPhone+'.';return;}
     if(url.protocol!=='https:'&&!(url.protocol==='http:'&&url.hostname==='127.0.0.1')){status.textContent='Не удалось открыть запись. Позвони: '+contactPhone+'.';return;}
     const stamp=new Date().toISOString();
-    const raw={name:form.elements.name.value.trim(),phone:normalized,branch:form.elements.branch.value,direction:form.elements.direction.value||'unsure',website:'',pagePath:location.pathname};
+    const raw={name:form.elements.name.value.trim(),surname:form.elements.surname.value.trim(),phone:normalized,branch:form.elements.branch.value,direction:form.elements.direction.value||'unsure',website:'',pagePath:location.pathname};
     if(raw.name.length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}
     if(!pending)pending={schemaVersion:1,requestId:crypto.randomUUID(),createdAt:stamp,...raw,consent:{accepted:true,acceptedAt:stamp,version:window.TZ_LEADS.consentVersion,documentUrl:new URL(document.querySelector('.lead-consent a').dataset?.consentUrl||document.querySelector('.lead-consent a').getAttribute('href'),location.href).href,privacyUrl:new URL(document.querySelector('.lead-consent a').dataset?.policyUrl||document.querySelectorAll('.lead-consent a')[1].getAttribute('href'),location.href).href}};
     sending=true;button.disabled=true;status.textContent='Отправляем заявку…';
@@ -318,5 +332,14 @@ maskPhone(phone);
     }catch(error){status.textContent=error.name==='AbortError'?'Не дождались подтверждения. Заявка могла дойти — уточни запись по телефону, чтобы не дублировать обращение.':error.message||'Нет подтверждения приёма заявки. Позвони нам.';}
     finally{clearTimeout(timer);sending=false;button.disabled=false;}
   });
-  form.elements.name.addEventListener('input',()=>form.elements.name.setCustomValidity(''));
+  for(const field of [form.elements.name,form.elements.surname]){
+    field.addEventListener('input',event=>{field.setCustomValidity('');if(!event.isComposing)capitalize(field);});
+    field.addEventListener('compositionend',()=>capitalize(field));
+  }
+  function capitalize(field){
+    const before=field.value,after=before.replace(/\p{L}/u,letter=>letter.toLocaleUpperCase('ru'));
+    if(before===after)return;
+    const start=field.selectionStart,end=field.selectionEnd;field.value=after;
+    if(typeof start==='number')field.setSelectionRange(start,end);
+  }
 })();

@@ -41,7 +41,7 @@
 .tz-cta:focus-visible { outline:2px solid var(--bord); outline-offset:4px; }
 .tz-cta:disabled { opacity:.6; cursor:wait; }
 /* Form layout can stretch the component without changing its internal geometry. */
-.lead-modal .tz-cta.lead-submit { width:100%!important; }
+.lead-modal .tz-cta:is(.lead-submit,.lead-call) { width:100%!important; }
 
 .top .top-right:has(> .tz-cta--compact) { width:auto!important; flex-basis:auto!important; flex-shrink:0!important; }
 
