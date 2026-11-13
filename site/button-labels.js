@@ -7,6 +7,7 @@
     // Native text avoids SVG glyph-metric offsets on touch browsers.
     if (window.matchMedia?.('(pointer:coarse)').matches) return;
     document.querySelectorAll('.btn, .header-cta, .branch-btn').forEach(button => {
+      if (button.classList?.contains('tz-cta')) return;
       const arrow = button.querySelector(':scope > i, :scope > svg');
       if (!arrow) return;
       let source = button.querySelector(':scope > span');

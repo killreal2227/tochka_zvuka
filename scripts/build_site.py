@@ -13,8 +13,38 @@ CITIES = {
     'kaluga': dict(name='Калуга', loc='Калуге', address='ул. Ленина, 79', full='г. Калуга, ул. Ленина, д. 79'),
 }
 
+def cta_components(content):
+    """Render burgundy actions through the same label/icon markup."""
+    def render(match):
+        tag, attrs, classes, inner = match.groups()
+        tokens = classes.split()
+        if not (('btn' in tokens and not {'light', 'lead-call'} & set(tokens)) or 'header-cta' in tokens):
+            return match[0]
+        compact = bool({'header-enrol', 'header-cta'} & set(tokens))
+        label = re.split(r'<(?:i|svg)\b', inner, maxsplit=1)[0].strip()
+        if label.startswith('<span'):
+            first = re.match(r'<span([^>]*)>', label)
+            span_attrs = first[1]
+            if 'class="' in span_attrs:
+                span_attrs = span_attrs.replace('class="', 'class="tz-cta-label ', 1)
+            else:
+                span_attrs += ' class="tz-cta-label"'
+            label = '<span' + span_attrs + '>' + label[first.end():]
+        else:
+            label = '<span class="tz-cta-label">' + label + '</span>'
+        size = 'compact' if compact else 'standard'
+        attrs = attrs.replace('class="' + classes + '"', 'class="' + classes + ' tz-cta tz-cta--' + size + '"', 1)
+        path = 'M12 5v14m-6-6 6 6 6-6' if compact else 'M6 18 18 6M6 6h12v12'
+        icon = '<i class="tz-cta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="' + path + '"/></svg></i>'
+        return '<' + tag + attrs + '>' + label + icon + '</' + tag + '>'
+    return re.sub(r'<(button|a)\b([^>]*\bclass="([^"]*)"[^>]*)>(.*?)</\1>', render, content, flags=re.S)
+
 def write(path, content):
     if path.suffix == '.html':
+        content = cta_components(content)
+        if 'tz-cta--' in content:
+            root = '../' * len(path.parent.relative_to(SITE).parts)
+            content = content.replace('</head>', '<link rel="stylesheet" href="' + root + 'cta.css">\n</head>')
         head, separator, body = content.partition('</head>')
         for old_base in ('https://tzvuka.ru', 'https://killreal2227.github.io/tochka_zvuka'):
             head = head.replace(old_base + '/', PUBLIC_BASE_URL + '/')
@@ -23,7 +53,7 @@ def write(path, content):
             asset = (path.parent / match[2]).resolve()
             revision = hashlib.sha256(asset.read_bytes()).hexdigest()[:10]
             return f'{match[1]}{match[2]}?v={revision}"'
-        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|responsive\.css|form\.css|home\.css|narrow-header\.css|troitsk-enrolment\.css|troitsk-enrolment\.js|troitsk-page\.js|home-motion\.js|home-branches\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|direction-scroll\.js|button-labels\.js|viewport-scale\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
+        content = re.sub(r'((?:href|src)=")([^"?]*(?:cta\.css|experience\.css|responsive\.css|form\.css|home\.css|narrow-header\.css|troitsk-enrolment\.css|troitsk-enrolment\.js|troitsk-page\.js|home-motion\.js|home-branches\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|direction-scroll\.js|button-labels\.js|viewport-scale\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding='utf-8')
 
