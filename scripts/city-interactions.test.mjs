@@ -589,3 +589,14 @@ test('Kaluga uses the same invitation timing with independent dismissal storage'
  assert.equal(store.has('tz:troitsk:invitation-dismissed-until'),false);
  const other=troitskInvitationScene(store);other.run();assert.equal(other.box.hidden,false);
 });
+
+test('horizontal steps track stays aligned with a vertically centered grid row',()=>{
+ const template=fs.readFileSync(new URL('../templates/city.html',import.meta.url),'utf8');
+ const fn=template.slice(template.indexOf('function stepsUpdate(){'),template.indexOf('let stepsFrame=0;'));
+ const props={},stepItems=[0,200,400].map(offsetLeft=>({offsetLeft,offsetTop:170,classList:{toggle(){}}}));
+ const ctx={stepsEl:{getBoundingClientRect:()=>({top:300}),style:{setProperty:(key,value)=>props[key]=value}},stepItems,
+  matchMedia:()=>({matches:false}),innerHeight:900,reduce:false};
+ vm.runInNewContext(fn+'stepsUpdate();',ctx);
+ assert.equal(props['--steps-start'],'186px');
+ assert.equal(props['--steps-track'],'400px');
+});

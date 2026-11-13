@@ -2,7 +2,7 @@
 (() => {
  'use strict';
  if(document.body.classList.contains('documents-page'))return;
- const selector='main .rv,main .step > .n,main .step > h3,main .step > p,main .path h3,main .path p,.hero h1,.hero .hero-copy,.hero-actions';
+ const selector='main .rv:not(.card),main .step > .n,main .step > h3,main .step > p,main .path h3,main .path p,.hero h1,.hero .hero-copy,.hero-actions';
  const elements=[...document.querySelectorAll(selector)];
  if(!elements.length)return;
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');

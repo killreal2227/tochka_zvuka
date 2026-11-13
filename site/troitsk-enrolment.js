@@ -29,9 +29,18 @@
   body.style.setProperty('--mobile-module-header',document.getElementById('top').getBoundingClientRect().height+'px');
   const previous=modules.map(section=>section.style.minHeight);
   modules.forEach(section=>section.style.minHeight='0px');
-  const natural=Math.ceil(Math.max(...modules.map(section=>section.getBoundingClientRect().height)));
+  // Keep the already agreed section height when tablet content is rearranged.
+  body.classList.add('measure-module-baseline');
+  const baseline=Math.max(...modules.map(section=>section.getBoundingClientRect().height));
+  body.classList.remove('measure-module-baseline');
+  // The illustration fits the free row; only text can demand extra module height.
+  body.classList.add('measure-module-content');
+  const contentHeight=Math.max(...modules.map(section=>section.getBoundingClientRect().height));
+  body.classList.remove('measure-module-content');
+  const natural=Math.ceil(Math.max(baseline,contentHeight));
   body.style.setProperty('--mobile-module-natural',natural+'px');
   modules.forEach((section,i)=>section.style.minHeight=previous[i]);
+  window.dispatchEvent(new CustomEvent('tz:module-layout'));
  }
  function schedule(){if(!frame)frame=requestAnimationFrame(measure);}
  window.addEventListener('resize',schedule,{passive:true});

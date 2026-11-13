@@ -767,6 +767,7 @@ function stepsUpdate(){
     progress=track?fill/track:1;
     stepsEl.style.setProperty('--steps-start',first+'px');
   }else{
+    stepsEl.style.setProperty('--steps-start',(stepItems[0].offsetTop+16)+'px');
     track=stepItems[stepItems.length-1].offsetLeft-stepItems[0].offsetLeft;
     progress=reduce?1:Math.max(0,Math.min(1,(innerHeight*.78-r.top)/Math.max(1,innerHeight*.5)));
     fill=track*progress;
@@ -782,7 +783,9 @@ function stepsUpdate(){
 let stepsFrame=0;
 function scheduleSteps(){if(!stepsFrame)stepsFrame=requestAnimationFrame(()=>{stepsFrame=0;stepsUpdate();});}
 addEventListener('scroll',scheduleSteps,{passive:true});
-addEventListener('resize',scheduleSteps);stepsUpdate();
+addEventListener('resize',scheduleSteps);
+addEventListener('tz:module-layout',scheduleSteps);
+document.fonts?.ready.then(scheduleSteps);stepsUpdate();
 
 /* липкая «Записаться» на телефоне: после первого экрана и пока финальный CTA ещё не виден */
 /* Sticky signup is controlled by city-ui.js. */

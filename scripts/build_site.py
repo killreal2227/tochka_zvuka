@@ -48,6 +48,7 @@ def branch_directions(content):
         body = re.sub(r'(<p class="lead rv d1">).*?(</p>)', lambda m: m[1] + 'Выбирай то, что откликается. В пути всегда можно сменить направление.' + m[2], body, count=1)
         def card(m):
             classes, direction, inner = m.groups()
+            classes = ' ' + ' '.join(token for token in classes.split() if token != 'rv' and not re.fullmatch(r'd[1-5]', token))
             inner = re.sub(r'<span class="go">.*?</span>$', '', inner, flags=re.S)
             inner = inner.replace('<span><span class="name">', '<span class="direction-copy"><span class="name" id="direction-name-' + direction + '">', 1)
             if direction == 'actor':
@@ -92,9 +93,18 @@ def branch_how(content):
         return body
     return re.sub(r'<section class="how" id="how">.*?</section>', section, content, count=1, flags=re.S)
 
+def inline_brand(content):
+    # Reuse the exact original paths without a cross-SVG use reference in the fixed header.
+    if 'href="#logo-full"' not in content:
+        return content
+    source = read('city.html')
+    symbol = re.search(r'<symbol id="logo-full"[^>]*>(.*?)</symbol>', source, re.S)[1]
+    inline = '<svg data-brand-logo viewBox="435 389 567 91" width="567" height="91" preserveAspectRatio="xMinYMid meet" aria-hidden="true" focusable="false">' + symbol + '</svg>'
+    return re.sub(r'<svg\b[^>]*>\s*<use\b[^>]*href="#logo-full"[^>]*/>\s*</svg>', lambda _: inline, content)
+
 def write(path, content):
     if path.suffix == '.html':
-        content = cta_components(content)
+        content = cta_components(inline_brand(content))
         if 'tz-cta--' in content:
             root = '../' * len(path.parent.relative_to(SITE).parts)
             content = content.replace('</head>', '<link rel="stylesheet" href="' + root + 'cta.css">\n</head>')

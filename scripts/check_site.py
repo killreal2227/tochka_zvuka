@@ -67,6 +67,10 @@ def check():
             assert set(re.findall(r'href="tel:([^"]+)"', text)) == {contact_phone}
             assert 'data-interaction="disclosure"' in text and text.count('data-disclosure="true"') == 6
             assert 'home-footer' in text and 'troitsk-page.js' in text
+            cards = re.findall(r'<article class="([^"]+)"[^>]*data-disclosure="true"', text)
+            assert len(cards) == 6 and all('rv' not in classes.split() for classes in cards)
+            assert 'data-brand-logo' in text
+
             assert 'филиал ' + ('Троицк' if slug == 'troitsk' else 'Калуга') in text
             assert 'href="../documents/"' in text
             assert 'id="leadForm"' in text and 'localStorage' not in text
