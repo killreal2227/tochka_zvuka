@@ -58,6 +58,7 @@ def build():
     symbols = re.findall(r'<svg width="0".*?</svg>', template, re.S)
     if len(symbols)>1:
         home_template = home_template.replace(logo, logo + '\n' + symbols[1], 1)
+    home_template = home_template.replace('{{footer}}', read('home-footer.html'))
     home = compose(home_template, './')
     write(SITE / 'index.html', home)
     for name in ('privacy', 'consent'):
@@ -74,7 +75,8 @@ def build():
         module = module.replace('../privacy/', '#privacy').replace('../consent/', '#consent')
         combined = combined.replace('{{' + name + '}}', module)
     write(SITE / 'documents' / 'index.html', combined)
-    urls = ['', 'troitsk/', 'kaluga/', 'privacy/', 'consent/', 'documents/']
+    write(SITE / 'requisites' / 'index.html', read('requisites.html').replace('{{public_base_url}}', PUBLIC_BASE_URL))
+    urls = ['requisites/', '', 'troitsk/', 'kaluga/', 'privacy/', 'consent/', 'documents/']
     write(SITE / 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join(f'<url><loc>{PUBLIC_BASE_URL}/{url}</loc></url>' for url in urls) + '</urlset>\n')
     write(SITE / 'robots.txt', f'User-agent: *\nAllow: /\nSitemap: {PUBLIC_BASE_URL}/sitemap.xml\n')
     print('Built home, city pages and shared footer/form.')

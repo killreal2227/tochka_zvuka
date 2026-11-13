@@ -71,7 +71,9 @@ def check():
     assert 'id="leadForm"' in home and 'id="leadModal"' in home
     assert 'name="consent"' not in home
     assert 'class="lead-consent"' in home
-    assert 'href="./privacy/"' in home and 'href="./consent/"' in home
+    assert 'href="./documents/"' in home and 'href="./requisites/"' in home
+    requisites = (SITE/'requisites/index.html').read_text(encoding='utf-8')
+    assert '732595555858' in requisites and '326774600083329' in requisites
     for slug in ('troitsk', 'kaluga'):
         assert 'home.css' not in (SITE/slug/'index.html').read_text(encoding='utf-8')
     for asset in ('lead-form.js', 'home-motion.js', 'direction-player.js', 'city-ui.js', 'button-labels.js', 'troitsk-enrolment.js'):
