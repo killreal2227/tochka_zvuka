@@ -314,5 +314,5 @@ body:is(.home-page,[data-city="troitsk"]) .home-footer .footer-meta a:hover { co
 [data-scaled-phone] body:is(.home-page,[data-city="troitsk"]) .home-footer .footer-meta { font-size:calc(10px * var(--touch-ui-factor)); gap:4px 12px; }
 
 /* The main page and Troitsk share the same compact footer and gutters. */
-body:is(.home-page,[data-city="troitsk"]) > .home-footer { padding-left:clamp(24px,5vw,72px); padding-right:clamp(24px,5vw,72px); }
+body:is(.home-page,[data-city="troitsk"]) > .home-footer { padding-left:max(clamp(24px,5vw,72px),calc((100% - var(--home-content,1440px))/2)); padding-right:max(clamp(24px,5vw,72px),calc((100% - var(--home-content,1440px))/2)); }
 @media(max-width:1000px) { body:is(.home-page,[data-city="troitsk"]) > .home-footer { padding-left:24px; padding-right:24px; } }

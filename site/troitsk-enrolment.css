@@ -593,3 +593,18 @@ body[data-city="troitsk"] #env .poster { border-radius:8px; overflow:hidden; iso
 
 /* The final primary CTA uses the shared geometry and its high-contrast light palette. */
 body[data-city="troitsk"] #join .join-primary { --cta-bg:var(--cream); --cta-text:var(--bord); --cta-circle-bg:var(--bord); --cta-icon-color:var(--cream); --cta-hover:#f1e2d3; }
+
+
+/* Balance the final composition inside the same desktop module height. */
+@media(min-width:1001px) {
+ body[data-city="troitsk"] #join {
+  align-items:center;
+  padding-bottom:var(--content-module-padding);
+ }
+ body[data-city="troitsk"] #join > div:first-child { padding-bottom:0; }
+ body[data-city="troitsk"] #join .arch {
+  width:min(100%,560px,calc((var(--content-module-height) - 2 * var(--content-module-padding)) * .75));
+  margin-bottom:0;
+  align-self:center;
+ }
+}
