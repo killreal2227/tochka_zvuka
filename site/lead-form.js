@@ -93,6 +93,7 @@ const formArt=(()=>{
     });
   });
   const pageCity=document.body.dataset.city||'';
+  const contactPhone=document.body.dataset.contactPhone||'+7 995 790-76-70';
   const fieldFocused=()=>sheet.classList.toggle('field-focused',sheet.contains(document.activeElement)&&document.activeElement.matches('input:not([type="radio"])'));
   sheet.addEventListener('focusin',fieldFocused);sheet.addEventListener('focusout',()=>queueMicrotask(fieldFocused));
   let lastFocus=null,pending=null,sending=false;
@@ -299,8 +300,8 @@ maskPhone(phone);
     // Local feedback only: no request, identifier, storage or fictitious lead record.
     // To enable real delivery, configure TZ_LEADS.endpoint after server acceptance tests.
     if(!endpoint){showSuccess();return;}
-    let url;try{url=new URL(endpoint,location.href);}catch{status.textContent='Не удалось открыть запись. Позвони: +7 995 790-76-70.';return;}
-    if(url.protocol!=='https:'&&!(url.protocol==='http:'&&url.hostname==='127.0.0.1')){status.textContent='Не удалось открыть запись. Позвони: +7 995 790-76-70.';return;}
+    let url;try{url=new URL(endpoint,location.href);}catch{status.textContent='Не удалось открыть запись. Позвони: '+contactPhone+'.';return;}
+    if(url.protocol!=='https:'&&!(url.protocol==='http:'&&url.hostname==='127.0.0.1')){status.textContent='Не удалось открыть запись. Позвони: '+contactPhone+'.';return;}
     const stamp=new Date().toISOString();
     const raw={name:form.elements.name.value.trim(),phone:normalized,branch:form.elements.branch.value,direction:form.elements.direction.value||'unsure',website:'',pagePath:location.pathname};
     if(raw.name.length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}

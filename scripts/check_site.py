@@ -55,7 +55,8 @@ def check():
             slug = name.split('/')[0]
             assert f'data-city="{slug}"' in text
             assert f'{PUBLIC_BASE_URL}/{slug}/' in text
-            assert 'tel:+79957907670' in text and 'mailto:tzvuka@yandex.ru' in text
+            contact_phone = '+74951280448' if slug == 'troitsk' else '+79957907670'
+            assert 'tel:' + contact_phone in text and 'mailto:tzvuka@yandex.ru' in text
             assert 'id="leadForm"' in text and 'localStorage' not in text
             assert 'lessonNudge' in text and 'direction-player.js' in text
             assert 'name="consent"' not in text

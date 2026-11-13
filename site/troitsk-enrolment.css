@@ -590,3 +590,6 @@ body[data-city="troitsk"] #env .poster { border-radius:8px; overflow:hidden; iso
  body[data-city="troitsk"] #how .step p { font-size:18px; line-height:1.5; max-width:none; }
  body[data-city="troitsk"] #join > div:first-child { padding-bottom:var(--content-module-padding); }
 }
+
+/* The final primary CTA uses the shared geometry and its high-contrast light palette. */
+body[data-city="troitsk"] #join .join-primary { --cta-bg:var(--cream); --cta-text:var(--bord); --cta-circle-bg:var(--bord); --cta-icon-color:var(--cream); --cta-hover:#f1e2d3; }

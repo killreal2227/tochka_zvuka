@@ -128,6 +128,9 @@ def build():
             source = troitsk_directions(source)
             source = troitsk_environment(source)
             source = troitsk_how(source)
+            source = re.sub(r'(<p class="lead rv d2" id="joinMessage">).*?(</p>)', lambda m: m[1] + 'Начни с пробного урока и почувствуй атмосферу „Точки звука“.' + m[2], source, count=1)
+            source = source.replace('class="btn light openForm"', 'class="btn openForm join-primary"', 1)
+
             source = re.sub(r'(<a class="link" href="#dirs">)([^<]+)(<svg)', lambda m: m[1] + '<span class="hero-direction-label">' + m[2] + '</span>' + m[3], source, count=1)
 
             source = source.replace('</head>', '<script src="../troitsk-page.js" defer></script>\n</head>')
@@ -138,6 +141,9 @@ def build():
         page = compose(source, '../')
         if slug == 'troitsk':
             page = re.sub(r'(<button class="footer-enrol openForm"[^>]*>).*?(<svg)', r'\1Записаться \2', page, count=1)
+        if slug == 'troitsk':
+            page = page.replace('+79957907670', '+74951280448').replace('+7 995 790-76-70', '+7 (495) 128-04-48')
+            page = re.sub(r'(<body\b[^>]*)(>)', lambda m: m[1] + ' data-contact-phone="+7 (495) 128-04-48"' + m[2], page, count=1)
         for key, value in dict(city, slug=slug).items():
             page = page.replace('{{' + key + '}}', escape(value))
         write(SITE / slug / 'index.html', page)
