@@ -420,3 +420,47 @@ body[data-city="troitsk"] .lesson-nudge h2 { margin:0; font-size:calc(18px * var
 body[data-city="troitsk"] .lesson-nudge p { margin:0 0 calc(12px * var(--nudge-scale)); font-size:calc(12px * var(--nudge-scale)); line-height:1.4; text-wrap:pretty; }
 body[data-city="troitsk"] .lesson-nudge .lesson-nudge-close { position:relative; inset:auto; width:calc(24px * var(--nudge-scale)); height:calc(24px * var(--nudge-scale)); margin:0; padding:0; font-size:calc(23px * var(--nudge-scale)); line-height:1; color:var(--bord); }
 body[data-city="troitsk"] .lesson-nudge .lesson-nudge-close::before { content:""; position:absolute; inset:calc(-10px * var(--nudge-scale)); }
+
+/* Troitsk direction disclosures: stable artwork until explicit activation. */
+body[data-city="troitsk"] #dirs .card[data-disclosure] { text-align:left; }
+body[data-city="troitsk"] #dirs .card[data-disclosure] > .direction-copy,
+body[data-city="troitsk"] #dirs .card[data-disclosure]:hover > .direction-copy,
+body[data-city="troitsk"] #dirs .card[data-disclosure]:focus-visible > .direction-copy { left:var(--direction-inset); right:var(--direction-inset); bottom:var(--direction-inset); transform:none; transition:bottom .25s var(--ease); pointer-events:none; }
+body[data-city="troitsk"] #dirs .card[data-disclosure] .name { display:block; padding-right:38px; }
+body[data-city="troitsk"] #dirs .card[data-disclosure] .desc,
+body[data-city="troitsk"] #dirs .card[data-disclosure]:hover .desc,
+body[data-city="troitsk"] #dirs .card[data-disclosure]:focus-visible .desc { display:block; position:static; width:100%; height:auto; max-height:0; overflow:hidden; padding:0; margin:0; opacity:0; visibility:hidden; transition:opacity .22s ease,max-height .25s ease,margin .25s ease,visibility 0s linear .25s; }
+body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded > .direction-copy { bottom:calc(var(--direction-inset) + 48px * var(--direction-control-scale,1)); }
+body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded .name { padding-right:0; }
+body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded .desc { max-height:120px; margin-top:8px; opacity:1; visibility:visible; transition:opacity .25s ease,max-height .25s ease,margin .25s ease,visibility 0s; }
+body[data-city="troitsk"] #dirs .direction-toggle { position:absolute; z-index:2; inset:0; width:100%; height:100%; border:0; padding:0; background:transparent; border-radius:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+body[data-city="troitsk"] #dirs .direction-toggle:focus-visible { outline:3px solid var(--ink); outline-offset:-5px; }
+body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator { display:grid; place-items:center; width:32px; height:32px; bottom:var(--direction-inset); right:var(--direction-inset); border:1px solid currentColor; border-radius:50%; background:transparent; color:inherit; font-size:26px; line-height:1; transform:none; pointer-events:none; }
+body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator::before,
+body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator::after { content:none; }
+body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded .direction-indicator { visibility:hidden; }
+body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-signup { --cta-position:absolute; position:absolute!important; z-index:3; right:var(--direction-inset); bottom:var(--direction-inset); }
+body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-signup[hidden] { display:none!important; }
+body[data-city="troitsk"] #dirs .card[data-disclosure]:not(.is-expanded)::before,
+body[data-city="troitsk"] #dirs .card[data-disclosure]:not(.is-expanded)::after { transform:translateY(12%); opacity:.8; }
+@media(max-width:1000px) {
+ body[data-city="troitsk"] #dirs .card[data-disclosure] .name { font-size:30px; }
+ body[data-city="troitsk"] #dirs .card[data-disclosure] > .ico { width:56px; height:56px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ body[data-city="troitsk"] #dirs .card[data-disclosure] * { transition:none!important; }
+}
+
+body[data-city="troitsk"] #dirs .card[data-disclosure] > .direction-toggle,
+body[data-city="troitsk"] #dirs .card[data-disclosure] > .direction-signup { pointer-events:auto; }
+
+@media(max-width:1000px) {
+ body[data-city="troitsk"] #dirs .card[data-disclosure],
+ body[data-city="troitsk"] #dirs .card[data-disclosure]:hover { height:280px; }
+}
+[data-scaled-phone] body[data-city="troitsk"] #dirs { --direction-control-scale:var(--touch-ui-factor); }
+[data-scaled-phone] body[data-city="troitsk"] #dirs .card[data-disclosure] .desc { font-size:calc(13px * var(--touch-ui-factor)); }
+
+/* Legacy hover selectors must not reposition disclosure content. */
+body[data-city="troitsk"] #dirs .card[data-disclosure] > .direction-copy { left:var(--direction-inset)!important; right:var(--direction-inset)!important; bottom:var(--direction-inset)!important; transform:none!important; }
+body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded > .direction-copy { bottom:calc(var(--direction-inset) + 48px * var(--direction-control-scale,1))!important; }

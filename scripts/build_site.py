@@ -40,6 +40,26 @@ def cta_components(content):
         return '<' + tag + attrs + '>' + label + icon + '</' + tag + '>'
     return re.sub(r'<(button|a)\b([^>]*\bclass="([^"]*)"[^>]*)>(.*?)</\1>', render, content, flags=re.S)
 
+def troitsk_directions(content):
+    def section(match):
+        body = match[0]
+        body = body.replace('<div class="grid"', '<div class="grid" data-interaction="disclosure"', 1)
+        body = re.sub(r'(<span class="kicker">).*?(</span>)', lambda m: m[1] + 'НАПРАВЛЕНИЯ' + m[2], body, count=1)
+        body = re.sub(r'(<p class="lead rv d1">).*?(</p>)', lambda m: m[1] + 'Выбирай то, что откликается. В пути всегда можно сменить направление.' + m[2], body, count=1)
+        def card(m):
+            classes, direction, inner = m.groups()
+            inner = re.sub(r'<span class="go">.*?</span>$', '', inner, flags=re.S)
+            inner = inner.replace('<span><span class="name">', '<span class="direction-copy"><span class="name" id="direction-name-' + direction + '">', 1)
+            inner = inner.replace('class="desc"', 'class="desc" id="direction-description-' + direction + '"', 1)
+            toggle = '<button class="direction-toggle" type="button" aria-expanded="false" aria-controls="direction-description-' + direction + '" aria-labelledby="direction-name-' + direction + '"></button>'
+            plus = '<span class="go direction-indicator" aria-hidden="true">+</span>'
+            signup = '<button class="btn direction-signup" data-cta-size="compact" type="button" hidden><span>Записаться</span><i><svg><use href="#i-arrow"/></svg></i></button>'
+            return '<article class="card' + classes + '" data-dir="' + direction + '" data-disclosure="true">' + inner + toggle + plus + signup + '</article>'
+        body, count = re.subn(r'<button class="card([^"]*)" type="button" data-dir="([^"]*)">(.*?)</button>', card, body, flags=re.S)
+        assert count == 6, 'Expected six Troitsk direction cards'
+        return body
+    return re.sub(r'<section class="dirs" id="dirs">.*?</section>', section, content, count=1, flags=re.S)
+
 def write(path, content):
     if path.suffix == '.html':
         content = cta_components(content)
@@ -73,6 +93,7 @@ def build():
         if slug == 'troitsk':
             source = re.sub(r'<header class="top".*?</header>', lambda _: read('troitsk-header.html'), source, count=1, flags=re.S)
             source = source.replace('{{nudge}}', read('troitsk-nudge.html'))
+            source = troitsk_directions(source)
             source = re.sub(r'(<a class="link" href="#dirs">)([^<]+)(<svg)', lambda m: m[1] + '<span class="hero-direction-label">' + m[2] + '</span>' + m[3], source, count=1)
 
             source = source.replace('</head>', '<script src="../troitsk-page.js" defer></script>\n</head>')

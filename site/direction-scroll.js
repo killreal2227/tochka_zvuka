@@ -5,6 +5,35 @@
     const grid=document.querySelector('#dirs .grid');if(!grid)return;
     const cards=[...grid.querySelectorAll('.card[data-dir]')],modal=document.getElementById('leadModal');
     const fine=matchMedia('(hover:hover) and (pointer:fine)'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
+    if(grid.dataset?.interaction==='disclosure'){
+      let active=null;
+      const player=window.createDirectionPlayer({ready,prepare,
+        eligible:card=>card===active&&card.classList.contains('is-expanded'),
+        reduced:()=>reduced.matches,blocked:()=>document.hidden||!modal.hidden});
+      const stop=()=>{player.stop();active=null;cards.forEach(card=>card.classList.remove('is-active'));};
+      cards.forEach(card=>{
+        const toggle=card.querySelector('.direction-toggle'),signup=card.querySelector('.direction-signup');
+        signup.setAttribute('aria-label','Записаться: '+card.querySelector('.name').textContent);
+        toggle.addEventListener('click',()=>{
+          const expanded=toggle.getAttribute('aria-expanded')!=='true';
+          toggle.setAttribute('aria-expanded',String(expanded));card.classList.toggle('is-expanded',expanded);
+          signup.hidden=!expanded;
+          if(expanded){stop();active=card;card.classList.add('is-active');player.request(card);
+            document.dispatchEvent(new CustomEvent('tz:direction-preview',{detail:{card}}));
+          }else if(active===card)stop();
+        });
+      });
+      document.addEventListener('tz:lead-open',stop);
+      document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
+      reduced.addEventListener('change',stop);
+      window.addEventListener('scroll',()=>{
+        if(!active)return;
+        const r=active.getBoundingClientRect(),top=document.querySelector('#top')?.getBoundingClientRect().bottom||0;
+        if(r.bottom<=top||r.top>=window.innerHeight)stop();
+      },{passive:true});
+      return;
+    }
+
     const previews=!!document.body?.dataset.city;let active=null,preview=null;
     const player=window.createDirectionPlayer({ready,prepare,eligible:card=>card===active,
       reduced:()=>reduced.matches,blocked:()=>document.hidden||!modal.hidden});

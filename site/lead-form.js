@@ -152,6 +152,11 @@ const formArt=(()=>{
   document.querySelectorAll('.openForm').forEach(el=>el.addEventListener('click',()=>open()));
   /* Preview and signup are separate actions on touch screens. */
   document.querySelectorAll('.card[data-dir]').forEach(el=>el.addEventListener('click',event=>{
+    if(el.dataset.disclosure==='true'){
+      if(event.target.closest?.('.direction-signup'))open(el.dataset.dir);
+      return;
+    }
+
     if(event.detail!==0&&Number.isFinite(event.clientX)&&Number.isFinite(event.clientY)){
       const r=el.getBoundingClientRect();
       if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)return;

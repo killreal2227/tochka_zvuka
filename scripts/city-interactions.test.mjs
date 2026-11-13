@@ -291,18 +291,25 @@ test('branch header shows only its current address without a branch switching co
   assert.ok(!template.includes("const bBtn="));assert.ok(header.includes('header-cta openForm'));
 });
 
-function ordinaryScene(finePointer=false,compactWidth=false,withPreviews=false){
+function ordinaryScene(finePointer=false,compactWidth=false,withPreviews=false,disclosures=false){
   const events=()=>({handlers:new Map(),addEventListener(k,fn,options){const list=this.handlers.get(k)||[];list.push({fn,options});this.handlers.set(k,list);},emit(k,e={}){(this.handlers.get(k)||[]).forEach(x=>x.fn(e));}});
   const cards=Array.from({length:6},(_,i)=>Object.assign(events(),{rect:{top:900+i*160,bottom:1040+i*160},classes:new Set(),keyboardFocus:false,matches(){return this.keyboardFocus;},getBoundingClientRect(){return this.rect;}}));
   cards.forEach((card,i)=>{
     card.dataset={dir:String(i)};card.querySelector=()=>({textContent:'direction'});card.setAttribute=()=>{};card.removeAttribute=()=>{};
-    card.classList={add:k=>card.classes.add(k),remove:k=>card.classes.delete(k),toggle(k,v){v?card.classes.add(k):card.classes.delete(k);}};
+    card.classList={add:k=>card.classes.add(k),remove:k=>card.classes.delete(k),toggle(k,v){v?card.classes.add(k):card.classes.delete(k);},contains:k=>card.classes.has(k)};
   });
-  const grid={querySelectorAll:()=>cards},header={getBoundingClientRect:()=>({bottom:76})},modal={hidden:true};
+  if(disclosures)cards.forEach(card=>{
+    const attrs=new Map([['aria-expanded','false']]);
+    card.toggle=Object.assign(events(),{getAttribute:k=>attrs.get(k),setAttribute:(k,v)=>attrs.set(k,v)});
+    card.signup={hidden:true,setAttribute(){}};
+    card.querySelector=s=>s==='.direction-toggle'?card.toggle:s==='.direction-signup'?card.signup:{textContent:'direction'};
+  });
+  const grid={dataset:disclosures?{interaction:'disclosure'}:{},querySelectorAll:()=>cards},header={getBoundingClientRect:()=>({bottom:76})},modal={hidden:true};
   const document=Object.assign(events(),{body:{dataset:withPreviews?{city:'troitsk'}:{}},hidden:false,querySelector:s=>s==='#dirs .grid'?grid:header,getElementById:()=>modal});
   const window=Object.assign(events(),{innerHeight:800}),frames=new Map(),played=[];let sequence=0;
   const fine=Object.assign(events(),{matches:finePointer}),compact=Object.assign(events(),{matches:compactWidth}),reduced=Object.assign(events(),{matches:false});
-  const context={window,document,innerHeight:800,Promise,WeakSet,Map,
+  document.dispatchEvent=e=>document.emit(e.type,e);
+  const context={window,document,innerHeight:800,Promise,WeakSet,Map,CustomEvent:class{constructor(type,options){this.type=type;this.detail=options.detail;}},
     matchMedia:q=>q.includes('pointer:fine')?fine:q.includes('max-width')?compact:reduced,
     requestAnimationFrame:fn=>{const id=++sequence;frames.set(id,fn);return id;}};
   vm.runInNewContext(source('direction-player.js'),context);
@@ -505,4 +512,18 @@ test('Troitsk invitation never interrupts direction card interaction',async()=>{
  const visible=troitskInvitationScene();visible.run();assert.equal(visible.box.hidden,false);
  await visible.document.emit('tz:direction-preview');assert.equal(visible.box.hidden,true);
  await visible.document.emit('visibilitychange');assert.equal(visible.box.hidden,true);
+});
+
+test('disclosure cards stay static until activated and toggle description and signup independently',()=>{
+ const s=ordinaryScene(true,false,true,true),[a,b]=s.cards;
+ a.emit('pointerenter',{pointerType:'mouse'});assert.equal(s.played.length,0);
+ a.toggle.emit('click');assert.equal(a.toggle.getAttribute('aria-expanded'),'true');assert.equal(a.signup.hidden,false);assert.equal(s.played.length,1);
+ b.toggle.emit('click');assert.equal(a.classes.has('is-expanded'),true);assert.equal(b.classes.has('is-expanded'),true);assert.equal(s.played.length,2);
+ a.toggle.emit('click');assert.equal(a.signup.hidden,true);assert.equal(a.classes.has('is-expanded'),false);assert.equal(b.classes.has('is-expanded'),true);
+ b.toggle.emit('click');assert.equal(b.signup.hidden,true);assert.equal(b.toggle.getAttribute('aria-expanded'),'false');
+});
+test('disclosures remain open when playback is stopped for scrolling or a form',()=>{
+ const s=ordinaryScene(false,true,true,true),[card]=s.cards;card.toggle.emit('click');
+ s.scroll(-500);assert.equal(card.classes.has('is-expanded'),true);assert.equal(card.signup.hidden,false);
+ s.document.emit('tz:lead-open');assert.equal(card.classes.has('is-expanded'),true);assert.equal(card.toggle.getAttribute('aria-expanded'),'true');
 });
