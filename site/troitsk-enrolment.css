@@ -549,3 +549,18 @@ body[data-city="troitsk"] #dirs .card[data-disclosure] > .ico {
 body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded > .ico { transform:scale(1.15)!important; }
 /* The translucent SVG groups stay still; only their inner contours flip. */
 body[data-city="troitsk"] #dirs .card.actor .bg-clip { isolation:isolate; }
+
+/* Environment module: paired desktop columns and the direction-card corner radius. */
+body[data-city="troitsk"] #env .poster { border-radius:8px; overflow:hidden; isolation:isolate; }
+@media(min-width:1001px) {
+ body[data-city="troitsk"] #env { grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:stretch; gap:clamp(32px,6vw,96px); }
+ body[data-city="troitsk"] #env > div:first-child { min-width:0; }
+ body[data-city="troitsk"] #env .kicker { margin-bottom:18px; }
+ body[data-city="troitsk"] #env .h2 { font-size:clamp(48px,5.6vw,88px); line-height:1.05; margin-bottom:36px; }
+ body[data-city="troitsk"] #env .path { margin:0; }
+ body[data-city="troitsk"] #env .path li { padding-bottom:32px; }
+ body[data-city="troitsk"] #env .path li:last-child { padding-bottom:0; }
+ body[data-city="troitsk"] #env .path h3 { font-size:clamp(24px,2.1vw,32px); line-height:1.15; margin-bottom:10px; }
+ body[data-city="troitsk"] #env .path p { max-width:none; font-size:17px; line-height:1.5; }
+ body[data-city="troitsk"] #env .poster { position:relative; top:0; width:100%; max-width:none; align-self:stretch; height:auto; min-height:0; aspect-ratio:auto; }
+}

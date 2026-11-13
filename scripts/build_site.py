@@ -62,6 +62,21 @@ def troitsk_directions(content):
         return body
     return re.sub(r'<section class="dirs" id="dirs">.*?</section>', section, content, count=1, flags=re.S)
 
+def troitsk_environment(content):
+    def section(match):
+        body = match[0]
+        body = re.sub(r'(<span class="kicker rv">).*?(</span>)', lambda m: m[1] + 'НЕ ТОЛЬКО УРОКИ' + m[2], body, count=1)
+        body = re.sub(r'(<h2 class="h2 rv d1">).*?(</h2>)', lambda m: m[1] + 'место для<br><em>большего.</em>' + m[2], body, count=1, flags=re.S)
+        entries = [
+            ('Открывай возможности', 'Здесь всегда есть пространство для новых идей, экспериментов и творческого развития.'),
+            ('Будь частью среды', 'Место, где музыка объединяет людей и создаёт атмосферу, в которую хочется возвращаться.'),
+            ('Делай по-своему', 'Здесь каждый находит то, что приносит удовольствие и вдохновляет продолжать.'),
+        ]
+        items = ''.join('<li><h3>' + title + '</h3><p>' + text + '</p></li>' for title, text in entries)
+        body = re.sub(r'(<ol class="path" id="path">).*?(</ol>)', lambda m: m[1] + items + m[2], body, count=1, flags=re.S)
+        return body
+    return re.sub(r'<section class="env on-dark" id="env">.*?</section>', section, content, count=1, flags=re.S)
+
 def write(path, content):
     if path.suffix == '.html':
         content = cta_components(content)
@@ -96,6 +111,7 @@ def build():
             source = re.sub(r'<header class="top".*?</header>', lambda _: read('troitsk-header.html'), source, count=1, flags=re.S)
             source = source.replace('{{nudge}}', read('troitsk-nudge.html'))
             source = troitsk_directions(source)
+            source = troitsk_environment(source)
             source = re.sub(r'(<a class="link" href="#dirs">)([^<]+)(<svg)', lambda m: m[1] + '<span class="hero-direction-label">' + m[2] + '</span>' + m[3], source, count=1)
 
             source = source.replace('</head>', '<script src="../troitsk-page.js" defer></script>\n</head>')
