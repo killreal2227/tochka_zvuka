@@ -25,6 +25,11 @@
  box.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();dismiss(true);}});
  document.addEventListener('tz:lead-open',()=>{blocked=true;hide();});
  document.addEventListener('tz:lead-success',()=>dismiss());
+ const engaging=event=>{if(event.target?.closest?.('#dirs .card')){blocked=true;hide();}};
+ document.addEventListener('pointerdown',engaging,{passive:true});
+ document.addEventListener('pointerover',engaging,{passive:true});
+ document.addEventListener('focusin',engaging);
+ document.addEventListener('tz:direction-preview',()=>{blocked=true;hide();});
  document.addEventListener('focusin',update);
  document.addEventListener('visibilitychange',update);
  window.visualViewport?.addEventListener('resize',update,{passive:true});

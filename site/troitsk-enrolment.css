@@ -396,3 +396,28 @@ body[data-city="troitsk"] .lesson-nudge .btn i { width:30px; height:30px; }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
 
 [data-scaled-phone] body[data-city="troitsk"] #top .header-call::before { inset:calc(-6px * var(--touch-ui-factor)); }
+
+/* A lighter invitation and consistent first-screen action typography. */
+body[data-city="troitsk"] #top .header-call { background:#eee1d4; color:var(--bord); }
+body[data-city="troitsk"] #top .header-call:hover { background:#e5cfc2; }
+body[data-city="troitsk"] .lesson-nudge { width:min(280px,calc(100vw - 32px)); padding:10px; }
+body[data-city="troitsk"] .lesson-nudge h2 { font-size:20px; line-height:1.15; margin-bottom:3px; }
+body[data-city="troitsk"] .lesson-nudge p { font-size:13px; line-height:1.3; margin-bottom:4px; }
+@media(max-width:1000px) {
+ body[data-city="troitsk"] .hero-actions { flex-wrap:wrap; gap:10px 20px; }
+ body[data-city="troitsk"] .hero-actions .btn.openForm,
+ body[data-city="troitsk"] .hero-actions .link { font-size:12px; line-height:1.2; }
+ body[data-city="troitsk"] .hero-actions .btn.openForm > span,
+ body[data-city="troitsk"] .hero-actions .hero-direction-label,
+ body[data-city="troitsk"] #top .header-enrol-label { padding-top:0; line-height:1.2; transform:translateY(2px); }
+}
+[data-scaled-phone] body[data-city="troitsk"] .hero-actions { gap:calc(10px * var(--touch-ui-factor)) calc(20px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] .hero-actions .btn.openForm,
+[data-scaled-phone] body[data-city="troitsk"] .hero-actions .link { font-size:calc(12px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] .hero-actions .btn.openForm > span,
+[data-scaled-phone] body[data-city="troitsk"] .hero-actions .hero-direction-label,
+[data-scaled-phone] body[data-city="troitsk"] #top .header-enrol-label { transform:translateY(calc(2px * var(--touch-ui-factor))); }
+[data-scaled-phone] body[data-city="troitsk"] #top .top-right > .header-enrol { font-size:calc(12px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge { width:min(calc(280px * var(--touch-ui-factor)),calc(100vw - 32px * var(--touch-ui-factor))); padding:calc(8px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge h2 { font-size:calc(18px * var(--touch-ui-factor)); line-height:1.15; margin-bottom:calc(3px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge p { font-size:calc(12px * var(--touch-ui-factor)); line-height:1.3; margin-bottom:calc(4px * var(--touch-ui-factor)); }

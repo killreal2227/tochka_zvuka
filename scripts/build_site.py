@@ -42,8 +42,10 @@ def build():
         if slug == 'troitsk':
             source = re.sub(r'<header class="top".*?</header>', lambda _: read('troitsk-header.html'), source, count=1, flags=re.S)
             source = source.replace('{{nudge}}', read('troitsk-nudge.html'))
+            source = re.sub(r'(<a class="link" href="#dirs">)([^<]+)(<svg)', lambda m: m[1] + '<span class="hero-direction-label">' + m[2] + '</span>' + m[3], source, count=1)
+
             source = source.replace('</head>', '<script src="../troitsk-page.js" defer></script>\n</head>')
-            source = re.sub(r'(<p class="lead hero-copy">).*?(</p>)', lambda m: m[1] + 'Музыка, сцена и люди, с которыми хочется пробовать новое. Для детей и взрослых, с опытом и без. Без экзаменов и ожидания „подходящего момента“.' + m[2], source, count=1, flags=re.S)
+            source = re.sub(r'(<p class="lead hero-copy">).*?(</p>)', lambda m: m[1] + 'Музыка, сцена и люди, с которыми хочется пробовать новое. Для детей и взрослых — независимо от опыта. Без экзаменов и ожидания „подходящего момента“.' + m[2], source, count=1, flags=re.S)
 
             source = re.sub(r'<span class="kicker hero-copy">.*?</span></span>', '<span class="kicker hero-copy">музыкальное пространство · <span class="hero-branch-line">филиал Троицк</span></span>', source, count=1)
         source = source.replace('</head>', '<link rel="stylesheet" href="../troitsk-enrolment.css"><script src="../troitsk-enrolment.js" defer></script>\n</head>')

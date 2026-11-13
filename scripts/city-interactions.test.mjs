@@ -495,3 +495,14 @@ test('Troitsk invitation respects hidden pages and works without browser storage
  s.document.hidden=false;await s.document.emit('visibilitychange');assert.equal(s.box.hidden,false);
  await s.close.emit('click');await s.document.emit('visibilitychange');assert.equal(s.box.hidden,true);
 });
+
+test('Troitsk invitation never interrupts direction card interaction',async()=>{
+ for(const event of ['pointerdown','pointerover','focusin']){
+  const s=troitskInvitationScene();
+  await s.document.emit(event,{target:{closest:()=>({})}});
+  s.run();assert.equal(s.box.hidden,true,event);
+ }
+ const visible=troitskInvitationScene();visible.run();assert.equal(visible.box.hidden,false);
+ await visible.document.emit('tz:direction-preview');assert.equal(visible.box.hidden,true);
+ await visible.document.emit('visibilitychange');assert.equal(visible.box.hidden,true);
+});
