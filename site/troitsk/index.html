@@ -440,6 +440,7 @@ img,svg{display:block;max-width:100%}
 <script src="../button-labels.js?v=831480a973" defer></script>
 <link rel="stylesheet" href="../narrow-header.css?v=78e5098dd8">
 <link rel="stylesheet" href="../responsive.css?v=68d71c9b0e">
+<link rel="stylesheet" href="../scroll-reveal.css?v=5bdef28bb6"><script src="../scroll-reveal.js?v=ae99ce92dc" defer></script>
 <script src="../troitsk-page.js?v=b9d0022178" defer></script>
 <link rel="stylesheet" href="../troitsk-enrolment.css?v=414f2b7953"><script src="../troitsk-enrolment.js?v=2a4bdff252" defer></script>
 <link rel="stylesheet" href="../cta.css?v=43c1b2b2a4">
@@ -646,7 +647,7 @@ img,svg{display:block;max-width:100%}
 
 <footer class="site-footer home-footer">
   <p class="footer-tagline">Твоя точка. Твоя музыка.</p>
-  <div class="footer-meta"><span>© 2026 Точка звука</span><nav aria-label="Документы"><a href="../documents/">Документы</a><a href="../requisites/">Реквизиты</a></nav></div>
+  <div class="footer-meta"><span>© 2026 Точка звука ·</span><nav aria-label="Документы"><a href="../documents/">Документы и реквизиты</a></nav></div>
 </footer>
 
 
@@ -826,8 +827,7 @@ eyeReduce.addEventListener('change',()=>{
 });
 
 /* ═════════ ПОЯВЛЕНИЕ ПРИ СКРОЛЛЕ ═════════ */
-const io = 'IntersectionObserver' in window ? new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{threshold:.12,rootMargin:'0px 0px -6% 0px'}) : null;
-$$('.rv').forEach(el=> io ? io.observe(el) : el.classList.add('in'));
+/* Repeated reveals are managed by scroll-reveal.js. */
 
 /* линия «пути» в разделе про среду */
 const pathLis=$$('#path li'), pathEl=$('#path');

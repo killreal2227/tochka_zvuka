@@ -1,0 +1,14 @@
+name = "tochka-legal-redirects"
+main = "legal-redirects.mjs"
+compatibility_date = "2026-11-13"
+workers_dev = false
+routes = [
+ { pattern = "tzvuka.ru/privacy*", zone_name = "tzvuka.ru" },
+ { pattern = "tzvuka.ru/consent*", zone_name = "tzvuka.ru" },
+ { pattern = "tzvuka.ru/details*", zone_name = "tzvuka.ru" },
+ { pattern = "tzvuka.ru/requisites*", zone_name = "tzvuka.ru" },
+ { pattern = "www.tzvuka.ru/privacy*", zone_name = "tzvuka.ru" },
+ { pattern = "www.tzvuka.ru/consent*", zone_name = "tzvuka.ru" },
+ { pattern = "www.tzvuka.ru/details*", zone_name = "tzvuka.ru" },
+ { pattern = "www.tzvuka.ru/requisites*", zone_name = "tzvuka.ru" }
+]
