@@ -87,6 +87,7 @@ def check():
     assert 'href="./documents/"' in home and 'href="./requisites/"' not in home
     requisites = (SITE/'documents/index.html').read_text(encoding='utf-8')
     assert '732595555858' in requisites and '326774600083329' in requisites
+    assert set(re.findall(r'href="tel:([^"]+)"', requisites)) == {'+74951280448', '+79200988003'}
     def paragraphs(markup):
         chunks = re.findall(r'<p(?![^>]*class="meta")[^>]*>(.*?)</p>', markup, re.S)
         return Counter(' '.join(unescape(re.sub('<[^>]+>', '', p)).split()) for p in chunks)
