@@ -28,9 +28,11 @@ jobs:
       - name: Build static city pages
         run: python3 scripts/build_site.py
       - name: Check pages and links
-        run: python3 scripts/check_site.py
-      - name: Check Telegram lead handler
-        run: node --test scripts/home-regression.test.mjs scripts/city-interactions.test.mjs backend/leads.test.mjs routing/legal-redirects.test.mjs scripts/scroll-reveal.test.mjs scripts/lead-viewport.test.mjs
+        run: |
+          python3 scripts/check_site_test.py
+          python3 scripts/check_site.py
+      - name: Check frontend and Worker regressions
+        run: node --test scripts/*.test.mjs backend/*.test.mjs routing/*.test.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
