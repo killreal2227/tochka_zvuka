@@ -115,6 +115,7 @@ function resolve(viewport, target, state = '', height = 1000) {
   const properties = new Map(); let order = 0;
   for (const rule of rules(sheets, viewport, true, height)) for (const selector of rule.selectors) {
     order++;
+    if (selector.includes('[data-scaled-phone]')) continue;
     if (selector.includes(':is(') || selector.includes(':not(') || selector.includes('[data-city]')) continue;
     if (selector.includes(':hover') && state !== 'hover') continue;
     if (selector.includes(':focus-visible') && state !== 'focus-visible') continue;
@@ -243,13 +244,13 @@ test('short landscape header is compact at 1229x571 without changing tall layout
 });
 
 test('touch viewports below 500 scale the full page composition and restore on rotation',()=>{
- let content='width=device-width, initial-scale=1',writes=0;
+ let content='width=device-width, initial-scale=1',writes=0,factor=1,scaled=false;
  const handlers={};const viewport={width:390,scale:1,addEventListener:(k,fn)=>{handlers.visual=fn;}};
  const window={visualViewport:viewport,matchMedia:()=>({matches:true}),addEventListener:(k,fn)=>{handlers.resize=fn;}};
- const document={querySelector:()=>({getAttribute:()=>content,setAttribute:(k,v)=>{content=v;writes++;}})};
+ const document={documentElement:{style:{setProperty:(k,v)=>{factor=Number(v);}},toggleAttribute:(k,v)=>{scaled=v;}},querySelector:()=>({getAttribute:()=>content,setAttribute:(k,v)=>{content=v;writes++;}})};
  vm.runInNewContext(fs.readFileSync(new URL('site/viewport-scale.js',root),'utf8'),{window,document});
- assert.equal(content,'width=500, initial-scale=0.78');
+ assert.equal(content,'width=500, initial-scale=0.78');assert.equal(factor,500/390);assert.equal(scaled,true);assert.ok(Math.abs(44*factor*.78-44)<1e-9);
  viewport.width=500;viewport.scale=.78;handlers.visual();assert.equal(writes,1);
  viewport.width=320;viewport.scale=1;handlers.resize();assert.equal(content,'width=500, initial-scale=0.64');
- viewport.width=844;viewport.scale=1;handlers.resize();assert.equal(content,'width=device-width, initial-scale=1');
+ viewport.width=844;viewport.scale=1;handlers.resize();assert.equal(content,'width=device-width, initial-scale=1');assert.equal(factor,1);assert.equal(scaled,false);
 });

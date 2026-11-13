@@ -297,3 +297,30 @@ body[data-city] #dirs .card { border-radius:8px; }
 @media(pointer:coarse) and (max-width:1000px) {
  body[data-city="troitsk"] #top .top-right > .header-enrol { grid-template-columns:minmax(0,1fr) 24px; gap:6px; padding:4px; }
 }
+
+/* Preserve usable controls while the surrounding phone page scales down. */
+[data-scaled-phone] body[data-city="troitsk"] { --header-height:calc(60px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] #top .top-right { width:calc(174px * var(--touch-ui-factor)); flex-basis:calc(174px * var(--touch-ui-factor)); gap:calc(6px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] #top .top-right > .header-enrol {
+ width:calc(124px * var(--touch-ui-factor)); min-width:0;
+ height:calc(48px * var(--touch-ui-factor)); min-height:calc(48px * var(--touch-ui-factor));
+ grid-template-columns:minmax(0,1fr) calc(28px * var(--touch-ui-factor));
+ padding:calc(6px * var(--touch-ui-factor)); gap:calc(6px * var(--touch-ui-factor));
+ font-size:calc(11px * var(--touch-ui-factor));
+}
+[data-scaled-phone] body[data-city="troitsk"] #top .header-enrol i,
+[data-scaled-phone] body[data-city="troitsk"] #top .header-enrol:hover i { width:calc(28px * var(--touch-ui-factor)); height:calc(28px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] #top .header-enrol i svg { width:calc(16px * var(--touch-ui-factor)); height:calc(16px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] #top .header-call { width:calc(48px * var(--touch-ui-factor)); height:calc(48px * var(--touch-ui-factor)); flex-basis:calc(48px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] #top .header-call svg { width:calc(20px * var(--touch-ui-factor)); height:calc(20px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city] .hero-actions { column-gap:calc(8px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city] .hero-actions .btn.openForm,
+[data-scaled-phone] body[data-city] .hero-actions .link { width:max(190px,calc(140px * var(--touch-ui-factor))); min-width:0; min-height:calc(48px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city] main .btn.openForm,
+[data-scaled-phone] body[data-city] #join .btn.openForm { height:calc(48px * var(--touch-ui-factor)); min-height:calc(48px * var(--touch-ui-factor)); font-size:calc(13px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city] .hero-actions .btn.openForm { grid-template-columns:minmax(0,1fr) calc(32px * var(--touch-ui-factor)); padding:calc(6px * var(--touch-ui-factor)); column-gap:calc(8px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city] main .btn.openForm i,
+[data-scaled-phone] body[data-city] #join .btn.openForm i { width:calc(32px * var(--touch-ui-factor)); height:calc(32px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city] main .btn.openForm i svg { width:calc(16px * var(--touch-ui-factor)); height:calc(16px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city] .hero-actions .link { font-size:calc(10.5px * var(--touch-ui-factor)); padding-left:calc(10px * var(--touch-ui-factor)); padding-right:0; gap:calc(4px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city] .hero-actions .link svg { width:calc(12px * var(--touch-ui-factor)); height:calc(12px * var(--touch-ui-factor)); flex-basis:calc(12px * var(--touch-ui-factor)); }

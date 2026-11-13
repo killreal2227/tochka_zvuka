@@ -38,7 +38,7 @@ html { scrollbar-gutter:stable; }
  .lead-modal .sheet #leadForm .lead-consent a,
  .lead-modal .sheet #leadForm .lead-address a { display:flex; align-items:center; min-height:44px; font-size:11px; line-height:14px; }
  .lead-modal .sheet .form-status:empty { display:none; }
- .lead-modal .sheet.field-focused .sheet-art { display:none; }
+
 }
 @media(max-width:700px), (max-height:500px) and (pointer:coarse) {
  .lead-modal { align-items:end; padding:0; }
@@ -232,3 +232,32 @@ body[data-city] #join .h2 { font-size:clamp(44px,6.6vw,108px); line-height:1.05;
  .lead-modal .sheet { border-radius:var(--tz-panel-radius); }
  .lead-modal .sheet, .lead-modal .sheet * { animation:none!important; transition:none!important; }
 }
+
+[data-scaled-phone] .lead-modal .sheet #leadForm .action-pane { grid-template-rows:calc(48px * var(--touch-ui-factor)) minmax(44px,auto); }
+[data-scaled-phone] .lead-modal .sheet #leadForm .action-pane > .btn { height:calc(48px * var(--touch-ui-factor)); min-height:calc(48px * var(--touch-ui-factor)); font-size:calc(12px * var(--touch-ui-factor)); }
+[data-scaled-phone] .lead-modal .sheet .lead-close { width:calc(44px * var(--touch-ui-factor)); height:calc(44px * var(--touch-ui-factor)); }
+
+[data-scaled-phone] .lesson-nudge .btn { min-height:calc(48px * var(--touch-ui-factor)); font-size:calc(12px * var(--touch-ui-factor)); }
+
+/* Keep home header actions finger-sized at the compensated phone scale. */
+[data-scaled-phone] body.home-page { --header-height:calc(60px * var(--touch-ui-factor)); }
+[data-scaled-phone] body.home-page .home-header .header-cta { height:calc(48px * var(--touch-ui-factor)); min-height:calc(48px * var(--touch-ui-factor)); font-size:calc(12px * var(--touch-ui-factor))!important; }
+[data-scaled-phone] body.home-page .home-header .branch-btn { height:calc(48px * var(--touch-ui-factor)); min-height:calc(48px * var(--touch-ui-factor)); font-size:calc(12px * var(--touch-ui-factor)); }
+
+/* Keep text at a readable device size when the phone viewport is scaled. */
+[data-scaled-phone] .lead-modal .sheet #contactFields { grid-template-columns:minmax(0,1fr); gap:8px; }
+[data-scaled-phone] .lead-modal .sheet #contactFields input { min-height:calc(48px * var(--touch-ui-factor)); font-size:calc(16px * var(--touch-ui-factor)); line-height:1.4; }
+[data-scaled-phone] body.home-page .home-header .branch-btn { min-width:calc(48px * var(--touch-ui-factor)); }
+
+@media(pointer:coarse) {
+ body.home-page button { -webkit-appearance:none; appearance:none; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+ body.home-page .home-header .header-cta { display:grid; grid-template-columns:minmax(0,1fr) 28px; align-items:center; gap:6px; padding:6px; line-height:1.2; }
+ body.home-page .home-header .header-cta > span { display:block; min-width:0; white-space:nowrap; text-align:center; padding-top:1px; }
+ body.home-page .home-header .header-cta > svg.header-cta-icon { position:static; width:28px; height:28px; margin:0; transform:none; }
+ body.home-page .home-header .branch-btn { display:grid; grid-template-columns:minmax(0,1fr) 8px; align-items:center; padding:6px; gap:4px; line-height:1.2; }
+ body.home-page .home-header .branch-btn > span { display:block; text-align:center; padding-top:1px; }
+ body.home-page .home-header .branch-btn > svg { position:static; margin:0; }
+}
+[data-scaled-phone] body.home-page { --narrow-logo:calc(90px * var(--touch-ui-factor)); --narrow-gutter:calc(8px * var(--touch-ui-factor)); }
+[data-scaled-phone] body.home-page .home-header .header-cta { width:calc(138px * var(--touch-ui-factor)); min-width:calc(138px * var(--touch-ui-factor)); grid-template-columns:minmax(0,1fr) calc(28px * var(--touch-ui-factor)); font-size:calc(11px * var(--touch-ui-factor))!important; }
+[data-scaled-phone] body.home-page .home-header .header-cta > svg.header-cta-icon { width:calc(28px * var(--touch-ui-factor)); height:calc(28px * var(--touch-ui-factor)); }

@@ -9,6 +9,8 @@
   const width=Math.round(viewport?viewport.width*viewport.scale:window.innerWidth);
   if(!width||Math.abs(width-lastWidth)<2)return;
   lastWidth=width;
+  document.documentElement.style.setProperty('--touch-ui-factor',String(Math.max(1,500/width)));
+  document.documentElement.toggleAttribute('data-scaled-phone',width<500);
   meta.setAttribute('content',width<500?'width=500, initial-scale='+String(width/500):original);
  }
  update();window.addEventListener('resize',update,{passive:true});
