@@ -448,3 +448,30 @@ body:is(.home-page,[data-city]) > .home-footer { padding-left:max(clamp(24px,5vw
  .lead-modal.is-success .sheet .sheet-body { padding-top:calc(62px * var(--form-scale)); }
  .lead-modal.is-success .sheet .success-followup { font-size:calc(14px * var(--form-scale)); }
 }
+
+/* Freeze only the background while the modal owns all scrolling. */
+html.lead-scroll-locked { overscroll-behavior:none; }
+html.lead-scroll-locked .lead-page-frame {
+ height:var(--lead-frame-height)!important; min-height:var(--lead-frame-height)!important; max-height:var(--lead-frame-height)!important;
+}
+/* visualViewport is the modal's frame; its outer shell never scrolls. */
+.lead-modal.viewport-managed {
+ position:fixed; inset:auto; top:var(--form-viewport-top,0px); left:var(--form-viewport-left,0px);
+ width:var(--form-viewport-width,100%); height:var(--form-viewport-height,100svh);
+ overflow:hidden; overscroll-behavior:none;
+ padding-top:max(calc(12px * var(--form-scale)),env(safe-area-inset-top));
+ padding-bottom:max(calc(12px * var(--form-scale)),env(safe-area-inset-bottom));
+}
+.lead-modal.viewport-managed .sheet {
+ max-height:100%; min-height:0; margin:0; overflow:hidden; grid-template-rows:minmax(0,1fr);
+}
+.lead-modal.viewport-managed .sheet .sheet-body {
+ min-height:0; max-height:100%; overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain;
+ -webkit-overflow-scrolling:touch; overflow-anchor:none;
+ scroll-padding-top:calc(52px * var(--form-scale)); scroll-padding-bottom:calc(12px * var(--form-scale));
+}
+.lead-modal.viewport-managed .sheet .lead-close { z-index:20; }
+@media(max-width:1000px) {
+ .lead-modal.viewport-managed .sheet { display:flex; flex-direction:column; }
+ .lead-modal.viewport-managed .sheet .sheet-body { flex:0 1 auto; max-height:none; }
+}

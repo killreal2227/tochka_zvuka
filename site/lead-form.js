@@ -147,9 +147,9 @@ const formArt=(()=>{
     if(pageCity){form.elements.branch.value=pageCity;form.querySelector('.lead-branch-label').hidden=true;}
     if(direction){const radio=form.querySelector('input[name="direction"][value="'+direction+'"]');if(radio)radio.checked=true;}
     modal.classList.remove('is-success');form.hidden=false;success.hidden=true;sheet.setAttribute('aria-labelledby','leadTitle');status.textContent='';
-    modal.hidden=false;modal.classList.remove('open');void sheet.offsetWidth;modal.classList.add('open');modal.setAttribute('aria-hidden','false');formArt.tint(true);formArt.start();document.body.style.overflow='hidden';sheet.focus({preventScroll:true});syncBranch();document.dispatchEvent(new CustomEvent('tz:lead-open'));
+    modal.hidden=false;modal.classList.remove('open');void sheet.offsetWidth;modal.classList.add('open');modal.setAttribute('aria-hidden','false');formArt.tint(true);formArt.start();sheet.focus({preventScroll:true});syncBranch();document.dispatchEvent(new CustomEvent('tz:lead-open'));
   }
-  function close(){if(sending)return;branchPicker.close();formArt.stop();modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.hidden=true;document.body.style.overflow='';lastFocus?.focus({preventScroll:true});document.dispatchEvent(new CustomEvent('tz:lead-close'));}
+  function close(){if(sending)return;branchPicker.close();formArt.stop();modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.hidden=true;lastFocus?.focus({preventScroll:true});document.dispatchEvent(new CustomEvent('tz:lead-close'));}
   document.querySelectorAll('.openForm').forEach(el=>el.addEventListener('click',()=>open()));
   /* Preview and signup are separate actions on touch screens. */
   document.querySelectorAll('.card[data-dir]').forEach(el=>el.addEventListener('click',event=>{
@@ -173,48 +173,9 @@ const formArt=(()=>{
   }));
   modal.querySelector('.lead-close').addEventListener('click',close);
   $('[data-lead-dismiss]')?.addEventListener('click',close);
-  /* Preserve the 500px composition below that width; fit height in landscape. */
-  let fitFrame=0;
-  function fitShortForm(){
-    fitFrame=0;if(modal.hidden||modal.classList.contains('is-success'))return;
-    const landscape=window.innerWidth>window.innerHeight&&window.innerHeight<=800;
-    const narrow=window.innerWidth<500;
-    const editing=form.contains(document.activeElement)&&['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName);
-    if(editing)return;
-    sheet.style.zoom='';sheet.style.maxHeight='';sheet.style.width='';sheet.style.maxWidth='';
-    if(!landscape&&!narrow)return;
-    if(narrow){sheet.style.width='476px';sheet.style.maxWidth='none';}
-    const body=modal.querySelector('.sheet-body');
-    const previousMax=body.style.maxHeight;body.style.maxHeight='none';
-    sheet.style.maxHeight='none';
-    const natural=sheet.getBoundingClientRect().height;
-    const available=Math.max(1,(window.visualViewport?.height||window.innerHeight)-28);
-    const widthScale=narrow?Math.max(1,window.innerWidth-24)/476:1;
-    const heightScale=landscape?Math.max(.6,available/Math.max(1,natural)):1;
-    const scale=Math.min(1,widthScale,heightScale);
-    sheet.style.zoom=String(scale);
-    sheet.style.maxHeight='calc((100dvh - 28px) / '+scale+')';
-    body.style.maxHeight=previousMax;
-    syncFooterLines();
-  }
-  function scheduleFormFit(){if(!fitFrame)fitFrame=requestAnimationFrame(fitShortForm);}
-  window.addEventListener('resize',scheduleFormFit,{passive:true});
-  window.visualViewport?.addEventListener('resize',scheduleFormFit,{passive:true});
-  function syncFormViewport(){
-    const viewport=window.visualViewport;
-    modal.style.setProperty?.('--form-viewport-height',(viewport?.height||window.innerHeight)+'px');
-    modal.style.setProperty?.('--form-viewport-top',(viewport?.offsetTop||0)+'px');
-  }
-  window.visualViewport?.addEventListener('resize',syncFormViewport,{passive:true});
-  window.visualViewport?.addEventListener('scroll',syncFormViewport,{passive:true});
-  document.addEventListener('tz:lead-open',syncFormViewport);
-  sheet.addEventListener('focusin',()=>setTimeout(()=>{
-    if(form.contains(document.activeElement))document.activeElement.scrollIntoView?.({block:'nearest'});
-  },250));
-
+  function scheduleFormFit(){document.dispatchEvent(new CustomEvent('tz:lead-layout'));}
   document.fonts?.ready.then(scheduleFormFit);
   form.addEventListener('change',scheduleFormFit);
-  form.addEventListener('focusout',scheduleFormFit);
   function syncFooterLines(){
     if(modal.hidden)return;
     const caption=modal.querySelector('#leadBranchCaption');

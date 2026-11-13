@@ -441,28 +441,6 @@ test('reassurance gets two lines exactly when the address wraps',()=>{
  height=17;ctx.syncFooterLines();assert.equal(wrapped,false);
 });
 
-test('short landscape form shrinks only when necessary and restores after rotation',()=>{
- const js=source('lead-form.js');const fn=js.slice(js.indexOf('let fitFrame=0;'),js.indexOf('function scheduleFormFit()'));
- const body={style:{maxHeight:''}},sheet={style:{},getBoundingClientRect:()=>({height:500})};
- const window={innerWidth:844,innerHeight:390,visualViewport:{height:390}};
- const ctx={window,modal:{hidden:false,classList:{contains:()=>false},querySelector:()=>body},form:{contains:()=>false},document:{activeElement:null},sheet,syncFooterLines(){}};
- vm.runInNewContext(fn+'fitShortForm();',ctx);assert.equal(Number(sheet.style.zoom),362/500);
- window.innerHeight=600;window.visualViewport.height=600;ctx.fitShortForm();assert.equal(sheet.style.zoom,'1');
- window.innerWidth=800;window.innerHeight=667;window.visualViewport.height=667;ctx.fitShortForm();assert.equal(sheet.style.zoom,'1');
- window.innerWidth=600;window.innerHeight=900;ctx.fitShortForm();assert.equal(sheet.style.zoom,'');assert.equal(sheet.style.maxHeight,'');
-});
-
-test('portrait form preserves 500px composition below 500 and grows normally above it',()=>{
- const js=source('lead-form.js');const fn=js.slice(js.indexOf('let fitFrame=0;'),js.indexOf('function scheduleFormFit()'));
- const body={style:{maxHeight:''}},sheet={style:{},getBoundingClientRect:()=>({height:500})};
- const window={innerWidth:390,innerHeight:844,visualViewport:{height:844}};
- const ctx={window,modal:{hidden:false,classList:{contains:()=>false},querySelector:()=>body},form:{contains:()=>false},document:{activeElement:null},sheet,syncFooterLines(){}};
- vm.runInNewContext(fn+'fitShortForm();',ctx);assert.equal(sheet.style.width,'476px');assert.equal(Number(sheet.style.zoom),366/476);
- window.innerWidth=320;ctx.fitShortForm();assert.equal(Number(sheet.style.zoom),296/476);
- window.innerWidth=500;ctx.fitShortForm();assert.equal(sheet.style.width,'');assert.equal(sheet.style.zoom,'');
- window.innerWidth=700;ctx.fitShortForm();assert.equal(sheet.style.maxWidth,'');
-});
-
 test('touch buttons retain native text instead of adding SVG caption layers',()=>{
  let queried=false;
  const document={readyState:'complete',querySelectorAll(){queried=true;throw Error('SVG caption must not initialize on touch');}};
