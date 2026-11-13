@@ -23,7 +23,7 @@ def write(path, content):
             asset = (path.parent / match[2]).resolve()
             revision = hashlib.sha256(asset.read_bytes()).hexdigest()[:10]
             return f'{match[1]}{match[2]}?v={revision}"'
-        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|responsive\.css|form\.css|home\.css|narrow-header\.css|troitsk-enrolment\.css|troitsk-enrolment\.js|home-motion\.js|home-branches\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|direction-scroll\.js|button-labels\.js|viewport-scale\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
+        content = re.sub(r'((?:href|src)=")([^"?]*(?:experience\.css|responsive\.css|form\.css|home\.css|narrow-header\.css|troitsk-enrolment\.css|troitsk-enrolment\.js|troitsk-page\.js|home-motion\.js|home-branches\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|direction-scroll\.js|button-labels\.js|viewport-scale\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding='utf-8')
 
@@ -41,7 +41,11 @@ def build():
         source = template
         if slug == 'troitsk':
             source = re.sub(r'<header class="top".*?</header>', lambda _: read('troitsk-header.html'), source, count=1, flags=re.S)
-            source = re.sub(r'<span class="kicker hero-copy">.*?</span></span>', '<span class="kicker hero-copy">музыкальное проство · <span class="hero-branch-line">филиал Троицк</span></span>', source, count=1)
+            source = source.replace('{{nudge}}', read('troitsk-nudge.html'))
+            source = source.replace('</head>', '<script src="../troitsk-page.js" defer></script>\n</head>')
+            source = re.sub(r'(<p class="lead hero-copy">).*?(</p>)', lambda m: m[1] + 'Музыка, сцена и люди, с которыми хочется пробовать новое. Для детей и взрослых, с опытом и без. Без экзаменов и ожидания „подходящего момента“.' + m[2], source, count=1, flags=re.S)
+
+            source = re.sub(r'<span class="kicker hero-copy">.*?</span></span>', '<span class="kicker hero-copy">музыкальное пространство · <span class="hero-branch-line">филиал Троицк</span></span>', source, count=1)
         source = source.replace('</head>', '<link rel="stylesheet" href="../troitsk-enrolment.css"><script src="../troitsk-enrolment.js" defer></script>\n</head>')
         page = compose(source, '../')
         if slug == 'troitsk':

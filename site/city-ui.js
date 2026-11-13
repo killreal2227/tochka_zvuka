@@ -1,6 +1,7 @@
 /* Two invitations at most: early, then a delayed reminder in the middle of the page. */
 (() => {
  'use strict';
+ if(document.body?.dataset.city==='troitsk')return;
  const box=document.getElementById('lessonNudge'),modal=document.getElementById('leadModal');
  if(!box)return;
  const join=document.querySelector('#join');

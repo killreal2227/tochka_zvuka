@@ -359,3 +359,40 @@ body[data-city] #dirs .card { border-radius:8px; }
 [data-scaled-phone] body[data-city="troitsk"] #top .header-enrol:hover i { width:calc(22px * var(--touch-ui-factor)); height:calc(22px * var(--touch-ui-factor)); }
 [data-scaled-phone] body[data-city="troitsk"] #top .header-call { width:calc(32px * var(--touch-ui-factor)); height:calc(32px * var(--touch-ui-factor)); flex-basis:calc(32px * var(--touch-ui-factor)); }
 [data-scaled-phone] body[data-city="troitsk"] #top .header-call svg { width:calc(16px * var(--touch-ui-factor)); height:calc(16px * var(--touch-ui-factor)); }
+
+/* Troitsk spacing rhythm and a compact, non-modal invitation. */
+body[data-city="troitsk"] { --section-space:clamp(52px,7vw,104px); }
+body[data-city="troitsk"] .hero { min-height:auto; padding-bottom:40px; }
+body[data-city="troitsk"] .hero h1 { margin-top:18px; margin-bottom:22px; }
+body[data-city="troitsk"] .hero-actions { margin-top:26px; }
+body[data-city="troitsk"] #dirs { padding-top:36px; padding-bottom:var(--section-space); scroll-margin-top:max(12px,calc(var(--header-height) - 72px)); }
+body[data-city="troitsk"] #env,
+body[data-city="troitsk"] #how { padding-top:var(--section-space); padding-bottom:var(--section-space); }
+body[data-city="troitsk"] #join { padding-top:var(--section-space); }
+body[data-city="troitsk"] .sec-head { margin-bottom:32px; }
+body[data-city="troitsk"] .stick { display:none!important; }
+body[data-city="troitsk"] .lesson-nudge { box-sizing:border-box; width:min(320px,calc(100vw - 32px)); right:max(16px,env(safe-area-inset-right)); bottom:calc(12px + env(safe-area-inset-bottom)); padding:16px; max-height:calc(100dvh - 32px); overflow:auto; overscroll-behavior:contain; }
+body[data-city="troitsk"] .lesson-nudge h2 { font-size:23px; margin:0 36px 8px 0; }
+body[data-city="troitsk"] .lesson-nudge p { font-size:14px; line-height:1.4; margin:0 0 12px; }
+body[data-city="troitsk"] .lesson-nudge-close { top:4px; right:4px; width:44px; height:44px; }
+body[data-city="troitsk"] .lesson-nudge .btn { min-height:44px; height:44px; font-size:13px; padding:5px 5px 5px 14px; gap:12px; }
+body[data-city="troitsk"] .lesson-nudge .btn i { width:30px; height:30px; }
+@media(max-width:1000px) {
+ body[data-city="troitsk"] .hero { padding-top:calc(var(--header-height) + 28px); padding-bottom:28px; }
+ body[data-city="troitsk"] .hero h1 { margin-top:16px; margin-bottom:20px; }
+ body[data-city="troitsk"] .hero-actions { margin-top:22px; }
+ body[data-city="troitsk"] #dirs { padding-top:28px; }
+ body[data-city="troitsk"] #top { padding-left:max(16px,env(safe-area-inset-left)); padding-right:max(16px,env(safe-area-inset-right)); }
+}
+/* These sizes compensate for the 500px phone composition. */
+[data-scaled-phone] body[data-city="troitsk"] #top .header-enrol::before,
+[data-scaled-phone] body[data-city="troitsk"] #top .header-call::before { content:""; position:absolute; inset:calc(-6px * var(--touch-ui-factor)) 0; }
+[data-scaled-phone] body[data-city="troitsk"] #top .header-call { position:relative; }
+[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge { width:min(calc(304px * var(--touch-ui-factor)),calc(100vw - 32px * var(--touch-ui-factor))); right:calc(16px * var(--touch-ui-factor)); bottom:calc((12px + env(safe-area-inset-bottom)) * var(--touch-ui-factor)); padding:calc(14px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge h2 { font-size:calc(20px * var(--touch-ui-factor)); margin-right:calc(36px * var(--touch-ui-factor)); margin-bottom:calc(6px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge p { font-size:calc(13px * var(--touch-ui-factor)); margin-bottom:calc(10px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge-close { width:calc(44px * var(--touch-ui-factor)); height:calc(44px * var(--touch-ui-factor)); font-size:calc(26px * var(--touch-ui-factor)); }
+[data-scaled-phone] body[data-city="troitsk"] .lesson-nudge .btn { min-height:calc(44px * var(--touch-ui-factor)); height:calc(44px * var(--touch-ui-factor)); font-size:calc(13px * var(--touch-ui-factor)); }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+
+[data-scaled-phone] body[data-city="troitsk"] #top .header-call::before { inset:calc(-6px * var(--touch-ui-factor)); }

@@ -462,3 +462,36 @@ test('touch buttons retain native text instead of adding SVG caption layers',()=
  vm.runInNewContext(source('button-labels.js'),{document,window:{matchMedia:()=>({matches:true})}});
  assert.equal(queried,false);
 });
+
+
+function troitskInvitationScene(store=new Map(),now=100000,storageBlocked=false){
+ const close=events(),modal={hidden:true},trigger={focus(){}};
+ const box=events({hidden:true,querySelector:()=>close,contains:()=>false});
+ const document=events({body:{dataset:{city:'troitsk'}},hidden:false,activeElement:null,
+  getElementById:id=>id==='lessonNudge'?box:modal,querySelector:()=>trigger});
+ const timers=[];
+ const window=events({innerHeight:844,visualViewport:events({height:844,scale:1}),
+  setTimeout:(fn,ms)=>timers.push({fn,ms})});
+ Object.defineProperty(window,'localStorage',{get(){if(storageBlocked)throw Error('storage unavailable');return{getItem:key=>store.get(key),setItem:(key,value)=>store.set(key,value)};}});
+ vm.runInNewContext(source('troitsk-page.js'),{window,document,Date:{now:()=>now}});
+ return{box,modal,close,document,window,timers,store,run(){timers[0].fn();}};
+}
+test('Troitsk invitation waits 18 seconds and dismissal persists for exactly seven days',async()=>{
+ const store=new Map(),s=troitskInvitationScene(store);
+ assert.equal(s.box.hidden,true);assert.equal(s.timers[0].ms,18000);s.run();assert.equal(s.box.hidden,false);
+ await s.close.emit('click');assert.equal(s.box.hidden,true);
+ const expiry=Number([...store.values()][0]);assert.equal(expiry,100000+7*86400000);
+ const suppressed=troitskInvitationScene(store,expiry-1);suppressed.run();assert.equal(suppressed.box.hidden,true);
+ const expired=troitskInvitationScene(store,expiry+1);expired.run();assert.equal(expired.box.hidden,false);
+});
+test('Troitsk invitation cannot appear while filling a form or after confirmation',async()=>{
+ const s=troitskInvitationScene();await s.document.emit('tz:lead-open');s.run();assert.equal(s.box.hidden,true);
+ const other=troitskInvitationScene();other.run();await other.document.emit('tz:lead-success');assert.equal(other.box.hidden,true);
+ const next=troitskInvitationScene(other.store);next.run();assert.equal(next.box.hidden,true);
+ const focused=troitskInvitationScene();focused.document.activeElement={matches:()=>true};focused.run();assert.equal(focused.box.hidden,true);
+});
+test('Troitsk invitation respects hidden pages and works without browser storage',async()=>{
+ const s=troitskInvitationScene(new Map(),100000,true);s.document.hidden=true;s.run();assert.equal(s.box.hidden,true);
+ s.document.hidden=false;await s.document.emit('visibilitychange');assert.equal(s.box.hidden,false);
+ await s.close.emit('click');await s.document.emit('visibilitychange');assert.equal(s.box.hidden,true);
+});

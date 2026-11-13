@@ -281,6 +281,7 @@ maskPhone(phone);
   function showSuccess(){
     form.hidden=true;success.hidden=false;sheet.setAttribute('aria-labelledby','doneText');formArt.stop();status.textContent='';pending=null;
     form.reset();syncBranch();success.setAttribute('tabindex','-1');success.focus({preventScroll:true});
+    document.dispatchEvent(new CustomEvent('tz:lead-success'));
   }
   form.addEventListener('submit',async event=>{
     event.preventDefault();if(sending)return;
