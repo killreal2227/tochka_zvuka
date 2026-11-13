@@ -851,7 +851,7 @@ function prepCard(card){
   const n=Math.max(1,items.length-1);
   items.forEach((it,i)=>{ it.p.setAttribute('pathLength',1); it.p.classList.add('ap'); if(it.rev) it.p.classList.add('rev'); it.p.style.setProperty('--a',(i/n*SPREAD).toFixed(3)); });
   // узел движения: группа-обёртка с прозрачностью (в ней же её обрезка), если в ней одна линия; иначе своя обёртка
-  const unit=p=>{ const g=p.closest('g[opacity]'); if(g && (g.querySelectorAll('path[stroke-width]').length===1||(complete&&(dir==='actor'||dir==='speech')))) return g;
+  const unit=p=>{ const g=p.closest('g[opacity]'); if(g && !(document.body.dataset.city==='troitsk'&&dir==='actor') && (g.querySelectorAll('path[stroke-width]').length===1||(complete&&(dir==='actor'||dir==='speech')))) return g;
     const w=document.createElementNS('http://www.w3.org/2000/svg','g'); p.before(w); w.appendChild(p); return w; };
   const byX=[...items].sort((u,v)=>u.cx-v.cx);
   if(dir==='drums'){

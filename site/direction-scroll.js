@@ -41,11 +41,17 @@
       document.addEventListener('tz:lead-open',stop);
       document.addEventListener('visibilitychange',()=>{if(document.hidden){if(fine.matches)close();else stop();}});
       reduced.addEventListener('change',stop);fine.addEventListener('change',close);
-      window.addEventListener('scroll',()=>{
-        if(!active)return;
-        const r=active.getBoundingClientRect(),top=document.querySelector('#top')?.getBoundingClientRect().bottom||0;
-        if(r.bottom<=top||r.top>=window.innerHeight){if(fine.matches)close();else stop();}
-      },{passive:true});
+      const closeOutside=()=>{
+        if(!expandedCard||!modal.hidden)return;
+        const r=expandedCard.getBoundingClientRect(),viewport=window.visualViewport;
+        const top=Math.max(document.querySelector('#top')?.getBoundingClientRect().bottom||0,viewport?.offsetTop||0);
+        const bottom=viewport?viewport.offsetTop+viewport.height:window.innerHeight;
+        if(r.bottom<=top||r.top>=bottom)close();
+      };
+      window.addEventListener('scroll',closeOutside,{passive:true});
+      window.addEventListener('resize',closeOutside,{passive:true});
+      window.visualViewport?.addEventListener('resize',closeOutside,{passive:true});
+      window.visualViewport?.addEventListener('scroll',closeOutside,{passive:true});
       return;
     }
 

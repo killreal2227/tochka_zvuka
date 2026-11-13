@@ -441,7 +441,7 @@ img,svg{display:block;max-width:100%}
 <link rel="stylesheet" href="../narrow-header.css?v=78e5098dd8">
 <link rel="stylesheet" href="../responsive.css?v=82eccd62c1">
 <script src="../troitsk-page.js?v=5dade76aae" defer></script>
-<link rel="stylesheet" href="../troitsk-enrolment.css?v=3e2a972bec"><script src="../troitsk-enrolment.js?v=8d1c88a4a4" defer></script>
+<link rel="stylesheet" href="../troitsk-enrolment.css?v=136467682d"><script src="../troitsk-enrolment.js?v=864e1b59a3" defer></script>
 <link rel="stylesheet" href="../cta.css?v=4dc65625fb">
 </head>
 <body data-city="troitsk">
@@ -759,7 +759,7 @@ img,svg{display:block;max-width:100%}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="../direction-player.js?v=2e10576c3d"></script>
-<script src="../direction-scroll.js?v=f1a5bd483b"></script>
+<script src="../direction-scroll.js?v=57a09e3068"></script>
 <script>
 const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
@@ -949,7 +949,7 @@ function prepCard(card){
   const n=Math.max(1,items.length-1);
   items.forEach((it,i)=>{ it.p.setAttribute('pathLength',1); it.p.classList.add('ap'); if(it.rev) it.p.classList.add('rev'); it.p.style.setProperty('--a',(i/n*SPREAD).toFixed(3)); });
   // узел движения: группа-обёртка с прозрачностью (в ней же её обрезка), если в ней одна линия; иначе своя обёртка
-  const unit=p=>{ const g=p.closest('g[opacity]'); if(g && (g.querySelectorAll('path[stroke-width]').length===1||(complete&&(dir==='actor'||dir==='speech')))) return g;
+  const unit=p=>{ const g=p.closest('g[opacity]'); if(g && !(document.body.dataset.city==='troitsk'&&dir==='actor') && (g.querySelectorAll('path[stroke-width]').length===1||(complete&&(dir==='actor'||dir==='speech')))) return g;
     const w=document.createElementNS('http://www.w3.org/2000/svg','g'); p.before(w); w.appendChild(p); return w; };
   const byX=[...items].sort((u,v)=>u.cx-v.cx);
   if(dir==='drums'){

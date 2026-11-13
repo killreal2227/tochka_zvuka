@@ -455,7 +455,7 @@ body[data-city="troitsk"] #dirs .direction-toggle:focus-visible { outline:3px so
 body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator {
  display:grid; place-items:center; width:var(--direction-control-height); height:var(--direction-control-height);
  bottom:var(--direction-inset); right:var(--direction-inset); border:0; border-radius:50%;
- background:var(--cream); color:var(--ink); transform:none; padding:0; pointer-events:none;
+ background:var(--cream); color:#1a1a1a; transform:none; padding:0; pointer-events:none;
  opacity:1; visibility:visible; transition:opacity var(--direction-transition),visibility 0s;
 }
 body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator svg {
@@ -467,7 +467,7 @@ body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator::aft
 body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded .direction-indicator { opacity:0; visibility:hidden; transition-delay:0s,240ms; }
 body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-signup {
  --cta-position:absolute; --cta-ratio:var(--direction-cta-ratio);
- --cta-bg:#1a1a1a; --cta-text:#fff; --cta-circle-bg:var(--cream); --cta-icon-color:#1a1a1a; --cta-hover:#000;
+ --cta-bg:#1a1a1a; --cta-text:#fff; --cta-circle-bg:var(--cream); --cta-icon-color:#1a1a1a; --cta-hover:#1a1a1a;
  --cta-transition:opacity var(--direction-transition),visibility 0s linear 240ms,background-color .2s;
  z-index:3; right:var(--direction-inset); bottom:var(--direction-inset);
  opacity:0; visibility:hidden; pointer-events:none;
@@ -536,3 +536,16 @@ body[data-city="troitsk"] #dirs .card[data-disclosure] .direction-indicator { wi
  }
 }
 [data-scaled-phone] body[data-city="troitsk"] #dirs .card[data-disclosure] .desc { font-size:calc(13px * var(--touch-ui-factor))!important; }
+
+/* Keep the desktop call circle exactly as tall as the adjacent compact CTA. */
+@media(min-width:1001px) {
+ body[data-city="troitsk"] #top .header-call { width:var(--header-action-size,48px); height:var(--header-action-size,48px); flex-basis:var(--header-action-size,48px); border-radius:50%; }
+}
+
+/* Scale the selected direction icon, never its text or background mask. */
+body[data-city="troitsk"] #dirs .card[data-disclosure] > .ico {
+ transform:scale(1)!important; transform-origin:center; transition:transform 240ms cubic-bezier(.22,.61,.36,1);
+}
+body[data-city="troitsk"] #dirs .card[data-disclosure].is-expanded > .ico { transform:scale(1.15)!important; }
+/* The translucent SVG groups stay still; only their inner contours flip. */
+body[data-city="troitsk"] #dirs .card.actor .bg-clip { isolation:isolate; }

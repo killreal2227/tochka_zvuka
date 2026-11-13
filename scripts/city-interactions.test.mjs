@@ -531,10 +531,12 @@ test('rapid disclosure changes never retain two expanded cards or stale signup c
   for(const card of s.cards)assert.equal(card.signup.inert,!card.classes.has('is-expanded'));
  }
 });
-test('disclosures remain open when playback is stopped for scrolling or a form',()=>{
- const s=ordinaryScene(false,true,true,true),[card]=s.cards;card.toggle.emit('click');
- s.scroll(-500);assert.equal(card.classes.has('is-expanded'),true);assert.equal(card.signup.inert,false);
- s.document.emit('tz:lead-open');assert.equal(card.classes.has('is-expanded'),true);assert.equal(card.toggle.getAttribute('aria-expanded'),'true');
+test('touch disclosure closes only after leaving the visible screen, even after playback stops',()=>{
+ const s=ordinaryScene(false,true,true,true),[card]=s.cards;
+ card.toggle.emit('click');s.scroll(700);assert.equal(card.classes.has('is-expanded'),true);
+ s.document.emit('tz:lead-open');s.modal.hidden=false;s.scroll(-500);assert.equal(card.classes.has('is-expanded'),true);
+ s.modal.hidden=true;s.scroll(-500);assert.equal(card.classes.has('is-expanded'),false);assert.equal(card.signup.inert,true);
+ card.toggle.emit('click');s.scroll(900);assert.equal(card.toggle.getAttribute('aria-expanded'),'false');
 });
 
 test('fine-pointer disclosures open on hover and close on leave without requiring a click',()=>{
