@@ -302,6 +302,12 @@ maskPhone(phone);
     form.reset();syncBranch();success.setAttribute('tabindex','-1');success.focus({preventScroll:true});
     document.dispatchEvent(new CustomEvent('tz:lead-success'));
   }
+  async function demoSubmit(requestId){
+    const delay=window.TZ_LEADS.demoDelayMs??700;
+    if(delay>0)await new Promise(resolve=>setTimeout(resolve,delay));
+    if(window.TZ_LEADS.demoFailure)throw new Error('Не удалось отправить заявку. Попробуй ещё раз.');
+    return {ok:true,requestId,leadId:'demo-'+requestId};
+  }
   form.addEventListener('submit',async event=>{
     event.preventDefault();if(sending)return;
     const normalized=normalisePhone(phone.value);
@@ -311,11 +317,13 @@ maskPhone(phone);
     if(form.elements.name.value.trim().length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}
     if(form.elements.surname.value.trim().length<2){form.elements.surname.setCustomValidity('Введи фамилию: минимум 2 символа.');form.elements.surname.reportValidity();return;}
     const endpoint=window.TZ_LEADS.endpoint;
-    // Confirmation requires a real server acknowledgement.
-    // To enable real delivery, configure TZ_LEADS.endpoint after server acceptance tests.
-    if(!endpoint){status.textContent='Отправка заявки пока недоступна. Позвони нам: '+contactPhone+'.';return;}
-    let url;try{url=new URL(endpoint,location.href);}catch{status.textContent='Не удалось открыть запись. Позвони: '+contactPhone+'.';return;}
-    if(url.protocol!=='https:'&&!(url.protocol==='http:'&&url.hostname==='127.0.0.1')){status.textContent='Не удалось открыть запись. Позвони: '+contactPhone+'.';return;}
+    // Local placeholder until a real endpoint is configured; contact fields are never transmitted.
+    const demo=!endpoint;
+    let url;
+    if(!demo){
+      try{url=new URL(endpoint,location.href);}catch{status.textContent='Не удалось открыть заявку. Позвони: '+contactPhone+'.';return;}
+      if(url.protocol!=='https:'&&!(url.protocol==='http:'&&url.hostname==='127.0.0.1')){status.textContent='Не удалось открыть заявку. Позвони: '+contactPhone+'.';return;}
+    }
     const stamp=new Date().toISOString();
     const raw={name:form.elements.name.value.trim(),surname:form.elements.surname.value.trim(),phone:normalized,branch:form.elements.branch.value,direction:form.elements.direction.value||'unsure',website:'',pagePath:location.pathname};
     if(raw.name.length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}
@@ -323,8 +331,14 @@ maskPhone(phone);
     sending=true;button.disabled=true;status.textContent='Отправляем заявку…';
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
     try{
-      const response=await fetch(url.href,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pending),credentials:'omit',redirect:'error',signal:controller.signal});
-      let data;try{data=await response.json();}catch{throw new Error('Сервис не подтвердил приём. Позвони нам, чтобы уточнить запись.');}
+      let response,data;
+      if(demo){
+        data=await demoSubmit(pending.requestId);
+        response={ok:true,status:200};
+      }else{
+        response=await fetch(url.href,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pending),credentials:'omit',redirect:'error',signal:controller.signal});
+        try{data=await response.json();}catch{throw new Error('Сервис не подтвердил приём. Позвони нам, чтобы уточнить заявку.');}
+      }
       if(!response.ok||data.ok!==true||data.requestId!==pending.requestId||typeof data.leadId!=='string'){
         throw new Error(response.status===429?'Слишком много попыток. Подожди минуту или позвони нам.':'Сервис не подтвердил приём. Позвони нам, чтобы уточнить запись.');
       }

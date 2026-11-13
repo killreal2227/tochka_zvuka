@@ -377,3 +377,34 @@ body:is(.home-page,[data-city="troitsk"]) > .home-footer { padding-left:max(clam
  .lead-modal .sheet #chips .pk .choice-icon { outline-offset:-1px; }
  .lead-modal .sheet #chips .pk input:checked+label .choice-icon { outline-offset:-2px; transform:none; }
 }
+
+/* Compact desktop composition and readable native input values. */
+@media(min-width:1001px) {
+ .lead-modal:not(.is-success) .sheet { width:min(980px,100%); grid-template-columns:264px minmax(0,1fr); }
+ .lead-modal:not(.is-success) .sheet .sheet-body { padding:96px 35px 31px; }
+ .lead-modal .sheet #leadTitle { font-size:60px; margin-bottom:10px; }
+ .lead-modal .sheet #contactFields { gap:14px 21px; margin-bottom:24px; }
+ .lead-modal .sheet #directionTitle,.lead-modal .sheet #directionReset { font-size:16px; }
+ .lead-modal .sheet #chips .choice-icon { width:53px; height:53px; flex-basis:53px; }
+ .lead-modal .sheet #chips .choice-icon img { width:53px; height:53px; }
+ .lead-modal .sheet #leadForm .action-pane { grid-template-rows:50px minmax(36px,auto); gap:10px; }
+ .lead-modal .sheet #leadForm .action-pane > .tz-cta { --cta-height:50px; --cta-circle:36px; --cta-inset:7px; --cta-leading:20px; --cta-gap:10px; --cta-font:15px; --cta-min-width:0px; --cta-arrow:20px; }
+}
+.lead-modal .sheet #contactFields input {
+ color:var(--ink); -webkit-text-fill-color:var(--ink); caret-color:var(--ink);
+}
+.lead-modal .sheet #contactFields input::placeholder { color:#998d83; -webkit-text-fill-color:#998d83; opacity:1; }
+.lead-modal .sheet #contactFields input:autofill,
+.lead-modal .sheet #contactFields input:-webkit-autofill {
+ color:var(--ink)!important; -webkit-text-fill-color:var(--ink)!important; caret-color:var(--ink);
+ box-shadow:inset 0 0 0 1000px var(--cream); -webkit-box-shadow:inset 0 0 0 1000px var(--cream);
+}
+@media(max-width:1000px) {
+ .lead-modal .sheet #contactFields input { font-size:calc(16px * var(--form-scale))!important; }
+ .lead-modal .sheet #leadForm .send { gap:calc(11px * var(--form-scale)); }
+ .lead-modal .sheet #leadForm .action-pane { display:contents; }
+ .lead-modal .sheet #leadForm .send .lead-submit { grid-row:1; grid-column:1; }
+ .lead-modal .sheet #leadForm .send .lead-call { grid-row:2; grid-column:1; }
+ .lead-modal .sheet #leadForm .send .lead-consent { grid-row:3; grid-column:1; }
+ .lead-modal .sheet #leadForm .send .lead-address { grid-row:4; grid-column:1; margin:0; }
+}

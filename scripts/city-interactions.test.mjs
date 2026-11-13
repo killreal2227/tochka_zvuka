@@ -186,7 +186,7 @@ function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',co
     querySelector:s=>s==='.lead-consent a'?link('./consent/'):null,
     querySelectorAll:s=>s==='.openForm'?[trigger]:s==='.lead-consent a'?[link('./consent/'),link('./privacy/')]:[]});
   document.dispatchEvent=e=>{document.emit(e.type);};
-  const window=events({TZ_LEADS:{endpoint}});
+  const window=events({TZ_LEADS:{endpoint,demoDelayMs:0,demoFailure:reply==='failure'}});
   vm.runInNewContext(source('lead-form.js'),{window,document,matchMedia:()=>({matches:true,addEventListener(){}}),
     requestAnimationFrame:()=>1,cancelAnimationFrame(){},setTimeout:()=>1,clearTimeout(){},URL,AbortController,Event,
     location:{href:'https://killreal2227.github.io/tochka_zvuka/',pathname:'/tochka_zvuka/'},
@@ -213,18 +213,18 @@ test('selected direction caption is lowercase and clears without permanent helpe
   s.form.elements.direction.value='';await s.form.emit('change',{target:{name:'direction'}});
   assert.equal(s.caption.textContent,'');
 });
-test('unconfigured form reports unavailable delivery without a false success',async()=>{
+test('demo form acknowledges locally without transmitting contact data',async()=>{
   const s=formScene();await s.trigger.emit('click');s.fill();await s.form.emit('submit',{preventDefault(){}});
-  assert.equal(s.calls,0);assert.equal(s.uuids,0);assert.equal(s.success.hidden,true);assert.equal(s.form.hidden,false);assert.ok(s.status.textContent);
-  assert.equal(s.phone.value,'+79950000000');await s.trigger.emit('click');assert.equal(s.form.hidden,false);assert.equal(s.success.hidden,true);
+  assert.equal(s.calls,0);assert.equal(s.uuids,1);assert.equal(s.success.hidden,false);assert.equal(s.form.hidden,true);
+  assert.equal(s.phone.value,'');await s.trigger.emit('click');assert.equal(s.form.hidden,false);assert.equal(s.success.hidden,true);
 });
-test('single-column branch form preserves branch and reports unavailable delivery',async()=>{
+test('single-column branch form supports demo acknowledgement without decorative SVG',async()=>{
   for(const city of ['kaluga','troitsk']){
     const s=formScene(null,'success',true,city);await s.trigger.emit('click');
     assert.equal(s.modal.hidden,false);assert.equal(s.form.elements.branch.value,city);
     s.fill();s.form.elements.branch.value=city;
     await s.form.emit('submit',{preventDefault(){}});
-    assert.equal(s.success.hidden,true);assert.equal(s.calls,0);assert.equal(s.uuids,0);assert.ok(s.status.textContent);
+    assert.equal(s.success.hidden,false);assert.equal(s.calls,0);assert.equal(s.uuids,1);
   }
 });
 test('configured form uses transport acknowledgement and includes button-consent metadata',async()=>{
@@ -572,4 +572,11 @@ test('surname is required before sending and preserves all letters except the fi
  }
  await s.form.emit('submit',{preventDefault(){}});
  assert.equal(s.calls,1);assert.equal(s.payload.surname,'ИВаНов');
+});
+
+test('demo failure preserves fields and never opens confirmation',async()=>{
+ const s=formScene(null,'failure');await s.trigger.emit('click');s.fill();
+ await s.form.emit('submit',{preventDefault(){}});
+ assert.equal(s.calls,0);assert.equal(s.success.hidden,true);assert.equal(s.form.hidden,false);
+ assert.equal(s.phone.value,'+79950000000');assert.match(s.status.textContent,/Не удалось отправить заявку/);
 });

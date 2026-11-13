@@ -611,3 +611,32 @@ body[data-city="troitsk"] #join .join-primary { --cta-bg:var(--cream); --cta-tex
 
 /* Match the lower illustration corners to the environment animation. */
 body[data-city=troitsk] #join .arch { border-bottom-left-radius:8px; border-bottom-right-radius:8px; overflow:hidden; isolation:isolate; }
+
+/* Equal mobile screens after the environment section; content may grow both modules. */
+@media(max-width:1000px) {
+ body[data-city="troitsk"] { --mobile-module-scale:var(--touch-ui-factor,1); --mobile-module-pad:calc(24px * var(--mobile-module-scale)); }
+ body[data-city="troitsk"] :is(#how,#join) {
+  box-sizing:border-box; min-height:max(100svh,var(--mobile-module-natural,0px));
+  padding:calc(var(--mobile-module-header,var(--header-height)) + var(--mobile-module-pad)) var(--gutter) var(--mobile-module-pad);
+  scroll-margin-top:0; overflow:visible;
+ }
+ body[data-city="troitsk"] #how { display:flex; flex-direction:column; }
+ body[data-city="troitsk"] #how .h2 { margin-bottom:var(--mobile-module-pad); }
+ body[data-city="troitsk"] #how .steps {
+  display:flex; flex:1; flex-direction:column; justify-content:space-between;
+  gap:var(--mobile-module-pad); margin:0;
+ }
+ body[data-city="troitsk"] #how .step { flex:none; }
+ body[data-city="troitsk"] #join {
+  display:grid; grid-template-columns:minmax(0,1fr);
+  grid-template-rows:minmax(min-content,1fr) auto; gap:var(--mobile-module-pad);
+  align-items:stretch; align-content:stretch;
+ }
+ body[data-city="troitsk"] #join > div:first-child {
+  display:flex; flex-direction:column; justify-content:space-between;
+  gap:calc(18px * var(--mobile-module-scale)); padding-bottom:0; min-width:0;
+ }
+ body[data-city="troitsk"] #join :is(.kicker,.h2,.lead,.addr) { margin:0; }
+ body[data-city="troitsk"] #join .addr { padding-top:calc(16px * var(--mobile-module-scale)); }
+ body[data-city="troitsk"] #join .arch { align-self:end; margin:0; }
+}
