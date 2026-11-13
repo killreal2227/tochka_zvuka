@@ -229,7 +229,12 @@ const formArt=(()=>{
   function syncBranch(){
     branchPicker.sync();
     const option=form.elements.branch.selectedOptions[0],caption=modal.querySelector('#leadBranchCaption');
-    caption.textContent=option?.value?option.textContent:'Выбери город';
+    const label=option?.value?option.textContent:'Выбери город';
+    const full=caption.querySelector?.('.lead-address-full'),short=caption.querySelector?.('.lead-address-short');
+    if(full&&short){
+      full.textContent=label;
+      short.textContent=label.replace(/^([^,]+),\s*(?:ул\.\s*)?/,'$1 · ').replace(/(\d+)-ая(?=\s)/g,'$1-я');
+    }else caption.textContent=label;
     caption.hidden=!option?.value;
     caption.href=option?.value?'https://yandex.ru/maps/?text='+encodeURIComponent(option.textContent.replace('·',',')):'#';
     scheduleFooterLines();scheduleFormFit();

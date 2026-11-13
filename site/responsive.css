@@ -408,3 +408,43 @@ body:is(.home-page,[data-city="troitsk"]) > .home-footer { padding-left:max(clam
  .lead-modal .sheet #leadForm .send .lead-consent { grid-row:3; grid-column:1; }
  .lead-modal .sheet #leadForm .send .lead-address { grid-row:4; grid-column:1; margin:0; }
 }
+
+/* Compact, centered mobile form footer and a naturally wrapping confirmation title. */
+.lead-modal .lead-address-short { display:none; }
+.lead-modal.is-success .sheet { width:min(640px,100%)!important; }
+.lead-modal.is-success .sheet .sheet-body { padding-top:70px; }
+.lead-modal.is-success .sheet #doneText {
+ display:flex; flex-wrap:wrap; align-items:baseline; gap:.14em .18em; line-height:1.1;
+}
+.lead-modal.is-success .sheet #doneText em {
+ display:inline-block; white-space:nowrap; background:var(--bord); color:var(--cream);
+ padding:0 .1em .06em; line-height:1.1;
+}
+.lead-modal.is-success .sheet .success-followup { font-size:16px; }
+@media(max-width:1000px) {
+ .lead-modal:not(.is-success) .sheet .sheet-body {
+  padding-bottom:calc(16px * var(--form-scale)); min-height:0; height:auto;
+ }
+ .lead-modal .sheet #leadForm .send { gap:0; padding-bottom:0; margin-bottom:0; }
+ .lead-modal .sheet #leadForm .send .lead-call { margin-top:calc(11px * var(--form-scale))!important; }
+ .lead-modal .sheet #leadForm .send .lead-consent,
+ .lead-modal .sheet #leadForm .send .lead-address {
+  display:block; height:auto; min-height:0; padding:0; margin:0; text-align:center; color:#786c62;
+  font-size:calc(12px * var(--form-scale)); line-height:1.4;
+ }
+ .lead-modal .sheet #leadForm .send .lead-consent { margin-top:calc(12px * var(--form-scale)); }
+ .lead-modal .sheet #leadForm .send .lead-address { margin-top:calc(5px * var(--form-scale)); }
+ .lead-modal .sheet #leadForm .send :is(.lead-consent,.lead-address) a {
+  display:block; width:100%; min-height:0; height:auto; margin:0; padding:0;
+  text-align:center; color:#786c62; font-size:calc(12px * var(--form-scale)); line-height:1.4;
+ }
+ .lead-modal .sheet #leadForm .send .lead-consent a { text-decoration:underline; }
+ .lead-modal .sheet #leadForm .send .lead-address a { text-decoration:none; }
+ .lead-modal .sheet #leadForm .send .lead-reassurance svg,
+ .lead-modal .sheet #leadForm .send .reassurance-break,
+ .lead-modal .sheet #leadForm .lead-address-full { display:none; }
+ .lead-modal .sheet #leadForm .lead-address-short { display:inline; }
+ .lead-modal.is-success .sheet { width:min(calc(400px * var(--form-scale)),100%)!important; }
+ .lead-modal.is-success .sheet .sheet-body { padding-top:calc(62px * var(--form-scale)); }
+ .lead-modal.is-success .sheet .success-followup { font-size:calc(14px * var(--form-scale)); }
+}
