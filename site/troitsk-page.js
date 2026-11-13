@@ -2,6 +2,16 @@
 (() => {
  'use strict';
  if(document.body.dataset.city!=='troitsk')return;
+ const directionLink=document.querySelector('.hero-actions .link[href="#dirs"]');
+ directionLink?.addEventListener?.('click',async event=>{
+  event.preventDefault();
+  if(document.fonts?.ready)await document.fonts.ready;
+  const heading=document.querySelector('#dirs .kicker'),header=document.getElementById('top');
+  if(!heading)return;
+  const scale=window.visualViewport?.scale||1;
+  const top=Math.max(0,window.scrollY+heading.getBoundingClientRect().top-(header?.getBoundingClientRect().bottom||0)-22/scale);
+  window.scrollTo({top,behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+ });
  const box=document.getElementById('lessonNudge'),modal=document.getElementById('leadModal');
  if(!box)return;
  const key='tz:troitsk:invitation-dismissed-until',week=7*24*60*60*1000;

@@ -515,7 +515,7 @@ test('Troitsk invitation never interrupts direction card interaction',async()=>{
 });
 
 test('disclosure cards allow only one expanded direction and toggle it closed',()=>{
- const s=ordinaryScene(true,false,true,true),[a,b]=s.cards;
+ const s=ordinaryScene(false,true,true,true),[a,b]=s.cards;
  a.emit('pointerenter',{pointerType:'mouse'});assert.equal(s.played.length,0);
  a.toggle.emit('click');assert.equal(a.toggle.getAttribute('aria-expanded'),'true');assert.equal(a.signup.inert,false);
  b.toggle.emit('click');assert.equal(a.classes.has('is-expanded'),false);assert.equal(a.signup.inert,true);assert.equal(b.classes.has('is-expanded'),true);
@@ -535,4 +535,27 @@ test('disclosures remain open when playback is stopped for scrolling or a form',
  const s=ordinaryScene(false,true,true,true),[card]=s.cards;card.toggle.emit('click');
  s.scroll(-500);assert.equal(card.classes.has('is-expanded'),true);assert.equal(card.signup.inert,false);
  s.document.emit('tz:lead-open');assert.equal(card.classes.has('is-expanded'),true);assert.equal(card.toggle.getAttribute('aria-expanded'),'true');
+});
+
+test('fine-pointer disclosures open on hover and close on leave without requiring a click',()=>{
+ const s=ordinaryScene(true,false,true,true),[a,b]=s.cards;
+ a.emit('pointerenter',{pointerType:'mouse'});assert.equal(a.classes.has('is-expanded'),true);assert.equal(a.signup.inert,false);
+ a.toggle.emit('click',{});assert.equal(a.classes.has('is-expanded'),true);
+ b.emit('pointerenter',{pointerType:'mouse'});assert.equal(a.classes.has('is-expanded'),false);assert.equal(b.classes.has('is-expanded'),true);
+ b.emit('pointerleave',{});assert.equal(b.classes.has('is-expanded'),false);
+});
+
+test('touch on a hybrid fine-pointer device is not cancelled by mouse-leave handling',()=>{
+ const s=ordinaryScene(true,false,true,true),[card]=s.cards;
+ card.emit('pointerdown',{pointerType:'touch'});card.toggle.emit('click',{});card.emit('pointerleave',{});
+ assert.equal(card.classes.has('is-expanded'),true);
+ card.emit('pointerdown',{pointerType:'touch'});card.toggle.emit('click',{});assert.equal(card.classes.has('is-expanded'),false);
+ card.emit('pointerenter',{pointerType:'mouse'});assert.equal(card.classes.has('is-expanded'),true);
+ card.emit('pointerleave',{});assert.equal(card.classes.has('is-expanded'),false);
+});
+
+test('fine-pointer focus exposes the signup control without requiring hover',()=>{
+ const s=ordinaryScene(true,false,true,true),[card]=s.cards;
+ card.emit('focusin',{target:{matches:()=>false}});assert.equal(card.classes.has('is-expanded'),true);assert.equal(card.signup.inert,false);
+ card.emit('focusout',{relatedTarget:null});assert.equal(card.classes.has('is-expanded'),false);
 });

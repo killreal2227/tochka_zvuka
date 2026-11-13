@@ -47,4 +47,10 @@
 
 .tz-cta--compact::after { content:""!important; position:absolute; inset:calc((var(--cta-height) * var(--cta-ratio,1) - 44px) * var(--cta-scale) / 2) 0; }
 .tz-cta[hidden] { display:none!important; }
+
+/* Full desktop sizes use the same component proportions. */
+@media(min-width:1001px) {
+ .tz-cta--standard { --cta-height:56px; --cta-circle:40px; --cta-inset:8px; --cta-leading:24px; --cta-gap:12px; --cta-font:17px; --cta-min-width:208px; --cta-arrow:22px; --cta-stroke:1.63636; }
+ .top .tz-cta--compact { --cta-height:48px; --cta-circle:32px; --cta-inset:8px; --cta-leading:18px; --cta-gap:8px; --cta-font:14px; --cta-min-width:160px; --cta-arrow:20px; --cta-stroke:1.8; }
+}
 }

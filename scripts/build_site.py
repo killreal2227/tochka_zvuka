@@ -50,6 +50,8 @@ def troitsk_directions(content):
             classes, direction, inner = m.groups()
             inner = re.sub(r'<span class="go">.*?</span>$', '', inner, flags=re.S)
             inner = inner.replace('<span><span class="name">', '<span class="direction-copy"><span class="name" id="direction-name-' + direction + '">', 1)
+            if direction == 'actor':
+                inner = re.sub(r'(<span class="desc-copy">).*?(</span>)', lambda n: n[1] + 'Сцена, эмоции и свобода самовыражения' + n[2], inner, count=1)
             inner = inner.replace('class="desc"', 'class="desc" id="direction-description-' + direction + '"', 1)
             toggle = '<button class="direction-toggle" type="button" aria-expanded="false" aria-controls="direction-description-' + direction + '" aria-labelledby="direction-name-' + direction + '"></button>'
             plus = '<span class="go direction-indicator" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 5v14M5 12h14"/></svg></span>'

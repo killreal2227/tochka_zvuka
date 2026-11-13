@@ -79,6 +79,7 @@ def check():
     descriptions = re.findall(r'data-dir="([^"]+)">.*?<span class="desc-copy">(.*?)</span>', city_template, re.S)
     assert len(descriptions) == 6
     for direction, description in descriptions:
+        if direction == 'actor': description = 'Сцена, эмоции и свобода самовыражения'
         assert '<span class="desc-copy">' + description + '</span>' in troitsk, 'Incomplete description: ' + direction
     for slug in ('troitsk', 'kaluga'):
         assert 'home.css' not in (SITE/slug/'index.html').read_text(encoding='utf-8')

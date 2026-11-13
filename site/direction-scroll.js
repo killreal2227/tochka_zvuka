@@ -6,37 +6,45 @@
     const cards=[...grid.querySelectorAll('.card[data-dir]')],modal=document.getElementById('leadModal');
     const fine=matchMedia('(hover:hover) and (pointer:fine)'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
     if(grid.dataset?.interaction==='disclosure'){
-      let active=null,expandedCard=null;
+      let active=null,expandedCard=null,lastTouch=false;
       const player=window.createDirectionPlayer({ready,prepare,
         eligible:card=>card===active&&card.classList.contains('is-expanded'),
         reduced:()=>reduced.matches,blocked:()=>document.hidden||!modal.hidden});
       const stop=()=>{player.stop();active=null;cards.forEach(card=>card.classList.remove('is-active'));};
+      const setExpanded=(card,expanded)=>{
+        card.querySelector('.direction-toggle').setAttribute('aria-expanded',String(expanded));
+        card.classList.toggle('is-expanded',expanded);
+        const action=card.querySelector('.direction-signup');action.inert=!expanded;action.setAttribute('aria-hidden',String(!expanded));
+      };
+      const close=()=>{stop();if(expandedCard)setExpanded(expandedCard,false);expandedCard=null;};
+      const show=card=>{
+        if(expandedCard===card)return;
+        close();expandedCard=card;setExpanded(card,true);active=card;card.classList.add('is-active');player.request(card);
+        document.dispatchEvent(new CustomEvent('tz:direction-preview',{detail:{card}}));
+      };
       cards.forEach(card=>{
         const toggle=card.querySelector('.direction-toggle'),signup=card.querySelector('.direction-signup');
         signup.setAttribute('aria-label','Записаться: '+card.querySelector('.name').textContent);
-        const setExpanded=(target,expanded)=>{
-          target.querySelector('.direction-toggle').setAttribute('aria-expanded',String(expanded));
-          target.classList.toggle('is-expanded',expanded);
-          const action=target.querySelector('.direction-signup');
-          action.inert=!expanded;action.setAttribute('aria-hidden',String(!expanded));
-        };
-        toggle.addEventListener('click',()=>{
-          const opening=expandedCard!==card;
-          stop();
-          if(expandedCard)setExpanded(expandedCard,false);
-          expandedCard=opening?card:null;
-          if(opening){setExpanded(card,true);active=card;card.classList.add('is-active');player.request(card);
-            document.dispatchEvent(new CustomEvent('tz:direction-preview',{detail:{card}}));
-          }
+        card.addEventListener('pointerdown',event=>{lastTouch=event.pointerType==='touch';},{passive:true});
+        card.addEventListener('pointerenter',event=>{if(fine.matches&&event.pointerType!=='touch'){lastTouch=false;show(card);}});
+        card.addEventListener('pointerleave',()=>{
+          const keyboard=card.contains?.(document.activeElement)&&document.activeElement?.matches?.(':focus-visible');
+          if(fine.matches&&!lastTouch&&expandedCard===card&&!keyboard)close();
+        });
+        card.addEventListener('focusin',event=>{if(fine.matches&&(!lastTouch||event.target?.matches?.(':focus-visible'))){lastTouch=false;show(card);}});
+        card.addEventListener('focusout',event=>{if(fine.matches&&expandedCard===card&&!card.contains?.(event.relatedTarget)&&!card.matches(':hover'))close();});
+        toggle.addEventListener('click',event=>{
+          if(fine.matches&&!lastTouch){show(card);return;}
+          if(expandedCard===card)close();else show(card);
         });
       });
       document.addEventListener('tz:lead-open',stop);
-      document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
-      reduced.addEventListener('change',stop);
+      document.addEventListener('visibilitychange',()=>{if(document.hidden){if(fine.matches)close();else stop();}});
+      reduced.addEventListener('change',stop);fine.addEventListener('change',close);
       window.addEventListener('scroll',()=>{
         if(!active)return;
         const r=active.getBoundingClientRect(),top=document.querySelector('#top')?.getBoundingClientRect().bottom||0;
-        if(r.bottom<=top||r.top>=window.innerHeight)stop();
+        if(r.bottom<=top||r.top>=window.innerHeight){if(fine.matches)close();else stop();}
       },{passive:true});
       return;
     }
