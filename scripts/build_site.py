@@ -129,7 +129,7 @@ def build():
             source = troitsk_directions(source)
             source = troitsk_environment(source)
             source = troitsk_how(source)
-            source = re.sub(r'(<p class="lead rv d2" id="joinMessage">).*?(</p>)', lambda m: m[1] + 'Начни с пробного урока и почувствуй атмосферу „Точки звука“.' + m[2], source, count=1)
+            source = re.sub(r'(<p class="lead rv d2" id="joinMessage">).*?(</p>)', lambda m: m[1] + 'Начни с пробного урока и почувствуй атмосферу «Точки звука».' + m[2], source, count=1)
             source = source.replace('class="btn light openForm"', 'class="btn openForm join-primary"', 1)
 
             source = re.sub(r'(<a class="link" href="#dirs">)([^<]+)(<svg)', lambda m: m[1] + '<span class="hero-direction-label">' + m[2] + '</span>' + m[3], source, count=1)
