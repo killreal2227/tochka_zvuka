@@ -3,6 +3,7 @@ import hashlib
 import re
 import uuid
 import ydb
+from storage_errors import RequestConflict
 
 UTF8 = ydb.PrimitiveType.Utf8
 U64 = ydb.PrimitiveType.Uint64
@@ -14,9 +15,6 @@ LEAD_TYPES = {k: UTF8 for k in (
     "consent_version", "consent_document_url", "privacy_url", "page_path",
     "telegram_message_id", "crm_state", "crm_external_id")}
 LEAD_TYPES.update(created_at_ms=U64, telegram_sent=BOOL)
-
-class RequestConflict(Exception):
-    pass
 
 def shard_for(request_id):
     return hashlib.sha256(request_id.encode()).digest()[0] % 4
@@ -133,7 +131,7 @@ class YdbStore:
             return {"token":token,"attempts":attempts,"lead":dict(leads[0])}
         return self._run(operation)
 
-    def finish(self, request_id, token, now_ms, attempts, message_id=None):
+    def finish(self, request_id, token, now_ms, attempts, message_id=None, failure=None):
         params={"shard":(shard_for(request_id),U32),"id":(request_id,UTF8)}
         def operation(tx):
             rows=self._execute(tx,"SELECT lease_token FROM "+self._table("outbox")+

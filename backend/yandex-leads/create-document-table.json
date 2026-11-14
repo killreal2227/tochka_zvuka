@@ -1,0 +1,5 @@
+{
+  "TableName": "tz_site_test_20261114_documents",
+  "AttributeDefinitions": [{"AttributeName": "pk", "AttributeType": "S"}],
+  "KeySchema": [{"AttributeName": "pk", "KeyType": "HASH"}]
+}

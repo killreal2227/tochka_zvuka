@@ -36,7 +36,7 @@ class FakeStore:
         return self.rows[data["requestId"]][1]
     def due(self,now,limit): return ["fixture-request"]
     def claim(self,id,now): return {"token":"fixture-lease","attempts":1,"lead":{"branch":"kaluga"}}
-    def finish(self,*args): self.finishes.append(args);return True
+    def finish(self,*args,**kwargs): self.finishes.append(args);return True
 class ServiceTests(unittest.TestCase):
     def call(self,e=None,env=None,proof=None,store=None):
         return receive(e or event(),env or ENV,store or self.store,

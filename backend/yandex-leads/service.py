@@ -9,7 +9,7 @@ import time
 import unicodedata
 import uuid
 from datetime import datetime
-from ydb_store import RequestConflict
+from storage_errors import RequestConflict,DeliveryFailure
 
 ORIGINS={"https://tzvuka.ru"}
 BRANCHES={"kaluga":"Калуга","troitsk":"Троицк"}
@@ -136,20 +136,25 @@ def receive(event, env, store, verify, now_ms=None):
 
 def deliver_due(store, telegram, now_ms=None):
     clock=(lambda:int(time.time()*1000)) if now_ms is None else (lambda:now_ms)
-    counts={"sent":0,"deferred":0,"errors":0}
+    counts={"sent":0,"deferred":0,"attention":0,"errors":0}
     for request_id in store.due(clock(),10):
         try:
             claim=store.claim(request_id,clock())
             if not claim:
                 continue
             message_id=None
+            failure=None
             try:
                 message_id=telegram(claim["lead"])
+            except DeliveryFailure as error:
+                failure=error
             except Exception:
-                pass
-            confirmed=store.finish(request_id,claim["token"],clock(),claim["attempts"],message_id)
+                failure=DeliveryFailure()
+            confirmed=store.finish(request_id,claim["token"],clock(),claim["attempts"],message_id,failure=failure)
             if confirmed:
-                counts["sent" if message_id is not None else "deferred"]+=1
+                category='sent' if message_id is not None else (
+                    'attention' if failure and (failure.permanent or claim['attempts']>=12) else 'deferred')
+                counts[category]+=1
         except Exception:
             counts["errors"]+=1
     return counts

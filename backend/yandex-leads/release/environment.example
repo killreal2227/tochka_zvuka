@@ -2,9 +2,9 @@
 PUBLIC_LEADS_ENABLED=false
 DELIVERY_ENABLED=false
 YDB_DATABASE_LABEL=tochka-leads
-YDB_ENDPOINT=
-YDB_DATABASE=
-YDB_TABLE_PREFIX=tz_site_
+LEADS_STORAGE_BACKEND=document
+YDB_DOCUMENT_ENDPOINT=
+YDB_DOCUMENT_TABLE=tz_site_test_20261114_documents
 DELIVERY_TRIGGER_ID=
 # Inject these from approved Lockbox secret versions, never commit values:
 SMARTCAPTCHA_SERVER_KEY=

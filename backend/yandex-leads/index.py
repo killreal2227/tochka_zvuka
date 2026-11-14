@@ -4,32 +4,29 @@ import os
 import threading
 import urllib.parse
 import urllib.request
+import urllib.error
 import ydb
 from service import BRANCHES, DIRECTIONS, receive, deliver_due, reply
-from ydb_store import YdbStore
+from document_api import DocumentAPI
+from document_store import DocumentStore
+from storage_errors import DeliveryFailure
 
 _lock=threading.Lock()
-_driver=None
 _store=None
 
 def get_store():
-    global _driver,_store
+    global _store
     with _lock:
         if _store is None:
             # Operator must verify the actual resource IDs; this label is only a guard.
             if os.environ.get("YDB_DATABASE_LABEL")!="tochka-leads":
                 raise RuntimeError("Unreviewed database target")
-            if not os.environ.get("YDB_ENDPOINT","").startswith("grpcs://"):
-                raise RuntimeError("TLS endpoint required")
-            driver=ydb.Driver(endpoint=os.environ["YDB_ENDPOINT"],database=os.environ["YDB_DATABASE"],
-                              credentials=ydb.iam.MetadataUrlCredentials())
-            try:
-                driver.wait(timeout=5,fail_fast=True)
-                store=YdbStore(ydb.SessionPool(driver,size=5),os.environ.get("YDB_TABLE_PREFIX","tz_site_"))
-            except Exception:
-                driver.stop()
-                raise
-            _driver,_store=driver,store
+            if os.environ.get('LEADS_STORAGE_BACKEND')!='document':
+                raise RuntimeError('Document API must be selected explicitly; no SQL fallback')
+            endpoint=os.environ.get('YDB_DOCUMENT_ENDPOINT','')
+            credentials=ydb.iam.MetadataUrlCredentials()
+            api=DocumentAPI(endpoint,lambda:credentials.token)
+            _store=DocumentStore(api,os.environ.get('YDB_DOCUMENT_TABLE',''))
         return _store
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -58,11 +55,25 @@ def telegram(lead):
     text="\n".join(["Новая заявка с сайта «Точка звука»","Филиал: "+BRANCHES[branch],
         "Имя: "+lead["name"]+" "+lead["surname"],"Телефон: "+lead["phone"],
         "Направление: "+DIRECTIONS[lead["direction"]],"Заявка: "+lead["request_id"]])
-    result=post("https://api.telegram.org/bot"+os.environ["TELEGRAM_BOT_TOKEN"]+"/sendMessage",
-        json.dumps({"chat_id":chat,"text":text,"link_preview_options":{"is_disabled":True}}).encode(),"application/json")
+    try:
+        result=post("https://api.telegram.org/bot"+os.environ["TELEGRAM_BOT_TOKEN"]+"/sendMessage",
+            json.dumps({"chat_id":chat,"text":text,"link_preview_options":{"is_disabled":True}}).encode(),"application/json")
+    except urllib.error.HTTPError as error:
+        status=error.code
+        try:result=json.loads(error.read(65536))
+        except Exception:result={}
+        if status==429:
+            raise DeliveryFailure('telegram_429',result.get('parameters',{}).get('retry_after')) from None
+        if status in (400,401,403):
+            raise DeliveryFailure('telegram_'+str(status),permanent=True) from None
+        raise DeliveryFailure('telegram_5xx' if status>=500 else 'delivery_unconfirmed') from None
+    except Exception:raise DeliveryFailure() from None
     message=result.get("result",{}).get("message_id")
     if result.get("ok") is not True or type(message) is not int or message<=0:
-        raise RuntimeError("Delivery unconfirmed")
+        code=result.get('error_code')
+        if code==429:raise DeliveryFailure('telegram_429',result.get('parameters',{}).get('retry_after'))
+        if code in (400,401,403):raise DeliveryFailure('telegram_'+str(code),permanent=True)
+        raise DeliveryFailure()
     return message
 
 def timer_allowed(event):

@@ -1,0 +1,4 @@
+{
+  "TableName": "tz_site_test_20261114_documents",
+  "TimeToLiveSpecification": {"AttributeName": "expires_at", "Enabled": true}
+}

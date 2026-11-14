@@ -5,7 +5,7 @@ import hashlib
 import json
 import shutil
 root=Path(__file__).resolve().parent
-files=["index.py","service.py","ydb_store.py","requirements.txt"]
+files=["index.py","service.py","document_api.py","document_store.py","storage_errors.py","private_document_test.py","requirements.txt"]
 # Use the fully pinned dependency list as the deployment requirements.txt.
 with ZipFile(root/"deployment.zip","w",ZIP_DEFLATED) as archive:
     for name in files:
