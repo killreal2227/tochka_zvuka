@@ -30,10 +30,9 @@ class FakeStore:
         self.rows={};self.allowed=True;self.rate_keys=[];self.finishes=[]
     def rate_limit(self,key,now): self.rate_keys.append(key);return self.allowed
     def save(self,data,digest,now):
-        old=self.rows.get(data["requestId"])
-        if old and old[0]!=digest: raise RequestConflict()
-        self.rows.setdefault(data["requestId"],(digest,str(uuid.uuid4()),data))
-        return self.rows[data["requestId"]][1]
+        receipt=data["requestId"]+":"+digest
+        self.rows.setdefault(receipt,(digest,receipt,data))
+        return receipt
     def due(self,now,limit): return ["fixture-request"]
     def claim(self,id,now): return {"token":"fixture-lease","attempts":1,"lead":{"branch":"kaluga"}}
     def finish(self,*args,**kwargs): self.finishes.append(args);return True
@@ -51,9 +50,10 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(len(self.store.rows),2)
         self.assertNotIn("captchaToken",next(iter(self.store.rows.values()))[2])
         self.assertRegex(self.store.rate_keys[0],r"^[0-9a-f]{64}$")
-    def test_conflict(self):
+    def test_changed_payload_creates_separate_version(self):
         p=payload();self.call(event(p));p["name"]="Другое"
-        self.assertEqual(self.call(event(p))["statusCode"],409)
+        self.assertEqual(self.call(event(p))["statusCode"],200)
+        self.assertEqual(len(self.store.rows),2)
     def test_captcha_failures_and_empty_host_fail_closed(self):
         for p in ({},{"status":"failed"},{"status":"ok","host":""},{"status":"ok","host":"evil.example"},{"success":True,"hostname":"tzvuka.ru"}):
             self.assertEqual(self.call(proof=p)["statusCode"],403)

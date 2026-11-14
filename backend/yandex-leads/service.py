@@ -73,7 +73,7 @@ def decode_body(event):
         return result
     return json.loads(raw.decode("utf-8"),object_pairs_hook=object_pairs)
 
-def receive(event, env, store, verify, now_ms=None):
+def receive(event, env, store, verify, now_ms=None, sender=None):
     now_ms=int(time.time()*1000) if now_ms is None else now_ms
     headers={str(k).lower():v for k,v in event.get("headers",{}).items()}
     origin=headers.get("origin")
@@ -128,7 +128,12 @@ def receive(event, env, store, verify, now_ms=None):
         lead_id=store.save(business,digest,now_ms)
         if not isinstance(lead_id,str) or not lead_id:
             raise RuntimeError("Persistence unconfirmed")
-        return reply(200,{"ok":True,"saved":True,"requestId":data["requestId"],"leadId":lead_id},origin)
+        notification='disabled'
+        if sender is not None:
+            try: notification=store.notify(lead_id,sender)
+            except Exception: notification='pending'
+        return reply(200,{"ok":True,"saved":True,"requestId":data["requestId"],"leadId":lead_id,
+                          "notification":notification},origin)
     except RequestConflict:
         return reply(409,{"error":"request_conflict"},origin)
     except Exception:

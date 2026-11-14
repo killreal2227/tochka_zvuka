@@ -21,9 +21,15 @@
   "telegram_delivery_enabled": false,
   "audit_spec_sha256": "e19e45be3ded3cb8d5f98a9edd061f9f40e85c05c0e7ec16bac6218f9d2ecaa9",
   "runtime_decision": "Python artifact; reported Node.js 22 version cannot execute this ZIP. Select python312 explicitly; no runtime changed by this preparation.",
-  "artifact_sha256": "e74e1601f3746b86c5c50f8621bfb6ad83347c19d81bfcccb48ef9eae71f75be",
-  "storage_backend": "document",
-  "notification_intent": "embedded_atomic_item",
+  "artifact_sha256": "56581d45691ee5d6954b8b74434826ef9f095b095fe44f07e57952efa1f03bfd",
+  "storage_backend": "bulk_read",
+  "notification_intent": "immutable_lead_row; separate confirmed sent marker",
   "document_api_live_verified": false,
-  "document_table": "tz_site_test_20261114_documents"
+  "document_table": "tz_site_test_20261114_documents",
+  "document_api_table_created": true,
+  "document_api_smoke_result": "FAILED: PutItem and GetItem client timeout at 8s; commit outcome unknown",
+  "deduplication": "requestId+canonical_payload_hash; changed content creates another version",
+  "delivery": "immediate attempt; private retry by receipt; no automatic retry or delivery guarantee",
+  "native_rpc_live_verified_previously": true,
+  "mvp_function_live_verified": false
 }

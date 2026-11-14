@@ -7,8 +7,7 @@ import urllib.request
 import urllib.error
 import ydb
 from service import BRANCHES, DIRECTIONS, receive, deliver_due, reply
-from document_api import DocumentAPI
-from document_store import DocumentStore
+from bulk_store import BulkStore
 from storage_errors import DeliveryFailure
 
 _lock=threading.Lock()
@@ -21,12 +20,20 @@ def get_store():
             # Operator must verify the actual resource IDs; this label is only a guard.
             if os.environ.get("YDB_DATABASE_LABEL")!="tochka-leads":
                 raise RuntimeError("Unreviewed database target")
-            if os.environ.get('LEADS_STORAGE_BACKEND')!='document':
-                raise RuntimeError('Document API must be selected explicitly; no SQL fallback')
-            endpoint=os.environ.get('YDB_DOCUMENT_ENDPOINT','')
-            credentials=ydb.iam.MetadataUrlCredentials()
-            api=DocumentAPI(endpoint,lambda:credentials.token)
-            _store=DocumentStore(api,os.environ.get('YDB_DOCUMENT_TABLE',''))
+            if os.environ.get('LEADS_STORAGE_BACKEND')!='bulk_read':
+                raise RuntimeError('Native RPC backend must be explicit')
+            endpoint=os.environ.get('YDB_ENDPOINT','')
+            database=os.environ.get('YDB_DATABASE','')
+            if endpoint!='grpcs://ydb.serverless.yandexcloud.net:2135' or database!='/ru-central1/b1gs93r1fhsuparnmrba/etntmjbnguvsu5l8bv3s':
+                raise RuntimeError('Unreviewed database endpoint/path')
+            prefix=os.environ.get('YDB_TABLE_PREFIX','')
+            if prefix!='tz_site_test_20261114_':
+                raise RuntimeError('Only approved test tables are enabled')
+            driver=ydb.Driver(endpoint=endpoint,database=database,credentials=ydb.iam.MetadataUrlCredentials())
+            driver.wait(timeout=8,fail_fast=True)
+            _store=BulkStore(driver.table_client,database,prefix)
+            _store.driver=driver
+
         return _store
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -90,9 +97,14 @@ class LazyStore:
 def handler(event, context):
     try:
         if "httpMethod" in event:
-            return receive(event,os.environ,LazyStore(),verify)
-        if os.environ.get("DELIVERY_ENABLED")=="true" and timer_allowed(event):
-            return deliver_due(get_store(),telegram)
+            return receive(event,os.environ,LazyStore(),verify,
+                sender=telegram if os.environ.get("DELIVERY_ENABLED")=="true" else None)
+        # Direct IAM-authorized invocation only: never exposed as an HTTP route.
+        if os.environ.get("DELIVERY_ENABLED")=="true" and set(event)=={"retryReceipt"}:
+            try:
+                return {"notification":get_store().notify(event['retryReceipt'],telegram)}
+            except Exception:
+                return {"notification":"pending"}
         return {"ignored":True}
     except Exception:
         # Never return SDK, SQL, secret, contact, HTTP request or Telegram URL details.
