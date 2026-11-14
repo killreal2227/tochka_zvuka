@@ -1,0 +1,82 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Tochka leads Python candidate - MANUAL REVIEW ONLY",
+    "version": "0.2.0",
+    "description": "Infrastructure proposal only. IDs, approved function tag, SWS profile, payload contract and logging must be reviewed before any deployment."
+  },
+  "x-yc-apigateway": {
+    "smartWebSecurity": {
+      "securityProfileId": "<SWS_PROFILE_ID>"
+    }
+  },
+  "paths": {
+    "/leads": {
+      "x-yc-apigateway-cors": {
+        "origin": "https://tzvuka.ru",
+        "methods": [
+          "POST",
+          "OPTIONS"
+        ],
+        "allowedHeaders": [
+          "Content-Type"
+        ],
+        "credentials": false,
+        "maxAge": 300,
+        "optionsSuccessStatus": 204
+      },
+      "post": {
+        "operationId": "submitLead",
+        "summary": "Public intake; server-side validation and SmartCaptcha remain mandatory",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Exact payload schema is owned by the integration agent; no schema validation guarantee from this draft."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmed YDB commit: {ok:true,saved:true,requestId,leadId}; Telegram queued"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "403": {
+            "description": "Origin or captcha rejected"
+          },
+          "409": {
+            "description": "Idempotency key reused with different payload"
+          },
+          "413": {
+            "description": "Request too large"
+          },
+          "415": {
+            "description": "Unsupported media type"
+          },
+          "429": {
+            "description": "Rate limited; retry policy must be checked"
+          },
+          "503": {
+            "description": "Dependency unavailable; no acceptance claimed"
+          }
+        },
+        "x-yc-apigateway-integration": {
+          "type": "cloud_functions",
+          "function_id": "<FUNCTION_ID>",
+          "tag": "<APPROVED_RELEASE_TAG>",
+          "service_account_id": "<GATEWAY_INVOKER_SA_ID>",
+          "payload_format_version": "1.0",
+          "context": {
+            "route": "website-leads-v1"
+          }
+        }
+      }
+    }
+  }
+}

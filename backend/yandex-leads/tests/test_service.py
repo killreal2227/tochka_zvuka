@@ -20,7 +20,7 @@ def payload():
         consent=dict(accepted=True,acceptedAt=STAMP,version="2026-11-10-v3",
         documentUrl="https://tzvuka.ru/documents/#consent",privacyUrl="https://tzvuka.ru/documents/#privacy"))
 def event(data=None):
-    return {"path":"/public/lead","httpMethod":"POST","body":json.dumps(data or payload()),
+    return {"version":"1.0","path":"/leads","httpMethod":"POST","body":json.dumps(data or payload()),
         "headers":{"origin":"https://tzvuka.ru","content-type":"application/json"},
         "requestContext":{"identity":{"sourceIp":"192.0.2.1"},
         "apiGateway":{"operationContext":{"route":"website-leads-v1"}}}}

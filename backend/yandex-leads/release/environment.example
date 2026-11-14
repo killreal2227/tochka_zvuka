@@ -1,0 +1,15 @@
+# Configuration names only. Not loaded automatically. No real keys or resource IDs.
+PUBLIC_LEADS_ENABLED=false
+DELIVERY_ENABLED=false
+YDB_DATABASE_LABEL=tochka-leads
+YDB_ENDPOINT=
+YDB_DATABASE=
+YDB_TABLE_PREFIX=tz_site_
+DELIVERY_TRIGGER_ID=
+# Inject these from approved Lockbox secret versions, never commit values:
+SMARTCAPTCHA_SERVER_KEY=
+RATE_HMAC_KEY=
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_CHAT_KALUGA=
+TELEGRAM_CHAT_TROITSK=
+# Public browser config: enabled=false, endpoint=null, siteKey=''

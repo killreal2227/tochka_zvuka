@@ -1,5 +1,5 @@
--- REVIEW ONLY. Do not execute against tochka-learning before separate approval.
--- New row tables in the existing database; no changes to learning tables or D1.
+-- REVIEW ONLY: target is the dedicated tochka-leads database, verified by resource ID/path.
+-- NEVER apply to tochka-learning. No execution until separate approval.
 CREATE TABLE tz_site_leads (
  request_id Utf8 NOT NULL, payload_hash Utf8, lead_id Utf8,
  branch Utf8, name Utf8, surname Utf8, phone Utf8, direction Utf8,

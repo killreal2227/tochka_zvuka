@@ -1,6 +1,7 @@
 # Configuration names only. Not loaded automatically. No real keys or resource IDs.
 PUBLIC_LEADS_ENABLED=false
 DELIVERY_ENABLED=false
+YDB_DATABASE_LABEL=tochka-leads
 YDB_ENDPOINT=
 YDB_DATABASE=
 YDB_TABLE_PREFIX=tz_site_

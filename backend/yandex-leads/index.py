@@ -16,6 +16,11 @@ def get_store():
     global _driver,_store
     with _lock:
         if _store is None:
+            # Operator must verify the actual resource IDs; this label is only a guard.
+            if os.environ.get("YDB_DATABASE_LABEL")!="tochka-leads":
+                raise RuntimeError("Unreviewed database target")
+            if not os.environ.get("YDB_ENDPOINT","").startswith("grpcs://"):
+                raise RuntimeError("TLS endpoint required")
             driver=ydb.Driver(endpoint=os.environ["YDB_ENDPOINT"],database=os.environ["YDB_DATABASE"],
                               credentials=ydb.iam.MetadataUrlCredentials())
             try:

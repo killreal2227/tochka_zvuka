@@ -4,3 +4,4 @@ __pycache__/
 .main-preservation.json
 backend/yandex-leads/.env
 backend/yandex-leads/deployment.zip
+backend/yandex-leads/release/*.zip

@@ -11,7 +11,7 @@ import uuid
 from datetime import datetime
 from ydb_store import RequestConflict
 
-ORIGINS={"https://tzvuka.ru","https://www.tzvuka.ru"}
+ORIGINS={"https://tzvuka.ru"}
 BRANCHES={"kaluga":"Калуга","troitsk":"Троицк"}
 DIRECTIONS={"vocal":"Вокал","guitar":"Гитара","drums":"Барабаны","piano":"Фортепиано",
             "actor":"Актёрское мастерство","speech":"Ораторское искусство","unsure":"Помогите выбрать"}
@@ -77,9 +77,15 @@ def receive(event, env, store, verify, now_ms=None):
     now_ms=int(time.time()*1000) if now_ms is None else now_ms
     headers={str(k).lower():v for k,v in event.get("headers",{}).items()}
     origin=headers.get("origin")
+    # Gateway 1.0 may provide repeated headers separately; reject ambiguity.
+    for name,values in event.get("multiValueHeaders",{}).items():
+        if name.lower() in ("origin","content-type") and (
+            not isinstance(values,list) or len(set(values))!=1 or
+            headers.get(name.lower())!=values[0]):
+            return reply(400,{"error":"ambiguous_headers"})
     if origin not in ORIGINS:
         return reply(403,{"error":"origin_rejected"})
-    if event.get("path")!="/public/lead":
+    if event.get("path")!="/leads":
         return reply(404,{"error":"not_found"},origin)
     method=event.get("httpMethod")
     if method=="OPTIONS":
