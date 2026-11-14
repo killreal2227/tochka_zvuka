@@ -1,6 +1,8 @@
 """Cloud Functions entrypoint: index.handler. Off by default; no resources created."""
 import json
+import http.client
 import os
+import socket
 import threading
 import urllib.parse
 import urllib.request
@@ -40,9 +42,37 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self,*args,**kwargs):
         return None
 
+class TelegramConnection(http.client.HTTPSConnection):
+    def __init__(self,host,address,**kwargs):
+        if host!='api.telegram.org' or address!='149.154.167.220':
+            raise RuntimeError('Unreviewed Telegram destination')
+        super().__init__(host,**kwargs)
+        self.address=address
+
+    def connect(self):
+        # Connect to the verified reachable Telegram address, retaining hostname/SNI/certificate checks.
+        raw=socket.create_connection((self.address,443),self.timeout,self.source_address)
+        try:
+            self.sock=self._context.wrap_socket(raw,server_hostname=self.host)
+        except Exception:
+            raw.close()
+            raise
+
+class TelegramHTTPSHandler(urllib.request.HTTPSHandler):
+    def __init__(self,address):
+        super().__init__()
+        self.address=address
+
+    def https_open(self,request):
+        return self.do_open(lambda host,**kwargs:TelegramConnection(host,self.address,**kwargs),
+                            request,context=self._context)
+
 def post(url, body, content_type):
     request=urllib.request.Request(url,data=body,headers={"Content-Type":content_type},method="POST")
-    with urllib.request.build_opener(NoRedirect).open(request,timeout=8) as response:
+    handlers=[NoRedirect]
+    if urllib.parse.urlsplit(url).netloc=='api.telegram.org' and os.environ.get('TELEGRAM_CONNECT_IPV4'):
+        handlers.extend([urllib.request.ProxyHandler({}),TelegramHTTPSHandler(os.environ['TELEGRAM_CONNECT_IPV4'])])
+    with urllib.request.build_opener(*handlers).open(request,timeout=8) as response:
         if response.status!=200:
             raise RuntimeError("Upstream unavailable")
         raw=response.read(65537)

@@ -2,6 +2,7 @@
 import copy
 import hashlib
 import json
+import ssl
 import unittest
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
@@ -16,6 +17,7 @@ class Client:
         if self.fail_write: raise RuntimeError('fixture')
         for row in rows: self.rows[(path,row['request_id'])]=copy.deepcopy(row)
     def read_rows(self,path,keys,types,settings=None):
+        if path.endswith('outbox'): raise RuntimeError('ReadRows unsupported on indexed table')
         row=self.rows.get((path,keys[0]['request_id']))
         return SimpleNamespace(rows=[] if self.hide or row is None else [copy.deepcopy(row)])
 
@@ -51,6 +53,9 @@ class BulkTests(unittest.TestCase):
             self.save();self.store.notify(receipt,sender);self.assertEqual(sender.call_count,1)
             lead=self.client.rows[('/fixture/tz_test_leads',receipt)]
             self.assertEqual(lead['status'],'notification_pending')
+            marker=self.client.rows[('/fixture/tz_test_leads','sent:'+receipt)]
+            self.assertTrue(marker['telegram_sent'])
+            self.assertEqual(marker['telegram_message_id'],'42')
     def test_failure_then_private_retry(self):
         receipt=self.save()
         with self.assertRaises(RuntimeError): self.store.notify(receipt,Mock(side_effect=RuntimeError('timeout')))
@@ -87,3 +92,16 @@ class BulkTests(unittest.TestCase):
         self.assertTrue(all(self.store.rate_limit('fixture',NOW) for _ in range(5)))
         self.assertFalse(self.store.rate_limit('fixture',NOW))
         self.assertTrue(self.store.rate_limit('fixture',NOW+60000))
+
+    def test_telegram_direct_address_keeps_certificate_hostname_validation(self):
+        connection=index.TelegramConnection('api.telegram.org','149.154.167.220',timeout=8)
+        self.assertTrue(connection._context.check_hostname)
+        self.assertEqual(connection._context.verify_mode,ssl.CERT_REQUIRED)
+        raw=Mock()
+        with patch.object(index.socket,'create_connection',return_value=raw) as connect, \
+             patch.object(connection._context,'wrap_socket',return_value=Mock()) as wrap:
+            connection.connect()
+        connect.assert_called_once_with(('149.154.167.220',443),8,None)
+        wrap.assert_called_once_with(raw,server_hostname='api.telegram.org')
+        for host,address in [('other.invalid','149.154.167.220'),('api.telegram.org','127.0.0.1')]:
+            with self.assertRaises(RuntimeError):index.TelegramConnection(host,address,timeout=8)

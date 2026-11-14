@@ -73,7 +73,7 @@ window.TZ_LEADS=Object.assign({
    if(config.enabled!==true)throw fail('Отправка заявки пока недоступна. Пожалуйста, позвоните в школу.');
    let url;try{url=new URL(config.endpoint);}catch{throw fail('Сервис недоступен. Пожалуйста, позвоните в школу.');}
    if(!config.siteKey||url.protocol!=='https:')throw fail('Сервис недоступен. Пожалуйста, позвоните в школу.');
-   const proof=await token(),controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
+   const proof=await token(),controller=new AbortController(),timer=setTimeout(()=>controller.abort(),65000);
    try{
     let response;
     try{response=await fetch(url.href,{method:'POST',headers:{'Content-Type':'application/json'},

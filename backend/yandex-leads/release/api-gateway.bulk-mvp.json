@@ -1,0 +1,74 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Tochka leads MVP - intake closed pending website approval",
+    "version": "0.3.0",
+    "description": "Dedicated leads gateway; no learning resources. Public intake disabled in function."
+  },
+  "paths": {
+    "/leads": {
+      "x-yc-apigateway-cors": {
+        "origin": "https://tzvuka.ru",
+        "methods": [
+          "POST",
+          "OPTIONS"
+        ],
+        "allowedHeaders": [
+          "Content-Type"
+        ],
+        "credentials": false,
+        "maxAge": 300,
+        "optionsSuccessStatus": 204
+      },
+      "post": {
+        "operationId": "submitLead",
+        "summary": "Public intake; server-side validation and SmartCaptcha remain mandatory",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Exact payload schema is owned by the integration agent; no schema validation guarantee from this draft."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Confirmed native YDB persistence; notification status is separate"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "403": {
+            "description": "Origin or captcha rejected"
+          },
+          "413": {
+            "description": "Request too large"
+          },
+          "415": {
+            "description": "Unsupported media type"
+          },
+          "429": {
+            "description": "Rate limited; retry policy must be checked"
+          },
+          "503": {
+            "description": "Dependency unavailable; no acceptance claimed"
+          }
+        },
+        "x-yc-apigateway-integration": {
+          "type": "cloud_functions",
+          "function_id": "d4ep7jlje5la3g8ohd70",
+          "tag": "bulk-telegram-r3-20261114",
+          "service_account_id": "aje3h7miof09lfdkkcom",
+          "payload_format_version": "1.0",
+          "context": {
+            "route": "website-leads-v1"
+          }
+        }
+      }
+    }
+  }
+}

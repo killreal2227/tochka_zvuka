@@ -50,4 +50,5 @@ class LaunchTests(unittest.TestCase):
         self.assertEqual(manifest['runtime'],'python312')
         self.assertEqual(manifest['database_name'],'tochka-leads')
         self.assertFalse(manifest['public_intake_enabled'])
-        self.assertFalse(manifest['telegram_delivery_enabled'])
+        self.assertTrue(manifest['telegram_delivery_enabled'])
+        self.assertEqual(manifest['status'],'DEPLOYED_PRIVATE_VERIFIED_WEBSITE_PENDING')

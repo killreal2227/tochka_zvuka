@@ -13,3 +13,6 @@ TELEGRAM_BOT_TOKEN=
 TELEGRAM_CHAT_KALUGA=
 TELEGRAM_CHAT_TROITSK=
 # Public browser config: enabled=false, endpoint=null, siteKey=''
+
+# Verified reachable Telegram address; TLS still validates api.telegram.org.
+TELEGRAM_CONNECT_IPV4=149.154.167.220

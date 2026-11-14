@@ -1,0 +1,68 @@
+{
+  "function_id": "d4ep7jlje5la3g8ohd70",
+  "telegram_version": "d4eabvvatt4s66eu3l6e",
+  "telegram_tag": "bulk-telegram-r3-20261114",
+  "telegram_secret_version": "e6qgsu2vsjngmj83qal1",
+  "gateway_id": "d5d2psrdhd0snl30t7b0",
+  "gateway_domain": "d5d2psrdhd0snl30t7b0.zj2i1qoy.apigw.yandexcloud.net",
+  "verified_delivery": {
+    "kaluga": {
+      "saved": true,
+      "telegram_sent": true,
+      "message_id": 16,
+      "chat_id_matches": true,
+      "request_branch_matches": true
+    },
+    "troitsk": {
+      "saved": true,
+      "telegram_sent": true,
+      "message_id": 17,
+      "chat_id_matches": true,
+      "request_branch_matches": true
+    }
+  },
+  "telegram_connection_probe": {
+    "lead_read": true,
+    "marker_read": false,
+    "telegram_error_type": "URLError",
+    "telegram_reason_type": "TimeoutError",
+    "elapsed_seconds": 8.05
+  },
+  "ipv4_probe": {
+    "proxy_schemes": [],
+    "attempts": [
+      {
+        "address": "149.154.166.110",
+        "error_type": "TimeoutError",
+        "seconds": 4.0
+      }
+    ],
+    "dns_families": [
+      "IPv4"
+    ]
+  },
+  "alt_ip_probe": {
+    "proxy_schemes": [],
+    "attempts": [
+      {
+        "address": "149.154.167.220",
+        "tcp": true,
+        "tls": true,
+        "http_status": 200,
+        "bot_ok": true,
+        "seconds": 0.22
+      }
+    ],
+    "dns_families": [
+      "IPv4"
+    ]
+  },
+  "public_intake_enabled": false,
+  "telegram_delivery_enabled": true,
+  "site_published": false,
+  "cloudflare_changed": false,
+  "learning_changed": false,
+  "main_changed": false,
+  "local_backend_tests": 25,
+  "local_client_tests": 5
+}

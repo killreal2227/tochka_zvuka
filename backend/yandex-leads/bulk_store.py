@@ -9,8 +9,6 @@ TEXT_FIELDS = ('request_id payload_hash lead_id branch name surname phone direct
                'privacy_url page_path telegram_message_id crm_state crm_external_id').split()
 LEAD_TYPES = {k:ydb.PrimitiveType.Utf8 for k in TEXT_FIELDS}
 LEAD_TYPES.update(created_at_ms=ydb.PrimitiveType.Uint64, telegram_sent=ydb.PrimitiveType.Bool)
-OUTBOX_TYPES = dict(shard=ydb.PrimitiveType.Uint32,request_id=ydb.PrimitiveType.Utf8,
-                   state=ydb.PrimitiveType.Utf8,lease_token=ydb.PrimitiveType.Utf8)
 
 def struct(types):
     result=ydb.StructType()
@@ -66,11 +64,14 @@ class BulkStore:
             raise ValueError('Invalid receipt')
         lead=self._read('leads',{'request_id':receipt},{'request_id':ydb.PrimitiveType.Utf8})
         if not lead: raise RuntimeError('Lead missing')
-        key={'shard':0,'request_id':'sent:'+receipt}
-        marker=self._read('outbox',key,{k:OUTBOX_TYPES[k] for k in key})
-        if marker and marker.get('state')=='sent': return 'sent'
+        # YDB ReadRows rejects tables with indexes (400070); existing outbox has due_idx.
+        # A reserved key in the unindexed leads table keeps the acknowledgement independent.
+        key={'request_id':'sent:'+receipt}
+        marker=self._read('leads',key,{'request_id':ydb.PrimitiveType.Utf8})
+        if marker and marker.get('telegram_sent') is True: return 'sent'
         # Failure/timeout never overwrites the durable pending intent or a successful marker.
         message=sender(lead)
         if type(message) is not int or message<=0: raise RuntimeError('Delivery unconfirmed')
-        self._write_confirm('outbox',dict(key,state='sent',lease_token=str(message)),OUTBOX_TYPES,key)
+        marker=dict(lead,**key,status='notification_sent',telegram_sent=True,telegram_message_id=str(message))
+        self._write_confirm('leads',marker,LEAD_TYPES,key)
         return 'sent'

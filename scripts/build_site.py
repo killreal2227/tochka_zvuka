@@ -116,7 +116,7 @@ def write(path, content):
             asset = (path.parent / match[2]).resolve()
             revision = hashlib.sha256(asset.read_bytes()).hexdigest()[:10]
             return f'{match[1]}{match[2]}?v={revision}"'
-        content = re.sub(r'((?:href|src)=")([^"?]*(?:scroll-reveal\.css|scroll-reveal\.js|legal\.css|documents\.js|cta\.css|experience\.css|responsive\.css|form\.css|home\.css|narrow-header\.css|troitsk-enrolment\.css|troitsk-enrolment\.js|troitsk-page\.js|home-motion\.js|home-branches\.js|lead-viewport\.js|lead-client\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|direction-scroll\.js|button-labels\.js|viewport-scale\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
+        content = re.sub(r'((?:href|src)=")([^"?]*(?:scroll-reveal\.css|scroll-reveal\.js|legal\.css|documents\.js|cta\.css|experience\.css|responsive\.css|form\.css|home\.css|narrow-header\.css|troitsk-enrolment\.css|troitsk-enrolment\.js|troitsk-page\.js|home-motion\.js|home-branches\.js|lead-viewport\.js|lead-client\.js|lead-config\.js|lead-form\.js|city-ui\.css|city-ui\.js|direction-player\.js|direction-scroll\.js|button-labels\.js|viewport-scale\.js|icons/ic_[a-z]+\.svg))"', versioned, content)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding='utf-8')
 
