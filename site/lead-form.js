@@ -276,12 +276,12 @@ maskPhone(phone);
     if(!form.reportValidity())return;
     if(form.elements.website.value)return;
     if(form.elements.name.value.trim().length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}
-    if(form.elements.surname.value.trim().length<2){form.elements.surname.setCustomValidity('Введи фамилию: минимум 2 символа.');form.elements.surname.reportValidity();return;}
+    if(form.elements.surname.value.trim()&&form.elements.surname.value.trim().length<2){form.elements.surname.setCustomValidity('Введи фамилию: минимум 2 символа.');form.elements.surname.reportValidity();return;}
     const stamp=new Date().toISOString();
     const raw={name:form.elements.name.value.trim(),surname:form.elements.surname.value.trim(),phone:normalized,branch:form.elements.branch.value,direction:form.elements.direction.value||'unsure',website:'',pagePath:location.pathname};
     if(raw.name.length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}
     if(pending&&Object.keys(raw).some(key=>pending[key]!==raw[key]))pending=null;
-    if(!pending)pending={schemaVersion:1,requestId:crypto.randomUUID(),createdAt:stamp,...raw,consent:{accepted:true,acceptedAt:stamp,version:window.TZ_LEADS.consentVersion,documentUrl:new URL(document.querySelector('.lead-consent a').dataset?.consentUrl||document.querySelector('.lead-consent a').getAttribute('href'),location.href).href,privacyUrl:new URL(document.querySelector('.lead-consent a').dataset?.policyUrl||document.querySelectorAll('.lead-consent a')[1].getAttribute('href'),location.href).href}};
+    if(!pending)pending={schemaVersion:2,requestId:crypto.randomUUID(),createdAt:stamp,...raw,privacyNoticeVersion:window.TZ_LEADS.privacyNoticeVersion};
     sending=true;button.disabled=true;status.textContent='Отправляем заявку…';
     const submission=pending;
     try{

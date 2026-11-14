@@ -1,0 +1,23 @@
+{
+  "runtime": "python312",
+  "entrypoint": "index.handler",
+  "files": [
+    "index.py",
+    "service.py",
+    "bulk_store.py",
+    "retention.py",
+    "storage_errors.py",
+    "requirements.txt"
+  ],
+  "sha256": "c252a380705168d21cca32b5a3518f74fa7f81e18c2c27e8fda8f2dd84336c2a",
+  "deployment_order": [
+    "additive-schema",
+    "dual-server",
+    "v2-client"
+  ],
+  "required_environment": {
+    "LEADS_SCHEMA_V2_ENABLED": "true",
+    "LEADS_MAINTENANCE": "false"
+  },
+  "secrets": "reuse existing Lockbox bindings; no new secret values"
+}

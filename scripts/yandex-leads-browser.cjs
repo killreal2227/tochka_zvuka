@@ -13,18 +13,19 @@ const {chromium,webkit}=require(process.env.TZ_PLAYWRIGHT_MODULE||'playwright');
    let loseFirst=true;
    await page.route('**/*',async route=>{
     const request=route.request(),u=new URL(request.url());
+    if(u.hostname==='tzvuka.ru'&&u.pathname==='/lead-config.js')return route.fulfill({contentType:'text/javascript',body:"window.TZ_LEADS={enabled:true,endpoint:'https://fixture.apigw.yandexcloud.net/leads',siteKey:'fixture-key',privacyNoticeVersion:'2026-11-14-v2'};"});
     if(u.hostname==='smartcaptcha.cloud.yandex.ru'){
      return route.fulfill({contentType:'text/javascript',body:"window.smartCaptcha={render:(host,options)=>{window.fixtureChallenge=options;return 'fixture-widget';},subscribe:()=>()=>{},reset:()=>{},destroy:()=>{},execute:()=>setTimeout(()=>window.fixtureChallenge.callback('fixture-proof'),50)};window.TZSmartCaptchaReady?.();"});
     }
     if(u.hostname==='fixture.apigw.yandexcloud.net'){
      if(request.method()==='OPTIONS')return route.fulfill({status:204,headers:{'access-control-allow-origin':'https://tzvuka.ru','access-control-allow-methods':'POST','access-control-allow-headers':'Content-Type'}});
      const payload=request.postDataJSON();payloads.push(payload);
-     assert.equal(payload.captchaToken,'fixture-proof');
+     assert.equal(payload.captchaToken,'fixture-proof');assert.equal(payload.schemaVersion,2);assert.equal(payload.privacyNoticeVersion,'2026-11-14-v2');assert.equal('consent' in payload,false);if(mobile)assert.equal(payload.surname,'');
      if(!saved.has(payload.requestId))saved.set(payload.requestId,{id:'fixture-'+payload.requestId,branch:payload.branch});
      if(loseFirst){loseFirst=false;return route.abort('failed');}
      return route.fulfill({status:200,headers:{'access-control-allow-origin':'https://tzvuka.ru','content-type':'application/json'},body:JSON.stringify({ok:true,saved:true,requestId:payload.requestId,leadId:saved.get(payload.requestId).id})});
     }
-    if(u.hostname!=='tzvuka.ru')throw Error('Unexpected external network request: '+u.hostname);
+    if(u.hostname!=='tzvuka.ru'){errors.push('Unexpected external network request: '+u.hostname);return route.abort();}
     let file=path.resolve(root,'.'+decodeURIComponent(u.pathname));
     if(!file.startsWith(root+path.sep)&&file!==root)return route.abort();
     try{if(fs.statSync(file).isDirectory())file=path.join(file,'index.html');return route.fulfill({path:file});}catch{return route.fulfill({status:404,body:''});}
@@ -34,7 +35,7 @@ const {chromium,webkit}=require(process.env.TZ_PLAYWRIGHT_MODULE||'playwright');
    await page.locator('#join .openForm').click();
    const before=await page.evaluate(()=>({y:-parseFloat(document.body.style.top),body:document.body.getBoundingClientRect().height}));
    await page.locator('[name=name]').fill('тест');
-   await page.locator('[name=surname]').fill('вымышленный');
+   if(!mobile)await page.locator('[name=surname]').fill('вымышленный');
    await page.locator('[name=phone]').fill('89990000000');
    await page.locator('#d-vocal').check({force:true});
    if(mobile){

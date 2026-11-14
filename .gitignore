@@ -5,3 +5,6 @@ __pycache__/
 backend/yandex-leads/.env
 backend/yandex-leads/deployment.zip
 backend/yandex-leads/release/*.zip
+*.local.json
+*.local.jsonl
+private-plans/

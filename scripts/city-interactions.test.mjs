@@ -186,7 +186,7 @@ function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',co
     querySelector:s=>s==='.lead-consent a'?link('./consent/'):null,
     querySelectorAll:s=>s==='.openForm'?[trigger]:s==='.lead-consent a'?[link('./consent/'),link('./privacy/')]:[]});
   document.dispatchEvent=e=>{document.emit(e.type);};
-  const window=events({TZ_LEADS:{endpoint,consentVersion:'2026-11-10-v3'},TZLeadClient:{
+  const window=events({TZ_LEADS:{endpoint,privacyNoticeVersion:'2026-11-14-v2'},TZLeadClient:{
     async submit(data){calls++;payload=data;if(reply==='failure')throw Object.assign(new Error('fixture transport failure'),{publicMessage:'Не удалось сохранить заявку.'});return {ok:true,saved:true,requestId:data.requestId,leadId:'fixture-id'};}
   }});
   vm.runInNewContext(source('lead-form.js'),{window,document,matchMedia:()=>({matches:true,addEventListener(){}}),
@@ -229,17 +229,17 @@ test('single-column branch form supports acknowledged delivery without decorativ
     assert.equal(s.success.hidden,false);assert.equal(s.calls,1);assert.equal(s.uuids,1);
   }
 });
-test('configured form uses transport acknowledgement and includes button-consent metadata',async()=>{
+test('configured form uses transport acknowledgement without fabricated consent',async()=>{
   const s=formScene('https://example.invalid/leads');await s.trigger.emit('click');s.fill();await s.form.emit('submit',{preventDefault(){}});
-  assert.equal(s.calls,1);assert.equal(s.success.hidden,false);assert.equal(s.payload.consent.accepted,true);assert.equal(s.payload.consent.version,'2026-11-10-v3');
+  assert.equal(s.calls,1);assert.equal(s.success.hidden,false);assert.equal('consent' in s.payload,false);assert.equal(s.payload.schemaVersion,2);assert.equal(s.payload.privacyNoticeVersion,'2026-11-14-v2');
   const bad=formScene('https://example.invalid/leads','failure');bad.fill();await bad.form.emit('submit',{preventDefault(){}});
   assert.equal(bad.success.hidden,true);assert.ok(bad.status.textContent);
 });
-test('combined legal page keeps consent and policy module URLs in future submission metadata',async()=>{
+test('combined legal page sends only informational notice revision, not consent URLs',async()=>{
   const s=formScene('https://example.invalid/leads','success',false,'',true);
   await s.trigger.emit('click');s.fill();await s.form.emit('submit',{preventDefault(){}});
-  assert.equal(s.payload.consent.documentUrl,'https://killreal2227.github.io/tochka_zvuka/documents/#consent');
-  assert.equal(s.payload.consent.privacyUrl,'https://killreal2227.github.io/tochka_zvuka/documents/#privacy');
+  assert.equal(s.payload.privacyNoticeVersion,'2026-11-14-v2');
+  assert.equal('consent' in s.payload,false);
 });
 test('invalid phone is rejected before any external request',async()=>{
   const s=formScene('https://example.invalid/leads');s.fill();s.phone.value='123';await s.form.emit('submit',{preventDefault(){}});
@@ -542,10 +542,11 @@ test('fine-pointer focus exposes the signup control without requiring hover',()=
  card.emit('focusout',{relatedTarget:null});assert.equal(card.classes.has('is-expanded'),false);
 });
 
-test('surname is required before sending and preserves all letters except the first',async()=>{
+test('empty surname is optional and filled names preserve all letters except the first',async()=>{
+ const empty=formScene('https://example.invalid/leads');empty.fill();
+ empty.form.elements.surname.value='  ';await empty.form.emit('submit',{preventDefault(){}});
+ assert.equal(empty.calls,1);assert.equal(empty.success.hidden,false);assert.equal(empty.payload.surname,'');
  const s=formScene('https://example.invalid/leads');s.fill();
- s.form.elements.surname.value='  ';await s.form.emit('submit',{preventDefault(){}});
- assert.equal(s.calls,0);assert.equal(s.success.hidden,true);assert.ok(s.form.elements.surname.validity);
  for(const key of ['name','surname']){
   const f=s.form.elements[key];f.value='иВаНов';await f.emit('input',{isComposing:false});
   assert.equal(f.value,'ИВаНов');

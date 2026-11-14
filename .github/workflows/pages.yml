@@ -33,7 +33,7 @@ jobs:
           python-version: '3.12'
       - name: Check Yandex lead candidate
         run: |
-          pip install -r backend/yandex-leads/requirements.lock
+          pip install -r backend/yandex-leads/requirements-admin.txt
           python -m unittest discover -s backend/yandex-leads/tests -v
       - name: Build static city pages
         run: python3 scripts/build_site.py

@@ -9,7 +9,7 @@ import time
 import unicodedata
 import uuid
 from datetime import datetime
-from storage_errors import RequestConflict,DeliveryFailure
+from storage_errors import RequestConflict,DeliveryFailure,RequestDeleted
 
 ORIGINS={"https://tzvuka.ru"}
 BRANCHES={"kaluga":"Калуга","troitsk":"Троицк"}
@@ -30,7 +30,7 @@ def person(value):
     return (isinstance(value,str) and value==value.strip() and 2<=len(value)<=80 and value[0].isalpha()
             and all(unicodedata.category(c)[0] in ("L","M") or c in " '-’" for c in value))
 
-def valid(data, origin, now_ms):
+def _valid_v1(data, origin, now_ms):
     if not isinstance(data,dict) or set(data)!=FIELDS:
         return False
     c=data["consent"]
@@ -49,6 +49,31 @@ def valid(data, origin, now_ms):
         and isinstance(c,dict) and set(c)==CONSENT_FIELDS and c["accepted"] is True
         and timestamp(c["acceptedAt"],now_ms) and c["version"]=="2026-11-10-v3"
         and c["documentUrl"]==origin+"/documents/#consent" and c["privacyUrl"]==origin+"/documents/#privacy")
+
+NOTICE_VERSION = "2026-11-14-v2"
+V2_FIELDS = (FIELDS - {"consent"}) | {"privacyNoticeVersion"}
+
+def valid(data, origin, now_ms):
+    if not isinstance(data, dict) or type(data.get("schemaVersion")) is not int:
+        return False
+    if data["schemaVersion"] == 1:
+        return _valid_v1(data, origin, now_ms)
+    if data["schemaVersion"] != 2 or set(data) != V2_FIELDS:
+        return False
+    try:
+        identity = uuid.UUID(data["requestId"])
+        id_ok = identity.version == 4 and str(identity) == data["requestId"]
+    except (ValueError, TypeError, AttributeError):
+        return False
+    branch = data["branch"]
+    return (id_ok and timestamp(data["createdAt"], now_ms)
+        and person(data["name"]) and (data["surname"] == "" or person(data["surname"]))
+        and isinstance(data["phone"], str) and re.fullmatch(r"\+7\d{10}", data["phone"], re.ASCII) is not None
+        and isinstance(branch, str) and branch in BRANCHES
+        and isinstance(data["direction"], str) and data["direction"] in DIRECTIONS
+        and data["website"] == "" and data["pagePath"] in ("/", "/" + branch + "/")
+        and isinstance(data["captchaToken"], str) and 0 < len(data["captchaToken"]) <= 8192
+        and data["privacyNoticeVersion"] == NOTICE_VERSION)
 
 def reply(status, body, origin=None):
     return {"statusCode":status,"isBase64Encoded":False,"headers":{
@@ -98,7 +123,7 @@ def receive(event, env, store, verify, now_ms=None, sender=None):
         return result
     if method!="POST":
         return reply(405,{"error":"method_rejected"},origin)
-    if env.get("PUBLIC_LEADS_ENABLED")!="true":
+    if env.get("PUBLIC_LEADS_ENABLED")!="true" or env.get("LEADS_MAINTENANCE")=="true":
         return reply(503,{"error":"disabled"},origin)
     if not re.fullmatch(r"application/json(?:\s*;\s*charset=utf-8)?",headers.get("content-type",""),re.I):
         return reply(415,{"error":"json_required"},origin)
@@ -117,7 +142,7 @@ def receive(event, env, store, verify, now_ms=None, sender=None):
             return reply(413,{"error":"too_large"},origin)
         except (ValueError,UnicodeError):
             return reply(400,{"error":"invalid_request"},origin)
-        if not valid(data,origin,now_ms):
+        if not valid(data,origin,now_ms) or (data.get("schemaVersion")==2 and env.get("LEADS_SCHEMA_V2_ENABLED")!="true"):
             return reply(400,{"error":"invalid_request"},origin)
         proof=verify(data["captchaToken"],ip)
         # SmartCaptcha has status/host, NOT Turnstile success/action fields.
@@ -134,6 +159,8 @@ def receive(event, env, store, verify, now_ms=None, sender=None):
             except Exception: notification='pending'
         return reply(200,{"ok":True,"saved":True,"requestId":data["requestId"],"leadId":lead_id,
                           "notification":notification},origin)
+    except RequestDeleted:
+        return reply(409,{"error":"request_deleted"},origin)
     except RequestConflict:
         return reply(409,{"error":"request_conflict"},origin)
     except Exception:
