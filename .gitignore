@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+.main-preservation.json
+backend/yandex-leads/.env
+backend/yandex-leads/deployment.zip

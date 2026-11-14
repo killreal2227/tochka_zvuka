@@ -179,14 +179,16 @@ function formScene(endpoint=null,reply='success',withoutArt=false,pageCity='',co
   const svg={setAttribute(){},querySelectorAll:()=>[],getScreenCTM:()=>({a:1})};
   const art={querySelector:()=>svg,closest:()=>sheet};
   const map={'.lead-sheet':sheet,'.lead-success':success,'.lead-close':close,'[data-lead-dismiss]':dismiss,'.sheet-art':withoutArt?null:art,'#chips':chips,'#pickCap':caption,'#directionTitle':directionTitle,'#directionReset':directionReset,'#leadBranchCaption':branchCaption};
-  const modal=Object.assign(element(),{hidden:true,querySelector:s=>map[s],querySelectorAll:s=>s==='a,button,input,select'?[close,name,phone,submit]:[]});
+  const modal=Object.assign(element(),{hidden:true,querySelector:s=>map[s],querySelectorAll:s=>s==='a,button,input,select,iframe'?[close,name,phone,submit]:[]});
   const link=href=>({getAttribute:()=>href,dataset:combinedDocs?{consentUrl:'./documents/#consent',policyUrl:'./documents/#privacy'}:{}});
   const document=events({body:{dataset:{city:pageCity},style:{}},activeElement:trigger,
     getElementById:id=>({leadModal:modal,leadForm:form,leadStatus:status})[id],
     querySelector:s=>s==='.lead-consent a'?link('./consent/'):null,
     querySelectorAll:s=>s==='.openForm'?[trigger]:s==='.lead-consent a'?[link('./consent/'),link('./privacy/')]:[]});
   document.dispatchEvent=e=>{document.emit(e.type);};
-  const window=events({TZ_LEADS:{endpoint,demoDelayMs:0,demoFailure:reply==='failure'}});
+  const window=events({TZ_LEADS:{endpoint,consentVersion:'2026-11-10-v3'},TZLeadClient:{
+    async submit(data){calls++;payload=data;if(reply==='failure')throw Object.assign(new Error('fixture transport failure'),{publicMessage:'Не удалось сохранить заявку.'});return {ok:true,saved:true,requestId:data.requestId,leadId:'fixture-id'};}
+  }});
   vm.runInNewContext(source('lead-form.js'),{window,document,matchMedia:()=>({matches:true,addEventListener(){}}),
     requestAnimationFrame:()=>1,cancelAnimationFrame(){},setTimeout:()=>1,clearTimeout(){},URL,AbortController,Event,
     location:{href:'https://killreal2227.github.io/tochka_zvuka/',pathname:'/tochka_zvuka/'},
@@ -213,18 +215,18 @@ test('selected direction caption is lowercase and clears without permanent helpe
   s.form.elements.direction.value='';await s.form.emit('change',{target:{name:'direction'}});
   assert.equal(s.caption.textContent,'');
 });
-test('demo form acknowledges locally without transmitting contact data',async()=>{
+test('form opens confirmation only after transport acknowledgement',async()=>{
   const s=formScene();await s.trigger.emit('click');s.fill();await s.form.emit('submit',{preventDefault(){}});
-  assert.equal(s.calls,0);assert.equal(s.uuids,1);assert.equal(s.success.hidden,false);assert.equal(s.form.hidden,true);
+  assert.equal(s.calls,1);assert.equal(s.uuids,1);assert.equal(s.success.hidden,false);assert.equal(s.form.hidden,true);
   assert.equal(s.phone.value,'');await s.trigger.emit('click');assert.equal(s.form.hidden,false);assert.equal(s.success.hidden,true);
 });
-test('single-column branch form supports demo acknowledgement without decorative SVG',async()=>{
+test('single-column branch form supports acknowledged delivery without decorative SVG',async()=>{
   for(const city of ['kaluga','troitsk']){
     const s=formScene(null,'success',true,city);await s.trigger.emit('click');
     assert.equal(s.modal.hidden,false);assert.equal(s.form.elements.branch.value,city);
     s.fill();s.form.elements.branch.value=city;
     await s.form.emit('submit',{preventDefault(){}});
-    assert.equal(s.success.hidden,false);assert.equal(s.calls,0);assert.equal(s.uuids,1);
+    assert.equal(s.success.hidden,false);assert.equal(s.calls,1);assert.equal(s.uuids,1);
   }
 });
 test('configured form uses transport acknowledgement and includes button-consent metadata',async()=>{
@@ -552,11 +554,11 @@ test('surname is required before sending and preserves all letters except the fi
  assert.equal(s.calls,1);assert.equal(s.payload.surname,'ИВаНов');
 });
 
-test('demo failure preserves fields and never opens confirmation',async()=>{
+test('transport failure preserves fields and never opens confirmation',async()=>{
  const s=formScene(null,'failure');await s.trigger.emit('click');s.fill();
  await s.form.emit('submit',{preventDefault(){}});
- assert.equal(s.calls,0);assert.equal(s.success.hidden,true);assert.equal(s.form.hidden,false);
- assert.equal(s.phone.value,'+79950000000');assert.match(s.status.textContent,/Не удалось отправить заявку/);
+ assert.equal(s.calls,1);assert.equal(s.success.hidden,true);assert.equal(s.form.hidden,false);
+ assert.equal(s.phone.value,'+79950000000');assert.match(s.status.textContent,/Не удалось сохранить заявку/);
 });
 
 test('Kaluga uses the same invitation timing with independent dismissal storage',async()=>{

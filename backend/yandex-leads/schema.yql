@@ -1,0 +1,22 @@
+-- REVIEW ONLY. Do not execute against tochka-learning before separate approval.
+-- New row tables in the existing database; no changes to learning tables or D1.
+CREATE TABLE tz_site_leads (
+ request_id Utf8 NOT NULL, payload_hash Utf8, lead_id Utf8,
+ branch Utf8, name Utf8, surname Utf8, phone Utf8, direction Utf8,
+ source Utf8, status Utf8, created_at_ms Uint64, client_created_at Utf8,
+ consent_accepted_at Utf8, consent_version Utf8, consent_document_url Utf8,
+ privacy_url Utf8, page_path Utf8, telegram_sent Bool, telegram_message_id Utf8,
+ crm_state Utf8, crm_external_id Utf8,
+ PRIMARY KEY (request_id)
+);
+CREATE TABLE tz_site_outbox (
+ shard Uint32 NOT NULL, request_id Utf8 NOT NULL,
+ state Utf8, attempts Uint64, next_attempt_ms Uint64,
+ lease_until_ms Uint64, lease_token Utf8, last_error_code Utf8,
+ INDEX due_idx GLOBAL SYNC ON (shard,state,next_attempt_ms),
+ PRIMARY KEY (shard,request_id)
+);
+CREATE TABLE tz_site_rate_limits (
+ bucket_key Utf8 NOT NULL, window_start Uint64 NOT NULL,
+ hits Uint64, PRIMARY KEY (bucket_key,window_start)
+) WITH (TTL = Interval("PT24H") ON window_start AS SECONDS);

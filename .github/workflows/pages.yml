@@ -25,12 +25,22 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check Yandex lead candidate
+        run: |
+          pip install -r backend/yandex-leads/requirements.lock
+          python -m unittest discover -s backend/yandex-leads/tests -v
       - name: Build static city pages
         run: python3 scripts/build_site.py
       - name: Check pages and links
         run: python3 scripts/check_site.py
       - name: Check Telegram lead handler
-        run: node --test scripts/home-regression.test.mjs scripts/city-interactions.test.mjs backend/leads.test.mjs routing/legal-redirects.test.mjs scripts/scroll-reveal.test.mjs scripts/lead-viewport.test.mjs
+        run: node --test scripts/home-regression.test.mjs scripts/city-interactions.test.mjs backend/leads.test.mjs routing/legal-redirects.test.mjs scripts/scroll-reveal.test.mjs scripts/lead-viewport.test.mjs scripts/lead-client.test.mjs scripts/branch-picker.test.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -1,5 +1,4 @@
 /* Public configuration contains no credentials. The server owns the bot token. */
-window.TZ_LEADS = Object.assign({endpoint:null,consentVersion:'2026-11-10-v3'},window.TZ_LEADS||{});
 (()=>{
   'use strict';
   const modal=document.getElementById('leadModal');
@@ -96,7 +95,9 @@ const formArt=(()=>{
   const contactPhone=document.body.dataset.contactPhone||'+7 995 790-76-70';
   const fieldFocused=()=>sheet.classList.toggle('field-focused',sheet.contains(document.activeElement)&&document.activeElement.matches('input:not([type="radio"])'));
   sheet.addEventListener('focusin',fieldFocused);sheet.addEventListener('focusout',()=>queueMicrotask(fieldFocused));
-  let lastFocus=null,pending=null,sending=false;
+  let lastFocus=null,pending=null,sending=false,captchaActive=false;
+  document.addEventListener('tz:captcha-open',()=>{captchaActive=true;});
+  document.addEventListener('tz:captcha-close',()=>{captchaActive=false;});
   const branchPicker=(()=>{
     const picker=$('.lead-branch-picker');
     if(!picker)return {sync(){},close(){}};
@@ -207,10 +208,10 @@ const formArt=(()=>{
   modal.addEventListener('pointercancel',()=>{backdropDragged=true;backdropStart=null;});
   modal.addEventListener('click',event=>{if(event.target===modal&&!backdropDragged)close();});
   document.addEventListener('keydown',event=>{
-    if(modal.hidden)return;
+    if(modal.hidden||captchaActive)return;
     if(event.key==='Escape')close();
     if(event.key==='Tab'){
-      const items=[...modal.querySelectorAll('a,button,input,select')].filter(el=>!el.disabled&&el.offsetParent!==null&&el.tabIndex!==-1&&(el.type!=='radio'||el.checked||(!form.elements.direction.value&&el===$('.pk input'))));
+      const items=[...modal.querySelectorAll('a,button,input,select,iframe')].filter(el=>!el.disabled&&el.offsetParent!==null&&el.tabIndex!==-1&&(el.type!=='radio'||el.checked||(!form.elements.direction.value&&el===$('.pk input'))));
       const first=items[0],last=items.at(-1);
       if(event.shiftKey&&(document.activeElement===first||document.activeElement===sheet)){event.preventDefault();last.focus();}
       else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
@@ -262,17 +263,11 @@ function maskPhone(el){
 maskPhone(phone);
   const normalisePhone=value=>{let digits=value.replace(/\D/g,'');if(digits[0]==='8')digits='7'+digits.slice(1);if(digits.length===10)digits='7'+digits;return /^7\d{10}$/.test(digits)?'+'+digits:null;};
   phone.addEventListener('input',()=>phone.setCustomValidity(''));
-  form.addEventListener('input',()=>{pending=null;status.textContent='';});
+  form.addEventListener('input',()=>{if(!sending)status.textContent='';});
   function showSuccess(){
     modal.classList.add('is-success');sheet.style.zoom='';sheet.style.width='';sheet.style.maxWidth='';sheet.style.maxHeight='';form.hidden=true;success.hidden=false;sheet.setAttribute('aria-labelledby','doneText');formArt.stop();status.textContent='';pending=null;
     form.reset();syncBranch();success.setAttribute('tabindex','-1');success.focus({preventScroll:true});
     document.dispatchEvent(new CustomEvent('tz:lead-success'));
-  }
-  async function demoSubmit(requestId){
-    const delay=window.TZ_LEADS.demoDelayMs??700;
-    if(delay>0)await new Promise(resolve=>setTimeout(resolve,delay));
-    if(window.TZ_LEADS.demoFailure)throw new Error('Не удалось отправить заявку. Попробуй ещё раз.');
-    return {ok:true,requestId,leadId:'demo-'+requestId};
   }
   form.addEventListener('submit',async event=>{
     event.preventDefault();if(sending)return;
@@ -282,35 +277,19 @@ maskPhone(phone);
     if(form.elements.website.value)return;
     if(form.elements.name.value.trim().length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}
     if(form.elements.surname.value.trim().length<2){form.elements.surname.setCustomValidity('Введи фамилию: минимум 2 символа.');form.elements.surname.reportValidity();return;}
-    const endpoint=window.TZ_LEADS.endpoint;
-    // Local placeholder until a real endpoint is configured; contact fields are never transmitted.
-    const demo=!endpoint;
-    let url;
-    if(!demo){
-      try{url=new URL(endpoint,location.href);}catch{status.textContent='Не удалось открыть заявку. Позвони: '+contactPhone+'.';return;}
-      if(url.protocol!=='https:'&&!(url.protocol==='http:'&&url.hostname==='127.0.0.1')){status.textContent='Не удалось открыть заявку. Позвони: '+contactPhone+'.';return;}
-    }
     const stamp=new Date().toISOString();
     const raw={name:form.elements.name.value.trim(),surname:form.elements.surname.value.trim(),phone:normalized,branch:form.elements.branch.value,direction:form.elements.direction.value||'unsure',website:'',pagePath:location.pathname};
     if(raw.name.length<2){form.elements.name.setCustomValidity('Напиши имя: минимум 2 символа.');form.elements.name.reportValidity();return;}
+    if(pending&&Object.keys(raw).some(key=>pending[key]!==raw[key]))pending=null;
     if(!pending)pending={schemaVersion:1,requestId:crypto.randomUUID(),createdAt:stamp,...raw,consent:{accepted:true,acceptedAt:stamp,version:window.TZ_LEADS.consentVersion,documentUrl:new URL(document.querySelector('.lead-consent a').dataset?.consentUrl||document.querySelector('.lead-consent a').getAttribute('href'),location.href).href,privacyUrl:new URL(document.querySelector('.lead-consent a').dataset?.policyUrl||document.querySelectorAll('.lead-consent a')[1].getAttribute('href'),location.href).href}};
     sending=true;button.disabled=true;status.textContent='Отправляем заявку…';
-    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
+    const submission=pending;
     try{
-      let response,data;
-      if(demo){
-        data=await demoSubmit(pending.requestId);
-        response={ok:true,status:200};
-      }else{
-        response=await fetch(url.href,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(pending),credentials:'omit',redirect:'error',signal:controller.signal});
-        try{data=await response.json();}catch{throw new Error('Сервис не подтвердил приём. Позвони нам, чтобы уточнить заявку.');}
-      }
-      if(!response.ok||data.ok!==true||data.requestId!==pending.requestId||typeof data.leadId!=='string'){
-        throw new Error(response.status===429?'Слишком много попыток. Подожди минуту или позвони нам.':'Сервис не подтвердил приём. Позвони нам, чтобы уточнить запись.');
-      }
+      if(!window.TZLeadClient)throw new Error('Сервис недоступен. Пожалуйста, позвоните в школу.');
+      await window.TZLeadClient.submit(submission);
       showSuccess();
-    }catch(error){status.textContent=error.name==='AbortError'?'Не дождались подтверждения. Заявка могла дойти — уточни запись по телефону, чтобы не дублировать обращение.':error.message||'Нет подтверждения приёма заявки. Позвони нам.';}
-    finally{clearTimeout(timer);sending=false;button.disabled=false;}
+    }catch(error){status.textContent=error.publicMessage||'Не удалось сохранить заявку. Попробуйте ещё раз или позвоните в школу.';}
+    finally{sending=false;button.disabled=false;}
   });
   for(const field of [form.elements.name,form.elements.surname]){
     field.addEventListener('input',event=>{field.setCustomValidity('');if(!event.isComposing)capitalize(field);});
