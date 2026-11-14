@@ -442,7 +442,7 @@ img,svg{display:block;max-width:100%}
 <link rel="stylesheet" href="../responsive.css?v=5efc72c4d2">
 <link rel="stylesheet" href="../scroll-reveal.css?v=5bdef28bb6"><script src="../scroll-reveal.js?v=b6861d124a" defer></script>
 <script src="../troitsk-page.js?v=b9d0022178" defer></script>
-<link rel="stylesheet" href="../troitsk-enrolment.css?v=7b4f646fc5"><script src="../troitsk-enrolment.js?v=980b8cee9f" defer></script>
+<link rel="stylesheet" href="../troitsk-enrolment.css?v=f238b66424"><script src="../troitsk-enrolment.js?v=a25dc82eac" defer></script>
 <link rel="stylesheet" href="../cta.css?v=43c1b2b2a4">
 </head>
 <body data-city="kaluga" data-contact-phone="+7 (920) 098-80-03">
@@ -860,6 +860,7 @@ function stepsUpdate(){
   }
   stepsEl.style.setProperty('--steps-track',track+'px');
   stepsEl.style.setProperty('--steps-fill',fill+'px');
+  stepsEl.style.setProperty('--steps-progress',String(track?fill/track:1));
   const current=mobile?stepItems.reduce((last,step,i)=>step.offsetTop-stepItems[0].offsetTop<=fill?i:last,0):Math.min(stepItems.length-1,Math.floor(progress*(stepItems.length-1)));
   stepItems.forEach((step,i)=>{
     step.classList.toggle('on',reduce||i<=current);

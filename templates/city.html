@@ -774,6 +774,7 @@ function stepsUpdate(){
   }
   stepsEl.style.setProperty('--steps-track',track+'px');
   stepsEl.style.setProperty('--steps-fill',fill+'px');
+  stepsEl.style.setProperty('--steps-progress',String(track?fill/track:1));
   const current=mobile?stepItems.reduce((last,step,i)=>step.offsetTop-stepItems[0].offsetTop<=fill?i:last,0):Math.min(stepItems.length-1,Math.floor(progress*(stepItems.length-1)));
   stepItems.forEach((step,i)=>{
     step.classList.toggle('on',reduce||i<=current);

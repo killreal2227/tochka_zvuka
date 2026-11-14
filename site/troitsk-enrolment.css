@@ -641,6 +641,22 @@ body[data-city] #join .arch { border-bottom-left-radius:8px; border-bottom-right
  body[data-city] #join .arch { align-self:end; margin:0; }
 }
 
+/* Keep the mobile timeline continuous while Safari's browser chrome moves. */
+@media(max-width:680px) {
+ body[data-city] #how .steps {
+  justify-content:center; gap:clamp(24px,4svh,36px);
+ }
+ body[data-city] #how .steps::after {
+  height:var(--steps-track,0px); transform:scaleY(var(--steps-progress,0));
+  transform-origin:top; transition:none;
+ }
+ /* The timeline has its own progress animation; independently hiding each line
+    of its text creates apparent holes when slowly crossing observer boundaries. */
+ body.reveal-enabled[data-city] #how .step > .scroll-reveal {
+  opacity:1; translate:none; transform:none; transition:none; pointer-events:auto;
+ }
+}
+
 /* Keep the first-screen logo stationary instead of floating vertically. */
 body[data-city] .hero .stage > svg { animation:none; transform:none; }
 

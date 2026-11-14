@@ -17,9 +17,15 @@
  const modules=['how','join'].map(id=>document.getElementById(id));
  if(modules.some(section=>!section))return;
  const mobile=matchMedia('(max-width:1000px)');
- let frame=0;
+ let frame=0,lastLayoutWidth=-1;
  function measure(){
   frame=0;
+  // Safari toolbar motion resizes height while scrolling. Do not collapse/re-measure
+  // live sections for those events: scroll anchoring otherwise moves the page.
+  const viewport=window.visualViewport;
+  const layoutWidth=Math.round(viewport?viewport.width*viewport.scale:window.innerWidth);
+  if(layoutWidth===lastLayoutWidth)return;
+  lastLayoutWidth=layoutWidth;
   const body=document.body;
   if(!mobile.matches){
    body.style.removeProperty('--mobile-module-natural');
@@ -44,6 +50,6 @@
  }
  function schedule(){if(!frame)frame=requestAnimationFrame(measure);}
  window.addEventListener('resize',schedule,{passive:true});
- document.fonts?.ready.then(schedule);
+ document.fonts?.ready.then(()=>{lastLayoutWidth=-1;schedule();});
  schedule();
 })();
