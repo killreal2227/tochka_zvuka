@@ -1,0 +1,48 @@
+{
+  "documents": {
+    "url": "https://tzvuka.ru/documents/",
+    "sha256": "97bc4b6cd412c76de5f09c88027473c846b871ed4afb3736bcf3cc222ac09dca",
+    "scripts": [
+      "../documents.js?v=e48084863a"
+    ],
+    "server": "GitHub.com"
+  },
+  "kaluga": {
+    "url": "https://tzvuka.ru/kaluga/",
+    "sha256": "d102cb3a779ad8d43c737f434f3050dccd0d9dc07876ce06794a63f30bab84f8",
+    "scripts": [
+      "../viewport-scale.js?v=56a3c62d35",
+      "../lead-viewport.js?v=0dfe27dadd",
+      "../lead-config.js?v=24fedcfabf",
+      "../lead-client.js?v=98679695a7",
+      "../lead-form.js?v=80c2660abf",
+      "../city-ui.js?v=815a44354a",
+      "../button-labels.js?v=fc0388036b",
+      "../scroll-reveal.js?v=ef029b002a",
+      "../troitsk-page.js?v=0a3844dfb2",
+      "../troitsk-enrolment.js?v=f8942f3d35",
+      "../direction-player.js?v=8a2aef0454",
+      "../direction-scroll.js?v=a91a40f7e8"
+    ],
+    "server": "GitHub.com"
+  },
+  "troitsk": {
+    "url": "https://tzvuka.ru/troitsk/",
+    "sha256": "ff190fd7ff112e8eb4e1a23defb8a4a8ff9f1277f1283e78a74802ceb4c84031",
+    "scripts": [
+      "../viewport-scale.js?v=56a3c62d35",
+      "../lead-viewport.js?v=0dfe27dadd",
+      "../lead-config.js?v=24fedcfabf",
+      "../lead-client.js?v=98679695a7",
+      "../lead-form.js?v=80c2660abf",
+      "../city-ui.js?v=815a44354a",
+      "../button-labels.js?v=fc0388036b",
+      "../scroll-reveal.js?v=ef029b002a",
+      "../troitsk-page.js?v=0a3844dfb2",
+      "../troitsk-enrolment.js?v=f8942f3d35",
+      "../direction-player.js?v=8a2aef0454",
+      "../direction-scroll.js?v=a91a40f7e8"
+    ],
+    "server": "GitHub.com"
+  }
+}

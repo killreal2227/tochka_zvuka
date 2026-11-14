@@ -33,7 +33,8 @@ def get_store():
                 raise RuntimeError('Only approved test tables are enabled')
             driver=ydb.Driver(endpoint=endpoint,database=database,credentials=ydb.iam.MetadataUrlCredentials())
             driver.wait(timeout=8,fail_fast=True)
-            _store=BulkStore(driver.table_client,database,prefix)
+            _store=BulkStore(driver.table_client,database,prefix,
+                metadata_enabled=os.environ.get('LEADS_SCHEMA_V2_ENABLED')=='true')
             _store.driver=driver
 
         return _store
@@ -126,11 +127,16 @@ class LazyStore:
 
 def handler(event, context):
     try:
+        if 'httpMethod' not in event and set(event)=={'adminStatus'} and event['adminStatus'] is True:
+            # Direct IAM invocation only, not an HTTP/Gateway administrative route.
+            return {'maintenance':os.environ.get('LEADS_MAINTENANCE')=='true',
+                    'schemaV2':os.environ.get('LEADS_SCHEMA_V2_ENABLED')=='true'}
         if "httpMethod" in event:
             return receive(event,os.environ,LazyStore(),verify,
                 sender=telegram if os.environ.get("DELIVERY_ENABLED")=="true" else None)
         # Direct IAM-authorized invocation only: never exposed as an HTTP route.
-        if os.environ.get("DELIVERY_ENABLED")=="true" and set(event)=={"retryReceipt"}:
+        if (os.environ.get("DELIVERY_ENABLED")=="true" and os.environ.get('LEADS_MAINTENANCE')!='true'
+            and set(event)=={"retryReceipt"}):
             try:
                 return {"notification":get_store().notify(event['retryReceipt'],telegram)}
             except Exception:

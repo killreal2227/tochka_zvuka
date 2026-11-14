@@ -42,3 +42,9 @@ test('sequential retry retains the same requestId and acquires proof again',asyn
  const s=scene();await s.client.submit(s.payload);await s.client.submit(s.payload);
  const ids=s.calls.map(c=>JSON.parse(c.init.body).requestId);assert.deepEqual(ids,[s.payload.requestId,s.payload.requestId]);
 });
+
+test('deleted request explains terminal state without manufacturing a new application',async()=>{
+ const s=scene({status:409,result:{error:'request_deleted'}}),before=s.payload.requestId;
+ await assert.rejects(s.client.submit(s.payload),/заявка удалена/);
+ assert.equal(s.payload.requestId,before);assert.equal(s.calls.length,1);
+});

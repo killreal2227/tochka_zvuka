@@ -1,0 +1,10 @@
+{
+  "database": "/ru-central1/b1gs93r1fhsuparnmrba/etntmjbnguvsu5l8bv3s",
+  "table": "tz_site_test_20261114_leads",
+  "engine": "YDB native Table API; no YQL data queries",
+  "add_nullable_utf8": ["legal_basis", "processing_purpose", "basis_policy_version", "notice_version", "legacy_consent_status", "retention_reason"],
+  "add_nullable_uint64": ["received_at_ms", "request_schema_version", "retention_anchor_ms", "retention_due_ms", "purge_at_ms"],
+  "ttl": {"column": "purge_at_ms", "unit": "MILLISECONDS", "expire_after_seconds": 0},
+  "existing_rows": "preserved; NULL TTL does not delete legacy rows; use bounded retention-plan to backfill real existing receipt anchors",
+  "executor": "admin.py schema-plan then schema-apply with exact confirmation hash"
+}

@@ -3,7 +3,7 @@ window.TZ_LEADS=Object.assign({
  enabled:false,
  endpoint:null,
  siteKey:'',
- consentVersion:'2026-11-10-v3'
+ privacyNoticeVersion:'2026-11-14-v2'
 },window.TZ_LEADS||{});
 (()=>{
  'use strict';
@@ -81,6 +81,7 @@ window.TZ_LEADS=Object.assign({
     catch{throw fail('Не удалось получить подтверждение. Повторите отправку: повторная попытка использует тот же номер заявки.');}
     let data;try{data=await response.json();}catch{throw fail('Сервис не подтвердил сохранение. Попробуйте ещё раз.');}
     if(!response.ok){
+     if(response.status===409&&data?.error==='request_deleted')throw fail('Эта заявка удалена. Новое обращение можно оставить по телефону школы.');
      const message=response.status===429?'Слишком много попыток. Подождите минуту.':
       response.status===403?'Проверка не пройдена. Попробуйте ещё раз.':
       response.status===409?'Данные заявки изменились. Проверьте поля и отправьте снова.':'Не удалось сохранить заявку. Попробуйте ещё раз или позвоните в школу.';

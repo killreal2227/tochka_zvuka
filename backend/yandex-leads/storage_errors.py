@@ -2,6 +2,9 @@
 class RequestConflict(Exception):
     pass
 
+class RequestDeleted(Exception):
+    pass
+
 class ConditionalFailed(Exception):
     pass
 
