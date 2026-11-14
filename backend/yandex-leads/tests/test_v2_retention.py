@@ -208,7 +208,7 @@ class V2Tests(unittest.TestCase):
 
     def test_maintenance_verifies_gateway_and_drains_active_version(self):
         route={'function_id':admin.FUNCTION,'tag':'fixture'}
-        gateway={'openapi':json.dumps({'paths':{'/leads':{'post':{'x-yc-apigateway-integration':route}}}})}
+        gateway={'openapi_spec':json.dumps({'paths':{'/leads':{'post':{'x-yc-apigateway-integration':route}}}})}
         version={'id':'fixture-version','tags':['fixture'],'environment':{'LEADS_MAINTENANCE':'true'},'execution_timeout':'3s'}
         elapsed=[0]
         def clock():return elapsed[0]

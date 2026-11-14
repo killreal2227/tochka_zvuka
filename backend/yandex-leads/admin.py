@@ -177,8 +177,8 @@ def gateway_spec(value):
 
 
 def require_maintenance(tag, *, clock=time.monotonic, sleep=time.sleep):
-    gateway=yc('serverless','api-gateway','get','--id',GATEWAY,'--full')
-    spec=gateway_spec(gateway.get('openapi'))
+    gateway=yc('serverless','api-gateway','get-spec','--id',GATEWAY)
+    spec=gateway_spec(gateway.get('openapi_spec'))
     route=spec['paths']['/leads']['post']['x-yc-apigateway-integration']
     if route.get('function_id')!=FUNCTION or route.get('tag')!=tag:
         raise ValueError('active_gateway_tag_mismatch')
@@ -210,8 +210,8 @@ def require_maintenance(tag, *, clock=time.monotonic, sleep=time.sleep):
     latest=latest if isinstance(latest,list) else latest.get('versions',[])
     if [v.get('id') for v in latest if tag in v.get('tags',[])]!=[version.get('id')]:
         raise ValueError('tag_changed_during_drain')
-    gateway=yc('serverless','api-gateway','get','--id',GATEWAY,'--full')
-    spec=gateway_spec(gateway['openapi'])
+    gateway=yc('serverless','api-gateway','get-spec','--id',GATEWAY)
+    spec=gateway_spec(gateway['openapi_spec'])
     if spec['paths']['/leads']['post']['x-yc-apigateway-integration']!=route:
         raise ValueError('gateway_changed_during_drain')
     status()
