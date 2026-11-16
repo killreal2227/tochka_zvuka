@@ -7,9 +7,12 @@
     "bulk_store.py",
     "retention.py",
     "storage_errors.py",
+    "alfacrm.py",
+    "crm_queue.py",
+    "crm_delivery.py",
     "requirements.txt"
   ],
-  "sha256": "c252a380705168d21cca32b5a3518f74fa7f81e18c2c27e8fda8f2dd84336c2a",
+  "sha256": "0b84e937cf44597a5927ccd55a62b8dddf2527a35f46b9a6ecc27cb882f7087d",
   "deployment_order": [
     "additive-schema",
     "dual-server",
@@ -19,5 +22,5 @@
     "LEADS_SCHEMA_V2_ENABLED": "true",
     "LEADS_MAINTENANCE": "false"
   },
-  "secrets": "reuse existing Lockbox bindings; no new secret values"
+  "secrets": "Lockbox references for SmartCaptcha, Telegram, AlfaCRM and FIFO; no values in artifact"
 }

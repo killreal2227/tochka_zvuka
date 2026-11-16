@@ -3,7 +3,7 @@ window.TZ_LEADS=Object.assign({
  enabled:false,
  endpoint:null,
  siteKey:'',
- privacyNoticeVersion:'2026-11-14-v2'
+ privacyNoticeVersion:'2026-11-16-v3'
 },window.TZ_LEADS||{});
 (()=>{
  'use strict';

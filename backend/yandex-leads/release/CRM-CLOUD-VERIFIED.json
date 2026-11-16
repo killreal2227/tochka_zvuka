@@ -1,0 +1,26 @@
+{
+  "kaluga": {
+    "branch": "kaluga",
+    "crm_id": "577737",
+    "notice_id": "22",
+    "crm_confirmed": true,
+    "notice_confirmed": true,
+    "notice_marker_no_contacts": true
+  },
+  "troitsk": {
+    "branch": "troitsk",
+    "crm_id": "577738",
+    "notice_id": "23",
+    "crm_confirmed": true,
+    "notice_confirmed": true,
+    "notice_marker_no_contacts": true
+  },
+  "recovered": {
+    "branch": "kaluga",
+    "crm_id": "577739",
+    "notice_id": "24",
+    "crm_confirmed": true,
+    "notice_confirmed": true,
+    "notice_marker_no_contacts": true
+  }
+}

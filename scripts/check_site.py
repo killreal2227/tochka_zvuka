@@ -105,7 +105,7 @@ def check():
     for filename in ('index.html', 'troitsk/index.html', 'kaluga/index.html'):
         markup = (SITE/filename).read_text(encoding='utf-8')
         footer = re.search(r'<footer class="site-footer home-footer">(.*?)</footer>', markup, re.S)[1]
-        assert footer.count('<a ') == 1 and 'Документы и реквизиты' in footer
+        assert footer.count('<a ') == 1 and 'Документы и контакты' in footer
 
     troitsk = (SITE/'troitsk/index.html').read_text(encoding='utf-8')
     city_template = (ROOT/'templates/city.html').read_text(encoding='utf-8')

@@ -11,9 +11,39 @@ import ydb
 from service import BRANCHES, DIRECTIONS, receive, deliver_due, reply
 from bulk_store import BulkStore
 from storage_errors import DeliveryFailure
+from alfacrm import AlfaCRM
+from crm_queue import Queue
+from crm_delivery import Delivery
 
 _lock=threading.Lock()
 _store=None
+_delivery=None
+
+def crm_notice(lead,text,old_message=None):
+    chat=os.environ['TELEGRAM_CHAT_'+lead['branch'].upper()]
+    body={'chat_id':chat,'text':text,'link_preview_options':{'is_disabled':True}}
+    method='sendMessage'
+    if old_message:
+        method='editMessageText';body['message_id']=int(old_message)
+    try:
+        result=post('https://api.telegram.org/bot'+os.environ['TELEGRAM_BOT_TOKEN']+'/'+method,
+            json.dumps(body).encode(),'application/json')
+    except urllib.error.HTTPError as error:
+        try:details=json.loads(error.read(65536))
+        except Exception:details={}
+        if old_message and error.code==400 and 'message is not modified' in details.get('description',''):
+            return int(old_message)
+        raise RuntimeError('notification_unconfirmed') from None
+    message=result.get('result',{}).get('message_id')
+    if result.get('ok') is not True or type(message) is not int or message<=0:
+        raise RuntimeError('notification_unconfirmed')
+    return message
+
+def get_delivery():
+    global _delivery
+    if _delivery is None:
+        _delivery=Delivery(get_store(),Queue(os.environ),AlfaCRM(os.environ),crm_notice)
+    return _delivery
 
 def get_store():
     global _store
@@ -127,13 +157,20 @@ class LazyStore:
 
 def handler(event, context):
     try:
+        crm_enabled=os.environ.get('ALFACRM_ENABLED')=='true'
+        if crm_enabled and 'httpMethod' not in event:
+            if timer_allowed(event) or event=={'crmDrain':True}:
+                return get_delivery().drain()
+            if set(event)=={'crmReceipt'}:
+                return get_delivery().accept(event['crmReceipt'])
         if 'httpMethod' not in event and set(event)=={'adminStatus'} and event['adminStatus'] is True:
             # Direct IAM invocation only, not an HTTP/Gateway administrative route.
             return {'maintenance':os.environ.get('LEADS_MAINTENANCE')=='true',
                     'schemaV2':os.environ.get('LEADS_SCHEMA_V2_ENABLED')=='true'}
         if "httpMethod" in event:
             return receive(event,os.environ,LazyStore(),verify,
-                sender=telegram if os.environ.get("DELIVERY_ENABLED")=="true" else None)
+                sender=telegram if not crm_enabled and os.environ.get("DELIVERY_ENABLED")=="true" else None,
+                crm_delivery=get_delivery().accept if crm_enabled else None)
         # Direct IAM-authorized invocation only: never exposed as an HTTP route.
         if (os.environ.get("DELIVERY_ENABLED")=="true" and os.environ.get('LEADS_MAINTENANCE')!='true'
             and set(event)=={"retryReceipt"}):

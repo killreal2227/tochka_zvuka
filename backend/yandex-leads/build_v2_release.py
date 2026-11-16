@@ -5,7 +5,7 @@ import json
 import zipfile
 
 ROOT=Path(__file__).resolve().parent
-FILES=('index.py','service.py','bulk_store.py','retention.py','storage_errors.py')
+FILES=('index.py','service.py','bulk_store.py','retention.py','storage_errors.py','alfacrm.py','crm_queue.py','crm_delivery.py')
 
 
 def build():
@@ -20,7 +20,7 @@ def build():
               'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),
               'deployment_order':['additive-schema','dual-server','v2-client'],
               'required_environment':{'LEADS_SCHEMA_V2_ENABLED':'true','LEADS_MAINTENANCE':'false'},
-              'secrets':'reuse existing Lockbox bindings; no new secret values'}
+              'secrets':'Lockbox references for SmartCaptcha, Telegram, AlfaCRM and FIFO; no values in artifact'}
     (ROOT/'release'/'leads-v2-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
     print(manifest['sha256'])
 

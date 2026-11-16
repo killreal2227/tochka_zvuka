@@ -107,3 +107,36 @@ class BulkStore:
         marker=dict(lead,**key,status='notification_sent',telegram_sent=True,telegram_message_id=str(message))
         self._write_confirm('leads',marker,LEGAL_TYPES if self.metadata_enabled else LEAD_TYPES,key)
         return 'sent'
+
+    def load_lead(self,receipt):
+        if not isinstance(receipt,str) or not re.fullmatch(r'[0-9a-f-]{36}:[0-9a-f]{64}',receipt):
+            raise ValueError('Invalid receipt')
+        self._guard(receipt)
+        lead=self._read('leads',{'request_id':receipt},{'request_id':ydb.PrimitiveType.Utf8})
+        if not lead or lead.get('status')=='deleting':raise RequestDeleted()
+        if lead.get('retention_due_ms') and lead['retention_due_ms']<=int(time.time()*1000):raise RequestDeleted()
+        return lead
+
+    def crm_marker(self,receipt):
+        if not isinstance(receipt,str) or not re.fullmatch(r'[0-9a-f-]{36}:[0-9a-f]{64}',receipt):raise ValueError('Invalid receipt')
+        return self._read('leads',{'request_id':'crm:'+receipt},{'request_id':ydb.PrimitiveType.Utf8})
+
+    def crm_mark(self,lead,state,external_id):
+        if state not in ('creating','sent','existing_review'):raise ValueError('Invalid CRM state')
+        self.load_lead(lead['request_id'])
+        key={'request_id':'crm:'+lead['request_id']}
+        marker=dict(lead,**key,status='crm_'+state,crm_state=state,crm_external_id=external_id)
+        self._write_confirm('leads',marker,LEGAL_TYPES if self.metadata_enabled else LEAD_TYPES,key)
+
+    def sync_crm(self,receipt,client):return client.sync(self.load_lead(receipt),self)
+
+    def notice_marker(self,receipt):
+        return self._read('leads',{'request_id':'notice:'+receipt},{'request_id':ydb.PrimitiveType.Utf8})
+
+    def notice_mark(self,lead,state,message_id):
+        self.load_lead(lead['request_id'])
+        key={'request_id':'notice:'+lead['request_id']}
+        marker=dict(lead,**key,status='crm_notice',crm_state=state,telegram_sent=True,telegram_message_id=str(message_id))
+        # Notification markers do not need another copy of the contact details.
+        for field in ('name','surname','phone'):marker[field]=''
+        self._write_confirm('leads',marker,LEGAL_TYPES if self.metadata_enabled else LEAD_TYPES,key)

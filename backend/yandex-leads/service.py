@@ -50,7 +50,7 @@ def _valid_v1(data, origin, now_ms):
         and timestamp(c["acceptedAt"],now_ms) and c["version"]=="2026-11-10-v3"
         and c["documentUrl"]==origin+"/documents/#consent" and c["privacyUrl"]==origin+"/documents/#privacy")
 
-NOTICE_VERSION = "2026-11-14-v2"
+NOTICE_VERSION = "2026-11-16-v3"
 V2_FIELDS = (FIELDS - {"consent"}) | {"privacyNoticeVersion"}
 
 def valid(data, origin, now_ms):
@@ -73,7 +73,7 @@ def valid(data, origin, now_ms):
         and isinstance(data["direction"], str) and data["direction"] in DIRECTIONS
         and data["website"] == "" and data["pagePath"] in ("/", "/" + branch + "/")
         and isinstance(data["captchaToken"], str) and 0 < len(data["captchaToken"]) <= 8192
-        and data["privacyNoticeVersion"] == NOTICE_VERSION)
+        and data["privacyNoticeVersion"] in (NOTICE_VERSION,"2026-11-14-v2"))
 
 def reply(status, body, origin=None):
     return {"statusCode":status,"isBase64Encoded":False,"headers":{
@@ -98,7 +98,7 @@ def decode_body(event):
         return result
     return json.loads(raw.decode("utf-8"),object_pairs_hook=object_pairs)
 
-def receive(event, env, store, verify, now_ms=None, sender=None):
+def receive(event, env, store, verify, now_ms=None, sender=None,crm_delivery=None):
     now_ms=int(time.time()*1000) if now_ms is None else now_ms
     headers={str(k).lower():v for k,v in event.get("headers",{}).items()}
     origin=headers.get("origin")
@@ -154,11 +154,19 @@ def receive(event, env, store, verify, now_ms=None, sender=None):
         if not isinstance(lead_id,str) or not lead_id:
             raise RuntimeError("Persistence unconfirmed")
         notification='disabled'
+        crm_result={}
+        if crm_delivery is not None:
+            try:
+                delivered=crm_delivery(lead_id)
+                notification=delivered.get('notification','pending')
+                crm_result={'crm':delivered.get('crm','pending')}
+            except Exception:
+                notification='pending';crm_result={'crm':'pending'}
         if sender is not None:
             try: notification=store.notify(lead_id,sender)
             except Exception: notification='pending'
         return reply(200,{"ok":True,"saved":True,"requestId":data["requestId"],"leadId":lead_id,
-                          "notification":notification},origin)
+                          "notification":notification,**crm_result},origin)
     except RequestDeleted:
         return reply(409,{"error":"request_deleted"},origin)
     except RequestConflict:

@@ -4,7 +4,7 @@ const {chromium,webkit}=require(process.env.TZ_PLAYWRIGHT_MODULE||'playwright');
 (async()=>{
  const root=path.resolve(__dirname,'../site'),saved=new Map();
  const profiles=[{width:320,height:568},{width:390,height:844},{width:430,height:932},{width:768,height:1024},{width:1024,height:768},{width:1440,height:900}];
- for(const [engineName,engine]of[['Chrome',chromium],['WebKit',webkit]]){
+ for(const [engineName,engine]of(process.env.TZ_CHROME_ONLY==='1'?[['Chrome',chromium]]:[['Chrome',chromium],['WebKit',webkit]])){
   const browser=await engine.launch(engineName==='Chrome'?{channel:'chrome',headless:true}:{headless:true});
   try{for(const viewport of profiles){
    const mobile=viewport.width<500,branch=viewport.width%3?'kaluga':'troitsk';
@@ -69,6 +69,7 @@ const {chromium,webkit}=require(process.env.TZ_PLAYWRIGHT_MODULE||'playwright');
    await context.close();
   }}finally{await browser.close();}
  }
- assert.equal(saved.size,12);
- console.log('12 browser profiles passed with mocked SmartCaptcha and API; NO YDB compatibility claim.');
+ const expected=process.env.TZ_CHROME_ONLY==='1'?6:12;
+ assert.equal(saved.size,expected);
+ console.log(expected+' browser profiles passed with mocked SmartCaptcha and API; NO YDB compatibility claim.');
 })().catch(e=>{console.error(e.message);process.exitCode=1;});

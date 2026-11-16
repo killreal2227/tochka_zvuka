@@ -26,7 +26,12 @@ TABLE = DATABASE + '/' + PREFIX + 'leads'
 FUNCTION = 'd4ep7jlje5la3g8ohd70'
 GATEWAY = 'd5d2psrdhd0snl30t7b0'
 RECEIPT = re.compile(r'[0-9a-f-]{36}:[0-9a-f]{64}')
-MAX_ROWS = 40  # including sent: copies; no unbounded --all option
+MAX_ROWS = 40  # includes service copies; no unbounded --all option
+
+def base_receipt(key):
+    for prefix in ('sent:', 'crm:', 'notice:'):
+        if key.startswith(prefix):return key[len(prefix):]
+    return key
 
 
 def canonical(value):
@@ -73,8 +78,8 @@ def make_plan(rows, *, receipt=None, expired=False, now_ms=None, limit=5, within
     mains=[r for r in rows if RECEIPT.fullmatch(r.get('request_id',''))]
     if receipt:
         identities={receipt[:36]}
-        if not any(RECEIPT.fullmatch(r.get('request_id','').removeprefix('sent:'))
-                   and r['request_id'].removeprefix('sent:')[:36]==receipt[:36] for r in rows):
+        if not any(RECEIPT.fullmatch(base_receipt(r.get('request_id','')))
+                   and base_receipt(r['request_id'])[:36]==receipt[:36] for r in rows):
             raise ValueError('receipt_not_found')
     else:
         overdue=sorted((r for r in mains if due(r) is not None and due(r)<=now_ms+within_days*86400000),
@@ -83,7 +88,7 @@ def make_plan(rows, *, receipt=None, expired=False, now_ms=None, limit=5, within
     selected=[]
     for row in rows:
         key=row.get('request_id','')
-        base=key[5:] if key.startswith('sent:') else key
+        base=base_receipt(key)
         if RECEIPT.fullmatch(base) and base[:36] in identities:
             # Never pull a live version into an expired-only deletion implicitly.
             if expired and (due(row) is None or due(row)>now_ms+within_days*86400000):
@@ -102,7 +107,7 @@ def validate_rows(store, plan):
         raise ValueError('row_count_rejected')
     found=[]
     for item in plan['rows']:
-        key=item['key']; base=key[5:] if key.startswith('sent:') else key
+        key=item['key']; base=base_receipt(key)
         if not RECEIPT.fullmatch(base):
             raise ValueError('invalid_plan_key')
         row=store._read('leads',{'request_id':key},{'request_id':ydb.PrimitiveType.Utf8})
@@ -129,7 +134,7 @@ def erase(store, plan, confirmation, *, maintenance=False, now_ms=None):
     if not 0<=now_ms-plan['created_at_ms']<=3600000:
         raise ValueError('plan_expired')
     rows=validate_rows(store,plan)  # verify ALL rows before the first mutation
-    identities={r['request_id'].removeprefix('sent:')[:36] for r in rows}
+    identities={base_receipt(r['request_id'])[:36] for r in rows}
     for identity in sorted(identities):
         key='deleted:'+identity
         store._write_confirm('leads',clear_row(key,now_ms,tombstone=True),LEGAL_TYPES,{'request_id':key})
@@ -141,7 +146,7 @@ def erase(store, plan, confirmation, *, maintenance=False, now_ms=None):
 
 def check_deleted(store, plan):
     remaining=sum(store._read('leads',{'request_id':r['key']},{'request_id':ydb.PrimitiveType.Utf8}) is not None for r in plan['rows'])
-    identities={r['key'].removeprefix('sent:')[:36] for r in plan['rows']}
+    identities={base_receipt(r['key'])[:36] for r in plan['rows']}
     guards=sum(store._read('leads',{'request_id':'deleted:'+i},{'request_id':ydb.PrimitiveType.Utf8}) is not None for i in identities)
     status='physical_delete_pending' if remaining else ('payload_deleted_replay_guard_pending' if guards else 'physical_delete_confirmed')
     return {'status':status,'remaining':remaining,'guards_remaining':guards}
