@@ -54,11 +54,28 @@ class CRMTests(unittest.TestCase):
         self.assertEqual(self.store.sync_crm(receipt,self.crm),'sent')
         self.assertEqual(self.store.crm_marker(receipt)['crm_external_id'],'123')
         self.assertEqual(len(self.created),1)
-    def test_existing_customer_is_preserved_and_flagged(self):
+    def test_existing_customer_is_preserved_and_new_inquiry_gets_own_lead(self):
         receipt=self.save();self.items=[{'id':99,'phone':['89990000000'],'is_study':1}]
         before=copy.deepcopy(self.items)
-        self.assertEqual(self.store.sync_crm(receipt,self.crm),'existing_review')
-        self.assertEqual(self.items,before);self.assertEqual(self.created,[])
+        self.assertEqual(self.store.sync_crm(receipt,self.crm),'sent')
+        self.assertEqual(self.items,before);self.assertEqual(len(self.created),1)
+        self.assertIn('№99',self.created[0]['note'])
+        self.assertEqual(self.created[0]['is_study'],0)
+    def test_legacy_existing_review_is_recovered_without_changing_existing_customers(self):
+        receipt=self.save();lead=self.store.load_lead(receipt)
+        self.items=[{'id':99,'phone':['89990000000']},{'id':100,'phone':['+79990000000']}]
+        self.store.crm_mark(lead,'existing_review','')
+        self.assertEqual(self.store.sync_crm(receipt,self.crm),'sent')
+        self.assertEqual(len(self.created),1)
+        self.assertIn('№99, №100',self.created[0]['note'])
+        self.assertEqual(self.store.sync_crm(receipt,self.crm),'sent')
+        self.assertEqual(len(self.created),1)
+    def test_prior_ambiguous_create_does_not_create_again_even_if_other_matches_exist(self):
+        receipt=self.save();lead=self.store.load_lead(receipt)
+        self.items=[{'id':99,'phone':['89990000000']}]
+        self.store.crm_mark(lead,'creating','')
+        self.assertEqual(self.store.sync_crm(receipt,self.crm),'attention')
+        self.assertEqual(self.created,[])
     def test_failed_marker_prevents_create(self):
         receipt=self.save();self.client.fail_write=True
         with self.assertRaises(RuntimeError):self.store.sync_crm(receipt,self.crm)

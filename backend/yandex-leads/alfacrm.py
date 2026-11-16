@@ -98,7 +98,7 @@ class AlfaCRM:
         if len(name) > 50:
             return 'attention'
         marker = store.crm_marker(receipt)
-        if marker and marker.get('crm_state') in ('sent', 'existing_review'):
+        if marker and marker.get('crm_state') == 'sent':
             return marker['crm_state']
         self._login()
         path = '/v2api/' + str(branch) + '/customer/'
@@ -118,21 +118,20 @@ class AlfaCRM:
         if len(recovered) == 1:
             store.crm_mark(lead, 'sent', str(recovered[0]['id']))
             return 'sent'
-        if matches:
-            # Preserve existing lifecycle/source/manager. New request stays in YDB.
-            store.crm_mark(lead, 'existing_review',
-                str(matches[0]['id']) if len(matches) == 1 else '')
-            return 'existing_review'
-        if items:
+        if len(recovered)>1:
+            return 'attention'
+        if items and not matches:
             # A fuzzy phone result is not proof that no duplicate exists.
             return 'attention'
-        if marker:
+        if marker and marker.get('crm_state')!='existing_review':
             # A previous create might have succeeded. Never create again blindly.
             return 'attention'
         store.crm_mark(lead, 'creating', '')  # durable barrier BEFORE the POST
         note = '\n'.join(['Заявка с tzvuka.ru', reference, 'Направление: ' + direction,
             'Страница: ' + lead['page_path'], 'Заявка на занятие по инициативе заявителя.',
             'Политика: https://tzvuka.ru/documents/#privacy'])
+        if matches:
+            note+='\nПовторное обращение. Связанные карточки с тем же телефоном: '+', '.join('№'+str(item['id']) for item in matches)+'. Прежние карточки не изменялись.'
         payload = {'name': name, 'phone': [lead['phone']], 'legal_type': 1,
             'is_study': 0, 'branch_ids': [branch], 'lead_source_id': 3,
             'lead_status_id': self.stage,'pipeline_id':1, 'note': note}
